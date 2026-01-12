@@ -14,6 +14,8 @@ import { FAQSection } from '@/components/country/FAQSection';
 import { CTASection } from '@/components/country/CTASection';
 import { AgenciesSection } from '@/components/country/AgenciesSection';
 import { OfstedSection } from '@/components/country/OfstedSection';
+import { CountryPageSkeleton } from '@/components/country/CountryPageSkeleton';
+import { BackToTop } from '@/components/shared/BackToTop';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -52,18 +54,14 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
   ];
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
-      </div>
-    );
+    return <CountryPageSkeleton />;
   }
 
   if (error || !countryPage) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-destructive">Page Not Found</h1>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center px-4">
+          <h1 className="text-2xl font-bold text-destructive mb-2">Page Not Found</h1>
           <p className="text-muted-foreground">The requested country page does not exist.</p>
         </div>
       </div>
@@ -71,12 +69,13 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
   }
 
   const content = countryPage.content;
+  const countryName = slug.charAt(0).toUpperCase() + slug.slice(1);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background">
       <Header />
       
-      {/* Hero Section - Matching Home Page Style */}
+      {/* Hero Section */}
       <section className="relative min-h-[90svh] md:min-h-[95vh] flex flex-col items-center justify-center pt-20 sm:pt-24 md:pt-28 pb-16 sm:pb-20 md:pb-24 overflow-hidden">
         {/* Background Gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#f8fafa] via-[#f0f7f7] to-background z-0" />
@@ -139,7 +138,7 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
             </div>
           </motion.div>
 
-          {/* 3D Floating Badge - Bottom Left */}
+          {/* Floating Badges */}
           <motion.div 
             className="absolute bottom-40 left-[8%] hidden md:block opacity-50 will-change-transform"
             animate={{ y: [0, -10, 0], rotate: [-3, 3, -3], scale: [1, 1.05, 1] }}
@@ -152,7 +151,6 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
             </div>
           </motion.div>
 
-          {/* 3D Floating Badge - Bottom Right */}
           <motion.div 
             className="absolute bottom-52 right-[10%] hidden md:block opacity-50 will-change-transform"
             animate={{ y: [0, 8, 0], rotate: [3, -3, 3], scale: [1, 1.03, 1] }}
@@ -174,16 +172,8 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
           >
             <Heart className="w-10 h-10 text-red-300/20 fill-red-200/15" />
           </motion.div>
-          <motion.div 
-            className="absolute top-1/2 right-[3%] will-change-transform hidden lg:block"
-            animate={{ y: [0, 20, 0], scale: [1, 1.2, 1], rotate: [0, -15, 0] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-            style={{ transform: "translateZ(0)" }}
-          >
-            <Heart className="w-12 h-12 text-primary/10 fill-primary/5" />
-          </motion.div>
 
-          {/* Floating 3D Spheres */}
+          {/* Floating Spheres */}
           <motion.div 
             className="absolute top-44 left-[28%] will-change-transform hidden md:block"
             animate={{ y: [0, -20, 0], x: [0, 10, 0] }}
@@ -191,14 +181,6 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
             style={{ transform: "translateZ(0)" }}
           >
             <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 shadow-lg shadow-primary/10" />
-          </motion.div>
-          <motion.div 
-            className="absolute top-64 right-[28%] will-change-transform hidden md:block"
-            animate={{ y: [0, 15, 0], scale: [1, 1.3, 1] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-            style={{ transform: "translateZ(0)" }}
-          >
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-accent/30 to-accent/10 shadow-lg shadow-accent/15" />
           </motion.div>
 
           {/* Gradient blobs */}
@@ -218,7 +200,7 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
             <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }}>
               <Sparkles className="w-3 h-3 sm:w-4 sm:h-4" />
             </motion.div>
-            Foster Care Agencies in {slug.charAt(0).toUpperCase() + slug.slice(1)}
+            Foster Care Agencies in {countryName}
           </motion.div>
 
           {/* Main Heading - FROM DATABASE */}
@@ -238,7 +220,7 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
             transition={{ duration: 0.6, delay: 0.15 }}
             className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground mb-6 sm:mb-8 h-8 sm:h-10 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2"
           >
-            <span className="text-xl">Specializing in</span>
+            <span className="text-lg sm:text-xl">Specializing in</span>
             <span className="text-primary font-semibold relative inline-block min-w-[180px] sm:min-w-[220px]">
               <AnimatePresence mode="wait">
                 <motion.span
@@ -247,7 +229,7 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
                   animate={{ opacity: 1, y: 0, rotateX: 0 }}
                   exit={{ opacity: 0, y: -20, rotateX: 90 }}
                   transition={{ duration: 0.4, type: "spring" }}
-                  className="inline-block text-xl"
+                  className="inline-block text-lg sm:text-xl"
                 >
                   {rotatingServices[currentServiceIndex]}
                 </motion.span>
@@ -266,7 +248,7 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-base text-muted-foreground mb-10 sm:mb-12 md:mb-14 max-w-2xl mx-auto leading-relaxed px-2 sm:text-base"
+              className="text-sm sm:text-base text-muted-foreground mb-10 sm:mb-12 md:mb-14 max-w-2xl mx-auto leading-relaxed px-2"
             >
               {content.intro.paragraphs[0]}
             </motion.p>
@@ -297,7 +279,7 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
             </Button>
           </motion.div>
 
-          {/* Stats Row with Hover Animations */}
+          {/* Stats Row */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -317,7 +299,7 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
                     scale: 1.05,
                     transition: { duration: 0.3, type: "spring", stiffness: 300 }
                   }}
-                  className="group flex flex-col sm:flex-row items-center gap-2 sm:gap-4 bg-background/80 backdrop-blur-sm rounded-xl sm:rounded-2xl px-4 sm:px-6 py-4 sm:py-4 border border-border/40 shadow-lg shadow-primary/5 hover:shadow-xl hover:shadow-primary/15 hover:border-primary/30 transition-all duration-300 cursor-default"
+                  className="group flex flex-col sm:flex-row items-center gap-2 sm:gap-4 bg-background/80 backdrop-blur-sm rounded-xl sm:rounded-2xl px-4 sm:px-6 py-4 border border-border/40 shadow-lg shadow-primary/5 hover:shadow-xl hover:shadow-primary/15 hover:border-primary/30 transition-all duration-300 cursor-default"
                 >
                   <motion.div
                     className="w-10 h-10 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center group-hover:from-primary/30 group-hover:to-primary/10 transition-all duration-300 shadow-inner"
@@ -348,7 +330,7 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
             <p className="text-xs sm:text-sm text-muted-foreground uppercase tracking-wider font-medium mb-4 sm:mb-6">
               Trusted by Leading Organizations
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-12">
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-6 lg:gap-8">
               {[
                 { name: "Ofsted", subtitle: "Registered" },
                 { name: "The Fostering Network", subtitle: "Member" },
@@ -362,10 +344,10 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.6 + index * 0.1 }}
                   whileHover={{ scale: 1.05, y: -2 }}
-                  className="flex flex-col items-center gap-0.5 px-4 py-2 sm:px-6 sm:py-3 rounded-xl bg-background/60 border border-border/30 backdrop-blur-sm hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 cursor-default"
+                  className="flex flex-col items-center gap-0.5 px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-xl bg-background/60 border border-border/30 backdrop-blur-sm hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 cursor-default"
                 >
-                  <span className="text-sm sm:text-base font-semibold text-foreground">{partner.name}</span>
-                  <span className="text-[10px] sm:text-xs text-muted-foreground">{partner.subtitle}</span>
+                  <span className="text-xs sm:text-sm font-semibold text-foreground">{partner.name}</span>
+                  <span className="text-[9px] sm:text-xs text-muted-foreground">{partner.subtitle}</span>
                 </motion.div>
               ))}
             </div>
@@ -373,15 +355,14 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
         </div>
       </section>
 
-      {/* Intro */}
-      {content.intro && content.intro.paragraphs && content.intro.paragraphs.length > 0 && (
+      {/* Page Sections with proper spacing */}
+      {content.intro && content.intro.paragraphs && content.intro.paragraphs.length > 1 && (
         <IntroSection 
-          heading={(content.intro as any).heading || 'Introduction'}
-          paragraphs={content.intro.paragraphs}
+          heading={(content.intro as any).heading || 'About Fostering in ' + countryName}
+          paragraphs={content.intro.paragraphs.slice(1)}
         />
       )}
       
-      {/* Regions */}
       {content.regions && (
         <RegionsGrid 
           heading={content.regions.heading}
@@ -389,7 +370,6 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
         />
       )}
 
-      {/* Why Fostering Matters */}
       {content.why_fostering_matters && (
         <WhyFosteringMattersSection 
           heading={content.why_fostering_matters.heading}
@@ -397,7 +377,6 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
         />
       )}
 
-      {/* Agency Types */}
       {content.agency_types && (
         <AgencyTypesSection 
           heading={content.agency_types.heading}
@@ -407,7 +386,6 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
         />
       )}
 
-      {/* Ofsted */}
       {content.ofsted && (
         <OfstedSection 
           heading={content.ofsted.heading}
@@ -415,7 +393,6 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
         />
       )}
 
-      {/* Types of Fostering */}
       {content.types_of_fostering && (
         <TypesOfFosteringSection 
           heading={content.types_of_fostering.heading}
@@ -424,7 +401,6 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
         />
       )}
 
-      {/* How to Become */}
       {content.how_to_become && (
         <HowToBecomeSection 
           heading={content.how_to_become.heading}
@@ -433,7 +409,6 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
         />
       )}
 
-      {/* Support */}
       {content.support && (
         <SupportSection 
           heading={content.support.heading}
@@ -441,7 +416,6 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
         />
       )}
 
-      {/* Responsibility */}
       {content.responsibility && (
         <ResponsibilitySection 
           heading={content.responsibility.heading}
@@ -449,7 +423,6 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
         />
       )}
 
-      {/* Glossary */}
       {content.glossary && content.glossary.items && Object.keys(content.glossary.items || {}).length > 0 && (
         <GlossarySection 
           heading={content.glossary.heading}
@@ -457,7 +430,6 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
         />
       )}
 
-      {/* FAQ */}
       {content.faq && content.faq.questions && content.faq.questions.length > 0 && (
         <FAQSection 
           heading={content.faq.heading}
@@ -465,10 +437,8 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
         />
       )}
 
-      {/* Agencies */}
       <AgenciesSection id="agencies" />
 
-      {/* CTA */}
       {content.cta && (
         <CTASection 
           heading={content.cta.heading}
@@ -478,6 +448,7 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
       )}
 
       <Footer />
+      <BackToTop />
     </div>
   );
 };
@@ -487,9 +458,9 @@ const CountryPage = () => {
   
   if (!country) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-destructive">Country not specified</h1>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center px-4">
+          <h1 className="text-2xl font-bold text-destructive mb-2">Country not specified</h1>
           <p className="text-muted-foreground">Please provide a country slug.</p>
         </div>
       </div>
@@ -497,11 +468,7 @@ const CountryPage = () => {
   }
 
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
-      </div>
-    }>
+    <Suspense fallback={<CountryPageSkeleton />}>
       <CountryPageContent slug={country} />
     </Suspense>
   );
