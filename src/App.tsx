@@ -32,6 +32,8 @@ import AdminBlog from './pages/admin/AdminBlog';
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminSettings from './pages/admin/AdminSettings';
 import AdminGmbImport from './pages/admin/AdminGmbImport';
+import SpecialismsIndex from './pages/SpecialismsIndex';
+import SpecialismPage from './pages/SpecialismPage';
 import NotFound from './pages/NotFound';
 
 const queryClient = new QueryClient();
@@ -53,6 +55,8 @@ const App = () => (
           <Route path="/locations/:country/:region/:county" element={<LocationPage />} />
           <Route path="/locations/:country/:region/:county/:city" element={<LocationPage />} />
           <Route path="/locations/:country" element={<CountryPage />} />
+          <Route path="/specialisms" element={<SpecialismsIndex />} />
+          <Route path="/specialisms/:slug" element={<SpecialismPage />} />
           <Route path="/blog" element={<BlogIndex />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/about" element={<AboutPage />} />
