@@ -12,7 +12,7 @@ import { ResponsibilitySection } from '@/components/country/ResponsibilitySectio
 import { GlossarySection } from '@/components/country/GlossarySection';
 import { FAQSection } from '@/components/country/FAQSection';
 import { CTASection } from '@/components/country/CTASection';
-
+import { CountryAgenciesSection } from '@/components/country/CountryAgenciesSection';
 import { OfstedSection } from '@/components/country/OfstedSection';
 import { CountryPageSkeleton } from '@/components/country/CountryPageSkeleton';
 import { BackToTop } from '@/components/shared/BackToTop';
@@ -437,7 +437,12 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
         />
       )}
 
-      
+      {/* Agencies Section - Dynamic from Database */}
+      <CountryAgenciesSection 
+        countrySlug={slug} 
+        countryName={countryName}
+        limit={6}
+      />
 
       {content.cta && (
         <CTASection 
