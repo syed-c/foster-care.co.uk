@@ -28,7 +28,7 @@ export const IntroSection = ({
             }} transition={{
               duration: 0.5,
               delay: 0.1 * index
-            }} className="text-muted-foreground leading-relaxed text-base sm:text-lg max-w-3xl mx-auto">
+            }} className="text-background leading-relaxed text-base sm:text-lg max-w-3xl mx-auto">
                   {paragraph}
                 </motion.p>)}
             </div>
