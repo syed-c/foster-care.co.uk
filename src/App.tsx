@@ -7,9 +7,7 @@ import Index from './pages/Index';
 import AgenciesListing from './pages/AgenciesListing';
 import AgencyProfile from './pages/AgencyProfile';
 import LocationsIndex from './pages/LocationsIndex';
-import LocationPage from './pages/LocationPage';
-import CountryPage from './pages/CountryPage';
-import RegionPage from './pages/RegionPage';
+import UnifiedLocationPage from './pages/UnifiedLocationPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import AuthPage from './pages/AuthPage';
@@ -57,11 +55,10 @@ const App = () => (
           <Route path="/agencies/:slug" element={<AgencyProfile />} />
           <Route path="/compare" element={<CompareAgencies />} />
           <Route path="/locations" element={<LocationsIndex />} />
-
-          <Route path="/locations/:country/:region" element={<RegionPage />} />
-          <Route path="/locations/:country/:region/:county" element={<LocationPage />} />
-          <Route path="/locations/:country/:region/:county/:city" element={<LocationPage />} />
-          <Route path="/locations/:country" element={<CountryPage />} />
+          
+          {/* Unified location route - handles any depth of location hierarchy */}
+          <Route path="/locations/*" element={<UnifiedLocationPage />} />
+          
           <Route path="/specialisms" element={<SpecialismsIndex />} />
           <Route path="/specialisms/:slug" element={<SpecialismPage />} />
           <Route path="/guides" element={<GuidesIndex />} />

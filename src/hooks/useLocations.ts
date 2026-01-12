@@ -38,6 +38,35 @@ export function useLocationBySlug(slug: string | undefined) {
   });
 }
 
+// Resolve a location from a URL path array like ['england', 'north-west-england', 'blackpool']
+// Returns the deepest valid location found
+export function useLocationFromPath(pathSegments: string[]) {
+  return useQuery({
+    queryKey: ["locationFromPath", pathSegments.join("/")],
+    queryFn: async () => {
+      if (!pathSegments || pathSegments.length === 0) return null;
+      
+      // Try to find the deepest location by checking the last segment first
+      // This handles cases like /locations/england/blackpool where blackpool is directly under england
+      const lastSegment = pathSegments[pathSegments.length - 1];
+      
+      const { data: location, error } = await supabase
+        .from("locations")
+        .select("*")
+        .eq("slug", lastSegment)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Error finding location:", error);
+        return null;
+      }
+      
+      return location as Location | null;
+    },
+    enabled: pathSegments.length > 0,
+  });
+}
+
 export function useChildLocations(parentId: string | undefined) {
   return useQuery({
     queryKey: ["childLocations", parentId],

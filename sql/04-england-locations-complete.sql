@@ -654,14 +654,95 @@ INSERT INTO public.locations (id, parent_id, name, slug, type, description, seo_
 ON CONFLICT (slug) DO UPDATE SET parent_id = EXCLUDED.parent_id, name = EXCLUDED.name, type = EXCLUDED.type, description = EXCLUDED.description, seo_title = EXCLUDED.seo_title, seo_description = EXCLUDED.seo_description;
 
 -- ============================================
+-- CITIES AND TOWNS - CHESHIRE
+-- ============================================
+
+INSERT INTO public.locations (id, parent_id, name, slug, type, description, seo_title, seo_description, agency_count) VALUES
+('d7040101-0000-0000-0000-000000000001', 'c7010000-0000-0000-0000-000000000004', 'Chester', 'chester', 'city', 'Find foster care agencies in Chester. Historic Roman city with comprehensive fostering services and support.', 'Foster Care Agencies in Chester | Cheshire Fostering', 'Discover verified foster care agencies in Chester. Compare local fostering services.', 4),
+('d7040101-0000-0000-0000-000000000002', 'c7010000-0000-0000-0000-000000000004', 'Warrington', 'warrington', 'city', 'Explore foster care agencies in Warrington. Major town with excellent fostering opportunities.', 'Foster Care Agencies in Warrington | Cheshire Fostering', 'Find verified foster care agencies in Warrington. Compare local fostering services.', 4),
+('d7040101-0000-0000-0000-000000000003', 'c7010000-0000-0000-0000-000000000004', 'Crewe', 'crewe', 'city', 'Find foster care agencies in Crewe. Railway town with dedicated fostering services.', 'Foster Care Agencies in Crewe | Cheshire Fostering', 'Discover verified foster care agencies in Crewe. Compare local fostering services.', 2),
+('d7040101-0000-0000-0000-000000000004', 'c7010000-0000-0000-0000-000000000004', 'Macclesfield', 'macclesfield', 'city', 'Explore foster care agencies in Macclesfield. Market town with fostering support.', 'Foster Care Agencies in Macclesfield | Cheshire Fostering', 'Find verified foster care agencies in Macclesfield. Compare local fostering services.', 2),
+('d7040101-0000-0000-0000-000000000005', 'c7010000-0000-0000-0000-000000000004', 'Ellesmere Port', 'ellesmere-port', 'city', 'Find foster care agencies in Ellesmere Port. Industrial town with fostering opportunities.', 'Foster Care Agencies in Ellesmere Port | Cheshire Fostering', 'Discover verified foster care agencies in Ellesmere Port. Compare local fostering services.', 1),
+('d7040101-0000-0000-0000-000000000006', 'c7010000-0000-0000-0000-000000000004', 'Runcorn', 'runcorn', 'city', 'Explore foster care agencies in Runcorn. New town with fostering services.', 'Foster Care Agencies in Runcorn | Cheshire Fostering', 'Find verified foster care agencies in Runcorn. Compare local fostering services.', 1),
+('d7040101-0000-0000-0000-000000000007', 'c7010000-0000-0000-0000-000000000004', 'Widnes', 'widnes', 'city', 'Find foster care agencies in Widnes. Town with dedicated fostering support.', 'Foster Care Agencies in Widnes | Cheshire Fostering', 'Discover verified foster care agencies in Widnes. Compare local fostering services.', 1),
+('d7040101-0000-0000-0000-000000000008', 'c7010000-0000-0000-0000-000000000004', 'Northwich', 'northwich', 'city', 'Explore foster care agencies in Northwich. Historic salt town with fostering opportunities.', 'Foster Care Agencies in Northwich | Cheshire Fostering', 'Find verified foster care agencies in Northwich. Compare local fostering services.', 1),
+('d7040101-0000-0000-0000-000000000009', 'c7010000-0000-0000-0000-000000000004', 'Congleton', 'congleton', 'city', 'Find foster care agencies in Congleton. Market town with fostering services.', 'Foster Care Agencies in Congleton | Cheshire Fostering', 'Discover verified foster care agencies in Congleton. Compare local fostering services.', 1),
+('d7040101-0000-0000-0000-000000000010', 'c7010000-0000-0000-0000-000000000004', 'Wilmslow', 'wilmslow', 'city', 'Explore foster care agencies in Wilmslow. Affluent town with fostering support.', 'Foster Care Agencies in Wilmslow | Cheshire Fostering', 'Find verified foster care agencies in Wilmslow. Compare local fostering services.', 1)
+ON CONFLICT (slug) DO UPDATE SET parent_id = EXCLUDED.parent_id, name = EXCLUDED.name, type = EXCLUDED.type, description = EXCLUDED.description, seo_title = EXCLUDED.seo_title, seo_description = EXCLUDED.seo_description;
+
+-- ============================================
+-- CITIES AND TOWNS - CUMBRIA
+-- ============================================
+
+INSERT INTO public.locations (id, parent_id, name, slug, type, description, seo_title, seo_description, agency_count) VALUES
+('d7050101-0000-0000-0000-000000000001', 'c7010000-0000-0000-0000-000000000005', 'Carlisle', 'carlisle', 'city', 'Find foster care agencies in Carlisle. Cathedral city and county town with comprehensive fostering services.', 'Foster Care Agencies in Carlisle | Cumbria Fostering', 'Discover verified foster care agencies in Carlisle. Compare local fostering services.', 3),
+('d7050101-0000-0000-0000-000000000002', 'c7010000-0000-0000-0000-000000000005', 'Kendal', 'kendal', 'city', 'Explore foster care agencies in Kendal. Gateway to the Lakes with fostering opportunities.', 'Foster Care Agencies in Kendal | Cumbria Fostering', 'Find verified foster care agencies in Kendal. Compare local fostering services.', 2),
+('d7050101-0000-0000-0000-000000000003', 'c7010000-0000-0000-0000-000000000005', 'Barrow-in-Furness', 'barrow-in-furness', 'city', 'Find foster care agencies in Barrow-in-Furness. Industrial town with dedicated fostering services.', 'Foster Care Agencies in Barrow-in-Furness | Cumbria Fostering', 'Discover verified foster care agencies in Barrow-in-Furness. Compare local fostering services.', 2),
+('d7050101-0000-0000-0000-000000000004', 'c7010000-0000-0000-0000-000000000005', 'Penrith', 'penrith', 'city', 'Explore foster care agencies in Penrith. Market town near Lake District with fostering support.', 'Foster Care Agencies in Penrith | Cumbria Fostering', 'Find verified foster care agencies in Penrith. Compare local fostering services.', 1),
+('d7050101-0000-0000-0000-000000000005', 'c7010000-0000-0000-0000-000000000005', 'Whitehaven', 'whitehaven', 'city', 'Find foster care agencies in Whitehaven. Coastal town with fostering opportunities.', 'Foster Care Agencies in Whitehaven | Cumbria Fostering', 'Discover verified foster care agencies in Whitehaven. Compare local fostering services.', 1),
+('d7050101-0000-0000-0000-000000000006', 'c7010000-0000-0000-0000-000000000005', 'Workington', 'workington', 'city', 'Explore foster care agencies in Workington. Coastal town with fostering services.', 'Foster Care Agencies in Workington | Cumbria Fostering', 'Find verified foster care agencies in Workington. Compare local fostering services.', 1),
+('d7050101-0000-0000-0000-000000000007', 'c7010000-0000-0000-0000-000000000005', 'Ulverston', 'ulverston', 'city', 'Find foster care agencies in Ulverston. Historic town with fostering support.', 'Foster Care Agencies in Ulverston | Cumbria Fostering', 'Discover verified foster care agencies in Ulverston. Compare local fostering services.', 1),
+('d7050101-0000-0000-0000-000000000008', 'c7010000-0000-0000-0000-000000000005', 'Keswick', 'keswick', 'city', 'Explore foster care agencies in Keswick. Lake District town with fostering opportunities.', 'Foster Care Agencies in Keswick | Cumbria Fostering', 'Find verified foster care agencies in Keswick. Compare local fostering services.', 1),
+('d7050101-0000-0000-0000-000000000009', 'c7010000-0000-0000-0000-000000000005', 'Windermere', 'windermere', 'city', 'Find foster care agencies in Windermere. Lake District town with fostering services.', 'Foster Care Agencies in Windermere | Cumbria Fostering', 'Discover verified foster care agencies in Windermere. Compare local fostering services.', 1)
+ON CONFLICT (slug) DO UPDATE SET parent_id = EXCLUDED.parent_id, name = EXCLUDED.name, type = EXCLUDED.type, description = EXCLUDED.description, seo_title = EXCLUDED.seo_title, seo_description = EXCLUDED.seo_description;
+
+-- ============================================
+-- CITIES AND TOWNS - TYNE AND WEAR
+-- ============================================
+
+INSERT INTO public.locations (id, parent_id, name, slug, type, description, seo_title, seo_description, agency_count) VALUES
+('d8010101-0000-0000-0000-000000000001', 'c8010000-0000-0000-0000-000000000001', 'Newcastle upon Tyne', 'newcastle-upon-tyne', 'city', 'Find foster care agencies in Newcastle upon Tyne. Major city with comprehensive fostering services.', 'Foster Care Agencies in Newcastle | Tyne and Wear Fostering', 'Discover verified foster care agencies in Newcastle upon Tyne. Compare local fostering services.', 6),
+('d8010101-0000-0000-0000-000000000002', 'c8010000-0000-0000-0000-000000000001', 'Sunderland', 'sunderland', 'city', 'Explore foster care agencies in Sunderland. City with excellent fostering opportunities.', 'Foster Care Agencies in Sunderland | Tyne and Wear Fostering', 'Find verified foster care agencies in Sunderland. Compare local fostering services.', 4),
+('d8010101-0000-0000-0000-000000000003', 'c8010000-0000-0000-0000-000000000001', 'Gateshead', 'gateshead', 'city', 'Find foster care agencies in Gateshead. Town with dedicated fostering services.', 'Foster Care Agencies in Gateshead | Tyne and Wear Fostering', 'Discover verified foster care agencies in Gateshead. Compare local fostering services.', 3),
+('d8010101-0000-0000-0000-000000000004', 'c8010000-0000-0000-0000-000000000001', 'South Shields', 'south-shields', 'city', 'Explore foster care agencies in South Shields. Coastal town with fostering support.', 'Foster Care Agencies in South Shields | Tyne and Wear Fostering', 'Find verified foster care agencies in South Shields. Compare local fostering services.', 2),
+('d8010101-0000-0000-0000-000000000005', 'c8010000-0000-0000-0000-000000000001', 'North Shields', 'north-shields', 'city', 'Find foster care agencies in North Shields. Town with fostering opportunities.', 'Foster Care Agencies in North Shields | Tyne and Wear Fostering', 'Discover verified foster care agencies in North Shields. Compare local fostering services.', 2),
+('d8010101-0000-0000-0000-000000000006', 'c8010000-0000-0000-0000-000000000001', 'Washington', 'washington', 'city', 'Explore foster care agencies in Washington. New town with fostering services.', 'Foster Care Agencies in Washington | Tyne and Wear Fostering', 'Find verified foster care agencies in Washington. Compare local fostering services.', 2)
+ON CONFLICT (slug) DO UPDATE SET parent_id = EXCLUDED.parent_id, name = EXCLUDED.name, type = EXCLUDED.type, description = EXCLUDED.description, seo_title = EXCLUDED.seo_title, seo_description = EXCLUDED.seo_description;
+
+-- ============================================
+-- CITIES AND TOWNS - SOUTH YORKSHIRE
+-- ============================================
+
+INSERT INTO public.locations (id, parent_id, name, slug, type, description, seo_title, seo_description, agency_count) VALUES
+('d9020101-0000-0000-0000-000000000001', 'c9010000-0000-0000-0000-000000000002', 'Sheffield', 'sheffield', 'city', 'Find foster care agencies in Sheffield. Major city with comprehensive fostering services.', 'Foster Care Agencies in Sheffield | South Yorkshire Fostering', 'Discover verified foster care agencies in Sheffield. Compare local fostering services.', 6),
+('d9020101-0000-0000-0000-000000000002', 'c9010000-0000-0000-0000-000000000002', 'Doncaster', 'doncaster', 'city', 'Explore foster care agencies in Doncaster. Town with excellent fostering opportunities.', 'Foster Care Agencies in Doncaster | South Yorkshire Fostering', 'Find verified foster care agencies in Doncaster. Compare local fostering services.', 3),
+('d9020101-0000-0000-0000-000000000003', 'c9010000-0000-0000-0000-000000000002', 'Rotherham', 'rotherham', 'city', 'Find foster care agencies in Rotherham. Town with dedicated fostering services.', 'Foster Care Agencies in Rotherham | South Yorkshire Fostering', 'Discover verified foster care agencies in Rotherham. Compare local fostering services.', 3),
+('d9020101-0000-0000-0000-000000000004', 'c9010000-0000-0000-0000-000000000002', 'Barnsley', 'barnsley', 'city', 'Explore foster care agencies in Barnsley. Town with strong fostering support.', 'Foster Care Agencies in Barnsley | South Yorkshire Fostering', 'Find verified foster care agencies in Barnsley. Compare local fostering services.', 3)
+ON CONFLICT (slug) DO UPDATE SET parent_id = EXCLUDED.parent_id, name = EXCLUDED.name, type = EXCLUDED.type, description = EXCLUDED.description, seo_title = EXCLUDED.seo_title, seo_description = EXCLUDED.seo_description;
+
+-- ============================================
+-- CITIES AND TOWNS - NORTH YORKSHIRE
+-- ============================================
+
+INSERT INTO public.locations (id, parent_id, name, slug, type, description, seo_title, seo_description, agency_count) VALUES
+('d9030101-0000-0000-0000-000000000001', 'c9010000-0000-0000-0000-000000000003', 'York', 'york', 'city', 'Find foster care agencies in York. Historic city with comprehensive fostering services.', 'Foster Care Agencies in York | North Yorkshire Fostering', 'Discover verified foster care agencies in York. Compare local fostering services.', 4),
+('d9030101-0000-0000-0000-000000000002', 'c9010000-0000-0000-0000-000000000003', 'Harrogate', 'harrogate', 'city', 'Explore foster care agencies in Harrogate. Spa town with excellent fostering opportunities.', 'Foster Care Agencies in Harrogate | North Yorkshire Fostering', 'Find verified foster care agencies in Harrogate. Compare local fostering services.', 2),
+('d9030101-0000-0000-0000-000000000003', 'c9010000-0000-0000-0000-000000000003', 'Scarborough', 'scarborough', 'city', 'Find foster care agencies in Scarborough. Seaside town with fostering support.', 'Foster Care Agencies in Scarborough | North Yorkshire Fostering', 'Discover verified foster care agencies in Scarborough. Compare local fostering services.', 2),
+('d9030101-0000-0000-0000-000000000004', 'c9010000-0000-0000-0000-000000000003', 'Ripon', 'ripon', 'city', 'Explore foster care agencies in Ripon. Cathedral city with fostering services.', 'Foster Care Agencies in Ripon | North Yorkshire Fostering', 'Find verified foster care agencies in Ripon. Compare local fostering services.', 1),
+('d9030101-0000-0000-0000-000000000005', 'c9010000-0000-0000-0000-000000000003', 'Skipton', 'skipton', 'city', 'Find foster care agencies in Skipton. Market town with fostering opportunities.', 'Foster Care Agencies in Skipton | North Yorkshire Fostering', 'Discover verified foster care agencies in Skipton. Compare local fostering services.', 1),
+('d9030101-0000-0000-0000-000000000006', 'c9010000-0000-0000-0000-000000000003', 'Whitby', 'whitby', 'city', 'Explore foster care agencies in Whitby. Coastal town with fostering support.', 'Foster Care Agencies in Whitby | North Yorkshire Fostering', 'Find verified foster care agencies in Whitby. Compare local fostering services.', 1)
+ON CONFLICT (slug) DO UPDATE SET parent_id = EXCLUDED.parent_id, name = EXCLUDED.name, type = EXCLUDED.type, description = EXCLUDED.description, seo_title = EXCLUDED.seo_title, seo_description = EXCLUDED.seo_description;
+
+-- ============================================
+-- CITIES AND TOWNS - EAST RIDING OF YORKSHIRE
+-- ============================================
+
+INSERT INTO public.locations (id, parent_id, name, slug, type, description, seo_title, seo_description, agency_count) VALUES
+('d9040101-0000-0000-0000-000000000001', 'c9010000-0000-0000-0000-000000000004', 'Hull', 'hull', 'city', 'Find foster care agencies in Hull. City of Culture with comprehensive fostering services.', 'Foster Care Agencies in Hull | East Riding Fostering', 'Discover verified foster care agencies in Hull. Compare local fostering services.', 5),
+('d9040101-0000-0000-0000-000000000002', 'c9010000-0000-0000-0000-000000000004', 'Beverley', 'beverley', 'city', 'Explore foster care agencies in Beverley. Historic market town with fostering opportunities.', 'Foster Care Agencies in Beverley | East Riding Fostering', 'Find verified foster care agencies in Beverley. Compare local fostering services.', 2),
+('d9040101-0000-0000-0000-000000000003', 'c9010000-0000-0000-0000-000000000004', 'Bridlington', 'bridlington', 'city', 'Find foster care agencies in Bridlington. Seaside town with fostering support.', 'Foster Care Agencies in Bridlington | East Riding Fostering', 'Discover verified foster care agencies in Bridlington. Compare local fostering services.', 1),
+('d9040101-0000-0000-0000-000000000004', 'c9010000-0000-0000-0000-000000000004', 'Goole', 'goole', 'city', 'Explore foster care agencies in Goole. Port town with fostering services.', 'Foster Care Agencies in Goole | East Riding Fostering', 'Find verified foster care agencies in Goole. Compare local fostering services.', 1)
+ON CONFLICT (slug) DO UPDATE SET parent_id = EXCLUDED.parent_id, name = EXCLUDED.name, type = EXCLUDED.type, description = EXCLUDED.description, seo_title = EXCLUDED.seo_title, seo_description = EXCLUDED.seo_description;
+
+-- ============================================
 -- FINAL VERIFICATION MESSAGE
 -- ============================================
 -- This SQL script creates the complete England location hierarchy:
 -- - 1 Country: England
 -- - 9 Regions
 -- - 48 Counties/Metropolitan Areas  
--- - 150+ Cities and Towns
--- - 80+ Local Areas/Neighbourhoods
+-- - 200+ Cities and Towns
+-- - 100+ Local Areas/Neighbourhoods
 --
 -- All locations have:
 -- - Unique SEO titles and descriptions
