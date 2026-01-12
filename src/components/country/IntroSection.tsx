@@ -9,7 +9,7 @@ export const IntroSection = ({
   paragraphs
 }: IntroSectionProps) => {
   if (!paragraphs || paragraphs.length === 0) return null;
-  return <section className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-foreground-muted">
+  return <section className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-foreground">
       <div className="max-w-4xl mx-auto">
         <ScrollReveal>
           <div className="text-center">
