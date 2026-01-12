@@ -251,7 +251,7 @@ export function HeroSection() {
               y: -15
             }} transition={{
               duration: 0.3
-            }} className="inline-block">
+            }} className="inline-block text-2xl">
                 {rotatingServices[currentServiceIndex]}
               </motion.span>
             </AnimatePresence>
