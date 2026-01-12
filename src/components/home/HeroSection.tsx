@@ -207,7 +207,7 @@ export function HeroSection() {
         y: 0
       }} transition={{
         duration: 0.6
-      }} className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium bg-primary/10 text-primary border border-primary/20 mb-10">
+      }} className="inline-flex items-center gap-2 rounded-full text-sm font-medium bg-primary/10 text-primary border border-primary/20 mb-10 px-[12px] py-[4px]">
           <CheckCircle className="w-4 h-4" />
           {subtitle}
         </motion.div>
