@@ -84,7 +84,7 @@ export const CTASection = ({
                   <Button 
                     size="lg" 
                     variant="outline"
-                    className="w-full sm:w-auto border-white/30 text-white hover:bg-white/10 rounded-xl h-12 sm:h-14 px-6 sm:px-8 font-medium transition-all duration-300"
+                    className="w-full sm:w-auto border-white/30 bg-white/10 text-white hover:bg-white hover:text-black rounded-xl h-12 sm:h-14 px-6 sm:px-8 font-medium transition-all duration-300"
                   >
                     Contact Us
                   </Button>
