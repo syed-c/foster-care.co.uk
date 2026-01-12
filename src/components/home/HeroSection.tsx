@@ -237,7 +237,7 @@ export function HeroSection() {
         duration: 0.6,
         delay: 0.15
       }} className="text-xl md:text-2xl text-muted-foreground mb-6 h-8">
-          <span>Specializing in </span>
+          <span className="text-2xl">Specializing in </span>
           <span className="text-primary font-medium relative inline-block min-w-[200px] text-left">
             <AnimatePresence mode="wait">
               <motion.span key={rotatingServices[currentServiceIndex]} initial={{
