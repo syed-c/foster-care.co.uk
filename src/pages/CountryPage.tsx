@@ -150,7 +150,7 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
       {/* Intro */}
       {content.intro && content.intro.paragraphs && content.intro.paragraphs.length > 0 && (
         <IntroSection 
-          heading={content.intro.heading || 'Introduction'}
+          heading={(content.intro as any).heading || 'Introduction'}
           paragraphs={content.intro.paragraphs}
         />
       )}

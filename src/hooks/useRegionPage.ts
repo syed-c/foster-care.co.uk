@@ -6,6 +6,7 @@ interface RegionPageData {
   content: {
     title?: string;
     intro?: {
+      heading?: string;
       paragraphs?: string[];
     };
     why_fostering_matters?: {
@@ -83,9 +84,9 @@ interface RegionPageData {
 export const useRegionPage = (slug: string) => {
   return useQuery<RegionPageData | null>({
     queryKey: ['region-page', slug],
-    queryFn: async () => {
+    queryFn: async (): Promise<RegionPageData | null> => {
       const { data, error } = await supabase
-        .from('location_content')
+        .from('location_content' as any)
         .select('*')
         .eq('slug', slug)
         .single();
@@ -95,7 +96,7 @@ export const useRegionPage = (slug: string) => {
         return null;
       }
 
-      return data;
+      return data as unknown as RegionPageData | null;
     },
     enabled: !!slug,
   });

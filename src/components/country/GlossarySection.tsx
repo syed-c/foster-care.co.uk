@@ -7,17 +7,19 @@ interface GlossaryItem {
 
 interface GlossarySectionProps {
   heading?: string;
-  items?: GlossaryItem[];
+  items?: GlossaryItem[] | Record<string, string>;
 }
 
 export const GlossarySection = ({ 
   heading, 
   items 
 }: GlossarySectionProps) => {
-  if (!items || Object.keys(items).length === 0) return null;
+  if (!items || (Array.isArray(items) ? items.length === 0 : Object.keys(items).length === 0)) return null;
 
   // Convert object to array format if needed
-  const itemsArray = Array.isArray(items) ? items : Object.entries(items).map(([term, definition]) => ({ term, definition }));
+  const itemsArray: GlossaryItem[] = Array.isArray(items) 
+    ? items 
+    : Object.entries(items).map(([term, definition]) => ({ term, definition: String(definition) }));
 
   return (
     <div className="w-full">
@@ -38,7 +40,7 @@ export const GlossarySection = ({
         transition={{ duration: 0.6, delay: 0.2 }}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-[1200px] mx-auto"
       >
-        {itemsArray?.map((item, index) => (
+        {itemsArray.map((item, index) => (
           <motion.div 
             key={index}
             initial={{ opacity: 0, y: 20 }}

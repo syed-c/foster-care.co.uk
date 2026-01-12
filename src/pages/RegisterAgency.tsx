@@ -136,18 +136,24 @@ export default function RegisterAgency() {
         }
       }
 
-      // Use the database function to create the agency
-      const { data, error: agencyError } = await supabase.rpc('create_agency', {
-        p_name: formData.agencyName,
-        p_slug: formData.slug,
-        p_description: formData.description,
-        p_email: formData.email,
-        p_phone: formData.phone,
-        p_address: formData.address,
-        p_city: formData.city,
-        p_postcode: formData.postcode,
-        p_website: formData.website,
-      });
+      // Create the agency directly
+      const { data: agencyData, error: agencyError } = await supabase
+        .from('agencies')
+        .insert({
+          name: formData.agencyName,
+          slug: formData.slug,
+          description: formData.description,
+          email: formData.email,
+          phone: formData.phone,
+          address: formData.address,
+          city: formData.city,
+          postcode: formData.postcode,
+          website: formData.website,
+          is_claimed: true,
+          is_verified: false,
+        })
+        .select()
+        .single();
 
       if (agencyError) throw agencyError;
 

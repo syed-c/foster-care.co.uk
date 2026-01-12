@@ -169,44 +169,43 @@ const AdminGmbImport = () => {
   // New function to fetch detailed reviews for imported agencies
   const fetchDetailedReviews = async () => {
     try {
-      // Get all imported agencies that have a place_id but no detailed reviews
+      // Get all imported agencies - we'll use the id to fetch reviews
       const { data: agencies, error } = await supabase
         .from('agencies')
-        .select('id, name, place_id')
-        .not('place_id', 'is', null);
+        .select('id, name');
 
       if (error) throw error;
 
       if (!agencies || agencies.length === 0) {
-        toast.info("No agencies with place_id found to fetch reviews for.");
+        toast.info("No agencies found to fetch reviews for.");
         return;
       }
 
-      const agenciesWithPlaceId = agencies.filter(agency => agency.place_id);
+      const agenciesWithPlaceId = agencies as { id: string; name: string }[];
       setFetchReviewsProgress({ total: agenciesWithPlaceId.length, completed: 0 });
 
       for (let i = 0; i < agenciesWithPlaceId.length; i++) {
         const agency = agenciesWithPlaceId[i];
         
         try {
-          // Call the new edge function to fetch detailed reviews
+          // Call the edge function to fetch detailed reviews
           const { data: reviewData, error: reviewError } = await supabase.functions.invoke('fetch-place-reviews', {
-            body: { place_id: agency.place_id },
+            body: { agency_id: agency.id },
           });
 
           if (reviewError) throw reviewError;
 
-          if (reviewData.success && reviewData.reviews && reviewData.reviews.length > 0) {
+          if (reviewData?.success && reviewData?.reviews && reviewData.reviews.length > 0) {
             // Insert the fetched reviews into the reviews table
             const reviewsToInsert = reviewData.reviews.map((review: any) => ({
               agency_id: agency.id,
               name: review.author_name,
               rating: review.rating,
               comment: review.text,
-              created_at: new Date(review.time * 1000).toISOString(), // Convert Unix timestamp to ISO string
-              is_approved: true, // Auto-approve imported reviews
+              created_at: new Date(review.time * 1000).toISOString(),
+              is_approved: true,
               is_featured: false,
-              source: 'google_places' // Mark as imported from Google Places
+              source: 'google_places'
             }));
 
             if (reviewsToInsert.length > 0) {
@@ -221,16 +220,18 @@ const AdminGmbImport = () => {
             }
 
             // Update the agency's rating with the one from Google Places
-            const { error: updateError } = await supabase
-              .from('agencies')
-              .update({
-                rating: reviewData.rating,
-                review_count: reviewData.user_ratings_total
-              })
-              .eq('id', agency.id);
+            if (reviewData.rating) {
+              const { error: updateError } = await supabase
+                .from('agencies')
+                .update({
+                  rating: reviewData.rating,
+                  review_count: reviewData.user_ratings_total || 0
+                })
+                .eq('id', agency.id);
 
-            if (updateError) {
-              console.error(`Failed to update agency ${agency.id}:`, updateError);
+              if (updateError) {
+                console.error(`Failed to update agency ${agency.id}:`, updateError);
+              }
             }
           }
         } catch (error) {

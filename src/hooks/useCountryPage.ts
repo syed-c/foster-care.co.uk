@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 export interface CountryPageContent {
   title?: string;
   intro?: {
+    heading?: string;
     paragraphs?: string[];
   };
   why_fostering_matters?: {
@@ -95,18 +96,18 @@ export interface CountryPageData {
 export function useCountryPage(slug: string | undefined) {
   return useQuery({
     queryKey: ["countryPage", slug],
-    queryFn: async () => {
+    queryFn: async (): Promise<CountryPageData | null> => {
       if (!slug) return null;
 
       const { data, error } = await supabase
-        .from("country_pages")
+        .from("country_pages" as any)
         .select("*")
         .eq("slug", slug)
         .eq("is_active", true)
         .single();
 
       if (error) throw error;
-      return data as CountryPageData | null;
+      return data as unknown as CountryPageData | null;
     },
     enabled: !!slug,
   });
