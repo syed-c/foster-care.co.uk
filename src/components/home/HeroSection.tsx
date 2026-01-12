@@ -1,187 +1,225 @@
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { ArrowRight, Search, Heart, Shield, Users } from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { Search, CheckCircle, Shield, Users, Star, Clock, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useCmsContentSection } from "@/hooks/useCmsContent";
-import heroImage from "@/assets/hero-foster-family.jpg";
+import { useLocations } from "@/hooks/useLocations";
+
+const rotatingWords = ["Foster Carer", "Family", "Support", "Agency"];
 
 export function HeroSection() {
+  const navigate = useNavigate();
   const { data: heroContent } = useCmsContentSection("home", "hero");
+  const { data: locations } = useLocations();
+  
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [selectedType, setSelectedType] = useState("");
 
   const title = heroContent?.title || "Finding the Right Foster Care Agency";
-  const subtitle = heroContent?.subtitle || "UK Foster Care Directory";
-  const content = heroContent?.content || "Connect with trusted foster care agencies across the United Kingdom. Every child deserves a loving home, and we're here to help you find the right support.";
-  const ctaText = heroContent?.cta_text || "Find Agencies";
-  const ctaUrl = heroContent?.cta_url || "/agencies";
-  const imageUrl = heroContent?.image_url || heroImage;
+  const subtitle = heroContent?.subtitle || "Serving Foster Families Across the UK";
+  const content = heroContent?.content || "Compare verified agencies, read reviews, and connect with the right fostering support in seconds.";
+
+  // Rotate words
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentWordIndex((prev) => (prev + 1) % rotatingWords.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleSearch = () => {
+    const params = new URLSearchParams();
+    if (selectedLocation) params.set("location", selectedLocation);
+    if (selectedType) params.set("type", selectedType);
+    navigate(`/agencies${params.toString() ? `?${params.toString()}` : ""}`);
+  };
+
+  const stats = [
+    { icon: Users, value: "500+", label: "VERIFIED AGENCIES" },
+    { icon: Shield, value: "100%", label: "OFSTED RATED" },
+    { icon: Star, value: "4.8", label: "AVERAGE RATING" },
+    { icon: Clock, value: "24h", label: "RESPONSE TIME" },
+  ];
+
   return (
-    <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background-warm via-background to-background-sand z-0" />
-      <div className="absolute inset-0 z-0">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/30 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/3 rounded-full blur-3xl" />
-      </div>
+    <section className="relative min-h-[90vh] flex flex-col items-center justify-center pt-20 overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background-warm/50 to-background z-0" />
       
-      <div className="container-main relative z-10 py-12 md:py-20">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Content */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-center lg:text-left"
-          >
+      {/* Decorative Elements */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        {/* Subtle grid pattern */}
+        <div className="absolute inset-0 opacity-[0.02]" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }} />
+        
+        {/* Floating plus signs */}
+        <motion.div 
+          className="absolute top-32 left-20 text-primary/20 text-4xl font-light"
+          animate={{ y: [0, -10, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          +
+        </motion.div>
+        <motion.div 
+          className="absolute top-40 right-32 text-primary/15 text-5xl font-light"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          +
+        </motion.div>
+        <motion.div 
+          className="absolute bottom-40 left-1/4 text-primary/10 text-3xl font-light"
+          animate={{ y: [0, -8, 0] }}
+          transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          +
+        </motion.div>
+        
+        {/* Subtle gradient blobs */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/3 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/20 rounded-full blur-3xl" />
+      </div>
+
+      <div className="container-main relative z-10 py-12 md:py-20 text-center max-w-5xl mx-auto px-4">
+        {/* Badge */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium bg-primary/10 text-primary border border-primary/20 mb-8"
+        >
+          <CheckCircle className="w-4 h-4" />
+          {subtitle}
+        </motion.div>
+
+        {/* Main Heading */}
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] mb-4 tracking-tight text-foreground"
+        >
+          Find Your Perfect
+          <br />
+          <span className="text-primary relative inline-block min-w-[280px] sm:min-w-[340px]">
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={rotatingWords[currentWordIndex]}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+                className="inline-block"
+              >
+                {rotatingWords[currentWordIndex]}
+              </motion.span>
+            </AnimatePresence>
             <motion.span
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-primary/10 text-primary border border-primary/20 mb-6"
-            >
-              <Heart className="w-4 h-4" />
-              {subtitle}
-            </motion.span>
-            
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] mb-6 tracking-tight"
-            >
-              {title.includes("Foster Care") ? (
-                <>
-                  Finding the Right
-                  <br />
-                  <span className="text-primary relative">
-                    Foster Care
-                    <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 8" fill="none">
-                      <path d="M2 6C50 2 150 2 198 6" stroke="currentColor" strokeWidth="3" strokeLinecap="round" className="text-primary/30"/>
-                    </svg>
-                  </span> Agency
-                </>
-              ) : title}
-            </motion.h1>
-            
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="text-lg md:text-xl text-foreground-muted mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed"
-            >
-              {content}
-            </motion.p>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
-            >
-              <Link to={ctaUrl}>
-                <Button variant="hero" size="lg" className="w-full sm:w-auto group shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all">
-                  <Search className="w-5 h-5" />
-                  {ctaText}
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
-              <Link to="/about">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto bg-background/50 backdrop-blur-sm">
-                  Learn More
-                </Button>
-              </Link>
-            </motion.div>
+              className="inline-block w-[3px] h-[0.9em] bg-primary ml-1 align-middle"
+              animate={{ opacity: [1, 0] }}
+              transition={{ duration: 0.8, repeat: Infinity, repeatType: "reverse" }}
+            />
+          </span>
+        </motion.h1>
 
-            {/* Trust Indicators */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.7 }}
-              className="mt-12 pt-8 border-t border-border/50"
-            >
-              <div className="grid grid-cols-3 gap-6 text-white">
-                {[
-                  { icon: Shield, value: "500+", label: "Verified Agencies" },
-                  { icon: Users, value: "4 Nations", label: "Across the UK" },
-                  { icon: Heart, value: "Trusted", label: "By Social Workers" },
-                ].map((stat, index) => (
-                  <motion.div
-                    key={stat.label}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: 0.8 + index * 0.1 }}
-                    className="text-center lg:text-left"
-                  >
-                    <div className="flex items-center gap-2 justify-center lg:justify-start mb-1">
-                      <stat.icon className="w-4 h-4 text-primary" />
-                      <p className="text-2xl md:text-3xl font-bold text-foreground">{stat.value}</p>
-                    </div>
-                    <p className="text-xs md:text-sm text-muted-foreground">{stat.label}</p>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          </motion.div>
+        {/* Subtitle */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed"
+        >
+          {content}
+        </motion.p>
 
-          {/* Hero Image */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-            className="relative hidden lg:block"
-          >
-            <div className="relative">
-              {/* Main Image Container */}
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-                <img
-                  src={imageUrl}
-                  alt="A caring foster family moment"
-                  className="w-full h-auto object-cover aspect-[4/3]"
-                />
-                {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-foreground/20 to-transparent" />
-              </div>
-              
-              {/* Floating Card */}
-              <motion.div
-                initial={{ opacity: 0, y: 20, x: -20 }}
-                animate={{ opacity: 1, y: 0, x: 0 }}
-                transition={{ duration: 0.6, delay: 1 }}
-                className="absolute -bottom-6 -left-6 bg-background rounded-2xl p-5 shadow-elevated border border-border/50 max-w-[280px]"
-              >
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Heart className="w-5 h-5 text-primary" />
+        {/* Search Bar */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="bg-background rounded-2xl shadow-xl border border-border/50 p-2 max-w-3xl mx-auto mb-12"
+        >
+          <div className="flex flex-col sm:flex-row gap-2">
+            {/* Location Select */}
+            <div className="flex-1">
+              <Select value={selectedLocation} onValueChange={setSelectedLocation}>
+                <SelectTrigger className="h-14 border-0 bg-transparent text-left px-4 focus:ring-0 focus:ring-offset-0">
+                  <div className="flex items-center gap-3">
+                    <MapPin className="w-5 h-5 text-muted-foreground" />
+                    <SelectValue placeholder="All Locations" />
                   </div>
-                  <div>
-                    <p className="font-semibold text-foreground">Ready to foster?</p>
-                    <p className="text-sm text-muted-foreground">Start your journey today</p>
-                  </div>
-                </div>
-                <Link to="/agencies">
-                  <Button variant="secondary" size="sm" className="w-full text-white">
-                    Find an Agency
-                  </Button>
-                </Link>
-              </motion.div>
-              
-              {/* Stats Card */}
-              <motion.div
-                initial={{ opacity: 0, y: -20, x: 20 }}
-                animate={{ opacity: 1, y: 0, x: 0 }}
-                transition={{ duration: 0.6, delay: 1.2 }}
-                className="absolute -top-4 -right-4 bg-primary text-primary-foreground rounded-2xl px-5 py-4 shadow-lg"
-              >
-                <p className="text-3xl font-bold">70K+</p>
-                <p className="text-sm text-primary-foreground/80">Children need care</p>
-              </motion.div>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Locations</SelectItem>
+                  {locations?.map((location) => (
+                    <SelectItem key={location.id} value={location.slug}>
+                      {location.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-            
-            {/* Decorative Elements */}
-            <div className="absolute -top-8 -right-8 w-32 h-32 bg-primary/10 rounded-full blur-2xl" />
-            <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-accent rounded-full blur-3xl" />
-          </motion.div>
-        </div>
+
+            {/* Divider */}
+            <div className="hidden sm:block w-px bg-border self-stretch my-2" />
+
+            {/* Type Select */}
+            <div className="flex-1">
+              <Select value={selectedType} onValueChange={setSelectedType}>
+                <SelectTrigger className="h-14 border-0 bg-transparent text-left px-4 focus:ring-0 focus:ring-offset-0">
+                  <div className="flex items-center gap-3">
+                    <Shield className="w-5 h-5 text-muted-foreground" />
+                    <SelectValue placeholder="All Agency Types" />
+                  </div>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Agency Types</SelectItem>
+                  <SelectItem value="independent">Independent Agency</SelectItem>
+                  <SelectItem value="local-authority">Local Authority</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Search Button */}
+            <Button 
+              onClick={handleSearch}
+              className="h-14 px-8 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
+            >
+              <Search className="w-5 h-5 mr-2" />
+              Search
+            </Button>
+          </div>
+        </motion.div>
+
+        {/* Stats Row */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="flex flex-wrap justify-center gap-8 md:gap-12 lg:gap-16"
+        >
+          {stats.map((stat, index) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
+              className="flex items-center gap-3"
+            >
+              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                <stat.icon className="w-5 h-5 text-primary" />
+              </div>
+              <div className="text-left">
+                <p className="text-2xl font-bold text-foreground">{stat.value}</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">{stat.label}</p>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );
