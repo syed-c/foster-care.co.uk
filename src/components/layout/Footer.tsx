@@ -4,23 +4,25 @@ import { Heart, Mail, Phone, MapPin } from "lucide-react";
 const footerLinks = {
   directory: [
     { href: "/agencies", label: "Find Agencies" },
-    { href: "/locations", label: "Browse by Location" },
-    { href: "/reviews", label: "Agency Reviews" },
+    { href: "/locations/england", label: "Browse by Location" },
+    { href: "/specialisms", label: "Specialisms" },
+    { href: "/compare", label: "Compare Agencies" },
   ],
   resources: [
+    { href: "/guides", label: "Fostering Guides" },
+    { href: "/blog", label: "Blog" },
     { href: "/about", label: "About Us" },
     { href: "/contact", label: "Contact" },
-    { href: "/faq", label: "FAQs" },
   ],
   forAgencies: [
     { href: "/claim", label: "Claim Your Agency" },
-    { href: "/auth/agency", label: "Agency Login" },
-    { href: "/pricing", label: "Subscription Plans" },
+    { href: "/how-listings-work", label: "How Listings Work" },
+    { href: "/register-agency", label: "Register Agency" },
   ],
   legal: [
+    { href: "/editorial-policy", label: "Editorial Policy" },
     { href: "/privacy", label: "Privacy Policy" },
     { href: "/terms", label: "Terms of Service" },
-    { href: "/cookies", label: "Cookie Policy" },
   ],
 };
 

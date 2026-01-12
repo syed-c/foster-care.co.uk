@@ -16,12 +16,11 @@ import { useUserRoles } from "@/hooks/useUserRoles";
 
 const navLinks = [
   { href: "/agencies", label: "Find Agencies" },
-  { href: "/compare", label: "Compare" },
-  { href: "/locations", label: "Locations" },
-  { href: "/locations/england", label: "Foster in England" },
+  { href: "/locations/england", label: "Locations" },
+  { href: "/specialisms", label: "Specialisms" },
+  { href: "/guides", label: "Guides" },
   { href: "/blog", label: "Blog" },
   { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
 ];
 
 export function Header() {
