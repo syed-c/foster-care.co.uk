@@ -34,6 +34,9 @@ import AdminSettings from './pages/admin/AdminSettings';
 import AdminGmbImport from './pages/admin/AdminGmbImport';
 import SpecialismsIndex from './pages/SpecialismsIndex';
 import SpecialismPage from './pages/SpecialismPage';
+import HowListingsWork from './pages/HowListingsWork';
+import EditorialPolicy from './pages/EditorialPolicy';
+import GuidesIndex from './pages/GuidesIndex';
 import NotFound from './pages/NotFound';
 
 const queryClient = new QueryClient();
@@ -57,6 +60,9 @@ const App = () => (
           <Route path="/locations/:country" element={<CountryPage />} />
           <Route path="/specialisms" element={<SpecialismsIndex />} />
           <Route path="/specialisms/:slug" element={<SpecialismPage />} />
+          <Route path="/guides" element={<GuidesIndex />} />
+          <Route path="/how-listings-work" element={<HowListingsWork />} />
+          <Route path="/editorial-policy" element={<EditorialPolicy />} />
           <Route path="/blog" element={<BlogIndex />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/about" element={<AboutPage />} />
