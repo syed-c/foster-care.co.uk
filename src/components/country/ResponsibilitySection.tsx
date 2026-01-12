@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { Info } from 'lucide-react';
-import { ScrollReveal } from '@/components/shared/ScrollReveal';
 
 interface ResponsibilitySectionProps {
   heading?: string;
@@ -14,29 +13,31 @@ export const ResponsibilitySection = ({
   if (!paragraph) return null;
   
   return (
-    <section className="py-12 sm:py-16 px-4 sm:px-6 bg-background">
-      <div className="max-w-4xl mx-auto">
-        <ScrollReveal>
-          <motion.div 
-            className="bg-muted/50 rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-border/40"
-            whileHover={{ scale: 1.01 }}
-            transition={{ duration: 0.3 }}
-          >
+    <section className="py-12 md:py-16 bg-slate-950 relative overflow-hidden">
+      <div className="container-main relative z-10">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="max-w-4xl mx-auto"
+        >
+          <div className="bg-slate-800/60 rounded-2xl p-6 md:p-8 border border-slate-700/50">
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <Info className="w-5 h-5 text-primary" />
+              <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center flex-shrink-0">
+                <Info className="w-5 h-5 text-amber-400" />
               </div>
               <div>
                 {heading && (
-                  <h3 className="font-semibold mb-2 text-foreground">{heading}</h3>
+                  <h3 className="font-bold mb-2 text-white">{heading}</h3>
                 )}
-                <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
+                <p className="text-white/60 text-sm leading-relaxed">
                   {paragraph}
                 </p>
               </div>
             </div>
-          </motion.div>
-        </ScrollReveal>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

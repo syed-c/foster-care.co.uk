@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useCountryPage } from '@/hooks/useCountryPage';
 import { RegionsGrid } from '@/components/country/RegionsGrid';
 import { IntroSection } from '@/components/country/IntroSection';
@@ -19,6 +19,8 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { LocationHero } from '@/components/location/LocationHero';
 import { AgencyListings } from '@/components/location/AgencyListings';
+import { EnquirySection } from '@/components/location/EnquirySection';
+import { LocationCTA } from '@/components/location/LocationCTA';
 import { useAgenciesByCountry } from '@/hooks/useAgenciesByCountry';
 
 // Country flag emoji mapping
@@ -39,9 +41,9 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
 
   if (error || !countryPage) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-secondary">
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
         <div className="text-center px-4">
-          <h1 className="text-2xl font-extrabold text-white mb-2">Page Not Found</h1>
+          <h1 className="text-2xl font-black text-white mb-2">Page Not Found</h1>
           <p className="text-white/60">The requested country page does not exist.</p>
         </div>
       </div>
@@ -59,11 +61,11 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-slate-950">
       <Header />
       
-      {/* Hero Section */}
       <main className="flex-1 pt-20">
+        {/* Hero Section */}
         <LocationHero
           title={content.title || `Fostering Agencies in ${countryName}`}
           description={content.intro?.paragraphs?.[0]}
@@ -158,6 +160,12 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
           />
         )}
 
+        {/* Lead Form Section */}
+        <EnquirySection
+          locationName={countryName}
+          locationSlug={slug}
+        />
+
         {content.faq && content.faq.questions && content.faq.questions.length > 0 && (
           <FAQSection 
             heading={content.faq.heading}
@@ -165,12 +173,14 @@ const CountryPageContent = ({ slug }: { slug: string }) => {
           />
         )}
 
-        {content.cta && (
+        {content.cta ? (
           <CTASection 
             heading={content.cta.heading}
             paragraph={content.cta.paragraph}
             button_text={content.cta.button_text}
           />
+        ) : (
+          <LocationCTA locationName={countryName} />
         )}
       </main>
 
@@ -185,9 +195,9 @@ const CountryPage = () => {
   
   if (!country) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-secondary">
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
         <div className="text-center px-4">
-          <h1 className="text-2xl font-extrabold text-white mb-2">Country not specified</h1>
+          <h1 className="text-2xl font-black text-white mb-2">Country not specified</h1>
           <p className="text-white/60">Please provide a country slug.</p>
         </div>
       </div>

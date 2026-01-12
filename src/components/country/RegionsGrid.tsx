@@ -1,12 +1,25 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { MapPin } from "lucide-react";
-import { ScrollReveal } from '@/components/shared/ScrollReveal';
+import { MapPin, ArrowRight, Building2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface RegionsGridProps {
   heading?: string;
   list: string[];
 }
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.03 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.25 } },
+};
 
 export const RegionsGrid = ({ heading, list }: RegionsGridProps) => {
   const slugify = (str: string) => {
@@ -26,43 +39,64 @@ export const RegionsGrid = ({ heading, list }: RegionsGridProps) => {
   }));
 
   return (
-    <section className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-gradient-to-b from-background to-muted/30">
-      <div className="max-w-6xl mx-auto">
-        <ScrollReveal>
-          <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-foreground">
-              {heading || "Explore Regions in England"}
-            </h2>
-            <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto">
-              Find foster care agencies in your local area
-            </p>
+    <section className="py-16 md:py-20 bg-gradient-to-b from-slate-950 to-slate-900 relative overflow-hidden">
+      {/* Decorative elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 left-1/4 w-[600px] h-[300px] bg-trust/8 rounded-full blur-[150px]" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[250px] bg-verified/8 rounded-full blur-[120px]" />
+      </div>
+      
+      <div className="container-main relative z-10">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} 
+          whileInView={{ opacity: 1, y: 0 }} 
+          viewport={{ once: true }} 
+          transition={{ duration: 0.5 }}
+          className="mb-10"
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-trust/30 to-trust/10 flex items-center justify-center border border-trust/30">
+              <MapPin className="w-6 h-6 text-trust" />
+            </div>
+            <Badge className="bg-trust/20 text-trust border-trust/40 rounded-full font-bold">
+              {regions.length} Regions
+            </Badge>
           </div>
-        </ScrollReveal>
+          <h2 className="text-3xl md:text-4xl font-black text-white mb-2 tracking-tight">
+            {heading || "Explore Regions in England"}
+          </h2>
+          <p className="text-white/50 text-lg">
+            Find foster care agencies in your local area
+          </p>
+        </motion.div>
 
-        <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
-          {regions.map((region, index) => (
-            <motion.div 
-              key={region.name}
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.03 }}
-            >
-              <Link
-                to={`/locations/england/${region.slug}`}
-                className="group inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-full bg-card border border-border/60 hover:border-primary/40 hover:bg-primary/5 shadow-sm hover:shadow-lg hover:shadow-primary/10 transition-all duration-300"
-              >
-                <MapPin className="w-4 h-4 text-primary" />
-                <span className="font-medium text-foreground group-hover:text-primary transition-colors text-sm sm:text-base">
-                  {region.name}
-                </span>
-                <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
-                  {region.agencies}
-                </span>
+        <motion.div 
+          variants={containerVariants} 
+          initial="hidden" 
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3"
+        >
+          {regions.map((region) => (
+            <motion.div key={region.slug} variants={itemVariants}>
+              <Link to={`/locations/england/${region.slug}`}>
+                <div className="group bg-slate-800/40 hover:bg-slate-800 border border-slate-700/50 hover:border-trust/50 rounded-2xl p-4 transition-all duration-300 h-full">
+                  <div className="flex items-center justify-between mb-2">
+                    <MapPin className="w-4 h-4 text-trust" />
+                    <ArrowRight className="w-4 h-4 text-white/20 group-hover:text-trust transition-colors" />
+                  </div>
+                  <h3 className="font-bold text-white group-hover:text-trust transition-colors text-sm mb-1 truncate">
+                    {region.name}
+                  </h3>
+                  <p className="text-xs text-white/40 flex items-center gap-1">
+                    <Building2 className="w-3 h-3" />
+                    {region.agencies} agencies
+                  </p>
+                </div>
               </Link>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
