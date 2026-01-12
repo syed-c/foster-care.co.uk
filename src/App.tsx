@@ -37,6 +37,10 @@ import SpecialismPage from './pages/SpecialismPage';
 import HowListingsWork from './pages/HowListingsWork';
 import EditorialPolicy from './pages/EditorialPolicy';
 import GuidesIndex from './pages/GuidesIndex';
+import TrustVerification from './pages/TrustVerification';
+import HowToBecomeGuide from './pages/guides/HowToBecomeGuide';
+import FosteringAllowancesGuide from './pages/guides/FosteringAllowancesGuide';
+import TypesOfFosteringGuide from './pages/guides/TypesOfFosteringGuide';
 import NotFound from './pages/NotFound';
 
 const queryClient = new QueryClient();
@@ -61,6 +65,10 @@ const App = () => (
           <Route path="/specialisms" element={<SpecialismsIndex />} />
           <Route path="/specialisms/:slug" element={<SpecialismPage />} />
           <Route path="/guides" element={<GuidesIndex />} />
+          <Route path="/guides/how-to-become-foster-carer" element={<HowToBecomeGuide />} />
+          <Route path="/guides/fostering-allowances" element={<FosteringAllowancesGuide />} />
+          <Route path="/guides/types-of-fostering" element={<TypesOfFosteringGuide />} />
+          <Route path="/trust-verification" element={<TrustVerification />} />
           <Route path="/how-listings-work" element={<HowListingsWork />} />
           <Route path="/editorial-policy" element={<EditorialPolicy />} />
           <Route path="/blog" element={<BlogIndex />} />
