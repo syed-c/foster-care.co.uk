@@ -1,7 +1,7 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
-import { MapPin, ChevronRight, Building2, Users, Heart, Shield, Phone, CheckCircle, Star, ExternalLink, Award, GraduationCap, Clock, ArrowRight, Sparkles, Globe } from "lucide-react";
+import { MapPin, ChevronRight, Building2, Users, Heart, Shield, Phone, CheckCircle, Star, ExternalLink, Award, GraduationCap, Clock, ArrowRight, Sparkles, Globe, Calendar, Eye } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -19,21 +19,13 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.08 },
+    transition: { staggerChildren: 0.06 },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
-};
-
-// Location type to gradient mapping
-const typeGradients: Record<string, string> = {
-  country: "from-rose-500/10 via-orange-500/5 to-amber-500/10",
-  region: "from-blue-500/10 via-indigo-500/5 to-violet-500/10",
-  county: "from-emerald-500/10 via-teal-500/5 to-cyan-500/10",
-  city: "from-amber-500/10 via-yellow-500/5 to-lime-500/10",
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.35 } },
 };
 
 // Country flag emoji mapping
@@ -52,8 +44,8 @@ export default function LocationPage() {
   const { data: childLocations, isLoading: childrenLoading } = useChildLocations(location?.id);
   const { data: locationPath } = useLocationPath(location?.id);
   const { data: locationFaqs } = useFaqsByLocation(location?.id);
-  const { data: locationAgencies } = useAgenciesByLocation(location?.id, 6);
-  const { data: featuredAgencies } = useFeaturedAgencies(6);
+  const { data: locationAgencies } = useAgenciesByLocation(location?.id, 12);
+  const { data: featuredAgencies } = useFeaturedAgencies(12);
   
   // Build CMS page_key with location_ prefix
   const cmsPageKey = slug ? `location_${slug}` : undefined;
@@ -67,30 +59,20 @@ export default function LocationPage() {
   // Get specific content sections
   const heroContent = getContentBySection(cmsContent, 'hero');
   const whyFosteringContent = getContentBySection(cmsContent, 'why_fostering');
-  const agencyTypesContent = getContentBySection(cmsContent, 'agency_types');
-  const fosteringTypesContent = getContentBySection(cmsContent, 'fostering_types');
-  const howToContent = getContentBySection(cmsContent, 'how_to');
-  const supportContent = getContentBySection(cmsContent, 'support');
 
   // Combine FAQs from location and page
   const allFaqs = [...(locationFaqs || []), ...(pageFaqs || [])];
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col bg-slate-950">
         <Header />
         <main className="flex-1 pt-20">
-          <section className="relative py-20 md:py-28">
-            <div className="absolute inset-0 bg-gradient-to-br from-background via-background-warm to-background-sand" />
-            <div className="container-main relative z-10">
-              <Skeleton className="h-6 w-64 mb-6" />
-              <div className="flex items-center gap-5 mb-6">
-                <Skeleton className="w-20 h-20 rounded-3xl" />
-                <div className="flex-1">
-                  <Skeleton className="h-12 w-80 mb-3" />
-                  <Skeleton className="h-6 w-96" />
-                </div>
-              </div>
+          <section className="relative py-16 md:py-24 bg-slate-950">
+            <div className="container-main">
+              <Skeleton className="h-6 w-64 mb-6 bg-slate-800" />
+              <Skeleton className="h-14 w-96 mb-4 bg-slate-800" />
+              <Skeleton className="h-6 w-full max-w-2xl bg-slate-800" />
             </div>
           </section>
         </main>
@@ -101,7 +83,7 @@ export default function LocationPage() {
 
   if (!location) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col bg-slate-950">
         <Header />
         <main className="flex-1 pt-20 flex items-center justify-center">
           <motion.div 
@@ -109,11 +91,11 @@ export default function LocationPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center max-w-md px-6"
           >
-            <div className="w-20 h-20 rounded-3xl bg-muted flex items-center justify-center mx-auto mb-6">
-              <MapPin className="w-10 h-10 text-muted-foreground" />
+            <div className="w-20 h-20 rounded-3xl bg-slate-800 flex items-center justify-center mx-auto mb-6">
+              <MapPin className="w-10 h-10 text-slate-400" />
             </div>
-            <h1 className="text-2xl font-bold mb-3">Location Not Found</h1>
-            <p className="text-muted-foreground mb-8">The location you're looking for doesn't exist or may have been moved.</p>
+            <h1 className="text-2xl font-bold mb-3 text-white">Location Not Found</h1>
+            <p className="text-slate-400 mb-8">The location you're looking for doesn't exist or may have been moved.</p>
             <Button asChild>
               <Link to="/locations">Browse All Locations</Link>
             </Button>
@@ -165,9 +147,6 @@ export default function LocationPage() {
   const currentPath = locationPath ? buildLocationUrl(locationPath) : `/locations/${location.slug}`;
   const agencies = locationAgencies && locationAgencies.length > 0 ? locationAgencies : featuredAgencies;
   const isShowingFeatured = !locationAgencies || locationAgencies.length === 0;
-  const gradient = typeGradients[location.type] || typeGradients.region;
-  
-  // Get flag for countries
   const flag = location.type === 'country' ? countryFlags[location.slug] : null;
 
   return (
@@ -184,19 +163,19 @@ export default function LocationPage() {
       />
       <Header />
       <main className="flex-1 pt-20">
-        {/* Hero Section - Modern Gradient Design */}
-        <section className="relative py-16 md:py-24 overflow-hidden">
-          {/* Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-background via-background-warm to-background-sand" />
-          <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-50`} />
+        {/* HERO SECTION - Dark, Bold, Directory Feel */}
+        <section className="relative py-16 md:py-20 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 overflow-hidden">
+          {/* Decorative Elements */}
           <div className="absolute inset-0">
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/30 rounded-full blur-3xl" />
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px]" />
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[100px]" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-600/5 rounded-full blur-[150px]" />
           </div>
-
-          {/* Decorative pattern */}
-          <div className="absolute inset-0 opacity-[0.015]" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          
+          {/* Grid Pattern */}
+          <div className="absolute inset-0 opacity-[0.03]" style={{
+            backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+            backgroundSize: '60px 60px',
           }} />
 
           <div className="container-main relative z-10">
@@ -205,138 +184,265 @@ export default function LocationPage() {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="flex items-center gap-2 text-sm text-muted-foreground mb-8 flex-wrap"
+              className="flex items-center gap-2 text-sm text-slate-400 mb-8 flex-wrap"
             >
-              <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
+              <Link to="/" className="hover:text-white transition-colors">Home</Link>
               <ChevronRight className="w-4 h-4" />
-              <Link to="/locations" className="hover:text-foreground transition-colors">Locations</Link>
+              <Link to="/locations" className="hover:text-white transition-colors">Locations</Link>
               {locationPath && locationPath.slice(0, -1).map((loc, index) => (
                 <span key={loc.id} className="flex items-center gap-2">
                   <ChevronRight className="w-4 h-4" />
-                  <Link to={buildLocationUrl(locationPath.slice(0, index + 1))} className="hover:text-foreground transition-colors">
+                  <Link to={buildLocationUrl(locationPath.slice(0, index + 1))} className="hover:text-white transition-colors">
                     {loc.name}
                   </Link>
                 </span>
               ))}
               <ChevronRight className="w-4 h-4" />
-              <span className="text-foreground font-medium">{location.name}</span>
+              <span className="text-white font-medium">{location.name}</span>
             </motion.nav>
 
-            <div className="max-w-5xl">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              {/* Left - Hero Content */}
               <motion.div 
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="flex items-start gap-6 mb-8"
               >
-                {/* Icon/Flag */}
-                <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-4xl shadow-lg shadow-primary/10 flex-shrink-0">
-                  {flag || <MapPin className="w-10 h-10 text-primary" />}
-                </div>
-                
-                <div className="flex-1">
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.2 }}
-                    className="flex items-center gap-3 mb-3"
-                  >
-                    <Badge variant="secondary" className="px-3 py-1 text-xs font-medium capitalize bg-background/80 backdrop-blur-sm">
-                      {location.type}
+                {/* Badge */}
+                <div className="flex items-center gap-3 mb-5">
+                  {flag && <span className="text-3xl">{flag}</span>}
+                  <Badge className="bg-primary/20 text-primary border-primary/30 px-4 py-1.5 text-sm font-medium capitalize">
+                    {location.type} Directory
+                  </Badge>
+                  {totalAgencies > 0 && (
+                    <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 px-3 py-1.5 text-sm">
+                      {totalAgencies} Agencies
                     </Badge>
-                    {totalAgencies > 0 && (
-                      <Badge variant="secondary" className="px-3 py-1 text-xs font-medium bg-primary/10 text-primary border-0">
-                        {totalAgencies} Agencies
-                      </Badge>
-                    )}
-                  </motion.div>
-                  
-                  <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4">
-                    {heroContent?.title || `Foster Care Agencies in ${location.name}`}
-                  </h1>
-                  
-                  <p className="text-lg md:text-xl text-foreground-muted max-w-3xl leading-relaxed">
-                    {heroContent?.content || location.description || `Find trusted foster care agencies in ${location.name}. Compare verified agencies and take the first step on your fostering journey.`}
-                  </p>
+                  )}
+                </div>
+                
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-[1.05] mb-5">
+                  {heroContent?.title || <>Fostering Agencies in <span className="text-primary">{location.name}</span></>}
+                </h1>
+                
+                <p className="text-lg md:text-xl text-slate-300 max-w-xl leading-relaxed mb-8">
+                  {heroContent?.content || location.description || `Discover verified foster care agencies across ${location.name}. Compare services, read reviews, and find the right agency for your fostering journey.`}
+                </p>
+
+                <div className="flex flex-wrap gap-4">
+                  <Button size="lg" className="bg-primary hover:bg-primary-hover text-white shadow-lg shadow-primary/25 px-8" asChild>
+                    <a href="#agencies">
+                      <Building2 className="w-5 h-5 mr-2" />
+                      Browse Agencies
+                    </a>
+                  </Button>
+                  <Button size="lg" variant="outline" className="border-slate-600 text-white hover:bg-slate-800 hover:border-slate-500 px-8" asChild>
+                    <a href="#enquire">
+                      <Heart className="w-5 h-5 mr-2" />
+                      Start Enquiry
+                    </a>
+                  </Button>
                 </div>
               </motion.div>
 
-              {/* Stats Cards */}
+              {/* Right - Stats Grid */}
               <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="flex flex-wrap gap-4 mb-8"
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="grid grid-cols-2 gap-4"
               >
-                <Card className="border-0 bg-background/80 backdrop-blur-sm shadow-lg">
-                  <CardContent className="flex items-center gap-4 p-5">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                      <Building2 className="w-7 h-7 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-3xl font-bold">{totalAgencies}</p>
-                      <p className="text-sm text-muted-foreground">Verified Agencies</p>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                {hasChildLocations && (
-                  <Card className="border-0 bg-background/80 backdrop-blur-sm shadow-lg">
-                    <CardContent className="flex items-center gap-4 p-5">
-                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-blue-500/5 flex items-center justify-center">
-                        <Globe className="w-7 h-7 text-blue-600" />
-                      </div>
-                      <div>
-                        <p className="text-3xl font-bold">{childLocations.length}</p>
-                        <p className="text-sm text-muted-foreground">{getChildTypeName()}</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-              </motion.div>
-
-              {/* CTA Buttons */}
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-                className="flex flex-wrap gap-4"
-              >
-                <Button size="lg" asChild className="shadow-lg shadow-primary/20">
-                  <Link to="/agencies">
-                    <Building2 className="w-5 h-5 mr-2" />
-                    Browse Agencies
-                  </Link>
-                </Button>
-                <Button size="lg" variant="outline" asChild className="bg-background/50 backdrop-blur-sm">
-                  <a href="#enquire">
-                    <Heart className="w-5 h-5 mr-2" />
-                    Start Enquiry
-                  </a>
-                </Button>
+                {[
+                  { icon: Building2, value: totalAgencies.toString(), label: "Verified Agencies", color: "from-primary/20 to-emerald-600/10" },
+                  { icon: Star, value: "4.8", label: "Average Rating", color: "from-amber-500/20 to-orange-500/10" },
+                  { icon: Users, value: "500+", label: "Foster Carers", color: "from-blue-500/20 to-indigo-500/10" },
+                  { icon: Shield, value: "100%", label: "Ofsted Registered", color: "from-violet-500/20 to-purple-500/10" },
+                ].map((stat, index) => (
+                  <motion.div
+                    key={stat.label}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
+                    className={`bg-gradient-to-br ${stat.color} backdrop-blur-sm border border-white/10 rounded-2xl p-5`}
+                  >
+                    <stat.icon className="w-6 h-6 text-white/70 mb-3" />
+                    <p className="text-3xl font-bold text-white mb-1">{stat.value}</p>
+                    <p className="text-sm text-slate-400">{stat.label}</p>
+                  </motion.div>
+                ))}
               </motion.div>
             </div>
           </div>
         </section>
 
-        {/* Child Locations Grid - Modern Cards */}
+        {/* AGENCY LISTINGS - Horizontal Row Format */}
+        <section className="py-12 md:py-16 bg-slate-900" id="agencies">
+          <div className="container-main">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              whileInView={{ opacity: 1, y: 0 }} 
+              viewport={{ once: true }} 
+              transition={{ duration: 0.5 }}
+              className="flex items-center justify-between mb-8"
+            >
+              <div>
+                <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                  {isShowingFeatured ? "Featured Agencies" : `Agencies in ${location.name}`}
+                </h2>
+                <p className="text-slate-400">
+                  {isShowingFeatured ? "Top-rated fostering agencies across England" : `${agencies?.length || 0} agencies serving ${location.name}`}
+                </p>
+              </div>
+              <Button variant="outline" className="border-slate-600 text-slate-300 hover:bg-slate-800" asChild>
+                <Link to="/agencies">View All</Link>
+              </Button>
+            </motion.div>
+
+            {/* Agency Rows */}
+            <motion.div 
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="space-y-3"
+            >
+              {agencies?.map((agency, index) => (
+                <motion.div 
+                  key={agency.id} 
+                  variants={itemVariants}
+                  className="group bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 hover:border-slate-600 rounded-xl p-4 transition-all duration-300"
+                >
+                  <div className="flex items-center gap-4">
+                    {/* Agency Logo/Image */}
+                    <div className="flex-shrink-0">
+                      {agency.logo_url ? (
+                        <img 
+                          src={agency.logo_url} 
+                          alt={agency.name} 
+                          className="w-14 h-14 rounded-xl object-cover border border-slate-600"
+                        />
+                      ) : (
+                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center border border-primary/20">
+                          <Building2 className="w-7 h-7 text-primary" />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Agency Info */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-3 mb-1">
+                        <h3 className="font-semibold text-lg text-white group-hover:text-primary transition-colors truncate">
+                          {agency.name}
+                        </h3>
+                        {agency.is_verified && (
+                          <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs">
+                            <CheckCircle className="w-3 h-3 mr-1" />
+                            Verified
+                          </Badge>
+                        )}
+                        {agency.is_featured && (
+                          <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs">
+                            <Star className="w-3 h-3 mr-1" />
+                            Featured
+                          </Badge>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-4 text-sm text-slate-400">
+                        {agency.city && (
+                          <span className="flex items-center gap-1.5">
+                            <MapPin className="w-3.5 h-3.5" />
+                            {agency.city}
+                          </span>
+                        )}
+                        {agency.description && (
+                          <span className="hidden md:block truncate max-w-md">
+                            {agency.description.slice(0, 80)}...
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Rating */}
+                    <div className="hidden sm:flex items-center gap-3 px-4 border-l border-slate-700">
+                      {agency.rating && agency.rating > 0 ? (
+                        <div className="text-center">
+                          <div className="flex items-center gap-1.5 mb-0.5">
+                            <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                            <span className="font-bold text-white">{agency.rating.toFixed(1)}</span>
+                          </div>
+                          <p className="text-xs text-slate-500">
+                            {agency.review_count || 0} reviews
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="text-center">
+                          <p className="text-sm text-slate-500">No reviews</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex items-center gap-2">
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="border-slate-600 text-slate-300 hover:bg-slate-700 hidden sm:flex"
+                        asChild
+                      >
+                        <a href={`tel:${agency.phone || ''}`}>
+                          <Calendar className="w-4 h-4 mr-1.5" />
+                          Book
+                        </a>
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        className="bg-primary hover:bg-primary-hover"
+                        asChild
+                      >
+                        <Link to={`/agencies/${agency.slug}`}>
+                          <Eye className="w-4 h-4 mr-1.5" />
+                          View Profile
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* Load More */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="text-center mt-8"
+            >
+              <Button variant="outline" size="lg" className="border-slate-600 text-slate-300 hover:bg-slate-800" asChild>
+                <Link to="/agencies">
+                  View All Agencies
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              </Button>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Child Locations - Compact Grid */}
         {hasChildLocations && (
-          <section className="section-padding bg-background relative">
+          <section className="py-12 md:py-16 bg-slate-950">
             <div className="container-main">
               <motion.div 
                 initial={{ opacity: 0, y: 20 }} 
                 whileInView={{ opacity: 1, y: 0 }} 
                 viewport={{ once: true }} 
                 transition={{ duration: 0.5 }}
-                className="mb-10"
+                className="mb-8"
               >
-                <div className="flex items-center gap-3 mb-3">
-                  <Sparkles className="w-5 h-5 text-primary" />
-                  <span className="text-sm font-medium text-primary">Explore {location.name}</span>
-                </div>
-                <h2 className="text-2xl md:text-3xl font-bold mb-3">{getChildTypeName()} in {location.name}</h2>
-                <p className="text-muted-foreground text-lg max-w-2xl">
-                  Find foster care agencies in specific areas of {location.name}. Click on a {getChildTypeName().toLowerCase().slice(0, -1)} to view local agencies.
+                <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                  {getChildTypeName()} in {location.name}
+                </h2>
+                <p className="text-slate-400">
+                  Explore fostering agencies in specific areas
                 </p>
               </motion.div>
 
@@ -345,31 +451,23 @@ export default function LocationPage() {
                 initial="hidden" 
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"
+                className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3"
               >
-                {childLocations.map((childLoc, index) => (
+                {childLocations.map((childLoc) => (
                   <motion.div key={childLoc.id} variants={itemVariants}>
                     <Link to={getChildLocationUrl(childLoc)}>
-                      <Card className="group h-full border-border/50 hover:border-primary/30 hover:shadow-card bg-gradient-to-br from-background to-background-warm transition-all duration-300">
-                        <CardContent className="p-5 flex items-center justify-between">
-                          <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                              <MapPin className="w-5 h-5 text-primary" />
-                            </div>
-                            <div>
-                              <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">{childLoc.name}</h3>
-                              <div className="flex items-center gap-2 mt-1">
-                                <Badge variant="secondary" className="text-xs bg-muted/50 border-0">
-                                  {childLoc.agency_count || 0} agencies
-                                </Badge>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="w-9 h-9 rounded-full bg-muted/50 flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
-                            <ArrowRight className="w-4 h-4" />
-                          </div>
-                        </CardContent>
-                      </Card>
+                      <div className="group bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-primary/40 rounded-xl p-4 transition-all duration-300">
+                        <div className="flex items-center justify-between mb-2">
+                          <MapPin className="w-4 h-4 text-primary" />
+                          <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-primary transition-colors" />
+                        </div>
+                        <h3 className="font-semibold text-white group-hover:text-primary transition-colors text-sm mb-1 truncate">
+                          {childLoc.name}
+                        </h3>
+                        <p className="text-xs text-slate-500">
+                          {childLoc.agency_count || 0} agencies
+                        </p>
+                      </div>
                     </Link>
                   </motion.div>
                 ))}
@@ -378,33 +476,28 @@ export default function LocationPage() {
           </section>
         )}
 
-        {/* Why Fostering Section - Always show with defaults or CMS content */}
-        <section className="section-padding bg-gradient-to-b from-background-warm to-background relative overflow-hidden">
-          <div className="absolute inset-0">
-            <div className="absolute top-1/2 left-0 w-[600px] h-[600px] bg-primary/3 rounded-full blur-3xl -translate-y-1/2" />
-          </div>
-          
-          <div className="container-main relative z-10">
+        {/* Why Fostering Matters - Compact */}
+        <section className="py-12 md:py-16 bg-gradient-to-b from-slate-900 to-slate-950">
+          <div className="container-main">
             <motion.div 
               initial={{ opacity: 0, y: 20 }} 
               whileInView={{ opacity: 1, y: 0 }} 
               viewport={{ once: true }} 
               transition={{ duration: 0.5 }}
-              className="max-w-4xl mx-auto text-center mb-12"
+              className="max-w-4xl mx-auto text-center mb-10"
             >
-              <Badge variant="secondary" className="mb-4 px-4 py-1.5">
+              <Badge className="bg-rose-500/20 text-rose-400 border-rose-500/30 mb-4">
                 <Heart className="w-3.5 h-3.5 mr-1.5" />
                 Why Foster?
               </Badge>
-              <h2 className="text-2xl md:text-3xl font-bold mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
                 {whyFosteringContent?.title || `Why Fostering Matters in ${location.name}`}
               </h2>
-              <p className="text-foreground-muted text-lg leading-relaxed">
-                {whyFosteringContent?.content || `Every child deserves a safe, loving home. Foster carers in ${location.name} provide vital support to children who need it most, offering stability during challenging times. Whether you're considering short-term fostering or a long-term commitment, your care can transform a young person's life.`}
+              <p className="text-slate-400 text-lg leading-relaxed">
+                {whyFosteringContent?.content || `Every child deserves a safe, loving home. Foster carers in ${location.name} provide vital support to children who need it most.`}
               </p>
             </motion.div>
 
-            {/* Trust points */}
             <motion.div 
               variants={containerVariants}
               initial="hidden"
@@ -413,379 +506,237 @@ export default function LocationPage() {
               className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4"
             >
               {[
-                { icon: Shield, title: "Verified Agencies", desc: "All agencies are checked and verified", color: "from-emerald-500/20 to-emerald-500/5" },
-                { icon: Heart, title: "Child-Focused", desc: "Every decision puts children first", color: "from-rose-500/20 to-rose-500/5" },
-                { icon: Users, title: "Expert Support", desc: "24/7 professional guidance", color: "from-blue-500/20 to-blue-500/5" },
-                { icon: Award, title: "Quality Standards", desc: "Ofsted-rated agency partners", color: "from-amber-500/20 to-amber-500/5" },
+                { icon: Shield, title: "Verified Agencies", desc: "All agencies checked", color: "from-emerald-500/20" },
+                { icon: Heart, title: "Child-Focused", desc: "Children come first", color: "from-rose-500/20" },
+                { icon: Users, title: "24/7 Support", desc: "Always available", color: "from-blue-500/20" },
+                { icon: Award, title: "Ofsted Rated", desc: "Quality assured", color: "from-amber-500/20" },
               ].map((item, index) => (
                 <motion.div key={item.title} variants={itemVariants}>
-                  <Card className="h-full border-0 bg-background shadow-card hover:shadow-elevated transition-shadow">
-                    <CardContent className="p-6">
-                      <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-4`}>
-                        <item.icon className="w-7 h-7 text-primary" />
-                      </div>
-                      <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
-                      <p className="text-sm text-muted-foreground">{item.desc}</p>
-                    </CardContent>
-                  </Card>
+                  <div className={`bg-gradient-to-br ${item.color} to-transparent border border-slate-800 rounded-xl p-5`}>
+                    <item.icon className="w-6 h-6 text-white/70 mb-3" />
+                    <h3 className="font-semibold text-white mb-1">{item.title}</h3>
+                    <p className="text-sm text-slate-400">{item.desc}</p>
+                  </div>
                 </motion.div>
               ))}
             </motion.div>
           </div>
         </section>
 
-        {/* Agency Types Section */}
-        <section className="section-padding bg-background">
+        {/* Types of Fostering - Compact Pills */}
+        <section className="py-12 md:py-16 bg-slate-950">
           <div className="container-main">
             <motion.div 
               initial={{ opacity: 0, y: 20 }} 
               whileInView={{ opacity: 1, y: 0 }} 
               viewport={{ once: true }} 
               transition={{ duration: 0.5 }}
-              className="max-w-4xl mx-auto"
+              className="text-center mb-8"
             >
-              <div className="text-center mb-10">
-                <Badge variant="secondary" className="mb-4 px-4 py-1.5">
-                  <Building2 className="w-3.5 h-3.5 mr-1.5" />
-                  Agency Types
-                </Badge>
-                <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                  {agencyTypesContent?.title || "Independent vs Local Authority Fostering"}
-                </h2>
-                <p className="text-muted-foreground text-lg">
-                  {agencyTypesContent?.subtitle || "Understanding your options helps you find the right fit"}
-                </p>
-              </div>
-              
-              <div className="grid md:grid-cols-2 gap-6">
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <Card className="h-full border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
-                    <CardContent className="p-7">
-                      <div className="flex items-center gap-4 mb-5">
-                        <div className="w-14 h-14 rounded-2xl bg-primary/15 flex items-center justify-center">
-                          <Building2 className="w-7 h-7 text-primary" />
-                        </div>
-                        <div>
-                          <h3 className="font-bold text-lg">Independent Fostering Agencies</h3>
-                          <p className="text-sm text-muted-foreground">Private sector providers</p>
-                        </div>
-                      </div>
-                      <ul className="space-y-3">
-                        {[
-                          "24/7 dedicated support line",
-                          "Specialist placements & therapeutic training",
-                          "Close-knit carer communities",
-                          "Regular supervision & home visits",
-                          "Competitive fostering allowances",
-                        ].map((item, i) => (
-                          <li key={i} className="flex items-start gap-2.5 text-sm">
-                            <CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                            <span className="text-muted-foreground">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-                
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                >
-                  <Card className="h-full border-blue-500/20 bg-gradient-to-br from-blue-500/5 to-transparent">
-                    <CardContent className="p-7">
-                      <div className="flex items-center gap-4 mb-5">
-                        <div className="w-14 h-14 rounded-2xl bg-blue-500/15 flex items-center justify-center">
-                          <Users className="w-7 h-7 text-blue-600" />
-                        </div>
-                        <div>
-                          <h3 className="font-bold text-lg">Local Authority Fostering</h3>
-                          <p className="text-sm text-muted-foreground">Council-run services</p>
-                        </div>
-                      </div>
-                      <ul className="space-y-3">
-                        {[
-                          "Placements closer to child's home area",
-                          "Direct involvement with children's services",
-                          "Ties into local schools & community",
-                          "Council-led support systems",
-                          "Access to local resources",
-                        ].map((item, i) => (
-                          <li key={i} className="flex items-start gap-2.5 text-sm">
-                            <CheckCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                            <span className="text-muted-foreground">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                Types of Fostering
+              </h2>
+              <p className="text-slate-400">Different ways to make a difference</p>
             </motion.div>
-          </div>
-        </section>
-
-        {/* Types of Fostering */}
-        <section className="section-padding bg-background-warm">
-          <div className="container-main">
+            
             <motion.div 
-              initial={{ opacity: 0, y: 20 }} 
-              whileInView={{ opacity: 1, y: 0 }} 
-              viewport={{ once: true }} 
-              transition={{ duration: 0.5 }}
-              className="max-w-5xl mx-auto"
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="flex flex-wrap justify-center gap-3"
             >
-              <div className="text-center mb-10">
-                <Badge variant="secondary" className="mb-4 px-4 py-1.5">
-                  <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-                  Fostering Types
-                </Badge>
-                <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                  {fosteringTypesContent?.title || `Types of Fostering in ${location.name}`}
-                </h2>
-                <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                  {fosteringTypesContent?.subtitle || "Discover the different ways you can make a difference in a child's life"}
-                </p>
-              </div>
-              
-              <motion.div 
-                variants={containerVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                className="grid md:grid-cols-2 lg:grid-cols-3 gap-4"
-              >
-                {[
-                  { icon: Clock, title: "Short-Term Fostering", desc: "Temporary care during transitions, from a few days to several months." },
-                  { icon: Heart, title: "Long-Term Fostering", desc: "A stable, permanent home for a child until they reach adulthood." },
-                  { icon: Shield, title: "Emergency Fostering", desc: "Immediate placement for children in crisis situations." },
-                  { icon: Users, title: "Respite Fostering", desc: "Short breaks to support other foster families." },
-                  { icon: GraduationCap, title: "Parent and Child", desc: "Supporting young parents to care for their babies." },
-                  { icon: Award, title: "Specialist Fostering", desc: "Care for children with additional or complex needs." },
-                ].map((type, index) => (
-                  <motion.div key={type.title} variants={itemVariants}>
-                    <Card className="h-full hover:shadow-card transition-shadow border-border/50">
-                      <CardContent className="p-6">
-                        <div className="flex items-center gap-3 mb-3">
-                          <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center">
-                            <type.icon className="w-5 h-5 text-primary" />
-                          </div>
-                          <h3 className="font-semibold">{type.title}</h3>
-                        </div>
-                        <p className="text-sm text-muted-foreground leading-relaxed">{type.desc}</p>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Agencies Section */}
-        {agencies && agencies.length > 0 && (
-          <section className="section-padding bg-background">
-            <div className="container-main">
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }} 
-                whileInView={{ opacity: 1, y: 0 }} 
-                viewport={{ once: true }} 
-                transition={{ duration: 0.5 }}
-                className="mb-10"
-              >
-                <div className="flex items-center gap-3 mb-3">
-                  <Building2 className="w-5 h-5 text-primary" />
-                  <span className="text-sm font-medium text-primary">
-                    {isShowingFeatured ? "Featured Agencies" : "Local Agencies"}
-                  </span>
-                </div>
-                <h2 className="text-2xl md:text-3xl font-bold mb-3">
-                  {isShowingFeatured ? "Featured Fostering Agencies" : `Agencies in ${location.name}`}
-                </h2>
-                <p className="text-muted-foreground text-lg max-w-2xl">
-                  {isShowingFeatured ? "Explore our featured fostering agencies across the UK." : `Browse verified agencies serving ${location.name} and surrounding areas.`}
-                </p>
-              </motion.div>
-
-              <motion.div 
-                variants={containerVariants} 
-                initial="hidden" 
-                whileInView="visible" 
-                viewport={{ once: true }} 
-                className="grid md:grid-cols-2 lg:grid-cols-3 gap-5"
-              >
-                {agencies.map((agency) => (
-                  <motion.div key={agency.id} variants={itemVariants}>
-                    <Link to={`/agencies/${agency.slug}`}>
-                      <Card className="group h-full hover:shadow-card hover:border-primary/20 transition-all duration-300">
-                        <CardContent className="p-6">
-                          <div className="flex items-start gap-4 mb-4">
-                            {agency.logo_url ? (
-                              <img src={agency.logo_url} alt={agency.name} className="w-14 h-14 rounded-xl object-cover" />
-                            ) : (
-                              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 flex items-center justify-center">
-                                <Building2 className="w-7 h-7 text-primary" />
-                              </div>
-                            )}
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-lg group-hover:text-primary transition-colors truncate">{agency.name}</h3>
-                              {agency.city && (
-                                <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1">
-                                  <MapPin className="w-3.5 h-3.5" />{agency.city}
-                                </p>
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              {agency.rating && agency.rating > 0 && (
-                                <div className="flex items-center gap-1 text-sm bg-amber-500/10 px-2.5 py-1 rounded-full">
-                                  <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
-                                  <span className="font-medium text-amber-700">{agency.rating.toFixed(1)}</span>
-                                </div>
-                              )}
-                              {agency.is_verified && (
-                                <Badge variant="secondary" className="text-xs bg-primary/10 text-primary border-0">
-                                  <CheckCircle className="w-3 h-3 mr-1" />
-                                  Verified
-                                </Badge>
-                              )}
-                            </div>
-                            <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </Link>
-                  </motion.div>
-                ))}
-              </motion.div>
-
-              <motion.div 
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                className="text-center mt-10"
-              >
-                <Button variant="outline" size="lg" asChild>
-                  <Link to="/agencies" className="group">
-                    View All Agencies
-                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              {[
+                { icon: Clock, title: "Short-Term" },
+                { icon: Heart, title: "Long-Term" },
+                { icon: Shield, title: "Emergency" },
+                { icon: Users, title: "Respite" },
+                { icon: GraduationCap, title: "Parent & Child" },
+                { icon: Award, title: "Specialist" },
+              ].map((type) => (
+                <motion.div key={type.title} variants={itemVariants}>
+                  <Link to={`/specialisms/${type.title.toLowerCase().replace(/\s+/g, '-')}`}>
+                    <div className="group flex items-center gap-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-primary/40 rounded-full px-5 py-2.5 transition-all">
+                      <type.icon className="w-4 h-4 text-primary" />
+                      <span className="text-sm font-medium text-slate-300 group-hover:text-white">{type.title}</span>
+                    </div>
                   </Link>
-                </Button>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Agency Types - Side by Side Compact */}
+        <section className="py-12 md:py-16 bg-slate-900">
+          <div className="container-main">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              whileInView={{ opacity: 1, y: 0 }} 
+              viewport={{ once: true }} 
+              transition={{ duration: 0.5 }}
+              className="text-center mb-8"
+            >
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                Agency Types Explained
+              </h2>
+              <p className="text-slate-400">Understanding your options</p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 rounded-2xl p-6"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
+                    <Building2 className="w-5 h-5 text-primary" />
+                  </div>
+                  <h3 className="font-bold text-white">Independent Agencies</h3>
+                </div>
+                <ul className="space-y-2 text-sm text-slate-400">
+                  {["24/7 dedicated support", "Specialist training", "Competitive allowances"].map((item) => (
+                    <li key={item} className="flex items-center gap-2">
+                      <CheckCircle className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-500/20 rounded-2xl p-6"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
+                    <Users className="w-5 h-5 text-blue-400" />
+                  </div>
+                  <h3 className="font-bold text-white">Local Authority</h3>
+                </div>
+                <ul className="space-y-2 text-sm text-slate-400">
+                  {["Local placements", "Council support", "Community ties"].map((item) => (
+                    <li key={item} className="flex items-center gap-2">
+                      <CheckCircle className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
               </motion.div>
             </div>
-          </section>
-        )}
+          </div>
+        </section>
 
-        {/* Lead Form Section */}
-        <section className="section-padding bg-gradient-to-b from-background-sand to-background-warm" id="enquire">
+        {/* Lead Form Section - Dark Theme */}
+        <section className="py-12 md:py-16 bg-gradient-to-b from-slate-950 to-slate-900" id="enquire">
           <div className="container-main">
-            <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+            <div className="grid lg:grid-cols-2 gap-12 items-start">
               <motion.div 
                 initial={{ opacity: 0, x: -30 }} 
                 whileInView={{ opacity: 1, x: 0 }} 
                 viewport={{ once: true }} 
                 transition={{ duration: 0.6 }}
               >
-                <Badge variant="secondary" className="mb-4 px-4 py-1.5">
+                <Badge className="bg-primary/20 text-primary border-primary/30 mb-4">
                   <Phone className="w-3.5 h-3.5 mr-1.5" />
                   Get in Touch
                 </Badge>
-                <h2 className="text-2xl md:text-3xl font-bold mb-4">Start Your Fostering Journey in {location.name}</h2>
-                <p className="text-muted-foreground text-lg mb-8">
-                  Ready to learn more? Fill out our enquiry form and a friendly fostering advisor will call you back within 24 hours. No pressure, just helpful guidance.
+                <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                  Start Your Journey in {location.name}
+                </h2>
+                <p className="text-slate-400 text-lg mb-8">
+                  Ready to learn more? Fill out our enquiry form and a fostering advisor will call you within 24 hours.
                 </p>
                 
-                <div className="space-y-5">
+                <div className="space-y-4">
                   {[
-                    { icon: CheckCircle, title: "No obligation", desc: "Get free information with no commitment required" },
-                    { icon: Phone, title: "Quick response", desc: "We'll call you back within 24 hours" },
-                    { icon: Shield, title: "100% confidential", desc: "Your information is kept completely private" },
-                  ].map((item, index) => (
-                    <motion.div 
-                      key={item.title} 
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.4, delay: index * 0.1 }}
-                      className="flex items-start gap-4"
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <item.icon className="w-5 h-5 text-primary" />
+                    { icon: CheckCircle, title: "No obligation", desc: "Free information, no commitment" },
+                    { icon: Phone, title: "Quick response", desc: "Callback within 24 hours" },
+                    { icon: Shield, title: "Confidential", desc: "Your data is secure" },
+                  ].map((item) => (
+                    <div key={item.title} className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
+                        <item.icon className="w-4 h-4 text-primary" />
                       </div>
                       <div>
-                        <p className="font-semibold">{item.title}</p>
-                        <p className="text-sm text-muted-foreground">{item.desc}</p>
+                        <h4 className="font-medium text-white">{item.title}</h4>
+                        <p className="text-sm text-slate-500">{item.desc}</p>
                       </div>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
               </motion.div>
-              
+
               <motion.div 
                 initial={{ opacity: 0, x: 30 }} 
                 whileInView={{ opacity: 1, x: 0 }} 
                 viewport={{ once: true }} 
-                transition={{ duration: 0.6, delay: 0.2 }}
+                transition={{ duration: 0.6 }}
+                className="bg-slate-800/50 border border-slate-700 rounded-2xl p-6 md:p-8"
               >
-                <MultiStepLeadForm sourceType="location_page" sourceLocationId={location.id} />
+                <MultiStepLeadForm sourceType={`location_${location.slug}`} sourceLocationId={location.id} />
               </motion.div>
             </div>
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="section-padding bg-primary text-primary-foreground relative overflow-hidden">
-          <div className="absolute inset-0">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-80 h-80 bg-white/5 rounded-full blur-3xl" />
-          </div>
-          
-          <div className="container-main text-center relative z-10">
+        {/* FAQ Section */}
+        {allFaqs && allFaqs.length > 0 && (
+          <section className="py-12 md:py-16 bg-slate-950">
+            <div className="container-main">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }} 
+                whileInView={{ opacity: 1, y: 0 }} 
+                viewport={{ once: true }} 
+                transition={{ duration: 0.5 }}
+                className="text-center mb-10"
+              >
+                <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                  Frequently Asked Questions
+                </h2>
+                <p className="text-slate-400">Common questions about fostering in {location.name}</p>
+              </motion.div>
+              
+              <div className="max-w-3xl mx-auto">
+                <FaqSection faqs={allFaqs} />
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* CTA Section - Compact */}
+        <section className="py-12 md:py-16 bg-gradient-to-r from-primary/20 via-slate-900 to-emerald-600/20">
+          <div className="container-main">
             <motion.div 
-              initial={{ opacity: 0, y: 20 }} 
-              whileInView={{ opacity: 1, y: 0 }} 
-              viewport={{ once: true }} 
-              transition={{ duration: 0.5 }}
-              className="max-w-2xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center max-w-2xl mx-auto"
             >
-              <h2 className="text-2xl md:text-3xl font-bold mb-4">Ready to Transform a Child's Life?</h2>
-              <p className="text-primary-foreground/80 text-lg mb-8">
-                Take the first step today. Connect with fostering agencies in {location.name} and discover how you can make a difference.
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                Ready to Transform a Child's Life?
+              </h2>
+              <p className="text-slate-400 mb-8">
+                Join hundreds of foster carers in {location.name} making a real difference.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
-                <Button size="lg" variant="secondary" asChild className="shadow-lg">
-                  <Link to="/agencies">
-                    <Building2 className="w-5 h-5 mr-2" />
-                    Find Local Agencies
-                  </Link>
-                </Button>
-                <Button size="lg" variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10" asChild>
-                  <a href="#enquire" className="flex items-center gap-2">
-                    <Phone className="w-4 h-4" />
-                    Make an Enquiry
+                <Button size="lg" className="bg-primary hover:bg-primary-hover shadow-lg shadow-primary/25" asChild>
+                  <a href="#enquire">
+                    Start Your Journey
+                    <ArrowRight className="w-4 h-4 ml-2" />
                   </a>
+                </Button>
+                <Button size="lg" variant="outline" className="border-slate-600 text-white hover:bg-slate-800" asChild>
+                  <Link to="/guides/how-to-become-foster-carer">Learn More</Link>
                 </Button>
               </div>
             </motion.div>
           </div>
         </section>
-
-        {/* FAQ Section */}
-        {allFaqs && allFaqs.length > 0 && (
-          <FaqSection 
-            faqs={allFaqs} 
-            title={`Fostering in ${location.name}: FAQs`}
-            subtitle={`Common questions about foster care in ${location.name}`}
-          />
-        )}
       </main>
       <Footer />
     </div>
