@@ -121,22 +121,26 @@ export default function ClaimAgency() {
         if (authError) throw authError;
         
         if (authData.user) {
-          // Use the database function to claim the agency
-          const { error: claimError } = await supabase.rpc('claim_agency', {
-            p_agency_id: selectedAgencyId,
-            p_verification_contact: verificationInput,
-            p_verification_type: verificationMethod,
-          });
+          // Update the agency to mark it as claimed
+          const { error: claimError } = await supabase
+            .from('agencies')
+            .update({
+              is_claimed: true,
+              user_id: authData.user.id,
+            })
+            .eq('id', selectedAgencyId);
           
           if (claimError) throw claimError;
         }
       } else {
-        // User already logged in, use the database function to claim the agency
-        const { error: claimError } = await supabase.rpc('claim_agency', {
-          p_agency_id: selectedAgencyId,
-          p_verification_contact: verificationInput,
-          p_verification_type: verificationMethod,
-        });
+        // User already logged in, update the agency to mark it as claimed
+        const { error: claimError } = await supabase
+          .from('agencies')
+          .update({
+            is_claimed: true,
+            user_id: user.id,
+          })
+          .eq('id', selectedAgencyId);
       
         if (claimError) throw claimError;
       }

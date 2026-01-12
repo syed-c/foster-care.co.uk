@@ -94,8 +94,16 @@ const RegionPageContent = ({ regionSlug }: { regionSlug: string }) => {
           <AgencyTypesSection 
             heading={content.agency_types.heading}
             intro={content.agency_types.intro}
-            independent={content.agency_types.independent}
-            local_authority={content.agency_types.local_authority}
+            independent={content.agency_types.independent ? {
+              title: content.agency_types.independent.title,
+              description: content.agency_types.independent.description || '',
+              benefits: content.agency_types.independent.benefits
+            } : undefined}
+            local_authority={content.agency_types.local_authority ? {
+              title: content.agency_types.local_authority.title,
+              description: content.agency_types.local_authority.description || '',
+              benefits: content.agency_types.local_authority.benefits
+            } : undefined}
           />
         </SectionWrapper>
       )}
