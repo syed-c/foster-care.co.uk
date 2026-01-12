@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useRegionPage } from '@/hooks/useRegionPage';
 import { RegionsGrid } from '@/components/country/RegionsGrid';
 import { IntroSection } from '@/components/country/IntroSection';
@@ -19,6 +19,8 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { LocationHero } from '@/components/location/LocationHero';
 import { AgencyListings } from '@/components/location/AgencyListings';
+import { EnquirySection } from '@/components/location/EnquirySection';
+import { LocationCTA } from '@/components/location/LocationCTA';
 import { useAgenciesByRegion } from '@/hooks/useAgenciesByRegion';
 
 const RegionPageContent = ({ regionSlug }: { regionSlug: string }) => {
@@ -31,9 +33,9 @@ const RegionPageContent = ({ regionSlug }: { regionSlug: string }) => {
 
   if (error || !regionData) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-secondary">
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
         <div className="text-center px-4">
-          <h1 className="text-2xl font-extrabold text-white mb-2">Page Not Found</h1>
+          <h1 className="text-2xl font-black text-white mb-2">Page Not Found</h1>
           <p className="text-white/60">The requested region page does not exist.</p>
         </div>
       </div>
@@ -51,7 +53,7 @@ const RegionPageContent = ({ regionSlug }: { regionSlug: string }) => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-slate-950">
       <Header />
       
       <main className="flex-1 pt-20">
@@ -156,6 +158,12 @@ const RegionPageContent = ({ regionSlug }: { regionSlug: string }) => {
           />
         )}
 
+        {/* Lead Form Section */}
+        <EnquirySection
+          locationName={regionName}
+          locationSlug={regionSlug}
+        />
+
         {content.faq && content.faq.questions && content.faq.questions.length > 0 && (
           <FAQSection 
             heading={content.faq.heading}
@@ -163,12 +171,14 @@ const RegionPageContent = ({ regionSlug }: { regionSlug: string }) => {
           />
         )}
 
-        {content.cta && (
+        {content.cta ? (
           <CTASection 
             heading={content.cta.heading}
             paragraph={content.cta.paragraph}
             button_text={content.cta.button_text}
           />
+        ) : (
+          <LocationCTA locationName={regionName} />
         )}
       </main>
 
@@ -183,9 +193,9 @@ const RegionPage = () => {
   
   if (!region) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-secondary">
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
         <div className="text-center px-4">
-          <h1 className="text-2xl font-extrabold text-white mb-2">Region not specified</h1>
+          <h1 className="text-2xl font-black text-white mb-2">Region not specified</h1>
           <p className="text-white/60">Please provide a region slug.</p>
         </div>
       </div>
