@@ -533,7 +533,7 @@ export function HeroSection() {
         duration: 0.6,
         delay: 0.4
       }} className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
-          {stats.map((stat, index) => {
+        {stats.map((stat, index) => {
           const IconComponent = stat.icon;
           return <motion.div key={stat.label} initial={{
             opacity: 0,
@@ -571,6 +571,39 @@ export function HeroSection() {
                 </div>
               </motion.div>;
         })}
+        </motion.div>
+
+        {/* Trust Badges Row */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="mt-10 sm:mt-12 md:mt-16"
+        >
+          <p className="text-xs sm:text-sm text-muted-foreground uppercase tracking-wider font-medium mb-4 sm:mb-6">
+            Trusted by Leading Organizations
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-12">
+            {[
+              { name: "Ofsted", subtitle: "Registered" },
+              { name: "The Fostering Network", subtitle: "Member" },
+              { name: "BAAF", subtitle: "Accredited" },
+              { name: "DfE", subtitle: "Compliant" },
+              { name: "CoramBAAF", subtitle: "Partner" },
+            ].map((partner, index) => (
+              <motion.div
+                key={partner.name}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.7 + index * 0.1 }}
+                whileHover={{ scale: 1.05, y: -2 }}
+                className="flex flex-col items-center gap-0.5 px-4 py-2 sm:px-6 sm:py-3 rounded-xl bg-background/60 border border-border/30 backdrop-blur-sm hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 cursor-default"
+              >
+                <span className="text-sm sm:text-base font-semibold text-foreground">{partner.name}</span>
+                <span className="text-[10px] sm:text-xs text-muted-foreground">{partner.subtitle}</span>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>;
