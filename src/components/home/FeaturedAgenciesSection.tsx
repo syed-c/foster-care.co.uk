@@ -95,7 +95,7 @@ export function FeaturedAgenciesSection() {
         duration: 0.6
       }} className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-secondary text-secondary-foreground mb-4">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-secondary-foreground mb-4 bg-sidebar-primary">
               <Star className="w-4 h-4" />
               {subtitle}
             </span>
