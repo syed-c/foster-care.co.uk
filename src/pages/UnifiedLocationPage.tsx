@@ -196,17 +196,18 @@ export default function UnifiedLocationPage() {
         }}
       />
       <Header />
-      <main className="flex-1 pt-20">
+      <main className="flex-1 pt-16">
         {/* Hero Section */}
         <LocationHero
-          title={heroContent?.title || `Fostering Agencies in ${location.name}`}
-          subtitle={location.type === 'country' ? `${location.type.charAt(0).toUpperCase() + location.type.slice(1)} Directory` : undefined}
-          description={heroContent?.content || location.description || `Discover verified foster care agencies across ${location.name}. Compare services, read reviews, and find the right agency for your fostering journey.`}
+          title={heroContent?.title || `Fostering in ${location.name}`}
+          description={heroContent?.content || location.description || `Compare ${totalAgencies || 'trusted'} foster care agencies in ${location.name}. Find the right agency for your fostering journey.`}
           badge={location.type}
           flag={flag || undefined}
           locationType={location.type}
           agencyCount={totalAgencies}
           breadcrumbs={breadcrumbs}
+          childLocations={childLocations?.map(c => ({ id: c.id, name: c.name, slug: c.slug })) || []}
+          currentLocationPath={currentPath}
         />
 
         {/* Agency Listings - Horizontal Line Format */}

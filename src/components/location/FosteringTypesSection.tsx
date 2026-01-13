@@ -27,28 +27,23 @@ export const FosteringTypesSection = () => {
   ];
 
   return (
-    <section className="py-14 md:py-20 bg-slate-950 relative overflow-hidden">
-      {/* Decorative */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-primary/5 rounded-full blur-[150px]" />
-      </div>
-      
+    <section className="py-10 md:py-14 bg-slate-950 relative overflow-hidden">
       <div className="container-main relative z-10">
         <motion.div 
-          initial={{ opacity: 0, y: 20 }} 
+          initial={{ opacity: 0, y: 15 }} 
           whileInView={{ opacity: 1, y: 0 }} 
           viewport={{ once: true }} 
-          transition={{ duration: 0.5 }}
-          className="text-center mb-10"
+          transition={{ duration: 0.4 }}
+          className="text-center mb-6"
         >
-          <Badge className="bg-primary/20 text-primary border-primary/40 mb-4 rounded-full px-4 py-1.5 font-bold">
-            <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-            Explore Options
+          <Badge className="bg-primary/20 text-primary border-primary/40 mb-3 rounded-full px-3 py-1 font-bold text-xs">
+            <Sparkles className="w-3 h-3 mr-1" />
+            Options
           </Badge>
-          <h2 className="text-3xl md:text-4xl font-black text-white mb-3 tracking-tight">
+          <h2 className="text-xl md:text-2xl font-black text-white mb-2 tracking-tight">
             Types of Fostering
           </h2>
-          <p className="text-white/50 text-lg">Find the right fostering path for you</p>
+          <p className="text-white/40 text-sm">Find the right path for you</p>
         </motion.div>
         
         <motion.div 
@@ -56,15 +51,15 @@ export const FosteringTypesSection = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3"
+          className="grid grid-cols-3 md:grid-cols-6 gap-2"
         >
           {types.map((type) => (
             <motion.div key={type.title} variants={itemVariants}>
               <Link to={`/specialisms/${type.slug}`}>
-                <div className={`group bg-gradient-to-br ${type.color} hover:scale-105 border rounded-2xl p-5 transition-all duration-300 h-full text-center`}>
-                  <type.icon className="w-8 h-8 text-white/70 mx-auto mb-3" />
-                  <h3 className="font-bold text-white text-base mb-1">{type.title}</h3>
-                  <p className="text-xs text-white/40">{type.desc}</p>
+                <div className={`group bg-gradient-to-br ${type.color} hover:scale-105 border rounded-xl p-3 transition-all duration-200 h-full text-center`}>
+                  <type.icon className="w-6 h-6 text-white/70 mx-auto mb-2" />
+                  <h3 className="font-bold text-white text-xs mb-0.5">{type.title}</h3>
+                  <p className="text-[10px] text-white/40">{type.desc}</p>
                 </div>
               </Link>
             </motion.div>
@@ -75,14 +70,14 @@ export const FosteringTypesSection = () => {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="text-center mt-8"
+          className="text-center mt-5"
         >
           <Link 
             to="/specialisms" 
-            className="inline-flex items-center gap-2 text-primary hover:text-primary-hover font-bold transition-colors"
+            className="inline-flex items-center gap-1 text-primary hover:text-primary-hover font-bold text-sm transition-colors"
           >
-            View all specialisms
-            <ArrowRight className="w-4 h-4" />
+            View all
+            <ArrowRight className="w-3 h-3" />
           </Link>
         </motion.div>
       </div>
