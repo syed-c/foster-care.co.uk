@@ -51,7 +51,7 @@ export const AgencyListings = ({
   const [selectedAgency, setSelectedAgency] = useState<Agency | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  if (!agencies || agencies.length === 0) return null;
+  const agencyCount = agencies?.length || 0;
 
   const handleBookClick = (agency: Agency) => {
     setSelectedAgency(agency);
@@ -79,6 +79,9 @@ export const AgencyListings = ({
                   <h2 className="text-xl md:text-2xl font-black text-white tracking-tight">
                     {title}
                   </h2>
+                  <Badge className="bg-white/10 text-white/80 border-white/20 rounded-full font-bold text-[10px] px-2">
+                    {agencyCount} {agencyCount === 1 ? 'agency' : 'agencies'}
+                  </Badge>
                   {showFeaturedLabel && (
                     <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/40 rounded-full font-bold text-[10px] px-2">
                       <Sparkles className="w-2.5 h-2.5 mr-0.5" />
@@ -87,7 +90,7 @@ export const AgencyListings = ({
                   )}
                 </div>
                 <p className="text-white/40 text-sm">
-                  {subtitle || `${agencies.length} agencies ready to help`}
+                  {subtitle || `${agencyCount} agencies ready to help`}
                 </p>
               </div>
             </div>
@@ -104,38 +107,39 @@ export const AgencyListings = ({
           </motion.div>
 
           {/* Agency List - Compact */}
-          <motion.div 
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="space-y-2"
-          >
-            {agencies.map((agency) => (
-              <motion.div 
-                key={agency.id} 
-                variants={itemVariants}
-                className="group bg-slate-800/40 hover:bg-slate-800 border border-slate-700/40 hover:border-primary/40 rounded-xl p-3 md:p-4 transition-all duration-200"
-              >
-                <div className="flex items-center gap-3 md:gap-4">
-                  {/* Agency Logo */}
-                  <div className="flex-shrink-0">
-                    {agency.logo_url ? (
-                      <img 
-                        src={agency.logo_url} 
-                        alt={agency.name} 
-                        className="w-10 h-10 md:w-12 md:h-12 rounded-xl object-cover border border-slate-600"
-                      />
-                    ) : (
-                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-primary/40 to-primary/20 flex items-center justify-center border border-primary/30">
-                        <Building2 className="w-5 h-5 md:w-6 md:h-6 text-primary" />
-                      </div>
-                    )}
-                  </div>
+          {agencyCount > 0 ? (
+            <motion.div 
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="space-y-2"
+            >
+              {agencies.map((agency) => (
+                <motion.div 
+                  key={agency.id} 
+                  variants={itemVariants}
+                  className="group bg-slate-800/40 hover:bg-slate-800 border border-slate-700/40 hover:border-primary/40 rounded-xl p-3 md:p-4 transition-all duration-200"
+                >
+                  <div className="flex items-center gap-3 md:gap-4">
+                    {/* Agency Logo */}
+                    <div className="flex-shrink-0">
+                      {agency.logo_url ? (
+                        <img 
+                          src={agency.logo_url} 
+                          alt={agency.name} 
+                          className="w-10 h-10 md:w-12 md:h-12 rounded-xl object-cover border border-slate-600"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-primary/40 to-primary/20 flex items-center justify-center border border-primary/30">
+                          <Building2 className="w-5 h-5 md:w-6 md:h-6 text-primary" />
+                        </div>
+                      )}
+                    </div>
 
-                  {/* Agency Info */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                    {/* Agency Info */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                       <h3 className="font-bold text-sm md:text-base text-white group-hover:text-primary transition-colors truncate">
                         {agency.name}
                       </h3>
@@ -199,29 +203,56 @@ export const AgencyListings = ({
                       </Link>
                     </Button>
                   </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          ) : (
+            /* Empty State when no agencies */
+            <motion.div 
+              initial={{ opacity: 0, y: 15 }} 
+              whileInView={{ opacity: 1, y: 0 }} 
+              viewport={{ once: true }}
+              className="bg-slate-800/40 border border-slate-700/40 rounded-xl p-8 text-center"
+            >
+              <div className="w-16 h-16 rounded-2xl bg-slate-700/50 flex items-center justify-center mx-auto mb-4">
+                <Building2 className="w-8 h-8 text-white/40" />
+              </div>
+              <h3 className="text-lg font-bold text-white mb-2">No agencies listed yet</h3>
+              <p className="text-white/50 text-sm mb-4 max-w-md mx-auto">
+                We're actively working to add fostering agencies in {locationName || 'this area'}. 
+                Check back soon or browse agencies in nearby regions.
+              </p>
+              <Button 
+                size="sm"
+                className="bg-primary hover:bg-primary-hover text-white font-bold rounded-lg"
+                asChild
+              >
+                <Link to="/agencies">Browse All Agencies</Link>
+              </Button>
+            </motion.div>
+          )}
 
           {/* Load More */}
-          <motion.div 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mt-6"
-          >
-            <Button 
-              size="sm" 
-              className="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-6 font-bold text-xs"
-              asChild
+          {agencyCount > 0 && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="text-center mt-6"
             >
-              <Link to="/agencies">
-                See All Agencies
-                <ArrowRight className="w-3 h-3 ml-1" />
-              </Link>
-            </Button>
-          </motion.div>
+              <Button 
+                size="sm" 
+                className="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-6 font-bold text-xs"
+                asChild
+              >
+                <Link to="/agencies">
+                  See All Agencies
+                  <ArrowRight className="w-3 h-3 ml-1" />
+                </Link>
+              </Button>
+            </motion.div>
+          )}
         </div>
       </section>
 

@@ -3,7 +3,7 @@ import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
 import { Link, useParams } from "react-router-dom";
 import { useLocationFromPath, useChildLocations, useLocationPath, buildLocationUrl, Location } from "@/hooks/useLocations";
-import { useAgenciesByLocation, useFeaturedAgencies } from "@/hooks/useAgencies";
+import { useAgenciesByLocation } from "@/hooks/useAgencies";
 import { useCmsContentByPage, getContentBySection } from "@/hooks/useCmsContent";
 import { useFaqsByLocation } from "@/hooks/useFaqs";
 import { FaqSection } from "@/components/shared/FaqSection";
@@ -57,8 +57,7 @@ export default function UnifiedLocationPage() {
   const { data: childLocations, isLoading: childrenLoading } = useChildLocations(location?.id);
   const { data: locationPath } = useLocationPath(location?.id);
   const { data: locationFaqs } = useFaqsByLocation(location?.id);
-  const { data: locationAgencies } = useAgenciesByLocation(location?.id, 12);
-  const { data: featuredAgencies } = useFeaturedAgencies(12);
+  const { data: locationAgencies } = useAgenciesByLocation(location?.id, 50);
   
   const cmsPageKey = targetSlug ? `location_${targetSlug}` : undefined;
   const { data: cmsContent } = useCmsContentByPage(cmsPageKey);
@@ -168,8 +167,6 @@ export default function UnifiedLocationPage() {
   };
 
   const currentPath = locationPath ? buildLocationUrl(locationPath) : `/locations/${location.slug}`;
-  const agencies = locationAgencies && locationAgencies.length > 0 ? locationAgencies : featuredAgencies;
-  const isShowingFeatured = !locationAgencies || locationAgencies.length === 0;
   const flag = location.type === 'country' ? countryFlags[location.slug] : null;
 
   // Generate unique SEO title based on location type
@@ -225,18 +222,14 @@ export default function UnifiedLocationPage() {
           currentLocationPath={currentPath}
         />
 
-        {/* Agency Listings - Horizontal Line Format */}
-        {agencies && agencies.length > 0 && (
-          <AgencyListings
-            agencies={agencies}
-            title={isShowingFeatured ? "Featured Agencies" : `Agencies in ${location.name}`}
-            subtitle={isShowingFeatured 
-              ? "Top-rated fostering agencies across England" 
-              : `${agencies.length} agencies serving ${location.name}`}
-            showFeaturedLabel={isShowingFeatured}
-            locationName={location.name}
-          />
-        )}
+        {/* Agency Listings - Always show, with real count */}
+        <AgencyListings
+          agencies={locationAgencies || []}
+          title={`Agencies in ${location.name}`}
+          subtitle={`${locationAgencies?.length || 0} agencies serving ${location.name}`}
+          showFeaturedLabel={false}
+          locationName={location.name}
+        />
 
         {/* Child Locations Grid */}
         {hasChildLocations && (
