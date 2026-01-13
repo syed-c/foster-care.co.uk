@@ -3,8 +3,7 @@ import { motion } from "framer-motion";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { useLocationFromPath, useLocationPath, buildLocationUrl } from "@/hooks/useLocations";
-import { useSpecialismBySlug, Specialism, STATIC_SPECIALISMS } from "@/hooks/useSpecialisms";
-import { useAgenciesByLocation } from "@/hooks/useAgencies";
+import { useSpecialismBySlug, STATIC_SPECIALISMS, useAgenciesByLocationAndSpecialism } from "@/hooks/useSpecialisms";
 import { SEOHead, getBreadcrumbSchema } from "@/components/seo/SEOHead";
 import { BackToTop } from "@/components/shared/BackToTop";
 import { Button } from "@/components/ui/button";
@@ -41,7 +40,7 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
   const { data: location, isLoading: locationLoading } = useLocationFromPath(locationSegments);
   const { data: specialism, isLoading: specialismLoading } = useSpecialismBySlug(specialismSlug);
   const { data: locationPath } = useLocationPath(location?.id);
-  const { data: allAgencies, isLoading: agenciesLoading } = useAgenciesByLocation(location?.id, 50);
+  const { data: allAgencies, isLoading: agenciesLoading } = useAgenciesByLocationAndSpecialism(location?.id, specialismSlug, 50);
 
   const isLoading = locationLoading || specialismLoading;
 
