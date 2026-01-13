@@ -20,6 +20,8 @@ import { LocationCTA } from "@/components/location/LocationCTA";
 import { MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BackToTop } from "@/components/shared/BackToTop";
+import { STATIC_SPECIALISMS } from "@/hooks/useSpecialisms";
+import LocationSpecialismPage from "./LocationSpecialismPage";
 
 // Country flag emoji mapping
 const countryFlags: Record<string, string> = {
@@ -29,11 +31,24 @@ const countryFlags: Record<string, string> = {
   "northern-ireland": "🇬🇧",
 };
 
+// Set of specialism slugs for quick lookup
+const SPECIALISM_SLUGS = new Set(STATIC_SPECIALISMS.map(s => s.slug));
+
 export default function UnifiedLocationPage() {
   // Get all possible path segments from the URL
   const params = useParams<{ "*": string }>();
   const pathString = params["*"] || "";
   const pathSegments = pathString.split("/").filter(Boolean);
+  
+  // Check if the last segment is a specialism slug
+  const lastSegment = pathSegments[pathSegments.length - 1];
+  const isSpecialismPage = SPECIALISM_SLUGS.has(lastSegment);
+  
+  // If it's a specialism page, render the LocationSpecialismPage component
+  if (isSpecialismPage && pathSegments.length > 1) {
+    const locationSegments = pathSegments.slice(0, -1);
+    return <LocationSpecialismPage locationSegments={locationSegments} specialismSlug={lastSegment} />;
+  }
   
   // The last segment is the location we're trying to display
   const targetSlug = pathSegments[pathSegments.length - 1];
@@ -241,7 +256,7 @@ export default function UnifiedLocationPage() {
         />
 
         {/* Types of Fostering */}
-        <FosteringTypesSection />
+        <FosteringTypesSection currentLocationPath={currentPath} locationName={location.name} />
 
         {/* Agency Types Explained */}
         <AgencyTypesCompactSection />

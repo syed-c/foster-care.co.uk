@@ -19,7 +19,7 @@ export interface Specialism {
 }
 
 // Static specialisms data until database table is created
-const STATIC_SPECIALISMS: Specialism[] = [
+export const STATIC_SPECIALISMS: Specialism[] = [
   { id: "1", name: "Therapeutic Fostering", slug: "therapeutic-fostering", description: "Specialised care for children with trauma and complex emotional needs", long_description: "Therapeutic fostering provides intensive support for children who have experienced significant trauma.", icon_name: "Heart", seo_title: null, seo_description: null, hero_content: null, faq_content: null, display_order: 1, is_active: true, created_at: "", updated_at: "" },
   { id: "2", name: "Emergency Fostering", slug: "emergency-fostering", description: "Immediate placements for children in urgent need of safe care", long_description: "Emergency foster carers provide immediate, short-term care for children who need to be removed urgently.", icon_name: "AlertCircle", seo_title: null, seo_description: null, hero_content: null, faq_content: null, display_order: 2, is_active: true, created_at: "", updated_at: "" },
   { id: "3", name: "Short-term Fostering", slug: "short-term-fostering", description: "Temporary care while long-term plans are developed", long_description: "Short-term fostering provides care for children for a defined period, usually up to two years.", icon_name: "Clock", seo_title: null, seo_description: null, hero_content: null, faq_content: null, display_order: 3, is_active: true, created_at: "", updated_at: "" },
