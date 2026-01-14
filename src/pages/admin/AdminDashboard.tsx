@@ -68,7 +68,7 @@ export default function AdminDashboard() {
     queryFn: async () => {
       const [total, published] = await Promise.all([
         supabase.from("blog_posts").select("*", { count: "exact", head: true }),
-        supabase.from("blog_posts").select("*", { count: "exact", head: true }).eq("is_published", true),
+        supabase.from("blog_posts").select("*", { count: "exact", head: true }).eq("status", "published"),
       ]);
       return {
         total: total.count || 0,

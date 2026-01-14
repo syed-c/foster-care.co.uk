@@ -271,6 +271,57 @@ export type Database = {
           },
         ]
       }
+      agency_subscriptions: {
+        Row: {
+          agency_id: string
+          cancelled_at: string | null
+          created_at: string | null
+          current_period_end: string | null
+          current_period_start: string | null
+          id: string
+          plan_id: string
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          agency_id: string
+          cancelled_at?: string | null
+          created_at?: string | null
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          plan_id: string
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          agency_id?: string
+          cancelled_at?: string | null
+          created_at?: string | null
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          plan_id?: string
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agency_subscriptions_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: true
+            referencedRelation: "agencies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agency_subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "pricing_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       agency_tasks: {
         Row: {
           assigned_to: string | null
@@ -636,6 +687,51 @@ export type Database = {
           },
         ]
       }
+      inquiry_events: {
+        Row: {
+          agency_id: string
+          created_at: string | null
+          event_type: string
+          id: string
+          lead_id: string | null
+          metadata: Json | null
+          source_page: string | null
+        }
+        Insert: {
+          agency_id: string
+          created_at?: string | null
+          event_type: string
+          id?: string
+          lead_id?: string | null
+          metadata?: Json | null
+          source_page?: string | null
+        }
+        Update: {
+          agency_id?: string
+          created_at?: string | null
+          event_type?: string
+          id?: string
+          lead_id?: string | null
+          metadata?: Json | null
+          source_page?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inquiry_events_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "agencies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inquiry_events_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       leads: {
         Row: {
           assigned_to: string | null
@@ -794,6 +890,108 @@ export type Database = {
           },
         ]
       }
+      page_content_blocks: {
+        Row: {
+          block_key: string
+          block_type: string
+          content: string | null
+          created_at: string | null
+          display_order: number | null
+          id: string
+          is_active: boolean | null
+          metadata: Json | null
+          page_key: string
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          block_key: string
+          block_type?: string
+          content?: string | null
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          page_key: string
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          block_key?: string
+          block_type?: string
+          content?: string | null
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          page_key?: string
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      pricing_plans: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          features: Json | null
+          id: string
+          is_active: boolean | null
+          is_popular: boolean | null
+          name: string
+          pain_removed: string | null
+          price_monthly: number
+          risk_not_using: string | null
+          slug: string
+          success_looks_like: string | null
+          tagline: string | null
+          updated_at: string | null
+          who_is_for: string | null
+          why_monthly: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          features?: Json | null
+          id?: string
+          is_active?: boolean | null
+          is_popular?: boolean | null
+          name: string
+          pain_removed?: string | null
+          price_monthly?: number
+          risk_not_using?: string | null
+          slug: string
+          success_looks_like?: string | null
+          tagline?: string | null
+          updated_at?: string | null
+          who_is_for?: string | null
+          why_monthly?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          features?: Json | null
+          id?: string
+          is_active?: boolean | null
+          is_popular?: boolean | null
+          name?: string
+          pain_removed?: string | null
+          price_monthly?: number
+          risk_not_using?: string | null
+          slug?: string
+          success_looks_like?: string | null
+          tagline?: string | null
+          updated_at?: string | null
+          who_is_for?: string | null
+          why_monthly?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -856,6 +1054,51 @@ export type Database = {
           to_path?: string
         }
         Relationships: []
+      }
+      reputation_events: {
+        Row: {
+          agency_id: string
+          created_at: string | null
+          event_type: string
+          id: string
+          metadata: Json | null
+          review_id: string | null
+          sentiment: string | null
+        }
+        Insert: {
+          agency_id: string
+          created_at?: string | null
+          event_type: string
+          id?: string
+          metadata?: Json | null
+          review_id?: string | null
+          sentiment?: string | null
+        }
+        Update: {
+          agency_id?: string
+          created_at?: string | null
+          event_type?: string
+          id?: string
+          metadata?: Json | null
+          review_id?: string | null
+          sentiment?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reputation_events_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "agencies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reputation_events_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "reviews"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       reviews: {
         Row: {
