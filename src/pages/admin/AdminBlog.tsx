@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { AdminLayout } from "@/components/admin/AdminLayout";
+import { SuperAdminSidebar } from "@/components/admin/SuperAdminSidebar";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { ImageUpload } from "@/components/admin/ImageUpload";
 import { Button } from "@/components/ui/button";
@@ -203,7 +203,7 @@ const AdminBlog = () => {
   };
 
   return (
-    <AdminLayout title="Blog Posts" description="Manage blog articles and fostering resources">
+    <SuperAdminSidebar title="Blog Posts" description="Manage blog articles and fostering resources">
       <div className="space-y-6">
         <div className="flex items-center justify-end">
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -470,7 +470,7 @@ const AdminBlog = () => {
           )}
         </Card>
       </div>
-    </AdminLayout>
+    </SuperAdminSidebar>
   );
 };
 

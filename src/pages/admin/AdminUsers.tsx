@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { AdminLayout } from "@/components/admin/AdminLayout";
+import { SuperAdminSidebar } from "@/components/admin/SuperAdminSidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -183,7 +183,7 @@ export default function AdminUsers() {
   };
 
   return (
-    <AdminLayout title="Users" description="Manage user profiles and roles">
+    <SuperAdminSidebar title="Users" description="Manage user profiles and roles">
       <Card className="border-border/50 shadow-card">
         <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <CardTitle className="flex items-center gap-2">
@@ -351,6 +351,6 @@ export default function AdminUsers() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </AdminLayout>
+    </SuperAdminSidebar>
   );
 }

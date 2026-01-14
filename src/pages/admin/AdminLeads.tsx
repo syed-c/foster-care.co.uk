@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AdminLayout } from "@/components/admin/AdminLayout";
+import { SuperAdminSidebar } from "@/components/admin/SuperAdminSidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -114,7 +114,7 @@ export default function AdminLeads() {
   };
 
   return (
-    <AdminLayout title="Leads" description="Manage fostering enquiries">
+    <SuperAdminSidebar title="Leads" description="Manage fostering enquiries">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
           <CardTitle>All Leads</CardTitle>
@@ -304,6 +304,6 @@ export default function AdminLeads() {
           )}
         </DialogContent>
       </Dialog>
-    </AdminLayout>
+    </SuperAdminSidebar>
   );
 }

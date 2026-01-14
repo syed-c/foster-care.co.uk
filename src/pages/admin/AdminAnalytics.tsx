@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { AdminLayout } from "@/components/admin/AdminLayout";
+import { SuperAdminSidebar } from "@/components/admin/SuperAdminSidebar";
 import { StatCard } from "@/components/admin/StatCard";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -148,7 +148,7 @@ export default function AdminAnalytics() {
   }, {} as Record<string, number>) || {};
 
   return (
-    <AdminLayout title="Analytics" description="Platform performance and insights">
+    <SuperAdminSidebar title="Analytics" description="Platform performance and insights">
       <div className="space-y-6">
         {/* Date Range Selector */}
         <div className="flex items-center justify-between">
@@ -378,6 +378,6 @@ export default function AdminAnalytics() {
           </TabsContent>
         </Tabs>
       </div>
-    </AdminLayout>
+    </SuperAdminSidebar>
   );
 }

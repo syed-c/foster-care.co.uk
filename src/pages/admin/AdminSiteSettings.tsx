@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { AdminLayout } from "@/components/admin/AdminLayout";
+import { SuperAdminSidebar } from "@/components/admin/SuperAdminSidebar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -113,16 +113,16 @@ export default function AdminSiteSettings() {
 
   if (isLoading) {
     return (
-      <AdminLayout title="Site Settings" description="Configure your website settings">
+      <SuperAdminSidebar title="Site Settings" description="Configure your website settings">
         <div className="flex items-center justify-center py-12">
           <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
         </div>
-      </AdminLayout>
+      </SuperAdminSidebar>
     );
   }
 
   return (
-    <AdminLayout title="Site Settings" description="Configure all aspects of your Foster Care UK website">
+    <SuperAdminSidebar title="Site Settings" description="Configure all aspects of your Foster Care UK website">
       <Tabs defaultValue="general" className="space-y-6">
         <TabsList className="bg-card border flex-wrap h-auto">
           <TabsTrigger value="general" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
@@ -403,6 +403,6 @@ export default function AdminSiteSettings() {
           </Card>
         </TabsContent>
       </Tabs>
-    </AdminLayout>
+    </SuperAdminSidebar>
   );
 }

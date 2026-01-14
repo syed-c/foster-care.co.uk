@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { AdminLayout } from "@/components/admin/AdminLayout";
+import { SuperAdminSidebar } from "@/components/admin/SuperAdminSidebar";
 import { StatCard } from "@/components/admin/StatCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -150,7 +150,7 @@ export default function AdminSubscriptions() {
   };
 
   return (
-    <AdminLayout title="Subscriptions" description="Manage agency subscriptions and billing">
+    <SuperAdminSidebar title="Subscriptions" description="Manage agency subscriptions and billing">
       <div className="space-y-6">
         {/* Stats */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -408,6 +408,6 @@ export default function AdminSubscriptions() {
           </DialogContent>
         </Dialog>
       </div>
-    </AdminLayout>
+    </SuperAdminSidebar>
   );
 }

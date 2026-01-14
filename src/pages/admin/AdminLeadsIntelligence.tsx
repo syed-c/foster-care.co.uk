@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { AdminLayout } from "@/components/admin/AdminLayout";
+import { SuperAdminSidebar } from "@/components/admin/SuperAdminSidebar";
 import { StatCard } from "@/components/admin/StatCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -162,7 +162,7 @@ export default function AdminLeadsIntelligence() {
   };
 
   return (
-    <AdminLayout title="Lead Intelligence" description="Track and qualify leads across the platform">
+    <SuperAdminSidebar title="Lead Intelligence" description="Track and qualify leads across the platform">
       <div className="space-y-6">
         {/* Stats */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
@@ -554,6 +554,6 @@ export default function AdminLeadsIntelligence() {
           </DialogContent>
         </Dialog>
       </div>
-    </AdminLayout>
+    </SuperAdminSidebar>
   );
 }

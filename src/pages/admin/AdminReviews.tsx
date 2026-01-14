@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { AdminLayout } from "@/components/admin/AdminLayout";
+import { SuperAdminSidebar } from "@/components/admin/SuperAdminSidebar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -238,7 +238,7 @@ export default function AdminReviews() {
   };
 
   return (
-    <AdminLayout title="Reviews" description="Manage and moderate all agency reviews">
+    <SuperAdminSidebar title="Reviews" description="Manage and moderate all agency reviews">
       <div className="space-y-6">
         {/* Stats Cards */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -701,6 +701,6 @@ export default function AdminReviews() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </AdminLayout>
+    </SuperAdminSidebar>
   );
 }

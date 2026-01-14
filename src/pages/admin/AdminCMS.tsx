@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { AdminLayout } from "@/components/admin/AdminLayout";
+import { SuperAdminSidebar } from "@/components/admin/SuperAdminSidebar";
 import { StatCard } from "@/components/admin/StatCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -206,7 +206,7 @@ export default function AdminCMS() {
   const activeBlocks = contentBlocks?.filter(b => b.is_active).length || 0;
 
   return (
-    <AdminLayout title="Content Management" description="Manage website pages and content blocks">
+    <SuperAdminSidebar title="Content Management" description="Manage website pages and content blocks">
       <div className="space-y-6">
         {/* Stats */}
         <div className="grid gap-4 sm:grid-cols-3">
@@ -442,7 +442,7 @@ export default function AdminCMS() {
           </DialogContent>
         </Dialog>
       </div>
-    </AdminLayout>
+    </SuperAdminSidebar>
   );
 }
 
