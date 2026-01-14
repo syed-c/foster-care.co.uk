@@ -24,14 +24,16 @@ import { useToast } from "@/hooks/use-toast";
 const navItems = [
   { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { name: "Agencies", href: "/admin/agencies", icon: Building2 },
-  { name: "GMB Import", href: "/admin/gmb-import", icon: Building2 },
   { name: "Locations", href: "/admin/locations", icon: MapPin },
   { name: "Agency Areas", href: "/admin/agency-locations", icon: MapPin },
+  { name: "Specialisms", href: "/admin/specialisms", icon: HelpCircle },
+  { name: "Reviews", href: "/admin/reviews", icon: MessageSquare },
+  { name: "Leads", href: "/admin/leads", icon: MessageSquare },
   { name: "FAQs", href: "/admin/faqs", icon: HelpCircle },
   { name: "Content", href: "/admin/content", icon: FileText },
   { name: "Blog", href: "/admin/blog", icon: FileText },
-  { name: "Leads", href: "/admin/leads", icon: MessageSquare },
   { name: "Users", href: "/admin/users", icon: Users },
+  { name: "GMB Import", href: "/admin/gmb-import", icon: Building2 },
 ];
 
 interface AdminLayoutProps {

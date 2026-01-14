@@ -30,6 +30,9 @@ import AdminBlog from './pages/admin/AdminBlog';
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminSettings from './pages/admin/AdminSettings';
 import AdminGmbImport from './pages/admin/AdminGmbImport';
+import AdminReviews from './pages/admin/AdminReviews';
+import AdminSpecialisms from './pages/admin/AdminSpecialisms';
+import AdminSiteSettings from './pages/admin/AdminSiteSettings';
 import SpecialismsIndex from './pages/SpecialismsIndex';
 import SpecialismPage from './pages/SpecialismPage';
 import HowListingsWork from './pages/HowListingsWork';
@@ -89,6 +92,9 @@ const App = () => (
           <Route path="/admin/users" element={<AdminUsers />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
           <Route path="/admin/gmb-import" element={<AdminGmbImport />} />
+          <Route path="/admin/reviews" element={<AdminReviews />} />
+          <Route path="/admin/specialisms" element={<AdminSpecialisms />} />
+          <Route path="/admin/site-settings" element={<AdminSiteSettings />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
