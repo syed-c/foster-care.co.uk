@@ -33,6 +33,7 @@ import AdminGmbImport from './pages/admin/AdminGmbImport';
 import AdminReviews from './pages/admin/AdminReviews';
 import AdminSpecialisms from './pages/admin/AdminSpecialisms';
 import AdminSiteSettings from './pages/admin/AdminSiteSettings';
+import AdminDirectAccess from './pages/admin/AdminDirectAccess';
 import SpecialismsIndex from './pages/SpecialismsIndex';
 import SpecialismPage from './pages/SpecialismPage';
 import HowListingsWork from './pages/HowListingsWork';
@@ -82,6 +83,7 @@ const App = () => (
           <Route path="/claim" element={<ClaimAgency />} />
           <Route path="/register-agency" element={<RegisterAgency />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/access" element={<AdminDirectAccess />} />
           <Route path="/admin/agencies" element={<AdminAgencies />} />
           <Route path="/admin/locations" element={<AdminLocations />} />
           <Route path="/admin/agency-locations" element={<AdminAgencyLocations />} />

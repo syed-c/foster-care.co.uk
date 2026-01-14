@@ -53,6 +53,14 @@ export function AdminLayout({ children, title, description }: AdminLayoutProps) 
 
   useEffect(() => {
     async function checkAdmin() {
+      // Check for test admin access (REMOVE IN PRODUCTION)
+      const testAdminAccess = localStorage.getItem('testAdminAccess');
+      if (testAdminAccess === 'true') {
+        setIsAdmin(true);
+        setIsLoading(false);
+        return;
+      }
+
       if (!user) {
         setIsLoading(false);
         return;
@@ -82,6 +90,12 @@ export function AdminLayout({ children, title, description }: AdminLayoutProps) 
   }, [user, loading]);
 
   useEffect(() => {
+    // Skip auth check if test admin access is enabled
+    const testAdminAccess = localStorage.getItem('testAdminAccess');
+    if (testAdminAccess === 'true') {
+      return;
+    }
+
     if (!loading && !isLoading) {
       if (!isAuthenticated) {
         navigate("/auth");
@@ -109,7 +123,9 @@ export function AdminLayout({ children, title, description }: AdminLayoutProps) 
     );
   }
 
-  if (!isAuthenticated || !isAdmin) {
+  // Allow access if test admin mode is enabled
+  const testAdminAccess = localStorage.getItem('testAdminAccess');
+  if (!testAdminAccess && (!isAuthenticated || !isAdmin)) {
     return null;
   }
 
