@@ -41,6 +41,7 @@ import AdminAuditLogs from './pages/admin/AdminAuditLogs';
 import AdminRanking from './pages/admin/AdminRanking';
 import AdminReputationManagement from './pages/admin/AdminReputationManagement';
 import AdminLeadsIntelligence from './pages/admin/AdminLeadsIntelligence';
+import AdminSEOEngine from './pages/admin/AdminSEOEngine';
 import SpecialismsIndex from './pages/SpecialismsIndex';
 import SpecialismPage from './pages/SpecialismPage';
 import HowListingsWork from './pages/HowListingsWork';
@@ -131,6 +132,7 @@ const App = () => (
           <Route path="/admin/ranking" element={<AdminRanking />} />
           <Route path="/admin/reputation" element={<AdminReputationManagement />} />
           <Route path="/admin/leads-intelligence" element={<AdminLeadsIntelligence />} />
+          <Route path="/admin/seo-engine" element={<AdminSEOEngine />} />
           
           <Route path="*" element={<NotFound />} />
         </Routes>
