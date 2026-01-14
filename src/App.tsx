@@ -45,6 +45,13 @@ import FosteringAllowancesGuide from './pages/guides/FosteringAllowancesGuide';
 import TypesOfFosteringGuide from './pages/guides/TypesOfFosteringGuide';
 import NotFound from './pages/NotFound';
 
+// Agency Workspace Pages
+import AgencyWorkspace from './pages/agency/AgencyWorkspace';
+import AgencyDashboardHome from './pages/agency/AgencyDashboardHome';
+import AgencyLeads from './pages/agency/AgencyLeads';
+import AgencyTasks from './pages/agency/AgencyTasks';
+import AgencyTeam from './pages/agency/AgencyTeam';
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -78,10 +85,23 @@ const App = () => (
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/dashboard" element={<UserDashboard />} />
+          
+          {/* Legacy agency dashboard routes */}
           <Route path="/agency/dashboard" element={<AgencyDashboard />} />
           <Route path="/agency/settings" element={<AgencySettings />} />
+          
+          {/* New Agency Workspace Routes */}
+          <Route path="/workspace" element={<AgencyWorkspace />}>
+            <Route index element={<AgencyDashboardHome />} />
+            <Route path="leads" element={<AgencyLeads />} />
+            <Route path="tasks" element={<AgencyTasks />} />
+            <Route path="team" element={<AgencyTeam />} />
+          </Route>
+          
           <Route path="/claim" element={<ClaimAgency />} />
           <Route path="/register-agency" element={<RegisterAgency />} />
+          
+          {/* Admin Routes */}
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/access" element={<AdminDirectAccess />} />
           <Route path="/admin/agencies" element={<AdminAgencies />} />
@@ -97,6 +117,7 @@ const App = () => (
           <Route path="/admin/reviews" element={<AdminReviews />} />
           <Route path="/admin/specialisms" element={<AdminSpecialisms />} />
           <Route path="/admin/site-settings" element={<AdminSiteSettings />} />
+          
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

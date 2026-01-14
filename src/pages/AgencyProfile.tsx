@@ -50,10 +50,40 @@ export default function AgencyProfile() {
     enabled: !!agency?.id,
   });
 
-  // Determine profile status
+  // Determine profile status - use claim_status from DB
   const isVerified = agency?.is_verified === true;
-  const isClaimed = agency?.is_claimed === true;
-  const isUnclaimed = !isClaimed;
+  const isClaimed = agency?.claim_status === 'claimed';
+  const isUnclaimed = agency?.claim_status !== 'claimed';
+
+  // Get specialisms for this agency
+  const { data: agencySpecialisms } = useQuery({
+    queryKey: ["agencySpecialisms", agency?.id],
+    queryFn: async () => {
+      if (!agency?.id) return [];
+      const { data, error } = await supabase
+        .from("agency_specialisms")
+        .select("specialism_id, specialisms(name, slug)")
+        .eq("agency_id", agency.id);
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!agency?.id,
+  });
+
+  // Get locations for this agency
+  const { data: agencyLocations } = useQuery({
+    queryKey: ["agencyLocations", agency?.id],
+    queryFn: async () => {
+      if (!agency?.id) return [];
+      const { data, error } = await supabase
+        .from("agency_locations")
+        .select("location_id, locations(name, slug)")
+        .eq("agency_id", agency.id);
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!agency?.id,
+  });
 
   const breadcrumbs = [
     { name: "Home", url: "/" },
@@ -99,9 +129,12 @@ export default function AgencyProfile() {
     );
   }
 
-  const serviceAreas = Array.isArray(agency.service_areas) ? agency.service_areas : [];
-  const services = Array.isArray(agency.services) ? agency.services : [];
-  const specializations = Array.isArray(agency.specializations) ? agency.specializations : [];
+  // Use agency_locations for service areas
+  const serviceAreas = agencyLocations?.map(al => (al.locations as any)?.name).filter(Boolean) || [];
+  // Use acceptance_types as services fallback
+  const services = agency.acceptance_types || [];
+  // Use agency_specialisms for specializations
+  const specializations = agencySpecialisms?.map(as => (as.specialisms as any)?.name).filter(Boolean) || [];
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -308,11 +341,11 @@ export default function AgencyProfile() {
                       )}
                     </div>
 
-                    {agency.ofsted_report_url && (
+                    {agency.ofsted_urn && (
                       <>
                         <Separator className="my-4" />
                         <a 
-                          href={agency.ofsted_report_url}
+                          href={`https://reports.ofsted.gov.uk/provider/45/${agency.ofsted_urn}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center justify-center gap-2 w-full py-2 px-4 rounded-full border border-border hover:bg-accent transition-colors text-sm font-medium"
@@ -403,7 +436,7 @@ export default function AgencyProfile() {
                 )}
 
                 {/* Specialisms */}
-                {(specializations.length > 0 || services.length > 0) && (
+                {specializations.length > 0 && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -412,17 +445,35 @@ export default function AgencyProfile() {
                   >
                     <h2 className="font-display text-xl font-semibold mb-4">
                       <Users className="w-5 h-5 inline mr-2 text-primary" />
-                      Fostering Specialisms
+                      Specialisms
                     </h2>
-                    <div className="grid sm:grid-cols-2 gap-3">
-                      {(specializations.length > 0 ? specializations : services).map((item, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center gap-3 p-4 rounded-2xl bg-background border border-border/50"
-                        >
-                          <CheckCircle className="w-5 h-5 text-verified flex-shrink-0" />
-                          <span className="text-foreground">{String(item)}</span>
-                        </div>
+                    <div className="flex flex-wrap gap-2">
+                      {specializations.map((spec, index) => (
+                        <Badge key={index} variant="secondary" className="px-4 py-2">
+                          {String(spec)}
+                        </Badge>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Services */}
+                {services.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="card-elevated p-8"
+                  >
+                    <h2 className="font-display text-xl font-semibold mb-4">
+                      <CheckCircle className="w-5 h-5 inline mr-2 text-primary" />
+                      Services & Acceptance Types
+                    </h2>
+                    <div className="flex flex-wrap gap-2">
+                      {services.map((service, index) => (
+                        <Badge key={index} variant="outline" className="px-4 py-2">
+                          {String(service)}
+                        </Badge>
                       ))}
                     </div>
                   </motion.div>
@@ -435,197 +486,100 @@ export default function AgencyProfile() {
                   viewport={{ once: true }}
                   className="card-elevated p-8"
                 >
-                  <div className="flex items-center justify-between mb-6">
-                    <h2 className="font-display text-xl font-semibold">
-                      Reviews {reviews && reviews.length > 0 && `(${reviews.length})`}
-                    </h2>
-                    {agency.rating && (
-                      <div className="flex items-center gap-2">
-                        <div className="flex">
-                          {Array.from({ length: 5 }).map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-5 h-5 ${
-                                i < Math.round(Number(agency.rating))
-                                  ? "text-primary fill-primary"
-                                  : "text-muted"
-                              }`}
-                            />
-                          ))}
-                        </div>
-                        <span className="font-semibold">{Number(agency.rating).toFixed(1)}</span>
-                      </div>
-                    )}
-                  </div>
-
+                  <h2 className="font-display text-xl font-semibold mb-6">
+                    <Star className="w-5 h-5 inline mr-2 text-primary" />
+                    Reviews
+                  </h2>
+                  
                   {reviews && reviews.length > 0 ? (
-                    <div className="space-y-4">
+                    <div className="space-y-6">
                       {reviews.map((review) => (
-                        <div
-                          key={review.id}
-                          className={`p-5 rounded-2xl bg-background border ${
-                            !review.is_approved ? "border-unclaimed/30" : "border-border/50"
-                          }`}
-                        >
-                          <div className="flex items-start justify-between mb-3">
-                            <div>
-                              <p className="font-semibold text-foreground">{review.author_name}</p>
-                              <p className="text-sm text-muted-foreground">
-                                {new Date(review.created_at).toLocaleDateString("en-GB", {
-                                  month: "long",
-                                  year: "numeric",
-                                })}
-                              </p>
-                              {!review.is_approved && isAdmin && (
-                                <Badge variant="outline" className="mt-1 bg-unclaimed/20 text-unclaimed border-unclaimed">
-                                  Pending Approval
-                                </Badge>
-                              )}
-                            </div>
-                            <div className="flex items-center gap-0.5">
-                              {Array.from({ length: review.rating }).map((_, i) => (
-                                <Star key={i} className="w-4 h-4 text-primary fill-primary" />
+                        <div key={review.id} className="border-b border-border pb-6 last:border-0 last:pb-0">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="flex">
+                              {[...Array(5)].map((_, i) => (
+                                <Star 
+                                  key={i} 
+                                  className={`w-4 h-4 ${i < review.rating ? 'text-primary fill-primary' : 'text-muted'}`} 
+                                />
                               ))}
                             </div>
+                            <span className="text-sm text-muted-foreground">
+                              by {review.author_name}
+                            </span>
                           </div>
                           {review.title && (
-                            <h4 className="font-medium mb-2 text-foreground">{review.title}</h4>
+                            <h4 className="font-medium mb-1">{review.title}</h4>
                           )}
-                          <p className="text-muted-foreground">{review.content}</p>
+                          <p className="text-muted-foreground text-sm">{review.content}</p>
                         </div>
                       ))}
                     </div>
                   ) : (
                     <div className="text-center py-8">
-                      <Star className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
-                      <p className="text-muted-foreground">No reviews yet. Be the first to share your experience.</p>
+                      <Star className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
+                      <p className="text-muted-foreground">No reviews yet</p>
+                      <p className="text-sm text-muted-foreground mt-1">Be the first to share your experience</p>
                     </div>
                   )}
-
+                  
                   <Separator className="my-6" />
-
-                  <h3 className="font-display font-semibold mb-4">Leave a Review</h3>
                   <ReviewForm agencyId={agency.id} agencyName={agency.name} />
                 </motion.div>
               </div>
 
               {/* Right Column - Sidebar */}
               <div className="space-y-6">
-                {/* CTA Card */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                >
-                  <Card className="card-elevated sticky top-24 overflow-hidden">
-                    <div className="bg-primary p-6 text-primary-foreground">
-                      <h3 className="font-display font-semibold text-lg mb-2">Interested in Fostering?</h3>
-                      <p className="text-primary-foreground/80 text-sm">
-                        Connect with {agency.name} to learn about becoming a foster carer.
-                      </p>
-                    </div>
-                    <CardContent className="p-6">
-                      <Button
-                        className="w-full rounded-full mb-4"
-                        size="lg"
-                        onClick={() => setShowLeadForm(true)}
-                      >
-                        Request Information
-                      </Button>
-                      
-                      {isClaimed && agency.phone && (
-                        <a
-                          href={`tel:${agency.phone}`}
-                          className="flex items-center justify-center gap-2 w-full py-3 rounded-full border border-border hover:bg-accent transition-colors text-sm font-medium"
-                        >
-                          <Phone className="w-4 h-4" />
-                          Call {agency.phone}
-                        </a>
-                      )}
-
-                      {isClaimed && agency.email && (
-                        <a
-                          href={`mailto:${agency.email}`}
-                          className="flex items-center justify-center gap-2 w-full py-3 mt-2 rounded-full border border-border hover:bg-accent transition-colors text-sm font-medium"
-                        >
-                          <Mail className="w-4 h-4" />
-                          Send Email
-                        </a>
-                      )}
-                    </CardContent>
-                  </Card>
-                </motion.div>
-
-                {/* Trust Signals */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.1 }}
-                >
-                  <Card className="card-warm">
-                    <CardContent className="p-6">
-                      <h3 className="font-display font-semibold mb-4">Trust & Verification</h3>
-                      <ul className="space-y-3">
-                        <li className="flex items-center gap-3 text-sm">
-                          {isVerified ? (
-                            <CheckCircle className="w-5 h-5 text-verified" />
-                          ) : (
-                            <div className="w-5 h-5 rounded-full border-2 border-muted" />
-                          )}
-                          <span className={isVerified ? "text-foreground" : "text-muted-foreground"}>
-                            Profile Verified
-                          </span>
-                        </li>
-                        <li className="flex items-center gap-3 text-sm">
-                          {agency.ofsted_rating ? (
-                            <CheckCircle className="w-5 h-5 text-verified" />
-                          ) : (
-                            <div className="w-5 h-5 rounded-full border-2 border-muted" />
-                          )}
-                          <span className={agency.ofsted_rating ? "text-foreground" : "text-muted-foreground"}>
-                            Ofsted Registered
-                          </span>
-                        </li>
-                        <li className="flex items-center gap-3 text-sm">
-                          {isClaimed ? (
-                            <CheckCircle className="w-5 h-5 text-verified" />
-                          ) : (
-                            <div className="w-5 h-5 rounded-full border-2 border-muted" />
-                          )}
-                          <span className={isClaimed ? "text-foreground" : "text-muted-foreground"}>
-                            Listing Claimed
-                          </span>
-                        </li>
-                      </ul>
-                      <Separator className="my-4" />
-                      <Link
-                        to="/how-listings-work"
-                        className="text-sm text-primary hover:underline flex items-center gap-1"
-                      >
-                        How we verify agencies
-                        <ExternalLink className="w-3 h-3" />
-                      </Link>
-                    </CardContent>
-                  </Card>
-                </motion.div>
+                {/* Contact Card */}
+                <Card className="card-elevated sticky top-24">
+                  <CardContent className="p-6">
+                    <h3 className="font-display font-semibold text-lg mb-4">Contact This Agency</h3>
+                    <p className="text-muted-foreground text-sm mb-6">
+                      Interested in learning more? Get in touch with {agency.name} to start your fostering journey.
+                    </p>
+                    <Button 
+                      className="w-full rounded-full"
+                      onClick={() => setShowLeadForm(true)}
+                    >
+                      Request Information
+                    </Button>
+                    
+                    {isClaimed && (
+                      <div className="mt-6 space-y-3">
+                        {agency.phone && (
+                          <a 
+                            href={`tel:${agency.phone}`}
+                            className="flex items-center gap-3 p-3 rounded-xl border border-border hover:bg-accent transition-colors"
+                          >
+                            <Phone className="w-5 h-5 text-primary" />
+                            <span className="text-sm">{agency.phone}</span>
+                          </a>
+                        )}
+                        {agency.email && (
+                          <a 
+                            href={`mailto:${agency.email}`}
+                            className="flex items-center gap-3 p-3 rounded-xl border border-border hover:bg-accent transition-colors"
+                          >
+                            <Mail className="w-5 h-5 text-primary" />
+                            <span className="text-sm">{agency.email}</span>
+                          </a>
+                        )}
+                        {agency.website && (
+                          <a 
+                            href={agency.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-3 p-3 rounded-xl border border-border hover:bg-accent transition-colors"
+                          >
+                            <Globe className="w-5 h-5 text-primary" />
+                            <span className="text-sm">Visit Website</span>
+                          </a>
+                        )}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Related Agencies */}
-        <section className="section-padding bg-background">
-          <div className="container-main">
-            <h2 className="font-display text-2xl font-bold mb-8 text-center">
-              Similar Agencies in {agency.city || "England"}
-            </h2>
-            <div className="text-center">
-              <Button variant="outline" size="lg" className="rounded-full" asChild>
-                <Link to={`/agencies?location=${agency.city || ""}`}>
-                  View All Agencies
-                </Link>
-              </Button>
             </div>
           </div>
         </section>
@@ -636,12 +590,11 @@ export default function AgencyProfile() {
 
       {/* Lead Form Dialog */}
       <Dialog open={showLeadForm} onOpenChange={setShowLeadForm}>
-        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="font-display">Request Information from {agency.name}</DialogTitle>
+            <DialogTitle>Request Information from {agency.name}</DialogTitle>
           </DialogHeader>
-          <MultiStepLeadForm
-            sourceType="agency_profile"
+          <MultiStepLeadForm 
             sourceAgencyId={agency.id}
             onSuccess={() => setShowLeadForm(false)}
           />
