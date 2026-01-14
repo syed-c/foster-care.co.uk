@@ -30,20 +30,9 @@ import { toast } from "sonner";
 import { Plus, Pencil, Trash2, Eye, EyeOff, Calendar, User, Image as ImageIcon } from "lucide-react";
 import { format } from "date-fns";
 
-interface BlogPost {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt: string | null;
-  content: string;
-  category: string | null;
-  author_name: string | null;
-  is_published: boolean | null;
-  published_at: string | null;
-  tags: string[] | null;
-  featured_image_url: string | null;
-  created_at: string;
-}
+import type { Tables } from "@/integrations/supabase/types";
+
+type BlogPost = Tables<"blog_posts">;
 
 const AdminBlog = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -55,9 +44,9 @@ const AdminBlog = () => {
     content: "",
     category: "",
     author_name: "",
-    is_published: false,
+    status: "draft" as "draft" | "published",
     tags: "",
-    featured_image_url: null as string | null,
+    cover_image_url: null as string | null,
   });
 
   const queryClient = useQueryClient();
@@ -70,7 +59,7 @@ const AdminBlog = () => {
         .select("*")
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return data as BlogPost[];
+      return data;
     },
   });
 
@@ -83,10 +72,10 @@ const AdminBlog = () => {
         content: data.content,
         category: data.category || null,
         author_name: data.author_name || null,
-        is_published: data.is_published,
-        published_at: data.is_published ? new Date().toISOString() : null,
+        status: data.status,
+        published_at: data.status === "published" ? new Date().toISOString() : null,
         tags: data.tags ? data.tags.split(",").map((t) => t.trim()) : [],
-        featured_image_url: data.featured_image_url,
+        cover_image_url: data.cover_image_url,
       });
       if (error) throw error;
     },
@@ -111,12 +100,12 @@ const AdminBlog = () => {
           content: data.content,
           category: data.category || null,
           author_name: data.author_name || null,
-          is_published: data.is_published,
-          published_at: data.is_published && !editingPost?.published_at 
+          status: data.status,
+          published_at: data.status === "published" && !editingPost?.published_at 
             ? new Date().toISOString() 
             : editingPost?.published_at,
           tags: data.tags ? data.tags.split(",").map((t) => t.trim()) : [],
-          featured_image_url: data.featured_image_url,
+          cover_image_url: data.cover_image_url,
         })
         .eq("id", id);
       if (error) throw error;
@@ -146,12 +135,12 @@ const AdminBlog = () => {
   });
 
   const togglePublishMutation = useMutation({
-    mutationFn: async ({ id, is_published }: { id: string; is_published: boolean }) => {
+    mutationFn: async ({ id, status }: { id: string; status: "draft" | "published" }) => {
       const { error } = await supabase
         .from("blog_posts")
         .update({
-          is_published,
-          published_at: is_published ? new Date().toISOString() : null,
+          status,
+          published_at: status === "published" ? new Date().toISOString() : null,
         })
         .eq("id", id);
       if (error) throw error;
@@ -173,9 +162,9 @@ const AdminBlog = () => {
       content: "",
       category: "",
       author_name: "",
-      is_published: false,
+      status: "draft",
       tags: "",
-      featured_image_url: null,
+      cover_image_url: null,
     });
     setEditingPost(null);
     setIsDialogOpen(false);
@@ -190,9 +179,9 @@ const AdminBlog = () => {
       content: post.content,
       category: post.category || "",
       author_name: post.author_name || "",
-      is_published: post.is_published || false,
+      status: (post.status as "draft" | "published") || "draft",
       tags: Array.isArray(post.tags) ? post.tags.join(", ") : "",
-      featured_image_url: post.featured_image_url,
+      cover_image_url: post.cover_image_url,
     });
     setIsDialogOpen(true);
   };
@@ -233,8 +222,8 @@ const AdminBlog = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Featured Image */}
                 <ImageUpload
-                  value={formData.featured_image_url}
-                  onChange={(url) => setFormData({ ...formData, featured_image_url: url })}
+                  value={formData.cover_image_url}
+                  onChange={(url) => setFormData({ ...formData, cover_image_url: url })}
                 />
 
                 <div className="grid grid-cols-2 gap-4">
@@ -329,13 +318,13 @@ const AdminBlog = () => {
 
                 <div className="flex items-center gap-2">
                   <Switch
-                    id="is_published"
-                    checked={formData.is_published}
+                    id="status"
+                    checked={formData.status === "published"}
                     onCheckedChange={(checked) =>
-                      setFormData({ ...formData, is_published: checked })
+                      setFormData({ ...formData, status: checked ? "published" : "draft" })
                     }
                   />
-                  <Label htmlFor="is_published">Publish immediately</Label>
+                  <Label htmlFor="status">Publish immediately</Label>
                 </div>
 
                 <div className="flex justify-end gap-2 pt-4 border-t">
@@ -380,9 +369,9 @@ const AdminBlog = () => {
                 {posts.map((post) => (
                   <TableRow key={post.id}>
                     <TableCell>
-                      {post.featured_image_url ? (
+                      {post.cover_image_url ? (
                         <img 
-                          src={post.featured_image_url} 
+                          src={post.cover_image_url} 
                           alt="" 
                           className="w-10 h-10 rounded object-cover"
                         />
@@ -418,23 +407,23 @@ const AdminBlog = () => {
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <Switch
-                          checked={post.is_published || false}
+                          checked={post.status === "published"}
                           onCheckedChange={(checked) =>
                             togglePublishMutation.mutate({
                               id: post.id,
-                              is_published: checked,
+                              status: checked ? "published" : "draft",
                             })
                           }
                         />
                         <Badge
-                          variant={post.is_published ? "default" : "outline"}
+                          variant={post.status === "published" ? "default" : "outline"}
                         >
-                          {post.is_published ? (
+                          {post.status === "published" ? (
                             <Eye className="h-3 w-3 mr-1" />
                           ) : (
                             <EyeOff className="h-3 w-3 mr-1" />
                           )}
-                          {post.is_published ? "Published" : "Draft"}
+                          {post.status === "published" ? "Published" : "Draft"}
                         </Badge>
                       </div>
                     </TableCell>

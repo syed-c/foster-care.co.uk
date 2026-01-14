@@ -63,8 +63,9 @@ export function TrustSection() {
   const {
     data: trustContent
   } = useCmsContentSection("home", "trust");
+  const metadata = trustContent?.metadata as Record<string, string> | null;
   const title = trustContent?.title || "A Directory You Can Rely On";
-  const subtitle = trustContent?.subtitle || "Why Trust Us";
+  const subtitle = metadata?.subtitle || "Why Trust Us";
   const content = trustContent?.content || "We understand that choosing a foster care agency is one of the most important decisions you'll make. That's why we've built a platform centered on trust and transparency.";
   return <section className="section-padding bg-background relative overflow-hidden">
       {/* Background Pattern */}

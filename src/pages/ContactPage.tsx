@@ -74,7 +74,7 @@ export default function ContactPage() {
               ) : (
                 <>
                   <span className="badge-pill mb-4 inline-block">
-                    {heroContent?.subtitle || "Contact Us"}
+                    {(heroContent?.metadata as Record<string, string> | null)?.subtitle || "Contact Us"}
                   </span>
                   <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-4">
                     {heroContent?.title || "We're Here to Help"}
@@ -109,7 +109,7 @@ export default function ContactPage() {
                         {emailContent?.title || "Email Us"}
                       </h3>
                       <p className="text-muted-foreground text-sm mb-2">
-                        {emailContent?.subtitle || "For general enquiries"}
+                        {(emailContent?.metadata as Record<string, string> | null)?.subtitle || "For general enquiries"}
                       </p>
                       <a 
                         href={`mailto:${emailContent?.content || "hello@fostercare.uk"}`} 
@@ -131,7 +131,7 @@ export default function ContactPage() {
                         {phoneContent?.title || "Call Us"}
                       </h3>
                       <p className="text-muted-foreground text-sm mb-2">
-                        {phoneContent?.subtitle || "Mon-Fri, 9am-5pm"}
+                        {(phoneContent?.metadata as Record<string, string> | null)?.subtitle || "Mon-Fri, 9am-5pm"}
                       </p>
                       <a 
                         href={`tel:${(phoneContent?.content || "0800 123 4567").replace(/\s/g, "")}`} 
@@ -153,7 +153,7 @@ export default function ContactPage() {
                         {addressContent?.title || "Location"}
                       </h3>
                       <p className="text-muted-foreground text-sm mb-2">
-                        {addressContent?.subtitle || "Our registered office"}
+                        {(addressContent?.metadata as Record<string, string> | null)?.subtitle || "Our registered office"}
                       </p>
                       <p className="text-foreground">
                         {(addressContent?.content || "123 Foster Lane, London, EC1A 1BB").split(", ").map((line, i, arr) => (

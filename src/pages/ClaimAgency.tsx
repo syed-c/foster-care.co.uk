@@ -36,7 +36,7 @@ export default function ClaimAgency() {
 
   // Fetch unclaimed agencies
   const { data: agencies, isLoading: agenciesLoading } = useAgencies();
-  const unclaimedAgencies = agencies?.filter(a => !a.is_claimed) || [];
+  const unclaimedAgencies = agencies?.filter(a => a.claim_status !== 'claimed') || [];
 
   const selectedAgency = agencies?.find(a => a.id === selectedAgencyId);
 
@@ -125,7 +125,8 @@ export default function ClaimAgency() {
           const { error: claimError } = await supabase
             .from('agencies')
             .update({
-              is_claimed: true,
+              claim_status: 'claimed',
+              claimed_at: new Date().toISOString(),
               user_id: authData.user.id,
             })
             .eq('id', selectedAgencyId);
@@ -137,7 +138,8 @@ export default function ClaimAgency() {
         const { error: claimError } = await supabase
           .from('agencies')
           .update({
-            is_claimed: true,
+            claim_status: 'claimed',
+            claimed_at: new Date().toISOString(),
             user_id: user.id,
           })
           .eq('id', selectedAgencyId);

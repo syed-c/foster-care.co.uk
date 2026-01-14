@@ -90,8 +90,9 @@ export function LocationDiscoverySection() {
     agencies: c.agency_count || 0,
     slug: c.slug
   })) : ukRegionsFallback;
+  const metadata = locationContent?.metadata as Record<string, string> | null;
   const title = locationContent?.title || "Find Agencies Near You";
-  const subtitle = locationContent?.subtitle || "Browse by Location";
+  const subtitle = metadata?.subtitle || "Browse by Location";
   const content = locationContent?.content || "Explore foster care agencies across the United Kingdom. Select a country or region to find local support.";
   return <section className="section-padding bg-background-warm relative overflow-hidden">
       {/* Background decoration */}
