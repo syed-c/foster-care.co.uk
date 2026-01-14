@@ -213,17 +213,17 @@ export default function AdminCMS() {
           <StatCard
             title="Total Pages"
             value={totalPages}
-            icon={<Globe className="w-5 h-5" />}
+            icon={Globe}
           />
           <StatCard
             title="Content Blocks"
             value={totalBlocks}
-            icon={<LayoutGrid className="w-5 h-5" />}
+            icon={LayoutGrid}
           />
           <StatCard
             title="Active Blocks"
             value={activeBlocks}
-            icon={<CheckCircle className="w-5 h-5" />}
+            icon={CheckCircle}
           />
         </div>
 

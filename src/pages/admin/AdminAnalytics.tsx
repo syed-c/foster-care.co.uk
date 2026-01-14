@@ -172,26 +172,26 @@ export default function AdminAnalytics() {
           <StatCard
             title="Total Agencies"
             value={totalAgencies}
-            icon={<Building2 className="w-5 h-5" />}
-            description={`${verifiedAgencies} verified`}
+            icon={Building2}
+            subtitle={`${verifiedAgencies} verified`}
           />
           <StatCard
             title="Total Leads"
             value={totalLeads}
-            icon={<MessageSquare className="w-5 h-5" />}
-            trend={totalLeads > 0 ? { value: 12, isPositive: true } : undefined}
+            icon={MessageSquare}
+            trend={totalLeads > 0 ? { value: 12, label: "vs last period" } : undefined}
           />
           <StatCard
             title="Conversion Rate"
             value={`${conversionRate}%`}
-            icon={<TrendingUp className="w-5 h-5" />}
-            description={`${convertedLeads} converted`}
+            icon={TrendingUp}
+            subtitle={`${convertedLeads} converted`}
           />
           <StatCard
             title="Avg Rating"
             value={avgRating}
-            icon={<Star className="w-5 h-5" />}
-            description={`${totalReviews} reviews`}
+            icon={Star}
+            subtitle={`${totalReviews} reviews`}
           />
         </div>
 
@@ -302,23 +302,23 @@ export default function AdminAnalytics() {
               <StatCard
                 title="Total Agencies"
                 value={totalAgencies}
-                icon={<Building2 className="w-5 h-5" />}
+                icon={Building2}
               />
               <StatCard
                 title="Verified"
                 value={verifiedAgencies}
-                icon={<Users className="w-5 h-5" />}
-                description={`${Math.round((verifiedAgencies / Math.max(totalAgencies, 1)) * 100)}%`}
+                icon={Users}
+                subtitle={`${Math.round((verifiedAgencies / Math.max(totalAgencies, 1)) * 100)}%`}
               />
               <StatCard
                 title="Featured"
                 value={agenciesData?.filter(a => a.is_featured).length || 0}
-                icon={<Star className="w-5 h-5" />}
+                icon={Star}
               />
               <StatCard
                 title="Avg Reviews"
                 value={(agenciesData?.reduce((sum, a) => sum + (a.review_count || 0), 0) / Math.max(totalAgencies, 1)).toFixed(1)}
-                icon={<MessageSquare className="w-5 h-5" />}
+                icon={MessageSquare}
               />
             </div>
           </TabsContent>
@@ -329,24 +329,24 @@ export default function AdminAnalytics() {
               <StatCard
                 title="Total Leads"
                 value={totalLeads}
-                icon={<MessageSquare className="w-5 h-5" />}
+                icon={MessageSquare}
               />
               <StatCard
                 title="New"
                 value={newLeads}
-                icon={<Users className="w-5 h-5" />}
-                className="text-primary"
+                icon={Users}
+                variant="primary"
               />
               <StatCard
                 title="Converted"
                 value={convertedLeads}
-                icon={<TrendingUp className="w-5 h-5" />}
-                className="text-verified"
+                icon={TrendingUp}
+                variant="verified"
               />
               <StatCard
                 title="Conversion Rate"
                 value={`${conversionRate}%`}
-                icon={<BarChart3 className="w-5 h-5" />}
+                icon={BarChart3}
               />
             </div>
           </TabsContent>
@@ -357,22 +357,22 @@ export default function AdminAnalytics() {
               <StatCard
                 title="Total Locations"
                 value={totalLocations}
-                icon={<MapPin className="w-5 h-5" />}
+                icon={MapPin}
               />
               <StatCard
                 title="Countries"
                 value={countriesCount}
-                icon={<MapPin className="w-5 h-5" />}
+                icon={MapPin}
               />
               <StatCard
                 title="Regions"
                 value={regionsCount}
-                icon={<MapPin className="w-5 h-5" />}
+                icon={MapPin}
               />
               <StatCard
                 title="Cities"
                 value={citiesCount}
-                icon={<MapPin className="w-5 h-5" />}
+                icon={MapPin}
               />
             </div>
           </TabsContent>
