@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { MorningSnapshot } from "@/components/agency/MorningSnapshot";
 import { 
   MessageSquare, 
   Star, 
@@ -18,7 +19,9 @@ import {
   Mail,
   Calendar,
   Sparkles,
-  MapPin
+  MapPin,
+  ThumbsUp,
+  BarChart3
 } from "lucide-react";
 
 interface ContextType {
@@ -29,6 +32,35 @@ interface ContextType {
 
 export default function AgencyDashboardHome() {
   const { agency, workspace, user } = useOutletContext<ContextType>();
+
+  // Fetch reputation stats
+  const { data: reputationStats } = useQuery({
+    queryKey: ["agency-reputation-stats", agency?.id],
+    queryFn: async () => {
+      const [reviews, feedbackRequests] = await Promise.all([
+        supabase
+          .from("reviews")
+          .select("rating, is_approved")
+          .eq("agency_id", agency?.id),
+        supabase
+          .from("feedback_requests")
+          .select("status")
+          .eq("agency_id", agency?.id),
+      ]);
+
+      const allReviews = reviews.data || [];
+      const positiveReviews = allReviews.filter(r => r.rating >= 4).length;
+      const totalRequests = feedbackRequests.data?.length || 0;
+      const completedRequests = feedbackRequests.data?.filter(r => r.status === "completed").length || 0;
+
+      return {
+        positiveReviews,
+        totalReviews: allReviews.length,
+        responseRate: totalRequests > 0 ? Math.round((completedRequests / totalRequests) * 100) : 0,
+      };
+    },
+    enabled: !!agency?.id,
+  });
 
   // Fetch leads
   const { data: leads } = useQuery({
@@ -83,21 +115,35 @@ export default function AgencyDashboardHome() {
 
   return (
     <div className="space-y-6">
-      {/* Welcome Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold">Welcome back!</h1>
-          <p className="text-muted-foreground">Here's what's happening with your agency today.</p>
-        </div>
-        {!agency?.is_verified && (
-          <Button className="rounded-full" asChild>
-            <Link to="/agency/profile">
-              <Sparkles className="w-4 h-4 mr-2" />
-              Complete Verification
-            </Link>
-          </Button>
-        )}
-      </div>
+      {/* Morning Snapshot */}
+      {agency && (
+        <MorningSnapshot agencyId={agency.id} agencyName={agency.name} />
+      )}
+
+      {/* Verification CTA */}
+      {!agency?.is_verified && (
+        <Card className="rounded-2xl border-warm/30 bg-warm/5">
+          <CardContent className="pt-5">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="p-3 rounded-2xl bg-warm/10">
+                <Sparkles className="w-6 h-6 text-warm" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-bold">Complete Your Verification</h3>
+                <p className="text-sm text-muted-foreground">
+                  Verified agencies receive 3x more enquiries. Complete your profile to unlock premium features.
+                </p>
+              </div>
+              <Button className="rounded-full" asChild>
+                <Link to="/workspace/profile">
+                  Get Verified
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Stats Grid */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

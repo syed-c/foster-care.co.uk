@@ -31,12 +31,21 @@ import {
   Zap,
 } from "lucide-react";
 
+import {
+  Crown,
+  TrendingUp,
+  Target,
+  FileEdit,
+  History,
+} from "lucide-react";
+
 const navSections = [
   {
     label: "Overview",
     items: [
       { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
       { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
+      { name: "Audit Logs", href: "/admin/audit-logs", icon: History },
     ],
   },
   {
@@ -49,27 +58,35 @@ const navSections = [
     ],
   },
   {
+    label: "Ranking & Control",
+    items: [
+      { name: "Ranking Engine", href: "/admin/ranking", icon: Crown },
+      { name: "Reputation Mgmt", href: "/admin/reputation", icon: TrendingUp },
+    ],
+  },
+  {
     label: "Growth & Leads",
     items: [
       { name: "Leads", href: "/admin/leads", icon: MessageSquare, badge: "leads" },
+      { name: "Lead Intelligence", href: "/admin/leads-intelligence", icon: Target },
       { name: "Reviews", href: "/admin/reviews", icon: Star, badge: "reviews" },
       { name: "Subscriptions", href: "/admin/subscriptions", icon: CreditCard },
     ],
   },
   {
-    label: "Content",
+    label: "Content & SEO",
     items: [
       { name: "CMS Pages", href: "/admin/cms", icon: Globe },
       { name: "Blog", href: "/admin/blog", icon: FileText },
       { name: "FAQs", href: "/admin/faqs", icon: HelpCircle },
-      { name: "Content Blocks", href: "/admin/content", icon: Layers },
+      { name: "Content Blocks", href: "/admin/content", icon: FileEdit },
     ],
   },
   {
     label: "System",
     items: [
       { name: "Users & Roles", href: "/admin/users", icon: Users },
-      { name: "Site Settings", href: "/admin/settings", icon: Settings },
+      { name: "Site Settings", href: "/admin/site-settings", icon: Settings },
       { name: "Security", href: "/admin/security", icon: Shield },
       { name: "GMB Import", href: "/admin/gmb-import", icon: Zap },
     ],
