@@ -232,6 +232,95 @@ export type Database = {
           },
         ]
       }
+      agency_ranking_overrides: {
+        Row: {
+          agency_id: string
+          boost_value: number | null
+          created_at: string
+          created_by: string | null
+          expires_at: string | null
+          id: string
+          override_type: string
+          position: number | null
+          reason: string | null
+          scope_id: string | null
+          scope_type: string
+        }
+        Insert: {
+          agency_id: string
+          boost_value?: number | null
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          override_type: string
+          position?: number | null
+          reason?: string | null
+          scope_id?: string | null
+          scope_type: string
+        }
+        Update: {
+          agency_id?: string
+          boost_value?: number | null
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          override_type?: string
+          position?: number | null
+          reason?: string | null
+          scope_id?: string | null
+          scope_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agency_ranking_overrides_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "agencies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agency_ranking_rules: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          factors: Json
+          id: string
+          is_active: boolean
+          name: string
+          scope_id: string | null
+          scope_type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          factors?: Json
+          id?: string
+          is_active?: boolean
+          name: string
+          scope_id?: string | null
+          scope_type: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          factors?: Json
+          id?: string
+          is_active?: boolean
+          name?: string
+          scope_id?: string | null
+          scope_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       agency_specialisms: {
         Row: {
           agency_id: string
@@ -437,6 +526,59 @@ export type Database = {
             columns: ["workspace_id"]
             isOneToOne: false
             referencedRelation: "agency_workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agency_trust_scores: {
+        Row: {
+          agency_id: string
+          avg_response_hours: number | null
+          content_updated_at: string | null
+          id: string
+          last_activity_at: string | null
+          notes: string | null
+          profile_completeness: number
+          reputation_trend: string | null
+          response_rate: number | null
+          trust_score: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          agency_id: string
+          avg_response_hours?: number | null
+          content_updated_at?: string | null
+          id?: string
+          last_activity_at?: string | null
+          notes?: string | null
+          profile_completeness?: number
+          reputation_trend?: string | null
+          response_rate?: number | null
+          trust_score?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          agency_id?: string
+          avg_response_hours?: number | null
+          content_updated_at?: string | null
+          id?: string
+          last_activity_at?: string | null
+          notes?: string | null
+          profile_completeness?: number
+          reputation_trend?: string | null
+          response_rate?: number | null
+          trust_score?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agency_trust_scores_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: true
+            referencedRelation: "agencies"
             referencedColumns: ["id"]
           },
         ]
@@ -687,6 +829,158 @@ export type Database = {
           },
         ]
       }
+      feedback_requests: {
+        Row: {
+          agency_id: string
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          custom_message: string | null
+          expires_at: string | null
+          id: string
+          opened_at: string | null
+          recipient_email: string
+          recipient_name: string
+          recipient_phone: string | null
+          request_type: string
+          response_id: string | null
+          sent_at: string | null
+          status: string
+        }
+        Insert: {
+          agency_id: string
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          custom_message?: string | null
+          expires_at?: string | null
+          id?: string
+          opened_at?: string | null
+          recipient_email: string
+          recipient_name: string
+          recipient_phone?: string | null
+          request_type: string
+          response_id?: string | null
+          sent_at?: string | null
+          status?: string
+        }
+        Update: {
+          agency_id?: string
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          custom_message?: string | null
+          expires_at?: string | null
+          id?: string
+          opened_at?: string | null
+          recipient_email?: string
+          recipient_name?: string
+          recipient_phone?: string | null
+          request_type?: string
+          response_id?: string | null
+          sent_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feedback_requests_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "agencies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feedback_responses: {
+        Row: {
+          agency_id: string
+          communication_rating: number | null
+          consent_logged_at: string | null
+          consent_public: boolean | null
+          created_at: string
+          id: string
+          identity_verified: boolean | null
+          improvement_feedback: string | null
+          nps_score: number | null
+          overall_rating: number
+          positive_feedback: string | null
+          professionalism_rating: number | null
+          request_id: string | null
+          respondent_email: string | null
+          respondent_name: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          routed_to: string | null
+          sentiment: string | null
+          status: string
+          support_rating: number | null
+          would_recommend: boolean | null
+        }
+        Insert: {
+          agency_id: string
+          communication_rating?: number | null
+          consent_logged_at?: string | null
+          consent_public?: boolean | null
+          created_at?: string
+          id?: string
+          identity_verified?: boolean | null
+          improvement_feedback?: string | null
+          nps_score?: number | null
+          overall_rating: number
+          positive_feedback?: string | null
+          professionalism_rating?: number | null
+          request_id?: string | null
+          respondent_email?: string | null
+          respondent_name?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          routed_to?: string | null
+          sentiment?: string | null
+          status?: string
+          support_rating?: number | null
+          would_recommend?: boolean | null
+        }
+        Update: {
+          agency_id?: string
+          communication_rating?: number | null
+          consent_logged_at?: string | null
+          consent_public?: boolean | null
+          created_at?: string
+          id?: string
+          identity_verified?: boolean | null
+          improvement_feedback?: string | null
+          nps_score?: number | null
+          overall_rating?: number
+          positive_feedback?: string | null
+          professionalism_rating?: number | null
+          request_id?: string | null
+          respondent_email?: string | null
+          respondent_name?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          routed_to?: string | null
+          sentiment?: string | null
+          status?: string
+          support_rating?: number | null
+          would_recommend?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feedback_responses_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "agencies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "feedback_responses_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "feedback_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       inquiry_events: {
         Row: {
           agency_id: string
@@ -732,6 +1026,125 @@ export type Database = {
           },
         ]
       }
+      lead_match_indicators: {
+        Row: {
+          agency_id: string
+          created_at: string
+          id: string
+          is_recommended: boolean | null
+          lead_id: string
+          match_factors: Json | null
+          match_score: number | null
+        }
+        Insert: {
+          agency_id: string
+          created_at?: string
+          id?: string
+          is_recommended?: boolean | null
+          lead_id: string
+          match_factors?: Json | null
+          match_score?: number | null
+        }
+        Update: {
+          agency_id?: string
+          created_at?: string
+          id?: string
+          is_recommended?: boolean | null
+          lead_id?: string
+          match_factors?: Json | null
+          match_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_match_indicators_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "agencies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lead_match_indicators_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lead_qualifications: {
+        Row: {
+          accommodation_type: string | null
+          best_contact_time: string | null
+          completion_percentage: number | null
+          created_at: string
+          experience_level: string | null
+          fostering_type: string | null
+          has_own_children: boolean | null
+          has_pets: boolean | null
+          has_spare_room: boolean | null
+          id: string
+          lead_id: string
+          location_preference: string | null
+          preferred_age_groups: string[] | null
+          qualification_score: number | null
+          special_considerations: string | null
+          steps_completed: number | null
+          timeframe: string | null
+          updated_at: string
+          willing_siblings: boolean | null
+        }
+        Insert: {
+          accommodation_type?: string | null
+          best_contact_time?: string | null
+          completion_percentage?: number | null
+          created_at?: string
+          experience_level?: string | null
+          fostering_type?: string | null
+          has_own_children?: boolean | null
+          has_pets?: boolean | null
+          has_spare_room?: boolean | null
+          id?: string
+          lead_id: string
+          location_preference?: string | null
+          preferred_age_groups?: string[] | null
+          qualification_score?: number | null
+          special_considerations?: string | null
+          steps_completed?: number | null
+          timeframe?: string | null
+          updated_at?: string
+          willing_siblings?: boolean | null
+        }
+        Update: {
+          accommodation_type?: string | null
+          best_contact_time?: string | null
+          completion_percentage?: number | null
+          created_at?: string
+          experience_level?: string | null
+          fostering_type?: string | null
+          has_own_children?: boolean | null
+          has_pets?: boolean | null
+          has_spare_room?: boolean | null
+          id?: string
+          lead_id?: string
+          location_preference?: string | null
+          preferred_age_groups?: string[] | null
+          qualification_score?: number | null
+          special_considerations?: string | null
+          steps_completed?: number | null
+          timeframe?: string | null
+          updated_at?: string
+          willing_siblings?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_qualifications_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: true
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       leads: {
         Row: {
           assigned_to: string | null
@@ -741,6 +1154,7 @@ export type Database = {
           first_name: string
           fostering_interest: string[] | null
           id: string
+          intent_depth: string | null
           is_viewed: boolean | null
           last_name: string | null
           marketing_consent: boolean | null
@@ -750,6 +1164,7 @@ export type Database = {
           postcode: string | null
           preferred_contact: string | null
           privacy_accepted: boolean | null
+          qualification_complete: boolean | null
           responded_at: string | null
           source_agency_id: string | null
           source_location_id: string | null
@@ -767,6 +1182,7 @@ export type Database = {
           first_name: string
           fostering_interest?: string[] | null
           id?: string
+          intent_depth?: string | null
           is_viewed?: boolean | null
           last_name?: string | null
           marketing_consent?: boolean | null
@@ -776,6 +1192,7 @@ export type Database = {
           postcode?: string | null
           preferred_contact?: string | null
           privacy_accepted?: boolean | null
+          qualification_complete?: boolean | null
           responded_at?: string | null
           source_agency_id?: string | null
           source_location_id?: string | null
@@ -793,6 +1210,7 @@ export type Database = {
           first_name?: string
           fostering_interest?: string[] | null
           id?: string
+          intent_depth?: string | null
           is_viewed?: boolean | null
           last_name?: string | null
           marketing_consent?: boolean | null
@@ -802,6 +1220,7 @@ export type Database = {
           postcode?: string | null
           preferred_contact?: string | null
           privacy_accepted?: boolean | null
+          qualification_complete?: boolean | null
           responded_at?: string | null
           source_agency_id?: string | null
           source_location_id?: string | null
@@ -1096,6 +1515,169 @@ export type Database = {
             columns: ["review_id"]
             isOneToOne: false
             referencedRelation: "reviews"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reputation_kpis: {
+        Row: {
+          agency_id: string
+          avg_resolution_hours: number | null
+          created_at: string
+          feedback_requests_sent: number | null
+          feedback_responses_received: number | null
+          id: string
+          negative_count: number | null
+          neutral_count: number | null
+          period_end: string
+          period_start: string
+          positive_count: number | null
+          resolution_threads_closed: number | null
+          resolution_threads_opened: number | null
+          response_rate: number | null
+          sentiment_score: number | null
+          trend_direction: string | null
+        }
+        Insert: {
+          agency_id: string
+          avg_resolution_hours?: number | null
+          created_at?: string
+          feedback_requests_sent?: number | null
+          feedback_responses_received?: number | null
+          id?: string
+          negative_count?: number | null
+          neutral_count?: number | null
+          period_end: string
+          period_start: string
+          positive_count?: number | null
+          resolution_threads_closed?: number | null
+          resolution_threads_opened?: number | null
+          response_rate?: number | null
+          sentiment_score?: number | null
+          trend_direction?: string | null
+        }
+        Update: {
+          agency_id?: string
+          avg_resolution_hours?: number | null
+          created_at?: string
+          feedback_requests_sent?: number | null
+          feedback_responses_received?: number | null
+          id?: string
+          negative_count?: number | null
+          neutral_count?: number | null
+          period_end?: string
+          period_start?: string
+          positive_count?: number | null
+          resolution_threads_closed?: number | null
+          resolution_threads_opened?: number | null
+          response_rate?: number | null
+          sentiment_score?: number | null
+          trend_direction?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reputation_kpis_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "agencies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      resolution_messages: {
+        Row: {
+          ai_approved_at: string | null
+          ai_approved_by: string | null
+          created_at: string
+          id: string
+          is_ai_generated: boolean | null
+          message: string
+          sender_id: string | null
+          sender_type: string
+          thread_id: string
+        }
+        Insert: {
+          ai_approved_at?: string | null
+          ai_approved_by?: string | null
+          created_at?: string
+          id?: string
+          is_ai_generated?: boolean | null
+          message: string
+          sender_id?: string | null
+          sender_type: string
+          thread_id: string
+        }
+        Update: {
+          ai_approved_at?: string | null
+          ai_approved_by?: string | null
+          created_at?: string
+          id?: string
+          is_ai_generated?: boolean | null
+          message?: string
+          sender_id?: string | null
+          sender_type?: string
+          thread_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resolution_messages_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "resolution_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      resolution_threads: {
+        Row: {
+          agency_id: string
+          assigned_to: string | null
+          created_at: string
+          feedback_response_id: string
+          id: string
+          priority: string | null
+          resolution_notes: string | null
+          resolved_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          agency_id: string
+          assigned_to?: string | null
+          created_at?: string
+          feedback_response_id: string
+          id?: string
+          priority?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          agency_id?: string
+          assigned_to?: string | null
+          created_at?: string
+          feedback_response_id?: string
+          id?: string
+          priority?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resolution_threads_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "agencies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "resolution_threads_feedback_response_id_fkey"
+            columns: ["feedback_response_id"]
+            isOneToOne: false
+            referencedRelation: "feedback_responses"
             referencedColumns: ["id"]
           },
         ]

@@ -49,7 +49,7 @@ serve(async (req) => {
 
     // Add country pages
     if (countryPages) {
-      countryPages.forEach(page => {
+      countryPages.forEach((page: { slug: string; updated_at: string | null }) => {
         const url = `https://foster-care.co.uk/fostering-agencies/${page.slug}`;
         const lastmod = page.updated_at ? new Date(page.updated_at).toISOString() : new Date().toISOString();
         xml += `  <url><loc>${url}</loc><lastmod>${lastmod}</lastmod></url>\n`;
@@ -58,7 +58,7 @@ serve(async (req) => {
 
     // Add location content (regions)
     if (locationContent) {
-      locationContent.forEach(location => {
+      locationContent.forEach((location: { slug: string; updated_at: string | null }) => {
         const url = `https://foster-care.co.uk/locations/${location.slug}`;
         const lastmod = location.updated_at ? new Date(location.updated_at).toISOString() : new Date().toISOString();
         xml += `  <url><loc>${url}</loc><lastmod>${lastmod}</lastmod></url>\n`;
