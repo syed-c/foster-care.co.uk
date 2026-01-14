@@ -86,7 +86,7 @@ export default function SpecialismsIndex() {
             ) : (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {specialisms?.map((specialism, index) => {
-                  const IconComponent = iconMap[specialism.icon_name || "Heart"] || Heart;
+                  const IconComponent = iconMap[specialism.icon || "Heart"] || Heart;
 
                   return (
                     <motion.div

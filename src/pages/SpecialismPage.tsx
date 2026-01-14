@@ -73,7 +73,7 @@ export default function SpecialismPage() {
     );
   }
 
-  const IconComponent = iconMap[specialism.icon_name || "Heart"] || Heart;
+  const IconComponent = iconMap[specialism.icon || "Heart"] || Heart;
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -164,15 +164,9 @@ export default function SpecialismPage() {
                 </h2>
                 <div className="prose prose-lg max-w-none text-muted-foreground">
                   <p className="text-lg leading-relaxed">
-                    {specialism.long_description || specialism.description}
+                    {specialism.description}
                   </p>
                 </div>
-
-                {specialism.hero_content && (
-                  <div className="mt-8 p-6 bg-primary/5 rounded-3xl border border-primary/10">
-                    <p className="text-foreground">{specialism.hero_content}</p>
-                  </div>
-                )}
               </motion.div>
 
               <motion.div

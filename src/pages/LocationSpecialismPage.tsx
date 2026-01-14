@@ -103,7 +103,7 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
     );
   }
 
-  const IconComponent = iconMap[specialism.icon_name || "Heart"] || Heart;
+  const IconComponent = iconMap[specialism.icon || "Heart"] || Heart;
   const currentPath = locationPath ? `${buildLocationUrl(locationPath)}/${specialismSlug}` : `/locations/${location.slug}/${specialismSlug}`;
 
   // Filter agencies - in real implementation, would filter by specialism
