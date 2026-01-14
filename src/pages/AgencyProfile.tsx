@@ -275,6 +275,12 @@ export default function AgencyProfile() {
                   >
                     Request Information
                   </Button>
+                  <Button variant="outline" size="lg" className="rounded-full" asChild>
+                    <Link to={`/agencies/${slug}/feedback`}>
+                      <Star className="w-4 h-4 mr-2" />
+                      Leave Feedback
+                    </Link>
+                  </Button>
                   <Button variant="outline" size="lg" className="rounded-full">
                     <Heart className="w-4 h-4 mr-2" />
                     Save
