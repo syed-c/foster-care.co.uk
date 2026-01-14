@@ -61,6 +61,8 @@ import AgencyTasks from './pages/agency/AgencyTasks';
 import AgencyTeam from './pages/agency/AgencyTeam';
 import AgencyReputationDashboard from './pages/agency/AgencyReputationDashboard';
 import AgencyCoverageManager from './pages/agency/AgencyCoverageManager';
+import AgencyFeedbackPage from './pages/agency/AgencyFeedbackPage';
+import AgencyDocuments from './pages/agency/AgencyDocuments';
 
 const queryClient = new QueryClient();
 
@@ -108,7 +110,11 @@ const App = () => (
             <Route path="team" element={<AgencyTeam />} />
             <Route path="reputation" element={<AgencyReputationDashboard />} />
             <Route path="coverage" element={<AgencyCoverageManager />} />
+            <Route path="documents" element={<AgencyDocuments />} />
           </Route>
+          
+          {/* Public Agency Feedback Page */}
+          <Route path="/agencies/:slug/feedback" element={<AgencyFeedbackPage />} />
           
           <Route path="/claim" element={<ClaimAgency />} />
           <Route path="/register-agency" element={<RegisterAgency />} />
