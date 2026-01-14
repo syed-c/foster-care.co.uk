@@ -59,6 +59,8 @@ import AgencyDashboardHome from './pages/agency/AgencyDashboardHome';
 import AgencyLeads from './pages/agency/AgencyLeads';
 import AgencyTasks from './pages/agency/AgencyTasks';
 import AgencyTeam from './pages/agency/AgencyTeam';
+import AgencyReputationDashboard from './pages/agency/AgencyReputationDashboard';
+import AgencyCoverageManager from './pages/agency/AgencyCoverageManager';
 
 const queryClient = new QueryClient();
 
@@ -104,6 +106,8 @@ const App = () => (
             <Route path="leads" element={<AgencyLeads />} />
             <Route path="tasks" element={<AgencyTasks />} />
             <Route path="team" element={<AgencyTeam />} />
+            <Route path="reputation" element={<AgencyReputationDashboard />} />
+            <Route path="coverage" element={<AgencyCoverageManager />} />
           </Route>
           
           <Route path="/claim" element={<ClaimAgency />} />
