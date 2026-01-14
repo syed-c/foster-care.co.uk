@@ -34,6 +34,13 @@ import AdminReviews from './pages/admin/AdminReviews';
 import AdminSpecialisms from './pages/admin/AdminSpecialisms';
 import AdminSiteSettings from './pages/admin/AdminSiteSettings';
 import AdminDirectAccess from './pages/admin/AdminDirectAccess';
+import AdminSubscriptions from './pages/admin/AdminSubscriptions';
+import AdminCMS from './pages/admin/AdminCMS';
+import AdminAnalytics from './pages/admin/AdminAnalytics';
+import AdminAuditLogs from './pages/admin/AdminAuditLogs';
+import AdminRanking from './pages/admin/AdminRanking';
+import AdminReputationManagement from './pages/admin/AdminReputationManagement';
+import AdminLeadsIntelligence from './pages/admin/AdminLeadsIntelligence';
 import SpecialismsIndex from './pages/SpecialismsIndex';
 import SpecialismPage from './pages/SpecialismPage';
 import HowListingsWork from './pages/HowListingsWork';
@@ -117,6 +124,13 @@ const App = () => (
           <Route path="/admin/reviews" element={<AdminReviews />} />
           <Route path="/admin/specialisms" element={<AdminSpecialisms />} />
           <Route path="/admin/site-settings" element={<AdminSiteSettings />} />
+          <Route path="/admin/subscriptions" element={<AdminSubscriptions />} />
+          <Route path="/admin/cms" element={<AdminCMS />} />
+          <Route path="/admin/analytics" element={<AdminAnalytics />} />
+          <Route path="/admin/audit-logs" element={<AdminAuditLogs />} />
+          <Route path="/admin/ranking" element={<AdminRanking />} />
+          <Route path="/admin/reputation" element={<AdminReputationManagement />} />
+          <Route path="/admin/leads-intelligence" element={<AdminLeadsIntelligence />} />
           
           <Route path="*" element={<NotFound />} />
         </Routes>
