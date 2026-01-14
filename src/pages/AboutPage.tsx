@@ -57,7 +57,7 @@ export default function AboutPage() {
               ) : (
                 <>
                   <span className="badge-pill mb-6 inline-block">
-                    {heroContent?.subtitle || "About Us"}
+                    {(heroContent?.metadata as Record<string, string> | null)?.subtitle || "About Us"}
                   </span>
                   <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold mb-6">
                     {heroContent?.title?.split(" ").slice(0, 3).join(" ") || "Connecting Families with"}
@@ -151,7 +151,7 @@ export default function AboutPage() {
                 {valuesContent?.title || "Our Values"}
               </h2>
               <p className="text-foreground-muted text-lg max-w-2xl mx-auto">
-                {valuesContent?.subtitle || "Everything we do is guided by our commitment to children, families, and the fostering community."}
+                {(valuesContent?.metadata as Record<string, string> | null)?.subtitle || "Everything we do is guided by our commitment to children, families, and the fostering community."}
               </p>
             </motion.div>
 

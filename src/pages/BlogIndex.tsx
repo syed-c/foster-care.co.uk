@@ -18,7 +18,7 @@ const BlogIndex = () => {
       const { data, error } = await supabase
         .from("blog_posts")
         .select("*")
-        .eq("is_published", true)
+        .eq("status", "published")
         .order("published_at", { ascending: false });
       if (error) throw error;
       return data;
@@ -82,9 +82,9 @@ const BlogIndex = () => {
                   <Card className="overflow-hidden bg-[#1a2228] text-white group transition-all duration-300 hover:scale-105 hover:shadow-xl">
                     <div className="grid md:grid-cols-2 gap-0">
                       <div className="h-64 md:h-auto bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center relative overflow-hidden">
-                        {featuredPost.featured_image_url ? (
+                        {featuredPost.cover_image_url ? (
                           <img 
-                            src={featuredPost.featured_image_url} 
+                            src={featuredPost.cover_image_url} 
                             alt={featuredPost.title}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
@@ -140,9 +140,9 @@ const BlogIndex = () => {
                   <Link key={post.id} to={`/blog/${post.slug}`}>
                     <Card className="overflow-hidden bg-[#1a2228] text-white h-full group transition-all duration-300 hover:scale-105 hover:shadow-lg">
                       <div className="h-48 bg-gradient-to-br from-muted to-muted/50 relative overflow-hidden">
-                        {post.featured_image_url ? (
+                        {post.cover_image_url ? (
                           <img 
-                            src={post.featured_image_url} 
+                            src={post.cover_image_url} 
                             alt={post.title}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />

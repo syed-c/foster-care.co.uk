@@ -25,23 +25,9 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-interface Agency {
-  id: string;
-  name: string;
-  slug: string;
-  rating: number | null;
-  review_count: number | null;
-  city: string | null;
-  ofsted_rating: string | null;
-  is_verified: boolean | null;
-  is_featured: boolean | null;
-  services: string[] | null;
-  specializations: string[] | null;
-  phone: string | null;
-  email: string | null;
-  website: string | null;
-  logo_url: string | null;
-}
+import type { Tables } from "@/integrations/supabase/types";
+
+type Agency = Tables<"agencies">;
 
 const CompareAgencies = () => {
   const [selectedAgencies, setSelectedAgencies] = useState<string[]>([]);
@@ -55,7 +41,7 @@ const CompareAgencies = () => {
         .select("*")
         .order("rating", { ascending: false });
       if (error) throw error;
-      return data as Agency[];
+      return data;
     },
   });
 
@@ -255,49 +241,47 @@ const CompareAgencies = () => {
                     </div>
                   ))}
 
-                  {/* Services */}
+                  {/* Acceptance Types */}
                   <div
                     className="grid gap-4 py-4 border-b bg-background text-foreground"
                     style={{ gridTemplateColumns: `200px repeat(${selectedAgencyData.length}, 1fr)` }}
                   >
                     <div className="flex items-center gap-2 px-4">
                       <CheckCircle2 className="h-4 w-4 text-foreground" />
-                      <span className="font-medium text-sm text-foreground">Services</span>
+                      <span className="font-medium text-sm text-foreground">Acceptance Types</span>
                     </div>
                     {selectedAgencyData.map((agency) => (
                       <div key={agency.id} className="flex flex-wrap gap-1 justify-center px-2">
-                        {agency.services && Array.isArray(agency.services) && agency.services.length > 0 ? (
-                          agency.services.slice(0, 3).map((service, i) => (
+                        {agency.acceptance_types && Array.isArray(agency.acceptance_types) && agency.acceptance_types.length > 0 ? (
+                          agency.acceptance_types.slice(0, 3).map((type, i) => (
                             <Badge key={i} variant="secondary" className="text-xs text-foreground">
-                              {service}
+                              {type}
                             </Badge>
                           ))
                         ) : (
-                          <span className="text-foreground/80 text-sm">No services listed</span>
+                          <span className="text-foreground/80 text-sm">No types listed</span>
                         )}
                       </div>
                     ))}
                   </div>
 
-                  {/* Specializations */}
+                  {/* Agency Type */}
                   <div
                     className="grid gap-4 py-4 bg-background text-foreground"
                     style={{ gridTemplateColumns: `200px repeat(${selectedAgencyData.length}, 1fr)` }}
                   >
                     <div className="flex items-center gap-2 px-4">
                       <Award className="h-4 w-4 text-foreground" />
-                      <span className="font-medium text-sm text-foreground">Specializations</span>
+                      <span className="font-medium text-sm text-foreground">Agency Type</span>
                     </div>
                     {selectedAgencyData.map((agency) => (
                       <div key={agency.id} className="flex flex-wrap gap-1 justify-center px-2">
-                        {agency.specializations && Array.isArray(agency.specializations) && agency.specializations.length > 0 ? (
-                          agency.specializations.slice(0, 3).map((spec, i) => (
-                            <Badge key={i} variant="outline" className="text-xs text-foreground border-border">
-                              {spec}
-                            </Badge>
-                          ))
+                        {agency.agency_type ? (
+                          <Badge variant="outline" className="text-xs text-foreground border-border">
+                            {agency.agency_type}
+                          </Badge>
                         ) : (
-                          <span className="text-foreground/80 text-sm">No specializations listed</span>
+                          <span className="text-foreground/80 text-sm">Not specified</span>
                         )}
                       </div>
                     ))}

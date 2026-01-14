@@ -32,24 +32,9 @@ import { useToast } from "@/hooks/use-toast";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 
-interface Lead {
-  id: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone: string | null;
-  postcode: string | null;
-  message: string | null;
-  fostering_interest: string | null;
-  accommodation_type: string | null;
-  preferred_age_group: string | null;
-  has_children: boolean | null;
-  has_pets: boolean | null;
-  source_type: string | null;
-  status: string | null;
-  is_viewed: boolean | null;
-  created_at: string;
-}
+import type { Tables } from "@/integrations/supabase/types";
+
+type Lead = Tables<"leads">;
 
 export default function AdminLeads() {
   const [search, setSearch] = useState("");
@@ -73,7 +58,7 @@ export default function AdminLeads() {
 
       const { data, error } = await query;
       if (error) throw error;
-      return data as Lead[];
+      return data;
     },
   });
 
@@ -286,20 +271,24 @@ export default function AdminLeads() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-xs text-muted-foreground">Interest Type</p>
-                    <p className="font-medium text-sm">{selectedLead.fostering_interest || "—"}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Preferred Age Group</p>
-                    <p className="font-medium text-sm">{selectedLead.preferred_age_group || "—"}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Accommodation</p>
-                    <p className="font-medium text-sm">{selectedLead.accommodation_type || "—"}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Has Children / Pets</p>
                     <p className="font-medium text-sm">
-                      {selectedLead.has_children ? "Yes" : "No"} / {selectedLead.has_pets ? "Yes" : "No"}
+                      {Array.isArray(selectedLead.fostering_interest) 
+                        ? selectedLead.fostering_interest.join(", ") 
+                        : selectedLead.fostering_interest || "—"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Preferred Contact</p>
+                    <p className="font-medium text-sm">{selectedLead.preferred_contact || "—"}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Source Page</p>
+                    <p className="font-medium text-sm">{selectedLead.source_page || "—"}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Marketing Consent</p>
+                    <p className="font-medium text-sm">
+                      {selectedLead.marketing_consent ? "Yes" : "No"}
                     </p>
                   </div>
                 </div>

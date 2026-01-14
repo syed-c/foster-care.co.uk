@@ -21,7 +21,7 @@ const BlogPost = () => {
         .from("blog_posts")
         .select("*")
         .eq("slug", slug)
-        .eq("is_published", true)
+        .eq("status", "published")
         .single();
       if (error) throw error;
       return data;
@@ -35,7 +35,7 @@ const BlogPost = () => {
       const { data, error } = await supabase
         .from("blog_posts")
         .select("*")
-        .eq("is_published", true)
+        .eq("status", "published")
         .eq("category", post?.category)
         .neq("id", post?.id)
         .limit(3);
@@ -102,7 +102,7 @@ const BlogPost = () => {
           title: post.title,
           description: post.seo_description || post.excerpt || "",
           url: `https://fostercare.uk/blog/${post.slug}`,
-          imageUrl: post.featured_image_url || undefined,
+          imageUrl: post.cover_image_url || undefined,
           publishedAt: post.published_at || post.created_at,
           author: post.author_name || "Foster Care UK"
         })}
@@ -154,11 +154,11 @@ const BlogPost = () => {
         </div>
 
         {/* Featured Image */}
-        {post.featured_image_url && (
+        {post.cover_image_url && (
           <div className="container mx-auto px-4 max-w-4xl -mt-4">
             <div className="rounded-xl overflow-hidden shadow-lg">
               <img 
-                src={post.featured_image_url} 
+                src={post.cover_image_url} 
                 alt={post.title}
                 className="w-full h-auto max-h-[500px] object-cover"
               />
@@ -208,9 +208,9 @@ const BlogPost = () => {
                   <Link key={relatedPost.id} to={`/blog/${relatedPost.slug}`}>
                     <Card className="overflow-hidden h-full group hover:shadow-lg transition-all">
                       <div className="h-40 bg-gradient-to-br from-muted to-muted/50">
-                        {relatedPost.featured_image_url ? (
+                        {relatedPost.cover_image_url ? (
                           <img 
-                            src={relatedPost.featured_image_url} 
+                            src={relatedPost.cover_image_url} 
                             alt={relatedPost.title}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />

@@ -19,8 +19,9 @@ export function HeroSection() {
   const [selectedType, setSelectedType] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
+  const metadata = heroContent?.metadata as Record<string, string> | null;
   const title = heroContent?.title || "Finding the Right Foster Care Agency";
-  const subtitle = heroContent?.subtitle || "Serving Foster Families Across the UK";
+  const subtitle = metadata?.subtitle || "Serving Foster Families Across the UK";
   const content = heroContent?.content || "Connect with trusted foster care agencies across the United Kingdom. Every child deserves a loving home, and we're here to help you find the right support.";
 
   useEffect(() => {

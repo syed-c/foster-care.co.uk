@@ -69,11 +69,12 @@ export function FeaturedAgenciesSection() {
     slug: "compass-fostering"
   }];
   const displayAgencies = agencies && agencies.length > 0 ? agencies.slice(0, 3) : fallbackAgencies;
+  const metadata = featuredContent?.metadata as Record<string, string> | null;
   const title = featuredContent?.title || "Trusted by Families";
-  const subtitle = featuredContent?.subtitle || "Featured Agencies";
+  const subtitle = metadata?.subtitle || "Featured Agencies";
   const content = featuredContent?.content || "Discover highly-rated foster care agencies recommended by foster carers.";
-  const ctaText = featuredContent?.cta_text || "View All Agencies";
-  const ctaUrl = featuredContent?.cta_url || "/agencies";
+  const ctaText = metadata?.cta_text || "View All Agencies";
+  const ctaUrl = metadata?.cta_url || "/agencies";
   return <section className="section-padding bg-background relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0">
