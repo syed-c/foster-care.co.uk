@@ -28,15 +28,15 @@ import { StatusBadge } from "@/components/ui/status-badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const navItems = [
-  { label: "Dashboard", href: "/agency", icon: LayoutDashboard },
-  { label: "Leads Inbox", href: "/agency/leads", icon: MessageSquare, badge: true },
-  { label: "Tasks", href: "/agency/tasks", icon: CheckSquare },
-  { label: "Team", href: "/agency/team", icon: Users },
-  { label: "Coverage Areas", href: "/agency/coverage", icon: MapPin },
-  { label: "Documents", href: "/agency/documents", icon: FileText },
-  { label: "Reports", href: "/agency/reports", icon: BarChart3 },
-  { label: "Profile", href: "/agency/profile", icon: Building2 },
-  { label: "Settings", href: "/agency/settings", icon: Settings },
+  { label: "Dashboard", href: "/workspace", icon: LayoutDashboard },
+  { label: "Leads Inbox", href: "/workspace/leads", icon: MessageSquare, badge: true },
+  { label: "Tasks", href: "/workspace/tasks", icon: CheckSquare },
+  { label: "Team", href: "/workspace/team", icon: Users },
+  { label: "Reputation", href: "/workspace/reputation", icon: BarChart3 },
+  { label: "Coverage Areas", href: "/workspace/coverage", icon: MapPin },
+  { label: "Documents", href: "/workspace/documents", icon: FileText },
+  { label: "Profile", href: "/workspace/profile", icon: Building2 },
+  { label: "Settings", href: "/workspace/settings", icon: Settings },
 ];
 
 export default function AgencyWorkspace() {
