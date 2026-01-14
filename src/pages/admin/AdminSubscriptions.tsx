@@ -157,25 +157,27 @@ export default function AdminSubscriptions() {
           <StatCard
             title="Active Subscriptions"
             value={activeCount}
-            icon={<CheckCircle className="w-5 h-5" />}
-            trend={activeCount > 0 ? { value: 12, isPositive: true } : undefined}
+            icon={CheckCircle}
+            trend={activeCount > 0 ? { value: 12, label: "vs last month" } : undefined}
+            variant="verified"
           />
           <StatCard
             title="In Trial"
             value={trialCount}
-            icon={<Clock className="w-5 h-5" />}
+            icon={Clock}
+            variant="primary"
           />
           <StatCard
             title="Cancelled"
             value={cancelledCount}
-            icon={<XCircle className="w-5 h-5" />}
-            className="text-destructive"
+            icon={XCircle}
           />
           <StatCard
             title="Monthly Revenue"
             value={`£${monthlyRevenue.toLocaleString()}`}
-            icon={<DollarSign className="w-5 h-5" />}
-            trend={monthlyRevenue > 0 ? { value: 8, isPositive: true } : undefined}
+            icon={DollarSign}
+            trend={monthlyRevenue > 0 ? { value: 8, label: "vs last month" } : undefined}
+            variant="warm"
           />
         </div>
 
