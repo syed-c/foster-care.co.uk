@@ -11,19 +11,10 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
-import { ImageUpload } from "@/components/admin/ImageUpload";
 import { toast } from "sonner";
 import { 
   Building2, 
   Save, 
-  Upload,
-  Globe,
-  MapPin,
-  Phone,
-  Mail,
-  Star,
-  Users,
-  Shield,
   Loader2
 } from "lucide-react";
 
@@ -37,10 +28,6 @@ interface AgencyFormData {
   postcode: string;
   website: string;
   ofsted_rating: string;
-  ofsted_report_url: string;
-  services: string;
-  service_areas: string;
-  specializations: string;
   logo_url: string;
   cover_image_url: string;
 }
@@ -59,10 +46,6 @@ const AgencySettings = () => {
     postcode: "",
     website: "",
     ofsted_rating: "",
-    ofsted_report_url: "",
-    services: "",
-    service_areas: "",
-    specializations: "",
     logo_url: "",
     cover_image_url: "",
   });
@@ -101,10 +84,6 @@ const AgencySettings = () => {
         postcode: agency.postcode || "",
         website: agency.website || "",
         ofsted_rating: agency.ofsted_rating || "",
-        ofsted_report_url: agency.ofsted_report_url || "",
-        services: Array.isArray(agency.services) ? agency.services.join(", ") : Array.isArray(agency.services) ? JSON.stringify(agency.services) : "",
-        service_areas: Array.isArray(agency.service_areas) ? agency.service_areas.join(", ") : Array.isArray(agency.service_areas) ? JSON.stringify(agency.service_areas) : "",
-        specializations: Array.isArray(agency.specializations) ? agency.specializations.join(", ") : Array.isArray(agency.specializations) ? JSON.stringify(agency.specializations) : "",
         logo_url: agency.logo_url || "",
         cover_image_url: agency.cover_image_url || "",
       });
@@ -117,12 +96,7 @@ const AgencySettings = () => {
       
       const { error } = await supabase
         .from("agencies")
-        .update({
-          ...updatedData,
-          services: updatedData.services ? updatedData.services.split(",").map(s => s.trim()) : null,
-          service_areas: updatedData.service_areas ? updatedData.service_areas.split(",").map(s => s.trim()) : null,
-          specializations: updatedData.specializations ? updatedData.specializations.split(",").map(s => s.trim()) : null,
-        })
+        .update(updatedData)
         .eq("id", agency.id);
       
       if (error) throw error;
@@ -152,11 +126,13 @@ const AgencySettings = () => {
 
   const handleImageUpload = async (file: File, field: 'logo_url' | 'cover_image_url') => {
     try {
+      if (!agency?.id) return;
+      
       const fileExt = file.name.split('.').pop();
       const fileName = `${field}_${Date.now()}.${fileExt}`;
       const filePath = `${agency.id}/${fileName}`;
 
-      const { data: uploadData, error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from('agency-images')
         .upload(filePath, file, { upsert: true });
 
@@ -243,7 +219,7 @@ const AgencySettings = () => {
             </TabsList>
 
             <TabsContent value="profile">
-              <Card className="hover:scale-105 transition-transform duration-300">
+              <Card>
                 <CardHeader>
                   <CardTitle>Basic Information</CardTitle>
                 </CardHeader>
@@ -251,52 +227,48 @@ const AgencySettings = () => {
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <Label htmlFor="name" className="text-white">Agency Name *</Label>
+                        <Label htmlFor="name">Agency Name *</Label>
                         <Input
                           id="name"
                           name="name"
                           value={formData.name}
                           onChange={handleInputChange}
                           required
-                          className="text-white placeholder:text-white/50"
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="email" className="text-white">Email</Label>
+                        <Label htmlFor="email">Email</Label>
                         <Input
                           id="email"
                           name="email"
                           type="email"
                           value={formData.email}
                           onChange={handleInputChange}
-                          className="text-white placeholder:text-white/50"
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="phone" className="text-white">Phone</Label>
+                        <Label htmlFor="phone">Phone</Label>
                         <Input
                           id="phone"
                           name="phone"
                           value={formData.phone}
                           onChange={handleInputChange}
-                          className="text-white placeholder:text-white/50"
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="website" className="text-white">Website</Label>
+                        <Label htmlFor="website">Website</Label>
                         <Input
                           id="website"
                           name="website"
                           value={formData.website}
                           onChange={handleInputChange}
                           placeholder="https://"
-                          className="text-white placeholder:text-white/50"
                         />
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="description" className="text-white">Description</Label>
+                      <Label htmlFor="description">Description</Label>
                       <Textarea
                         id="description"
                         name="description"
@@ -304,80 +276,40 @@ const AgencySettings = () => {
                         onChange={handleInputChange}
                         rows={4}
                         placeholder="Tell people about your agency..."
-                        className="text-white placeholder:text-white/50"
                       />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div className="space-y-2">
-                        <Label htmlFor="address" className="text-white">Address</Label>
+                        <Label htmlFor="address">Address</Label>
                         <Input
                           id="address"
                           name="address"
                           value={formData.address}
                           onChange={handleInputChange}
-                          className="text-white placeholder:text-white/50"
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="city" className="text-white">City</Label>
+                        <Label htmlFor="city">City</Label>
                         <Input
                           id="city"
                           name="city"
                           value={formData.city}
                           onChange={handleInputChange}
-                          className="text-white placeholder:text-white/50"
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="postcode" className="text-white">Postcode</Label>
+                        <Label htmlFor="postcode">Postcode</Label>
                         <Input
                           id="postcode"
                           name="postcode"
                           value={formData.postcode}
                           onChange={handleInputChange}
-                          className="text-white placeholder:text-white/50"
                         />
                       </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="services" className="text-white">Services (comma separated)</Label>
-                      <Input
-                        id="services"
-                        name="services"
-                        value={formData.services}
-                        onChange={handleInputChange}
-                        placeholder="e.g., Emergency fostering, Short-term care, Respite care"
-                        className="text-white placeholder:text-white/50"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="service_areas" className="text-white">Service Areas (comma separated)</Label>
-                      <Input
-                        id="service_areas"
-                        name="service_areas"
-                        value={formData.service_areas}
-                        onChange={handleInputChange}
-                        placeholder="e.g., London, Manchester, Birmingham"
-                        className="text-white placeholder:text-white/50"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="specializations" className="text-white">Specializations (comma separated)</Label>
-                      <Input
-                        id="specializations"
-                        name="specializations"
-                        value={formData.specializations}
-                        onChange={handleInputChange}
-                        placeholder="e.g., Teenagers, Siblings, Disabilities"
-                        className="text-white placeholder:text-white/50"
-                      />
-                    </div>
-
-                    <Button type="submit" variant="secondary" disabled={isSubmitting}>
+                    <Button type="submit" disabled={isSubmitting}>
                       {isSubmitting ? (
                         <>
                           <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -396,7 +328,7 @@ const AgencySettings = () => {
             </TabsContent>
 
             <TabsContent value="images">
-              <Card className="hover:scale-105 transition-transform duration-300">
+              <Card>
                 <CardHeader>
                   <CardTitle>Agency Images</CardTitle>
                 </CardHeader>
@@ -419,7 +351,6 @@ const AgencySettings = () => {
                             const file = e.target.files?.[0];
                             if (file) handleImageUpload(file, 'logo_url');
                           }}
-                          className="text-white placeholder:text-white/50"
                         />
                         <p className="text-xs text-muted-foreground">Max size: 2MB, JPG/PNG</p>
                       </div>
@@ -444,9 +375,8 @@ const AgencySettings = () => {
                             const file = e.target.files?.[0];
                             if (file) handleImageUpload(file, 'cover_image_url');
                           }}
-                          className="text-white placeholder:text-white/50"
                         />
-                        <p className="text-xs text-muted-foreground">Max size: 5MB, JPG/PNG</p>
+                        <p className="text-xs text-muted-foreground">Recommended: 1200x400px, Max size: 5MB</p>
                       </div>
                     </div>
                   </div>
@@ -455,50 +385,46 @@ const AgencySettings = () => {
             </TabsContent>
 
             <TabsContent value="verification">
-              <Card className="hover:scale-105 transition-transform duration-300">
+              <Card>
                 <CardHeader>
-                  <CardTitle>Verification Information</CardTitle>
+                  <CardTitle>Verification Status</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="ofsted_rating" className="text-white">Ofsted Rating</Label>
-                      <Input
-                        id="ofsted_rating"
-                        name="ofsted_rating"
-                        value={formData.ofsted_rating}
-                        onChange={handleInputChange}
-                        placeholder="e.g., Outstanding, Good, Requires Improvement"
-                        className="text-white placeholder:text-white/50"
-                      />
+                  <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                    <div>
+                      <h4 className="font-medium">Agency Verification</h4>
+                      <p className="text-sm text-muted-foreground">
+                        {agency.is_verified 
+                          ? "Your agency is verified and trusted."
+                          : "Your agency is pending verification."}
+                      </p>
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="ofsted_report_url" className="text-white">Ofsted Report URL</Label>
-                      <Input
-                        id="ofsted_report_url"
-                        name="ofsted_report_url"
-                        type="url"
-                        value={formData.ofsted_report_url}
-                        onChange={handleInputChange}
-                        placeholder="https://reports.ofsted.gov.uk/provider/..."
-                        className="text-white placeholder:text-white/50"
-                      />
+                    <div className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      agency.is_verified 
+                        ? "bg-green-100 text-green-800" 
+                        : "bg-yellow-100 text-yellow-800"
+                    }`}>
+                      {agency.is_verified ? "Verified" : "Pending"}
                     </div>
                   </div>
-
-                  <Button type="button" variant="secondary" onClick={handleSubmit} disabled={isSubmitting}>
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Saving...
-                      </>
-                    ) : (
-                      <>
-                        <Save className="w-4 h-4 mr-2" />
-                        Save Verification Info
-                      </>
-                    )}
-                  </Button>
+                  
+                  {agency.ofsted_rating && (
+                    <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                      <div>
+                        <h4 className="font-medium">Ofsted Rating</h4>
+                        <p className="text-sm text-muted-foreground">
+                          Current inspection rating
+                        </p>
+                      </div>
+                      <div className="px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary">
+                        {agency.ofsted_rating}
+                      </div>
+                    </div>
+                  )}
+                  
+                  <p className="text-sm text-muted-foreground">
+                    To update your verification status or Ofsted details, please contact our support team.
+                  </p>
                 </CardContent>
               </Card>
             </TabsContent>

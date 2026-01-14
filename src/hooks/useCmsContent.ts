@@ -1,19 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import type { Tables } from "@/integrations/supabase/types";
 
-interface CmsContent {
-  id: string;
-  page_key: string;
-  section_key: string;
-  title: string | null;
-  subtitle: string | null;
-  content: string | null;
-  image_url: string | null;
-  cta_text: string | null;
-  cta_url: string | null;
-  display_order: number | null;
-  is_active: boolean | null;
-}
+// Use the actual database schema type
+export type CmsContent = Tables<"cms_content">;
 
 // Fetch all CMS content for a specific page
 export function useCmsContentByPage(pageKey: string | undefined) {
@@ -27,10 +17,10 @@ export function useCmsContentByPage(pageKey: string | undefined) {
         .select("*")
         .eq("page_key", pageKey)
         .eq("is_active", true)
-        .order("display_order");
+        .order("section");
 
       if (error) throw error;
-      return data as CmsContent[];
+      return data;
     },
     enabled: !!pageKey,
   });
@@ -47,12 +37,12 @@ export function useCmsContentSection(pageKey: string | undefined, sectionKey: st
         .from("cms_content")
         .select("*")
         .eq("page_key", pageKey)
-        .eq("section_key", sectionKey)
+        .eq("section", sectionKey)
         .eq("is_active", true)
         .maybeSingle();
 
       if (error) throw error;
-      return data as CmsContent | null;
+      return data;
     },
     enabled: !!pageKey,
   });
@@ -81,5 +71,5 @@ export function useFaqsByPage(pageKey: string | undefined) {
 
 // Helper to get content by section from an array of content
 export function getContentBySection(contents: CmsContent[] | undefined, sectionKey: string): CmsContent | undefined {
-  return contents?.find((c) => c.section_key === sectionKey);
+  return contents?.find((c) => c.section === sectionKey);
 }

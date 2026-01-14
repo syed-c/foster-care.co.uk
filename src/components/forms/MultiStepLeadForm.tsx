@@ -80,22 +80,20 @@ export function MultiStepLeadForm({
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase.from("leads").insert({
+      const leadData = {
         first_name: formData.firstName,
-        last_name: formData.lastName,
+        last_name: formData.lastName || null,
         email: formData.email,
         phone: formData.phone || null,
         postcode: formData.postcode || null,
-        accommodation_type: formData.accommodationType || null,
-        has_children: formData.hasChildren,
-        has_pets: formData.hasPets,
-        fostering_interest: formData.fosteringInterest || null,
-        preferred_age_group: formData.preferredAgeGroup || null,
+        fostering_interest: formData.fosteringInterest ? [formData.fosteringInterest] : null,
         message: formData.message || null,
-        source_type: sourceType,
+        source_page: sourceType,
         source_agency_id: sourceAgencyId || null,
         source_location_id: sourceLocationId || null,
-      });
+      };
+
+      const { error } = await supabase.from("leads").insert(leadData);
 
       if (error) throw error;
 
