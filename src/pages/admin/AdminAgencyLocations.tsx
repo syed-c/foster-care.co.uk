@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { AdminLayout } from "@/components/admin/AdminLayout";
+import { SuperAdminSidebar } from "@/components/admin/SuperAdminSidebar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -179,7 +179,7 @@ const AdminAgencyLocations = () => {
   );
 
   return (
-    <AdminLayout title="Agency Locations" description="Manage which locations agencies serve">
+    <SuperAdminSidebar title="Agency Locations" description="Manage which locations agencies serve">
       <div className="space-y-6">
         <div className="flex items-center justify-end">
           <Button onClick={() => setIsAddDialogOpen(true)}>
@@ -369,7 +369,7 @@ const AdminAgencyLocations = () => {
           </DialogContent>
         </Dialog>
       </div>
-    </AdminLayout>
+    </SuperAdminSidebar>
   );
 };
 

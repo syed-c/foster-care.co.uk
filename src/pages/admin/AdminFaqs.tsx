@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AdminLayout } from "@/components/admin/AdminLayout";
+import { SuperAdminSidebar } from "@/components/admin/SuperAdminSidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -158,7 +158,7 @@ export default function AdminFaqs() {
   };
 
   return (
-    <AdminLayout title="FAQs" description="Manage frequently asked questions">
+    <SuperAdminSidebar title="FAQs" description="Manage frequently asked questions">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
           <CardTitle>All FAQs</CardTitle>
@@ -324,6 +324,6 @@ export default function AdminFaqs() {
           )}
         </CardContent>
       </Card>
-    </AdminLayout>
+    </SuperAdminSidebar>
   );
 }

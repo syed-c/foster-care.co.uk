@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { AdminLayout } from "@/components/admin/AdminLayout";
+import { SuperAdminSidebar } from "@/components/admin/SuperAdminSidebar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -119,16 +119,16 @@ export default function AdminSettings() {
 
   if (isLoading) {
     return (
-      <AdminLayout title="Site Settings" description="Configure your website settings">
+      <SuperAdminSidebar title="Site Settings" description="Configure your website settings">
         <div className="flex items-center justify-center py-12">
           <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
         </div>
-      </AdminLayout>
+      </SuperAdminSidebar>
     );
   }
 
   return (
-    <AdminLayout title="Site Settings" description="Configure all aspects of your Foster Care UK website">
+    <SuperAdminSidebar title="Site Settings" description="Configure all aspects of your Foster Care UK website">
       <div className="space-y-6">
         {/* Quick Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -744,6 +744,6 @@ export default function AdminSettings() {
           </TabsContent>
         </Tabs>
       </div>
-    </AdminLayout>
+    </SuperAdminSidebar>
   );
 }

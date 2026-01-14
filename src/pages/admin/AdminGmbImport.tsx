@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { AdminLayout } from "@/components/admin/AdminLayout";
+import { SuperAdminSidebar } from "@/components/admin/SuperAdminSidebar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -253,7 +253,7 @@ const AdminGmbImport = () => {
   };
 
   return (
-    <AdminLayout title="GMB Import" description="Import foster care agencies from Google My Business">
+    <SuperAdminSidebar title="GMB Import" description="Import foster care agencies from Google My Business">
       <div className="space-y-6">
         {/* Info Banner */}
         <Card className="bg-primary/5 border-primary/20">
@@ -491,7 +491,7 @@ const AdminGmbImport = () => {
           </CardContent>
         </Card>
       </div>
-    </AdminLayout>
+    </SuperAdminSidebar>
   );
 };
 

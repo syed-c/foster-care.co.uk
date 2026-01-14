@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { AdminLayout } from "@/components/admin/AdminLayout";
+import { SuperAdminSidebar } from "@/components/admin/SuperAdminSidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -141,7 +141,7 @@ export default function AdminAuditLogs() {
   };
 
   return (
-    <AdminLayout title="Audit Logs" description="Track all system activities and changes">
+    <SuperAdminSidebar title="Audit Logs" description="Track all system activities and changes">
       <div className="space-y-6">
         {/* Filters */}
         <Card className="rounded-2xl border-border shadow-soft">
@@ -343,6 +343,6 @@ export default function AdminAuditLogs() {
           </DialogContent>
         </Dialog>
       </div>
-    </AdminLayout>
+    </SuperAdminSidebar>
   );
 }
