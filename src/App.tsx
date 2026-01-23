@@ -52,6 +52,7 @@ import HowToBecomeGuide from './pages/guides/HowToBecomeGuide';
 import FosteringAllowancesGuide from './pages/guides/FosteringAllowancesGuide';
 import TypesOfFosteringGuide from './pages/guides/TypesOfFosteringGuide';
 import NotFound from './pages/NotFound';
+import PricingPage from './pages/PricingPage';
 
 // Agency Workspace Pages
 import AgencyWorkspace from './pages/agency/AgencyWorkspace';
@@ -91,6 +92,7 @@ const App = () => (
           <Route path="/trust-verification" element={<TrustVerification />} />
           <Route path="/how-listings-work" element={<HowListingsWork />} />
           <Route path="/editorial-policy" element={<EditorialPolicy />} />
+          <Route path="/pricing" element={<PricingPage />} />
           <Route path="/blog" element={<BlogIndex />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/about" element={<AboutPage />} />

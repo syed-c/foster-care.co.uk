@@ -1,3 +1,7 @@
+# Foster Care UK - robots.txt
+# https://foster-care.co.uk
+
+# Allow all major search engine crawlers
 User-agent: Googlebot
 Allow: /
 
@@ -10,5 +14,43 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
+User-agent: LinkedInBot
+Allow: /
+
+# Default rules for all other bots
 User-agent: *
 Allow: /
+
+# Public pages - explicitly allowed
+Allow: /agencies
+Allow: /agencies/
+Allow: /locations
+Allow: /locations/
+Allow: /specialisms
+Allow: /specialisms/
+Allow: /guides
+Allow: /guides/
+Allow: /blog
+Allow: /blog/
+Allow: /about
+Allow: /contact
+Allow: /pricing
+Allow: /compare
+Allow: /trust-verification
+Allow: /how-listings-work
+Allow: /editorial-policy
+
+# Disallow private/admin areas
+Disallow: /admin/
+Disallow: /workspace/
+Disallow: /dashboard
+Disallow: /auth
+Disallow: /agency/
+Disallow: /claim
+Disallow: /register-agency
+
+# Sitemap location
+Sitemap: https://foster-care.co.uk/sitemap.xml
+
+# Crawl-delay for politeness (optional, some bots respect this)
+Crawl-delay: 1

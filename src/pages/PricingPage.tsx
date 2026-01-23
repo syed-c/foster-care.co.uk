@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -62,6 +63,12 @@ export default function PricingPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <SEOHead
+        title="Fostering Agency Pricing Plans | Verified Listings | Foster Care UK"
+        description="Affordable monthly plans for fostering agencies. Get verified listings, lead management, SEO optimization, and reputation management. No annual lock-ins. Cancel anytime."
+        canonicalUrl="https://foster-care.co.uk/pricing"
+        keywords={["fostering agency pricing", "foster care agency listing", "fostering agency marketing", "foster care lead generation"]}
+      />
       <Header />
       
       <main className="flex-1 pt-24">
