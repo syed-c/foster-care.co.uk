@@ -91,9 +91,9 @@ export function LocationDiscoverySection() {
     slug: c.slug
   })) : ukRegionsFallback;
   const metadata = locationContent?.metadata as Record<string, string> | null;
-  const title = locationContent?.title || "Find Agencies Near You";
-  const subtitle = metadata?.subtitle || "Browse by Location";
-  const content = locationContent?.content || "Explore foster care agencies across the United Kingdom. Select a country or region to find local support.";
+  const title = locationContent?.title || "Find Foster Care Agencies Near You";
+  const subtitle = metadata?.subtitle || "Browse by UK Region";
+  const content = locationContent?.content || "Discover fostering agencies across England, Scotland, Wales, and Northern Ireland. Each region has local and independent agencies ready to support your fostering journey with comprehensive training, allowances, and 24/7 support.";
   return <section className="section-padding bg-background-warm relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0">

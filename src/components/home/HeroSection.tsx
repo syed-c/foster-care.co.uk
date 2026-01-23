@@ -20,9 +20,9 @@ export function HeroSection() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const metadata = heroContent?.metadata as Record<string, string> | null;
-  const title = heroContent?.title || "Finding the Right Foster Care Agency";
-  const subtitle = metadata?.subtitle || "Serving Foster Families Across the UK";
-  const content = heroContent?.content || "Connect with trusted foster care agencies across the United Kingdom. Every child deserves a loving home, and we're here to help you find the right support.";
+  const title = heroContent?.title || "Find the Right Foster Care Agency";
+  const subtitle = metadata?.subtitle || "The UK's Leading Fostering Directory";
+  const content = heroContent?.content || "Compare over 500 Ofsted-registered fostering agencies across England. Read genuine reviews from foster carers, compare allowances and support packages, and take the first step towards making a difference in a child's life.";
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -40,10 +40,10 @@ export function HeroSection() {
   };
 
   const stats = [
-    { icon: Building2, value: "500+", label: "Verified Agencies", color: "bg-primary/20 border-primary/40 text-primary" },
-    { icon: Star, value: "4.8", label: "Average Rating", color: "bg-amber-500/20 border-amber-500/40 text-amber-400" },
-    { icon: Shield, value: "100%", label: "Ofsted Rated", color: "bg-verified/20 border-verified/40 text-verified" },
-    { icon: Users, value: "24h", label: "Response Time", color: "bg-trust/20 border-trust/40 text-trust" },
+    { icon: Building2, value: "500+", label: "Ofsted-Registered Agencies", color: "bg-primary/20 border-primary/40 text-primary" },
+    { icon: Star, value: "4.8", label: "Average Carer Rating", color: "bg-amber-500/20 border-amber-500/40 text-amber-400" },
+    { icon: Shield, value: "100%", label: "Verified & Checked", color: "bg-verified/20 border-verified/40 text-verified" },
+    { icon: Users, value: "24h", label: "Avg Response Time", color: "bg-trust/20 border-trust/40 text-trust" },
   ];
 
   return (

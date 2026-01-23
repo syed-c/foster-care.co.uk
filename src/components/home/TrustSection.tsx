@@ -3,37 +3,37 @@ import { Shield, Heart, Users, CheckCircle, Award, Clock } from "lucide-react";
 import { useCmsContentSection } from "@/hooks/useCmsContent";
 const trustPoints = [{
   icon: Shield,
-  title: "Verified Agencies",
-  description: "All agencies are checked and verified to ensure quality care standards.",
+  title: "Ofsted Verified Agencies",
+  description: "Every agency in our directory is cross-referenced with Ofsted records to ensure they meet regulatory standards for foster care in England.",
   gradient: "from-emerald-500/10 to-emerald-500/5"
 }, {
   icon: Heart,
-  title: "Child-Focused",
-  description: "Every connection we facilitate puts the welfare of children first.",
+  title: "Child-Centred Approach",
+  description: "Our platform prioritises children's welfare above all else. We only feature agencies committed to providing safe, nurturing placements.",
   gradient: "from-rose-500/10 to-rose-500/5"
 }, {
   icon: Users,
-  title: "Expert Support",
-  description: "Experienced professionals guiding you through your fostering journey.",
+  title: "Expert Fostering Support",
+  description: "Access agencies offering 24/7 support, comprehensive training, and dedicated social workers to guide you through your fostering journey.",
   gradient: "from-blue-500/10 to-blue-500/5"
 }, {
   icon: CheckCircle,
-  title: "Trusted Process",
-  description: "A transparent, supportive approach to finding the right agency.",
+  title: "Transparent Reviews",
+  description: "Read genuine reviews from foster carers. We verify feedback to ensure authentic experiences help you make informed decisions.",
   gradient: "from-amber-500/10 to-amber-500/5"
 }];
 const stats = [{
   icon: Award,
   value: "500+",
-  label: "Agencies Listed"
+  label: "Registered Fostering Agencies"
 }, {
   icon: Users,
-  value: "10K+",
-  label: "Families Helped"
+  value: "10,000+",
+  label: "Foster Families Connected"
 }, {
   icon: Clock,
   value: "24/7",
-  label: "Support Available"
+  label: "Agency Support Available"
 }];
 const containerVariants = {
   hidden: {

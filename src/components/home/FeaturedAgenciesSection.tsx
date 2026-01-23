@@ -70,10 +70,10 @@ export function FeaturedAgenciesSection() {
   }];
   const displayAgencies = agencies && agencies.length > 0 ? agencies.slice(0, 3) : fallbackAgencies;
   const metadata = featuredContent?.metadata as Record<string, string> | null;
-  const title = featuredContent?.title || "Trusted by Families";
-  const subtitle = metadata?.subtitle || "Featured Agencies";
-  const content = featuredContent?.content || "Discover highly-rated foster care agencies recommended by foster carers.";
-  const ctaText = metadata?.cta_text || "View All Agencies";
+  const title = featuredContent?.title || "Top-Rated Fostering Agencies";
+  const subtitle = metadata?.subtitle || "Recommended by Foster Carers";
+  const content = featuredContent?.content || "Explore highly-rated independent and local authority fostering agencies recommended by current foster carers. Each agency offers Ofsted registration, comprehensive training, and competitive allowances.";
+  const ctaText = metadata?.cta_text || "View All 500+ Agencies";
   const ctaUrl = metadata?.cta_url || "/agencies";
   return <section className="section-padding bg-background relative overflow-hidden">
       {/* Background decoration */}

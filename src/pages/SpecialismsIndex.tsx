@@ -34,9 +34,10 @@ export default function SpecialismsIndex() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <SEOHead
-        title="Types of Fostering | Foster Care Specialisms in England"
-        description="Explore different types of fostering in England including therapeutic, emergency, respite, parent & child, and more. Find the right fostering path for you."
-        canonicalUrl="https://fostercare.uk/specialisms"
+        title="Types of Foster Care | Specialisms & Services | Foster Care UK"
+        description="Discover different fostering specialisms in England: emergency, therapeutic, respite, parent & child, sibling groups, teenagers, and more. Find agencies matching your interests and skills."
+        canonicalUrl="https://foster-care.co.uk/specialisms"
+        keywords={["types of fostering", "foster care specialisms", "therapeutic fostering", "emergency foster care", "respite fostering", "sibling group fostering"]}
         structuredData={getBreadcrumbSchema(breadcrumbs)}
       />
       <Header />
@@ -63,12 +64,13 @@ export default function SpecialismsIndex() {
               </div>
 
               <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-                Find Your{" "}
-                <span className="text-gradient-primary">Fostering Specialism</span>
+                Fostering{" "}
+                <span className="text-gradient-primary">Specialisms & Types</span>
               </h1>
 
               <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-                Every child is unique, and so is every fostering journey. Explore the different types of fostering to find the path that's right for you.
+                From short-term emergency placements to long-term therapeutic care, explore the different ways you can make 
+                a difference in a child's life. Each specialism requires unique skills and offers rewarding opportunities.
               </p>
             </motion.div>
           </div>
