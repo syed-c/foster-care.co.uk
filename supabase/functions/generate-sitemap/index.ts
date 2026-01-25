@@ -7,17 +7,44 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 const SITE_URL = "https://foster-care.co.uk";
 
+// Fostering specialisms for location-specialism combo pages
+const SPECIALISM_SLUGS = [
+  "short-term-fostering",
+  "long-term-fostering", 
+  "emergency-fostering",
+  "respite-fostering",
+  "therapeutic-fostering",
+  "parent-child-fostering",
+  "sibling-groups-fostering",
+  "teenagers-fostering",
+  "asylum-seekers-fostering",
+  "disabilities-fostering",
+];
+
 serve(async (req) => {
+  // Handle CORS preflight
+  if (req.method === "OPTIONS") {
+    return new Response(null, {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
+    });
+  }
+
   // Only allow GET requests
   if (req.method !== "GET") {
     return new Response("Method not allowed", { status: 405 });
   }
 
   try {
+    const today = new Date().toISOString().split('T')[0];
+    
     // Fetch all locations
     const { data: locations, error: locError } = await supabase
       .from('locations')
-      .select('slug, type, parent_id, updated_at')
+      .select('id, slug, type, parent_id, updated_at, name')
       .eq('is_active', true);
 
     if (locError) {
@@ -27,7 +54,7 @@ serve(async (req) => {
     // Fetch all agencies
     const { data: agencies, error: agencyError } = await supabase
       .from('agencies')
-      .select('slug, updated_at')
+      .select('slug, updated_at, name')
       .eq('is_active', true);
 
     if (agencyError) {
@@ -37,7 +64,7 @@ serve(async (req) => {
     // Fetch all specialisms
     const { data: specialisms, error: specError } = await supabase
       .from('specialisms')
-      .select('slug, updated_at')
+      .select('slug, updated_at, name')
       .eq('is_active', true);
 
     if (specError) {
@@ -47,21 +74,19 @@ serve(async (req) => {
     // Fetch all published blog posts
     const { data: blogPosts, error: blogError } = await supabase
       .from('blog_posts')
-      .select('slug, updated_at')
+      .select('slug, updated_at, title')
       .eq('status', 'published');
 
     if (blogError) {
       console.error('Error fetching blog posts:', blogError);
     }
 
-    // Build location hierarchy map
-    type LocationRow = { slug: string; type: string; parent_id: string | null; updated_at: string | null };
-    const locationMap = new Map<string, LocationRow>();
-    locations?.forEach((loc: LocationRow) => locationMap.set(loc.slug, loc));
-
     // Generate sitemap XML
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
-    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n';
+    xml += '        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n';
+    xml += '        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9\n';
+    xml += '        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">\n';
 
     // Static pages with high priority
     const staticPages = [
@@ -87,6 +112,7 @@ serve(async (req) => {
     for (const page of staticPages) {
       xml += `  <url>
     <loc>${SITE_URL}${page.url}</loc>
+    <lastmod>${today}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>
   </url>\n`;
@@ -102,7 +128,6 @@ serve(async (req) => {
       );
 
       for (const location of sortedLocations) {
-        // Build the full URL path based on hierarchy
         let urlPath = `/locations/${location.slug}`;
         let priority = "0.6";
         
@@ -113,11 +138,13 @@ serve(async (req) => {
           priority = "0.8";
         } else if (location.type === 'city') {
           priority = "0.7";
+        } else if (location.type === 'county') {
+          priority = "0.65";
         }
 
         const lastmod = location.updated_at 
           ? new Date(location.updated_at).toISOString().split('T')[0]
-          : new Date().toISOString().split('T')[0];
+          : today;
 
         xml += `  <url>
     <loc>${SITE_URL}${urlPath}</loc>
@@ -125,6 +152,18 @@ serve(async (req) => {
     <changefreq>weekly</changefreq>
     <priority>${priority}</priority>
   </url>\n`;
+
+        // Add location + specialism combo pages for main location types
+        if (['country', 'region', 'city'].includes(location.type)) {
+          for (const specSlug of SPECIALISM_SLUGS) {
+            xml += `  <url>
+    <loc>${SITE_URL}${urlPath}/${specSlug}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>\n`;
+          }
+        }
       }
     }
 
@@ -133,7 +172,7 @@ serve(async (req) => {
       for (const agency of agencies) {
         const lastmod = agency.updated_at 
           ? new Date(agency.updated_at).toISOString().split('T')[0]
-          : new Date().toISOString().split('T')[0];
+          : today;
 
         xml += `  <url>
     <loc>${SITE_URL}/agencies/${agency.slug}</loc>
@@ -149,7 +188,7 @@ serve(async (req) => {
       for (const specialism of specialisms) {
         const lastmod = specialism.updated_at 
           ? new Date(specialism.updated_at).toISOString().split('T')[0]
-          : new Date().toISOString().split('T')[0];
+          : today;
 
         xml += `  <url>
     <loc>${SITE_URL}/specialisms/${specialism.slug}</loc>
@@ -165,7 +204,7 @@ serve(async (req) => {
       for (const post of blogPosts) {
         const lastmod = post.updated_at 
           ? new Date(post.updated_at).toISOString().split('T')[0]
-          : new Date().toISOString().split('T')[0];
+          : today;
 
         xml += `  <url>
     <loc>${SITE_URL}/blog/${post.slug}</loc>
@@ -178,11 +217,16 @@ serve(async (req) => {
 
     xml += '</urlset>';
 
+    // Log stats
+    const urlCount = (xml.match(/<url>/g) || []).length;
+    console.log(`Generated sitemap with ${urlCount} URLs`);
+
     return new Response(xml, {
       headers: { 
-        "Content-Type": "application/xml",
-        "Cache-Control": "s-maxage=3600, stale-while-revalidate=86400",
-        "Access-Control-Allow-Origin": "*"
+        "Content-Type": "application/xml; charset=utf-8",
+        "Cache-Control": "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400",
+        "Access-Control-Allow-Origin": "*",
+        "X-Robots-Tag": "noindex"
       },
     });
   } catch (error) {
@@ -206,11 +250,19 @@ serve(async (req) => {
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
+  <url>
+    <loc>${SITE_URL}/locations/england</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
 </urlset>`;
     
     return new Response(fallbackXml, {
       status: 200,
-      headers: { "Content-Type": "application/xml" },
+      headers: { 
+        "Content-Type": "application/xml; charset=utf-8",
+        "Access-Control-Allow-Origin": "*"
+      },
     });
   }
 });

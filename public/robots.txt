@@ -1,12 +1,45 @@
-# Foster Care UK - robots.txt
+# Foster Care UK - Robots.txt
 # https://foster-care.co.uk
+# Last updated: January 2026
 
-# Allow all major search engine crawlers
+# Default: Allow all crawlers full access
+User-agent: *
+Allow: /
+Crawl-delay: 1
+
+# Sitemap location - Dynamic sitemap with all pages
+Sitemap: https://foster-care.co.uk/sitemap.xml
+
+# ============================================
+# SEARCH ENGINE CRAWLERS
+# ============================================
+
 User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Googlebot-Image
 Allow: /
 
 User-agent: Bingbot
 Allow: /
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+# ============================================
+# SOCIAL MEDIA CRAWLERS
+# ============================================
 
 User-agent: Twitterbot
 Allow: /
@@ -17,21 +50,53 @@ Allow: /
 User-agent: LinkedInBot
 Allow: /
 
-# Default rules for all other bots
-User-agent: *
+User-agent: Pinterestbot
 Allow: /
 
-# Public pages - explicitly allowed
+# ============================================
+# AI / LLM CRAWLERS - EXPLICITLY ALLOWED
+# ============================================
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Anthropic-AI
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# ============================================
+# EXPLICITLY ALLOWED PUBLIC PAGES
+# ============================================
+
+# Directory Pages
 Allow: /agencies
-Allow: /agencies/
+Allow: /agencies/*
 Allow: /locations
-Allow: /locations/
+Allow: /locations/*
 Allow: /specialisms
-Allow: /specialisms/
+Allow: /specialisms/*
+
+# Content Pages
 Allow: /guides
-Allow: /guides/
+Allow: /guides/*
 Allow: /blog
-Allow: /blog/
+Allow: /blog/*
+
+# Static Pages
 Allow: /about
 Allow: /contact
 Allow: /pricing
@@ -40,17 +105,21 @@ Allow: /trust-verification
 Allow: /how-listings-work
 Allow: /editorial-policy
 
-# Disallow private/admin areas
-Disallow: /admin/
-Disallow: /workspace/
-Disallow: /dashboard
+# ============================================
+# DISALLOWED PRIVATE AREAS
+# ============================================
+
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /workspace
+Disallow: /workspace/*
+Disallow: /agency-dashboard
+Disallow: /agency-dashboard/*
+Disallow: /user-dashboard
 Disallow: /auth
-Disallow: /agency/
 Disallow: /claim
 Disallow: /register-agency
 
-# Sitemap location
-Sitemap: https://foster-care.co.uk/sitemap.xml
-
-# Crawl-delay for politeness (optional, some bots respect this)
-Crawl-delay: 1
+# Utility endpoints
+Disallow: /api/
+Disallow: /*.json$

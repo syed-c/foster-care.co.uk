@@ -109,14 +109,100 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
   // Filter agencies - in real implementation, would filter by specialism
   const agencies = allAgencies || [];
 
+  // Generate unique SEO content for this location+specialism combination
+  const getSpecialismLocationContent = () => {
+    const contents: { [key: string]: { intro: string; benefits: string[] } } = {
+      "short-term-fostering": {
+        intro: `Short-term fostering in ${location.name} provides temporary care for children while their families receive support or permanent arrangements are made. Foster carers in ${location.name} typically provide placements lasting from a few days to several months.`,
+        benefits: ["Flexible commitment suitable for working families", "Regular placement intervals", "Opportunity to help many children", "Full agency support throughout"]
+      },
+      "long-term-fostering": {
+        intro: `Long-term fostering in ${location.name} offers stability and permanence for children who cannot return to their birth families. These placements often last until the child reaches adulthood, providing a loving family environment throughout their formative years.`,
+        benefits: ["Build lasting family bonds", "See children grow and develop", "Higher fostering allowances", "Ongoing training and support"]
+      },
+      "emergency-fostering": {
+        intro: `Emergency fostering in ${location.name} provides crucial immediate care for children who need safe accommodation urgently, often at very short notice. These placements typically last a few days to a couple of weeks.`,
+        benefits: ["Make immediate impact in children's lives", "Flexible scheduling", "Premium emergency rates", "24/7 agency support"]
+      },
+      "respite-fostering": {
+        intro: `Respite fostering in ${location.name} provides short breaks for other foster families or birth families, typically during weekends or school holidays. It's an excellent way to experience fostering with a lighter commitment.`,
+        benefits: ["Perfect for those new to fostering", "Planned, predictable placements", "Support other foster families", "Maintain work-life balance"]
+      },
+      "therapeutic-fostering": {
+        intro: `Therapeutic fostering in ${location.name} provides specialist care for children with complex emotional, behavioural, or mental health needs. Foster carers receive enhanced training and support to help these vulnerable young people.`,
+        benefits: ["Higher specialist allowances", "Intensive training provided", "Smaller caseloads", "Professional multidisciplinary support"]
+      },
+      "parent-child-fostering": {
+        intro: `Parent and child fostering in ${location.name} supports young parents and their babies together in a nurturing environment. Foster carers help develop parenting skills while providing a safe home.`,
+        benefits: ["Keep families together", "Teach vital parenting skills", "Rewarding mentoring role", "Specialist training provided"]
+      },
+    };
+    
+    return contents[specialismSlug] || {
+      intro: `${specialism.name} in ${location.name} offers specialized foster care services for children with specific needs. Local agencies provide comprehensive training and support for foster carers.`,
+      benefits: ["Specialist training provided", "Competitive allowances", "24/7 support available", "Join local carer community"]
+    };
+  };
+
+  const specialismContent = getSpecialismLocationContent();
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-950">
       <SEOHead
         title={`${specialism.name} in ${location.name} | Foster Care Agencies`}
-        description={`Find ${specialism.name.toLowerCase()} foster care agencies in ${location.name}. Compare verified agencies offering ${specialism.name.toLowerCase()} placements.`}
-        canonicalUrl={`https://fostercare.uk${currentPath}`}
-        structuredData={getBreadcrumbSchema(breadcrumbs.map(b => ({ name: b.name, url: `https://fostercare.uk${b.url}` })))}
+        description={`Find ${specialism.name.toLowerCase()} foster care agencies in ${location.name}. Compare verified agencies offering ${specialism.name.toLowerCase()} placements with Ofsted ratings and reviews.`}
+        canonicalUrl={`https://foster-care.co.uk${currentPath}`}
+        keywords={[`${specialism.name.toLowerCase()} ${location.name}`, `foster care ${location.name}`, `${specialism.name.toLowerCase()} fostering`, `fostering agencies ${location.name}`]}
+        structuredData={getBreadcrumbSchema(breadcrumbs.map(b => ({ name: b.name, url: `https://foster-care.co.uk${b.url}` })))}
       />
+      
+      {/* Hidden SEO Content for Crawlers */}
+      <article className="sr-only" aria-hidden="false">
+        <header>
+          <h1>{specialism.name} Foster Care in {location.name}</h1>
+          <p>Find verified {specialism.name.toLowerCase()} foster care agencies serving {location.name}.</p>
+        </header>
+        
+        <section>
+          <h2>About {specialism.name} in {location.name}</h2>
+          <p>{specialismContent.intro}</p>
+        </section>
+        
+        <section>
+          <h2>Benefits of {specialism.name} Fostering</h2>
+          <ul>
+            {specialismContent.benefits.map((benefit, i) => (
+              <li key={i}>{benefit}</li>
+            ))}
+          </ul>
+        </section>
+        
+        {agencies.length > 0 && (
+          <section>
+            <h2>{specialism.name} Agencies in {location.name}</h2>
+            <ul>
+              {agencies.map((agency: any) => (
+                <li key={agency.id}>
+                  <a href={`/agencies/${agency.slug}`}>{agency.name}</a>
+                  {agency.city && ` - ${agency.city}`}
+                  {agency.ofsted_rating && ` - Ofsted: ${agency.ofsted_rating}`}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+        
+        <section>
+          <h2>How to Start {specialism.name} Fostering in {location.name}</h2>
+          <ol>
+            <li>Contact a local agency specializing in {specialism.name.toLowerCase()}</li>
+            <li>Attend an information session about {specialism.name.toLowerCase()} placements</li>
+            <li>Complete assessment and specialist training</li>
+            <li>Get matched with children who need {specialism.name.toLowerCase()} care</li>
+          </ol>
+        </section>
+      </article>
+      
       <Header />
 
       <main className="flex-1">

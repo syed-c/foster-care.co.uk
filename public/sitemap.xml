@@ -3,6 +3,7 @@
   <!-- Homepage -->
   <url>
     <loc>https://foster-care.co.uk/</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -10,83 +11,75 @@
   <!-- Main Directory Pages -->
   <url>
     <loc>https://foster-care.co.uk/agencies</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://foster-care.co.uk/locations</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://foster-care.co.uk/compare</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
-  <!-- Specialisms -->
+  <!-- Specialisms Index -->
   <url>
     <loc>https://foster-care.co.uk/specialisms</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://foster-care.co.uk/specialisms/emergency</loc>
+    <loc>https://foster-care.co.uk/specialisms/emergency-fostering</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://foster-care.co.uk/specialisms/short-term</loc>
+    <loc>https://foster-care.co.uk/specialisms/short-term-fostering</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://foster-care.co.uk/specialisms/long-term</loc>
+    <loc>https://foster-care.co.uk/specialisms/long-term-fostering</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://foster-care.co.uk/specialisms/respite</loc>
+    <loc>https://foster-care.co.uk/specialisms/respite-fostering</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://foster-care.co.uk/specialisms/therapeutic</loc>
+    <loc>https://foster-care.co.uk/specialisms/therapeutic-fostering</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://foster-care.co.uk/specialisms/parent-child</loc>
+    <loc>https://foster-care.co.uk/specialisms/parent-child-fostering</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://foster-care.co.uk/specialisms/sibling-groups</loc>
+    <loc>https://foster-care.co.uk/specialisms/sibling-groups-fostering</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://foster-care.co.uk/specialisms/teenagers</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/specialisms/asylum-seekers</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/specialisms/disabilities</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/specialisms/mother-baby</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/specialisms/remand</loc>
+    <loc>https://foster-care.co.uk/specialisms/teenagers-fostering</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -94,6 +87,7 @@
   <!-- Location Pages - Countries -->
   <url>
     <loc>https://foster-care.co.uk/locations/england</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -101,190 +95,113 @@
   <!-- Location Pages - Regions -->
   <url>
     <loc>https://foster-care.co.uk/locations/london</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://foster-care.co.uk/locations/south-east</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://foster-care.co.uk/locations/south-west</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://foster-care.co.uk/locations/east-of-england</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://foster-care.co.uk/locations/west-midlands</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://foster-care.co.uk/locations/east-midlands</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://foster-care.co.uk/locations/yorkshire-humber</loc>
+    <loc>https://foster-care.co.uk/locations/yorkshire</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://foster-care.co.uk/locations/north-west</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://foster-care.co.uk/locations/north-east</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
-  <!-- Location Pages - Major Cities -->
+  <!-- Location + Specialism Combo Pages (England) -->
   <url>
-    <loc>https://foster-care.co.uk/locations/birmingham</loc>
+    <loc>https://foster-care.co.uk/locations/england/short-term-fostering</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://foster-care.co.uk/locations/manchester</loc>
+    <loc>https://foster-care.co.uk/locations/england/long-term-fostering</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://foster-care.co.uk/locations/leeds</loc>
+    <loc>https://foster-care.co.uk/locations/england/emergency-fostering</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://foster-care.co.uk/locations/liverpool</loc>
+    <loc>https://foster-care.co.uk/locations/england/respite-fostering</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://foster-care.co.uk/locations/bristol</loc>
+    <loc>https://foster-care.co.uk/locations/england/therapeutic-fostering</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://foster-care.co.uk/locations/sheffield</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/locations/newcastle</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/locations/nottingham</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/locations/leicester</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/locations/coventry</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/locations/bradford</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/locations/cambridge</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/locations/oxford</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/locations/brighton</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/locations/southampton</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/locations/portsmouth</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/locations/reading</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/locations/plymouth</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/locations/derby</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/locations/hull</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/locations/norwich</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/locations/exeter</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/locations/bath</loc>
+    <loc>https://foster-care.co.uk/locations/england/parent-child-fostering</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
-  <!-- London Areas -->
+  <!-- Location + Specialism Combo Pages (London) -->
   <url>
-    <loc>https://foster-care.co.uk/locations/central-london</loc>
+    <loc>https://foster-care.co.uk/locations/london/short-term-fostering</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://foster-care.co.uk/locations/east-london</loc>
+    <loc>https://foster-care.co.uk/locations/london/long-term-fostering</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://foster-care.co.uk/locations/north-london</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/locations/south-london</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://foster-care.co.uk/locations/west-london</loc>
+    <loc>https://foster-care.co.uk/locations/london/emergency-fostering</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -292,21 +209,25 @@
   <!-- Guides -->
   <url>
     <loc>https://foster-care.co.uk/guides</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://foster-care.co.uk/guides/how-to-become-foster-carer</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://foster-care.co.uk/guides/fostering-allowances</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://foster-care.co.uk/guides/types-of-fostering</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -314,6 +235,7 @@
   <!-- Blog -->
   <url>
     <loc>https://foster-care.co.uk/blog</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -321,21 +243,25 @@
   <!-- Trust & Information Pages -->
   <url>
     <loc>https://foster-care.co.uk/trust-verification</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://foster-care.co.uk/how-listings-work</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://foster-care.co.uk/editorial-policy</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://foster-care.co.uk/pricing</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -343,11 +269,13 @@
   <!-- About & Contact -->
   <url>
     <loc>https://foster-care.co.uk/about</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://foster-care.co.uk/contact</loc>
+    <lastmod>2026-01-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
