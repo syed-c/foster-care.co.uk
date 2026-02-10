@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { SEOHead, getArticleSchema } from "@/components/seo/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,11 +12,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
 import { Calendar, User, ArrowLeft, Clock, Share2, BookOpen } from "lucide-react";
 import { format } from "date-fns";
+import type { Tables } from "@/integrations/supabase/types";
+
+type BlogPost = Tables<"blog_posts">;
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
 
-  const { data: post, isLoading } = useQuery({
+  const { data: post, isLoading } = useQuery<BlogPost>({
     queryKey: ["blog-post", slug],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -30,7 +33,7 @@ const BlogPost = () => {
     },
   });
 
-  const { data: relatedPosts } = useQuery({
+  const { data: relatedPosts } = useQuery<BlogPost[]>({
     queryKey: ["related-posts", post?.category],
     enabled: !!post?.category,
     queryFn: async () => {
@@ -42,7 +45,7 @@ const BlogPost = () => {
         .neq("id", post?.id)
         .limit(3);
       if (error) throw error;
-      return data;
+      return data as BlogPost[];
     },
   });
 
@@ -65,7 +68,7 @@ const BlogPost = () => {
             </div>
           </div>
         </main>
-        <Footer />
+
       </div>
     );
   }
@@ -89,7 +92,7 @@ const BlogPost = () => {
             </Link>
           </div>
         </main>
-        <Footer />
+
       </div>
     );
   }
@@ -110,7 +113,7 @@ const BlogPost = () => {
         })}
       />
       <Header />
-      
+
       <main className="flex-1">
         {/* Hero Section */}
         <div className="bg-gradient-to-b from-muted/50 to-background py-12 lg:py-16">
@@ -159,8 +162,8 @@ const BlogPost = () => {
         {post.cover_image_url && (
           <div className="container mx-auto px-4 max-w-4xl -mt-4">
             <div className="rounded-xl overflow-hidden shadow-lg">
-              <img 
-                src={post.cover_image_url} 
+              <img
+                src={post.cover_image_url}
                 alt={post.title}
                 className="w-full h-auto max-h-[500px] object-cover"
               />
@@ -170,7 +173,7 @@ const BlogPost = () => {
 
         {/* Content */}
         <article className="container mx-auto px-4 max-w-4xl py-12">
-          <div 
+          <div
             className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-a:text-primary prose-strong:text-foreground"
             dangerouslySetInnerHTML={{ __html: post.content.replace(/\n/g, '<br />') }}
           />
@@ -211,8 +214,8 @@ const BlogPost = () => {
                     <Card className="overflow-hidden h-full group hover:shadow-lg transition-all">
                       <div className="h-40 bg-gradient-to-br from-muted to-muted/50">
                         {relatedPost.cover_image_url ? (
-                          <img 
-                            src={relatedPost.cover_image_url} 
+                          <img
+                            src={relatedPost.cover_image_url}
                             alt={relatedPost.title}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />
@@ -235,8 +238,8 @@ const BlogPost = () => {
           </section>
         )}
       </main>
-      
-      <Footer />
+
+
     </div>
   );
 };

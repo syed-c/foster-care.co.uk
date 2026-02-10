@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { useSpecialismBySlug, useAgenciesBySpecialism } from "@/hooks/useSpecialisms";
 import { SEOHead, getBreadcrumbSchema } from "@/components/seo/SEOHead";
 import { BackToTop } from "@/components/shared/BackToTop";
@@ -50,7 +50,7 @@ export default function SpecialismPage() {
             <Skeleton className="h-96 rounded-3xl" />
           </div>
         </main>
-        <Footer />
+
       </div>
     );
   }
@@ -70,7 +70,7 @@ export default function SpecialismPage() {
             </Button>
           </div>
         </main>
-        <Footer />
+
       </div>
     );
   }
@@ -345,7 +345,7 @@ export default function SpecialismPage() {
         </section>
       </main>
 
-      <Footer />
+
       <BackToTop />
     </div>
   );

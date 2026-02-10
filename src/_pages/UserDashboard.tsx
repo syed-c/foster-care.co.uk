@@ -5,22 +5,26 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
-import { 
-  User, 
-  Heart, 
-  MessageSquare, 
-  Building2, 
-  MapPin, 
+import {
+  User,
+  Heart,
+  MessageSquare,
+  Building2,
+  MapPin,
   Clock,
   FileText,
   Settings,
   Loader2
 } from "lucide-react";
+import type { Tables } from "@/integrations/supabase/types";
+
+type Lead = Tables<"leads"> & { agencies: { name: string } | null };
+type Profile = Tables<"profiles">;
 
 const UserDashboard = () => {
   const { user, isAuthenticated, loading } = useAuth();
@@ -43,7 +47,8 @@ const UserDashboard = () => {
         .order("created_at", { ascending: false })
         .limit(5);
       if (error) throw error;
-      return data;
+      // We need to cast this because of the join
+      return data as unknown as Lead[];
     },
     enabled: !!user?.email,
   });
@@ -58,7 +63,7 @@ const UserDashboard = () => {
         .eq("user_id", user?.id)
         .maybeSingle();
       if (error) throw error;
-      return data;
+      return data as Profile | null;
     },
     enabled: !!user?.id,
   });
@@ -179,8 +184,8 @@ const UserDashboard = () => {
                                     lead.status === "contacted"
                                       ? "default"
                                       : lead.status === "new"
-                                      ? "secondary"
-                                      : "outline"
+                                        ? "secondary"
+                                        : "outline"
                                   }
                                   className="text-xs"
                                 >
@@ -265,7 +270,7 @@ const UserDashboard = () => {
           </div>
         </div>
       </main>
-      <Footer />
+
     </div>
   );
 };

@@ -1,18 +1,18 @@
 "use client";
 import Link from "next/link";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { BackToTop } from "@/components/shared/BackToTop";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { motion } from "framer-motion";
-import { 
-  Shield, 
-  CheckCircle, 
-  AlertCircle, 
-  Star, 
-  Building2, 
-  RefreshCw, 
-  Lock, 
+import {
+  Shield,
+  CheckCircle,
+  AlertCircle,
+  Star,
+  Building2,
+  RefreshCw,
+  Lock,
   Eye,
   ArrowRight,
   BadgeCheck,
@@ -113,7 +113,7 @@ export default function TrustVerification() {
         keywords={["verified agencies", "foster care trust", "agency verification", "profile verification"]}
       />
       <Header />
-      
+
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative py-20 md:py-28 overflow-hidden">
@@ -134,14 +134,14 @@ export default function TrustVerification() {
                 <Shield className="w-4 h-4 mr-2" />
                 Trust & Transparency
               </Badge>
-              
+
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                 How We Verify{" "}
                 <span className="text-primary">Foster Care Agencies</span>
               </h1>
-              
+
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                We believe in transparency. Learn how we build and maintain accurate agency profiles, 
+                We believe in transparency. Learn how we build and maintain accurate agency profiles,
                 and understand the difference between unclaimed and verified listings.
               </p>
             </motion.div>
@@ -159,7 +159,7 @@ export default function TrustVerification() {
             >
               <h2 className="text-3xl md:text-4xl font-bold mb-4">Two Types of Profiles</h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Every agency on our platform falls into one of two categories. Both are valuable, 
+                Every agency on our platform falls into one of two categories. Both are valuable,
                 but verified profiles offer more comprehensive information.
               </p>
             </motion.div>
@@ -189,10 +189,10 @@ export default function TrustVerification() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <p className="text-muted-foreground">
-                      These profiles are created using publicly available information to help families 
+                      These profiles are created using publicly available information to help families
                       discover agencies in their area. They provide a starting point for research.
                     </p>
-                    
+
                     <div className="space-y-3">
                       <h4 className="font-semibold text-sm text-foreground/80">What's included:</h4>
                       <ul className="space-y-2 text-sm">
@@ -212,7 +212,7 @@ export default function TrustVerification() {
 
                     <div className="pt-4 border-t border-border/50">
                       <p className="text-sm text-muted-foreground italic">
-                        "This profile was auto-generated using publicly available information. 
+                        "This profile was auto-generated using publicly available information.
                         Details may be limited until the agency claims and verifies their listing."
                       </p>
                     </div>
@@ -240,10 +240,10 @@ export default function TrustVerification() {
                   </CardHeader>
                   <CardContent className="space-y-4 relative">
                     <p className="text-muted-foreground">
-                      Verified profiles are managed directly by the agency. They provide comprehensive, 
+                      Verified profiles are managed directly by the agency. They provide comprehensive,
                       up-to-date information and are prioritized in search results.
                     </p>
-                    
+
                     <div className="space-y-3">
                       <h4 className="font-semibold text-sm text-foreground/80">What's included:</h4>
                       <ul className="space-y-2 text-sm">
@@ -397,16 +397,16 @@ export default function TrustVerification() {
                       <h2 className="text-2xl md:text-3xl font-bold mb-4">Our Commitment to Accuracy</h2>
                       <div className="prose prose-lg text-muted-foreground">
                         <p>
-                          We take accuracy seriously. Our team regularly reviews profiles to ensure information 
+                          We take accuracy seriously. Our team regularly reviews profiles to ensure information
                           remains current and helpful. We never invent or assume details about agencies.
                         </p>
                         <p className="mt-4">
-                          For unclaimed profiles, we clearly indicate that information may be limited. 
-                          We encourage all agencies to claim their profiles to provide the most accurate 
+                          For unclaimed profiles, we clearly indicate that information may be limited.
+                          We encourage all agencies to claim their profiles to provide the most accurate
                           and comprehensive information to prospective foster carers.
                         </p>
                       </div>
-                      
+
                       <div className="flex flex-wrap gap-4 mt-8">
                         <Button asChild>
                           <Link href="/claim">
@@ -439,7 +439,7 @@ export default function TrustVerification() {
             >
               <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Find Your Agency?</h2>
               <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
-                Browse our directory of foster care agencies across England. 
+                Browse our directory of foster care agencies across England.
                 Filter by location, specialism, and verification status.
               </p>
               <div className="flex flex-wrap gap-4 justify-center">
@@ -460,7 +460,7 @@ export default function TrustVerification() {
         </section>
       </main>
 
-      <Footer />
+
       <BackToTop />
     </div>
   );

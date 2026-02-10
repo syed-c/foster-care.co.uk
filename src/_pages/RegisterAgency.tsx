@@ -11,7 +11,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+import type { Database } from "@/integrations/supabase/types";
+
 
 interface FormData {
   agencyName: string;
@@ -58,7 +59,7 @@ export default function RegisterAgency() {
 
   const updateFormData = (field: keyof FormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    
+
     if (field === 'agencyName') {
       const generatedSlug = value.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
       setFormData(prev => ({ ...prev, slug: generatedSlug }));
@@ -129,9 +130,9 @@ export default function RegisterAgency() {
             emailRedirectTo: `${window.location.origin}/`,
           },
         });
-        
+
         if (authError) throw authError;
-        
+
         if (!authData.user?.id) {
           throw new Error("Failed to create user account");
         }
@@ -152,7 +153,7 @@ export default function RegisterAgency() {
           website: formData.website,
           is_claimed: true,
           is_verified: false,
-        })
+        } as any)
         .select()
         .single();
 
@@ -200,7 +201,7 @@ export default function RegisterAgency() {
             </CardContent>
           </Card>
         </main>
-        <Footer />
+
       </div>
     );
   }
@@ -228,11 +229,10 @@ export default function RegisterAgency() {
                   {steps.map((step, index) => (
                     <div key={step.id} className="flex items-center">
                       <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
-                          currentStep >= step.id
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-muted text-muted-foreground"
-                        }`}
+                        className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${currentStep >= step.id
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted text-muted-foreground"
+                          }`}
                       >
                         {currentStep > step.id ? (
                           <Check className="w-5 h-5" />
@@ -242,9 +242,8 @@ export default function RegisterAgency() {
                       </div>
                       {index < steps.length - 1 && (
                         <div
-                          className={`w-8 sm:w-12 h-0.5 transition-colors ${
-                            currentStep > step.id ? "bg-primary" : "bg-muted"
-                          }`}
+                          className={`w-8 sm:w-12 h-0.5 transition-colors ${currentStep > step.id ? "bg-primary" : "bg-muted"
+                            }`}
                         />
                       )}
                     </div>
@@ -465,7 +464,7 @@ export default function RegisterAgency() {
           </Card>
         </div>
       </main>
-      <Footer />
+
     </div>
   );
 }

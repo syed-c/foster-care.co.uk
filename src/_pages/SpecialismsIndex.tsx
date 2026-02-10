@@ -2,14 +2,14 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { useSpecialisms } from "@/hooks/useSpecialisms";
 import { SEOHead, getBreadcrumbSchema } from "@/components/seo/SEOHead";
 import { BackToTop } from "@/components/shared/BackToTop";
 import { Skeleton } from "@/components/ui/skeleton";
-import { 
-  Heart, AlertCircle, Clock, Home, Coffee, Users, 
-  GraduationCap, Accessibility, Scale, ArrowRight, Sparkles 
+import {
+  Heart, AlertCircle, Clock, Home, Coffee, Users,
+  GraduationCap, Accessibility, Scale, ArrowRight, Sparkles
 } from "lucide-react";
 
 const iconMap: { [key: string]: React.ElementType } = {
@@ -70,7 +70,7 @@ export default function SpecialismsIndex() {
               </h1>
 
               <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-                From short-term emergency placements to long-term therapeutic care, explore the different ways you can make 
+                From short-term emergency placements to long-term therapeutic care, explore the different ways you can make
                 a difference in a child's life. Each specialism requires unique skills and offers rewarding opportunities.
               </p>
             </motion.div>
@@ -167,7 +167,7 @@ export default function SpecialismsIndex() {
         </section>
       </main>
 
-      <Footer />
+
       <BackToTop />
     </div>
   );

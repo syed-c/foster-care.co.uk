@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { motion } from "framer-motion";
 import { useLocationBySlug, useChildLocations, useLocationPath, buildLocationUrl, Location } from "@/hooks/useLocations";
 import { useAgenciesByLocation, useFeaturedAgencies } from "@/hooks/useAgencies";
@@ -33,14 +33,14 @@ const countryFlags: Record<string, string> = {
 export default function LocationPage() {
   const params = useParams();
   const slug = params.city || params.county || params.region || params.country;
-  
+
   const { data: location, isLoading: locationLoading } = useLocationBySlug(slug);
   const { data: childLocations, isLoading: childrenLoading } = useChildLocations(location?.id);
   const { data: locationPath } = useLocationPath(location?.id);
   const { data: locationFaqs } = useFaqsByLocation(location?.id);
   const { data: locationAgencies } = useAgenciesByLocation(location?.id, 12);
   const { data: featuredAgencies } = useFeaturedAgencies(12);
-  
+
   const cmsPageKey = slug ? `location_${slug}` : undefined;
   const { data: cmsContent } = useCmsContentByPage(cmsPageKey);
   const { data: pageFaqs } = useFaqsByPage(cmsPageKey);
@@ -63,7 +63,7 @@ export default function LocationPage() {
             </div>
           </section>
         </main>
-        <Footer />
+
       </div>
     );
   }
@@ -73,7 +73,7 @@ export default function LocationPage() {
       <div className="min-h-screen flex flex-col bg-secondary">
         <Header />
         <main className="flex-1 pt-20 flex items-center justify-center">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center max-w-md px-6"
@@ -88,13 +88,13 @@ export default function LocationPage() {
             </Button>
           </motion.div>
         </main>
-        <Footer />
+
       </div>
     );
   }
 
   const hasChildLocations = childLocations && childLocations.length > 0;
-  const totalAgencies = hasChildLocations 
+  const totalAgencies = hasChildLocations
     ? childLocations.reduce((sum, loc) => sum + (loc.agency_count || 0), 0)
     : location.agency_count || 0;
 
@@ -103,7 +103,7 @@ export default function LocationPage() {
     { label: "Home", href: "/" },
     { label: "Locations", href: "/locations" },
   ];
-  
+
   if (locationPath) {
     locationPath.forEach((loc, index) => {
       const pathToLoc = locationPath.slice(0, index + 1);
@@ -119,7 +119,7 @@ export default function LocationPage() {
     { name: "Home", url: "https://fostercare.uk" },
     { name: "Locations", url: "https://fostercare.uk/locations" },
   ];
-  
+
   if (locationPath) {
     locationPath.forEach((loc, index) => {
       const pathToLoc = locationPath.slice(0, index + 1);
@@ -138,7 +138,7 @@ export default function LocationPage() {
   };
 
   const faqsForSchema = allFaqs?.map(f => ({ question: f.question, answer: f.answer })) || [];
-  
+
   const getChildTypeName = () => {
     switch (location.type) {
       case "country": return "Regions";
@@ -184,8 +184,8 @@ export default function LocationPage() {
           <AgencyListings
             agencies={agencies}
             title={isShowingFeatured ? "Featured Agencies" : `Agencies in ${location.name}`}
-            subtitle={isShowingFeatured 
-              ? "Top-rated fostering agencies across England" 
+            subtitle={isShowingFeatured
+              ? "Top-rated fostering agencies across England"
               : `${agencies.length} agencies serving ${location.name}`}
             showFeaturedLabel={isShowingFeatured}
             locationName={location.name}
@@ -226,10 +226,10 @@ export default function LocationPage() {
         {allFaqs && allFaqs.length > 0 && (
           <section className="py-14 md:py-20 bg-secondary/95">
             <div className="container-main">
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }} 
-                whileInView={{ opacity: 1, y: 0 }} 
-                viewport={{ once: true }} 
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
                 className="text-center mb-10"
               >
@@ -238,7 +238,7 @@ export default function LocationPage() {
                 </h2>
                 <p className="text-white/60 text-lg">Common questions about fostering in {location.name}</p>
               </motion.div>
-              
+
               <div className="max-w-3xl mx-auto">
                 <FaqSection faqs={allFaqs} />
               </div>
@@ -249,7 +249,7 @@ export default function LocationPage() {
         {/* CTA Section */}
         <LocationCTA locationName={location.name} />
       </main>
-      <Footer />
+
     </div>
   );
 }

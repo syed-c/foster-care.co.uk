@@ -17,7 +17,7 @@ import { OfstedSection } from '@/components/country/OfstedSection';
 import { CountryPageSkeleton } from '@/components/country/CountryPageSkeleton';
 import { BackToTop } from '@/components/shared/BackToTop';
 import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
+
 import { LocationHero } from '@/components/location/LocationHero';
 import { AgencyListings } from '@/components/location/AgencyListings';
 import { EnquirySection } from '@/components/location/EnquirySection';
@@ -56,7 +56,7 @@ const RegionPageContent = ({ regionSlug }: { regionSlug: string }) => {
   return (
     <div className="min-h-screen flex flex-col bg-slate-950">
       <Header />
-      
+
       <main className="flex-1 pt-20">
         {/* Hero Section */}
         <LocationHero
@@ -78,28 +78,28 @@ const RegionPageContent = ({ regionSlug }: { regionSlug: string }) => {
 
         {/* Page Sections */}
         {content.intro && content.intro.paragraphs && content.intro.paragraphs.length > 1 && (
-          <IntroSection 
+          <IntroSection
             heading={(content.intro as any).heading || 'About Fostering in ' + regionName}
             paragraphs={content.intro.paragraphs.slice(1)}
           />
         )}
-        
+
         {content.regions && (
-          <RegionsGrid 
+          <RegionsGrid
             heading={content.regions.heading}
             list={content.regions.list}
           />
         )}
 
         {content.why_fostering_matters && (
-          <WhyFosteringMattersSection 
+          <WhyFosteringMattersSection
             heading={content.why_fostering_matters.heading}
             paragraphs={content.why_fostering_matters.paragraphs}
           />
         )}
 
         {content.agency_types && (
-          <AgencyTypesSection 
+          <AgencyTypesSection
             heading={content.agency_types.heading}
             intro={content.agency_types.intro}
             independent={content.agency_types.independent ? {
@@ -116,14 +116,14 @@ const RegionPageContent = ({ regionSlug }: { regionSlug: string }) => {
         )}
 
         {content.ofsted && (
-          <OfstedSection 
+          <OfstedSection
             heading={content.ofsted.heading}
             description={content.ofsted.description}
           />
         )}
 
         {content.types_of_fostering && (
-          <TypesOfFosteringSection 
+          <TypesOfFosteringSection
             heading={content.types_of_fostering.heading}
             intro={content.types_of_fostering.intro}
             categories={content.types_of_fostering.categories}
@@ -131,7 +131,7 @@ const RegionPageContent = ({ regionSlug }: { regionSlug: string }) => {
         )}
 
         {content.how_to_become && (
-          <HowToBecomeSection 
+          <HowToBecomeSection
             heading={content.how_to_become.heading}
             note={content.how_to_become.note}
             steps={content.how_to_become.steps}
@@ -139,21 +139,21 @@ const RegionPageContent = ({ regionSlug }: { regionSlug: string }) => {
         )}
 
         {content.support && (
-          <SupportSection 
+          <SupportSection
             heading={content.support.heading}
             categories={content.support.categories}
           />
         )}
 
         {content.responsibility && (
-          <ResponsibilitySection 
+          <ResponsibilitySection
             heading={content.responsibility.heading}
             paragraph={content.responsibility.paragraph}
           />
         )}
 
         {content.glossary && content.glossary.items && Object.keys(content.glossary.items || {}).length > 0 && (
-          <GlossarySection 
+          <GlossarySection
             heading={content.glossary.heading}
             items={content.glossary.items}
           />
@@ -166,14 +166,14 @@ const RegionPageContent = ({ regionSlug }: { regionSlug: string }) => {
         />
 
         {content.faq && content.faq.questions && content.faq.questions.length > 0 && (
-          <FAQSection 
+          <FAQSection
             heading={content.faq.heading}
             questions={content.faq.questions}
           />
         )}
 
         {content.cta ? (
-          <CTASection 
+          <CTASection
             heading={content.cta.heading}
             paragraph={content.cta.paragraph}
             button_text={content.cta.button_text}
@@ -183,7 +183,7 @@ const RegionPageContent = ({ regionSlug }: { regionSlug: string }) => {
         )}
       </main>
 
-      <Footer />
+
       <BackToTop />
     </div>
   );
@@ -191,7 +191,7 @@ const RegionPageContent = ({ regionSlug }: { regionSlug: string }) => {
 
 const RegionPage = () => {
   const { country, region } = useParams<{ country: string; region: string }>();
-  
+
   if (!region) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950">

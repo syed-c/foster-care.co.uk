@@ -5,18 +5,18 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
 import { ReviewManagement } from "@/components/agency/ReviewManagement";
-import { 
-  Building2, 
-  MessageSquare, 
-  Star, 
-  TrendingUp, 
+import {
+  Building2,
+  MessageSquare,
+  Star,
+  TrendingUp,
   Users,
   Eye,
   Phone,
@@ -26,6 +26,11 @@ import {
   ExternalLink,
   MessageCircle
 } from "lucide-react";
+import type { Tables } from "@/integrations/supabase/types";
+
+type Agency = Tables<"agencies">;
+type Lead = Tables<"leads">;
+type Review = Tables<"reviews">;
 
 const AgencyDashboard = () => {
   const { user, isAuthenticated, loading } = useAuth();
@@ -47,7 +52,7 @@ const AgencyDashboard = () => {
         .eq("user_id", user?.id)
         .maybeSingle();
       if (error) throw error;
-      return data;
+      return data as Agency | null;
     },
     enabled: !!user?.id,
   });
@@ -56,13 +61,14 @@ const AgencyDashboard = () => {
   const { data: leads, isLoading: leadsLoading } = useQuery({
     queryKey: ["agency-leads", agency?.id],
     queryFn: async () => {
+      if (!agency) return [];
       const { data, error } = await supabase
         .from("leads")
         .select("*")
-        .eq("source_agency_id", agency?.id)
+        .eq("source_agency_id", agency.id)
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return data;
+      return data as Lead[];
     },
     enabled: !!agency?.id,
   });
@@ -71,13 +77,14 @@ const AgencyDashboard = () => {
   const { data: reviews } = useQuery({
     queryKey: ["agency-reviews", agency?.id],
     queryFn: async () => {
+      if (!agency) return [];
       const { data, error } = await supabase
         .from("reviews")
         .select("*")
-        .eq("agency_id", agency?.id)
+        .eq("agency_id", agency.id)
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return data;
+      return data as Review[];
     },
     enabled: !!agency?.id,
   });
@@ -114,7 +121,7 @@ const AgencyDashboard = () => {
             </div>
           </div>
         </main>
-        <Footer />
+
       </div>
     );
   }
@@ -255,9 +262,8 @@ const AgencyDashboard = () => {
                       {leads.slice(0, 10).map((lead: any) => (
                         <div
                           key={lead.id}
-                          className={`p-4 rounded-xl border transition-colors ${
-                            !lead.is_viewed ? "bg-primary/5 border-primary/20" : "bg-card"
-                          }`}
+                          className={`p-4 rounded-xl border transition-colors ${!lead.is_viewed ? "bg-primary/5 border-primary/20" : "bg-card"
+                            }`}
                         >
                           <div className="flex items-start justify-between gap-4">
                             <div className="flex-1 min-w-0">
@@ -321,11 +327,10 @@ const AgencyDashboard = () => {
                                 {[...Array(5)].map((_, i) => (
                                   <Star
                                     key={i}
-                                    className={`w-4 h-4 ${
-                                      i < review.rating
-                                        ? "fill-amber-400 text-amber-400"
-                                        : "text-muted"
-                                    }`}
+                                    className={`w-4 h-4 ${i < review.rating
+                                      ? "fill-amber-400 text-amber-400"
+                                      : "text-muted"
+                                      }`}
                                   />
                                 ))}
                               </div>
@@ -395,7 +400,7 @@ const AgencyDashboard = () => {
           </Tabs>
         </div>
       </main>
-      <Footer />
+
     </div>
   );
 };

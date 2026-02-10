@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,9 +14,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
-import { 
-  Building2, 
-  Save, 
+import {
+  Building2,
+  Save,
   Loader2
 } from "lucide-react";
 
@@ -95,12 +95,12 @@ const AgencySettings = () => {
   const updateAgencyMutation = useMutation({
     mutationFn: async (updatedData: Partial<AgencyFormData>) => {
       if (!agency?.id) throw new Error("Agency not found");
-      
+
       const { error } = await supabase
         .from("agencies")
         .update(updatedData)
         .eq("id", agency.id);
-      
+
       if (error) throw error;
     },
     onSuccess: () => {
@@ -129,7 +129,7 @@ const AgencySettings = () => {
   const handleImageUpload = async (file: File, field: 'logo_url' | 'cover_image_url') => {
     try {
       if (!agency?.id) return;
-      
+
       const fileExt = file.name.split('.').pop();
       const fileName = `${field}_${Date.now()}.${fileExt}`;
       const filePath = `${agency.id}/${fileName}`;
@@ -148,14 +148,14 @@ const AgencySettings = () => {
 
       // Update the form data
       setFormData(prev => ({ ...prev, [field]: publicUrl.publicUrl }));
-      
+
       // Save the updated agency information
       const updateData = { [field]: publicUrl.publicUrl };
       const { error: updateError } = await supabase
         .from('agencies')
         .update(updateData)
         .eq('id', agency.id);
-      
+
       if (updateError) throw updateError;
 
       toast.success(`${field === 'logo_url' ? 'Logo' : 'Cover image'} uploaded and saved successfully!`);
@@ -196,7 +196,7 @@ const AgencySettings = () => {
             </div>
           </div>
         </main>
-        <Footer />
+
       </div>
     );
   }
@@ -339,15 +339,15 @@ const AgencySettings = () => {
                     <h3 className="text-lg font-medium">Logo</h3>
                     <div className="flex items-center gap-6">
                       {formData.logo_url && (
-                        <img 
-                          src={formData.logo_url} 
-                          alt="Current logo" 
+                        <img
+                          src={formData.logo_url}
+                          alt="Current logo"
                           className="w-16 h-16 rounded-lg object-cover border"
                         />
                       )}
                       <div className="flex flex-col gap-2">
-                        <Input 
-                          type="file" 
+                        <Input
+                          type="file"
                           accept="image/*"
                           onChange={(e) => {
                             const file = e.target.files?.[0];
@@ -363,15 +363,15 @@ const AgencySettings = () => {
                     <h3 className="text-lg font-medium">Cover Image</h3>
                     <div className="space-y-4">
                       {formData.cover_image_url && (
-                        <img 
-                          src={formData.cover_image_url} 
-                          alt="Current cover" 
+                        <img
+                          src={formData.cover_image_url}
+                          alt="Current cover"
                           className="w-full h-48 object-cover rounded-lg border"
                         />
                       )}
                       <div className="flex flex-col gap-2">
-                        <Input 
-                          type="file" 
+                        <Input
+                          type="file"
                           accept="image/*"
                           onChange={(e) => {
                             const file = e.target.files?.[0];
@@ -396,20 +396,19 @@ const AgencySettings = () => {
                     <div>
                       <h4 className="font-medium">Agency Verification</h4>
                       <p className="text-sm text-muted-foreground">
-                        {agency.is_verified 
+                        {agency.is_verified
                           ? "Your agency is verified and trusted."
                           : "Your agency is pending verification."}
                       </p>
                     </div>
-                    <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-                      agency.is_verified 
-                        ? "bg-green-100 text-green-800" 
+                    <div className={`px-3 py-1 rounded-full text-sm font-medium ${agency.is_verified
+                        ? "bg-green-100 text-green-800"
                         : "bg-yellow-100 text-yellow-800"
-                    }`}>
+                      }`}>
                       {agency.is_verified ? "Verified" : "Pending"}
                     </div>
                   </div>
-                  
+
                   {agency.ofsted_rating && (
                     <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
                       <div>
@@ -423,7 +422,7 @@ const AgencySettings = () => {
                       </div>
                     </div>
                   )}
-                  
+
                   <p className="text-sm text-muted-foreground">
                     To update your verification status or Ofsted details, please contact our support team.
                   </p>
@@ -433,7 +432,7 @@ const AgencySettings = () => {
           </Tabs>
         </div>
       </main>
-      <Footer />
+
     </div>
   );
 };

@@ -1,6 +1,6 @@
 "use client";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { motion } from "framer-motion";
 import { Heart, Users, Shield, Target } from "lucide-react";
 import { SEOHead, getBreadcrumbSchema } from "@/components/seo/SEOHead";
@@ -68,7 +68,7 @@ export default function AboutPage() {
                     </span>
                   </h1>
                   <p className="text-foreground-muted text-xl leading-relaxed">
-                    {heroContent?.content || 
+                    {heroContent?.content ||
                       "Foster Care UK is the leading directory for foster care agencies across the United Kingdom. We're here to make it easier for prospective foster carers to find the right agency, and for agencies to connect with families who want to make a difference."}
                   </p>
                 </>
@@ -99,11 +99,11 @@ export default function AboutPage() {
                       {missionContent?.title || "Our Mission"}
                     </h2>
                     <p className="text-foreground-muted text-lg mb-6 leading-relaxed">
-                      {missionContent?.content?.split(". ").slice(0, 2).join(". ") + "." || 
+                      {missionContent?.content?.split(". ").slice(0, 2).join(". ") + "." ||
                         "There are over 80,000 children in care in the UK, and thousands more foster carers are needed every year. We believe that finding the right foster care agency shouldn't be complicated."}
                     </p>
                     <p className="text-foreground-muted text-lg leading-relaxed">
-                      {missionContent?.content?.split(". ").slice(2).join(". ") || 
+                      {missionContent?.content?.split(". ").slice(2).join(". ") ||
                         "Our mission is to simplify the journey for prospective foster carers by providing a comprehensive, trustworthy directory of verified agencies. We want every child to have the opportunity to find a loving, supportive home."}
                     </p>
                   </>
@@ -182,14 +182,14 @@ export default function AboutPage() {
 
         {/* FAQs */}
         {faqs && faqs.length > 0 && (
-          <FaqSection 
-            faqs={faqs} 
+          <FaqSection
+            faqs={faqs}
             title="Frequently Asked Questions"
             subtitle="Common questions about Foster Care UK"
           />
         )}
       </main>
-      <Footer />
+
     </div>
   );
 }

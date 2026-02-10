@@ -14,7 +14,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAgencies } from "@/hooks/useAgencies";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 
 const steps = [
@@ -25,7 +25,7 @@ const steps = [
 export default function ClaimAgency() {
   const [searchParams] = useSearchParams();
   const preselectedAgencyId = searchParams.get("agency");
-  
+
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedAgencyId, setSelectedAgencyId] = useState(preselectedAgencyId || "");
   const [verificationMethod, setVerificationMethod] = useState<"email" | "phone">("email");
@@ -74,7 +74,7 @@ export default function ClaimAgency() {
       // In production, this would send an actual OTP via email or SMS
       // For now, we'll simulate it
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       setOtpSent(true);
       toast({
         title: "Verification code sent",
@@ -105,10 +105,10 @@ export default function ClaimAgency() {
     try {
       // For demo: accept any 6-digit OTP
       // In production, verify against stored OTP
-      
+
       // Get or create user session
       const { data: { user } } = await supabase.auth.getUser();
-      
+
       if (!user) {
         // Create a user account with the verified email/phone
         const password = Math.random().toString(36).slice(-12);
@@ -119,9 +119,9 @@ export default function ClaimAgency() {
             emailRedirectTo: `${window.location.origin}/`,
           },
         });
-        
+
         if (authError) throw authError;
-        
+
         if (authData.user) {
           // Update the agency to mark it as claimed
           const { error: claimError } = await supabase
@@ -132,7 +132,7 @@ export default function ClaimAgency() {
               user_id: authData.user.id,
             })
             .eq('id', selectedAgencyId);
-          
+
           if (claimError) throw claimError;
         }
       } else {
@@ -145,7 +145,7 @@ export default function ClaimAgency() {
             user_id: user.id,
           })
           .eq('id', selectedAgencyId);
-      
+
         if (claimError) throw claimError;
       }
 
@@ -191,7 +191,7 @@ export default function ClaimAgency() {
             </CardContent>
           </Card>
         </main>
-        <Footer />
+
       </div>
     );
   }
@@ -219,11 +219,10 @@ export default function ClaimAgency() {
                   {steps.map((step, index) => (
                     <div key={step.id} className="flex items-center">
                       <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
-                          currentStep >= step.id
+                        className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${currentStep >= step.id
                             ? "bg-primary text-primary-foreground"
                             : "bg-muted text-muted-foreground"
-                        }`}
+                          }`}
                       >
                         {currentStep > step.id ? (
                           <Check className="w-5 h-5" />
@@ -233,9 +232,8 @@ export default function ClaimAgency() {
                       </div>
                       {index < steps.length - 1 && (
                         <div
-                          className={`w-16 h-0.5 transition-colors ${
-                            currentStep > step.id ? "bg-primary" : "bg-muted"
-                          }`}
+                          className={`w-16 h-0.5 transition-colors ${currentStep > step.id ? "bg-primary" : "bg-muted"
+                            }`}
                         />
                       )}
                     </div>
@@ -259,7 +257,7 @@ export default function ClaimAgency() {
                       className="space-y-6"
                     >
                       <h3 className="text-xl font-semibold mb-4">Select Your Agency</h3>
-                      
+
                       {agenciesLoading ? (
                         <div className="text-center py-8 text-muted-foreground">
                           Loading agencies...
@@ -326,7 +324,7 @@ export default function ClaimAgency() {
                       className="space-y-6"
                     >
                       <h3 className="text-xl font-semibold mb-4">Verify Your Ownership</h3>
-                      
+
                       <p className="text-sm text-muted-foreground">
                         To prove you own or represent <strong>{selectedAgency?.name}</strong>, please verify using your agency's official contact details.
                       </p>
@@ -369,7 +367,7 @@ export default function ClaimAgency() {
                               placeholder={verificationMethod === "email" ? "contact@youragency.com" : "01234 567890"}
                             />
                             <p className="text-xs text-muted-foreground">
-                              {verificationMethod === "email" 
+                              {verificationMethod === "email"
                                 ? "Enter your agency's official business email from your website"
                                 : "Enter the phone number listed on your agency's profile or website"
                               }
@@ -382,7 +380,7 @@ export default function ClaimAgency() {
                             <p className="text-sm text-muted-foreground mb-4">
                               We've sent a 6-digit verification code to <strong>{verificationInput}</strong>
                             </p>
-                            
+
                             <div className="flex justify-center mb-4">
                               <InputOTP maxLength={6} value={otp} onChange={setOtp}>
                                 <InputOTPGroup>
@@ -424,7 +422,7 @@ export default function ClaimAgency() {
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Back
                   </Button>
-                  
+
                   {currentStep === 1 ? (
                     <Button
                       onClick={nextStep}
@@ -434,16 +432,16 @@ export default function ClaimAgency() {
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   ) : !otpSent ? (
-                    <Button 
-                      onClick={sendOtp} 
+                    <Button
+                      onClick={sendOtp}
                       disabled={isSubmitting || !verificationInput}
                     >
                       {isSubmitting ? "Sending..." : "Send Verification Code"}
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   ) : (
-                    <Button 
-                      onClick={verifyAndClaim} 
+                    <Button
+                      onClick={verifyAndClaim}
                       disabled={isSubmitting || otp.length !== 6}
                     >
                       {isSubmitting ? "Verifying..." : "Verify & Claim Agency"}
@@ -456,7 +454,7 @@ export default function ClaimAgency() {
           </Card>
         </div>
       </main>
-      <Footer />
+
     </div>
   );
 }

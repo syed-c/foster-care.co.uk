@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { useLocationFromPath, useLocationPath, buildLocationUrl } from "@/hooks/useLocations";
 import { useSpecialismBySlug, STATIC_SPECIALISMS, useAgenciesByLocationAndSpecialism } from "@/hooks/useSpecialisms";
 import { SEOHead, getBreadcrumbSchema } from "@/components/seo/SEOHead";
@@ -38,7 +38,7 @@ interface LocationSpecialismPageProps {
 
 export default function LocationSpecialismPage({ locationSegments, specialismSlug }: LocationSpecialismPageProps) {
   const [selectedAgency, setSelectedAgency] = useState<any>(null);
-  
+
   const { data: location, isLoading: locationLoading } = useLocationFromPath(locationSegments);
   const { data: specialism, isLoading: specialismLoading } = useSpecialismBySlug(specialismSlug);
   const { data: locationPath } = useLocationPath(location?.id);
@@ -51,7 +51,7 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
     { name: "Home", url: "/" },
     { name: "Locations", url: "/locations" },
   ];
-  
+
   if (locationPath) {
     locationPath.forEach((loc, index) => {
       const pathToLoc = locationPath.slice(0, index + 1);
@@ -61,7 +61,7 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
       });
     });
   }
-  
+
   if (specialism) {
     breadcrumbs.push({
       name: specialism.name,
@@ -80,7 +80,7 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
             <Skeleton className="h-96 rounded-3xl bg-white/10" />
           </div>
         </main>
-        <Footer />
+
       </div>
     );
   }
@@ -100,7 +100,7 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
             </Button>
           </div>
         </main>
-        <Footer />
+
       </div>
     );
   }
@@ -139,7 +139,7 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
         benefits: ["Keep families together", "Teach vital parenting skills", "Rewarding mentoring role", "Specialist training provided"]
       },
     };
-    
+
     return contents[specialismSlug] || {
       intro: `${specialism.name} in ${location.name} offers specialized foster care services for children with specific needs. Local agencies provide comprehensive training and support for foster carers.`,
       benefits: ["Specialist training provided", "Competitive allowances", "24/7 support available", "Join local carer community"]
@@ -157,19 +157,19 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
         keywords={[`${specialism.name.toLowerCase()} ${location.name}`, `foster care ${location.name}`, `${specialism.name.toLowerCase()} fostering`, `fostering agencies ${location.name}`]}
         structuredData={getBreadcrumbSchema(breadcrumbs.map(b => ({ name: b.name, url: `https://foster-care.co.uk${b.url}` })))}
       />
-      
+
       {/* Hidden SEO Content for Crawlers */}
       <article className="sr-only" aria-hidden="false">
         <header>
           <h1>{specialism.name} Foster Care in {location.name}</h1>
           <p>Find verified {specialism.name.toLowerCase()} foster care agencies serving {location.name}.</p>
         </header>
-        
+
         <section>
           <h2>About {specialism.name} in {location.name}</h2>
           <p>{specialismContent.intro}</p>
         </section>
-        
+
         <section>
           <h2>Benefits of {specialism.name} Fostering</h2>
           <ul>
@@ -178,7 +178,7 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
             ))}
           </ul>
         </section>
-        
+
         {agencies.length > 0 && (
           <section>
             <h2>{specialism.name} Agencies in {location.name}</h2>
@@ -193,7 +193,7 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
             </ul>
           </section>
         )}
-        
+
         <section>
           <h2>How to Start {specialism.name} Fostering in {location.name}</h2>
           <ol>
@@ -204,7 +204,7 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
           </ol>
         </section>
       </article>
-      
+
       <Header />
 
       <main className="flex-1">
@@ -299,7 +299,7 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
                 {specialism.name} Agencies in {location.name}
               </h2>
               <p className="text-white/60 text-sm">
-                {agencies.length > 0 
+                {agencies.length > 0
                   ? `${agencies.length} agencies offering ${specialism.name.toLowerCase()} in this area`
                   : `Looking for agencies offering ${specialism.name.toLowerCase()}`
                 }
@@ -335,10 +335,10 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
                           <Home className="w-6 h-6 text-primary" />
                         </div>
                       )}
-                      
+
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <Link 
+                          <Link
                             href={`/agencies/${agency.slug}`}
                             className="font-semibold text-white group-hover:text-primary transition-colors truncate"
                           >
@@ -363,7 +363,7 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
                           )}
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center gap-2 flex-shrink-0">
                         {agency.phone && (
                           <a href={`tel:${agency.phone}`} className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
@@ -412,11 +412,11 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
             </h2>
             <div className="flex flex-wrap justify-center gap-2">
               {STATIC_SPECIALISMS.filter(s => s.slug !== specialismSlug).slice(0, 6).map((spec) => {
-                const specPath = locationPath 
+                const specPath = locationPath
                   ? `${buildLocationUrl(locationPath)}/${spec.slug}`
                   : `/locations/${location.slug}/${spec.slug}`;
                 return (
-                  <Link 
+                  <Link
                     key={spec.id}
                     href={specPath}
                     className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white/70 hover:bg-primary/20 hover:text-primary hover:border-primary/30 transition-all text-sm"
@@ -430,9 +430,9 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
         </section>
       </main>
 
-      <Footer />
+
       <BackToTop />
-      
+
       {selectedAgency && (
         <AgencyBookingModal
           agency={selectedAgency}

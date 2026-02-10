@@ -8,7 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { SEOHead } from "@/components/seo/SEOHead";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -50,15 +50,14 @@ export default function PricingPage() {
   const [billingInterval] = useState<"monthly">("monthly");
 
   const { data: plans, isLoading } = useQuery({
-    queryKey: ["pricing-plans"],
+    queryKey: ["subscription-plans"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("pricing_plans")
+        .from("subscription_plans")
         .select("*")
-        .eq("is_active", true)
-        .order("display_order", { ascending: true });
+        .order("price_monthly", { ascending: true });
       if (error) throw error;
-      return data;
+      return data as any[];
     },
   });
 
@@ -71,7 +70,7 @@ export default function PricingPage() {
         keywords={["fostering agency pricing", "foster care agency listing", "fostering agency marketing", "foster care lead generation"]}
       />
       <Header />
-      
+
       <main className="flex-1 pt-24">
         {/* Hero Section */}
         <section className="container-main py-16 lg:py-24">
@@ -111,7 +110,7 @@ export default function PricingPage() {
             ) : plans?.map((plan, index) => {
               const Icon = planIcons[plan.slug as keyof typeof planIcons] || Shield;
               const features = (plan.features as { name: string; included: boolean }[]) || [];
-              
+
               return (
                 <motion.div
                   key={plan.id}
@@ -119,12 +118,11 @@ export default function PricingPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <Card 
-                    className={`rounded-3xl h-full transition-all hover:-translate-y-1 ${
-                      plan.is_popular 
-                        ? "border-primary shadow-glow relative overflow-visible" 
-                        : "border-border hover:border-primary/30 hover:shadow-card"
-                    }`}
+                  <Card
+                    className={`rounded-3xl h-full transition-all hover:-translate-y-1 ${plan.is_popular
+                      ? "border-primary shadow-glow relative overflow-visible"
+                      : "border-border hover:border-primary/30 hover:shadow-card"
+                      }`}
                   >
                     {plan.is_popular && (
                       <div className="absolute -top-4 left-1/2 -translate-x-1/2">
@@ -137,9 +135,8 @@ export default function PricingPage() {
                     <CardContent className="p-6 lg:p-8 flex flex-col h-full">
                       {/* Header */}
                       <div className="mb-6">
-                        <div className={`w-12 h-12 rounded-2xl mb-4 flex items-center justify-center ${
-                          plan.is_popular ? "bg-primary text-primary-foreground" : "bg-primary/10 text-primary"
-                        }`}>
+                        <div className={`w-12 h-12 rounded-2xl mb-4 flex items-center justify-center ${plan.is_popular ? "bg-primary text-primary-foreground" : "bg-primary/10 text-primary"
+                          }`}>
                           <Icon className="w-6 h-6" />
                         </div>
                         <h3 className="text-xl font-bold">{plan.name}</h3>
@@ -186,7 +183,7 @@ export default function PricingPage() {
                       </div>
 
                       {/* CTA */}
-                      <Button 
+                      <Button
                         className={`w-full rounded-xl ${plan.is_popular ? "" : "variant-outline"}`}
                         variant={plan.is_popular ? "default" : "outline"}
                         asChild
@@ -300,7 +297,7 @@ export default function PricingPage() {
         </section>
       </main>
 
-      <Footer />
+
     </div>
   );
 }

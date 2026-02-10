@@ -1,11 +1,11 @@
 "use client";
 import Link from "next/link";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { BackToTop } from "@/components/shared/BackToTop";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { motion } from "framer-motion";
-import { 
+import {
   PoundSterling,
   Calculator,
   Gift,
@@ -119,7 +119,7 @@ export default function FosteringAllowancesGuide() {
         keywords={["foster care allowance", "foster carer pay", "fostering income", "foster care fees"]}
       />
       <Header />
-      
+
       <main className="flex-1">
         {/* Breadcrumb */}
         <div className="bg-muted/30 border-b border-border/50">
@@ -153,14 +153,14 @@ export default function FosteringAllowancesGuide() {
                 <PoundSterling className="w-4 h-4 mr-2" />
                 Financial Guide
               </Badge>
-              
+
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                 Fostering{" "}
                 <span className="text-primary">Allowances & Pay</span>
               </h1>
-              
+
               <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed mb-8">
-                A comprehensive guide to foster carer allowances in England. 
+                A comprehensive guide to foster carer allowances in England.
                 Understand what financial support is available and how it works.
               </p>
 
@@ -192,8 +192,8 @@ export default function FosteringAllowancesGuide() {
               <div>
                 <p className="font-medium text-amber-800">Important Note</p>
                 <p className="text-sm text-amber-700 mt-1">
-                  Fostering allowances vary significantly between agencies and local authorities. 
-                  The figures shown are typical ranges and should be used as a guide only. 
+                  Fostering allowances vary significantly between agencies and local authorities.
+                  The figures shown are typical ranges and should be used as a guide only.
                   Always confirm exact rates with individual agencies.
                 </p>
               </div>
@@ -212,7 +212,7 @@ export default function FosteringAllowancesGuide() {
             >
               <h2 className="text-3xl md:text-4xl font-bold mb-4">Types of Allowances</h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Foster carers typically receive a combination of allowances designed to cover 
+                Foster carers typically receive a combination of allowances designed to cover
                 the costs of caring for a child and recognise your skills and commitment.
               </p>
             </motion.div>
@@ -279,7 +279,7 @@ export default function FosteringAllowancesGuide() {
                   <p className="text-muted-foreground mb-6">
                     Here's an example of what a typical foster carer might receive caring for one child aged 10:
                   </p>
-                  
+
                   <div className="space-y-4 mb-6">
                     <div className="flex justify-between items-center py-3 border-b border-border/50">
                       <span>Maintenance Allowance</span>
@@ -402,7 +402,7 @@ export default function FosteringAllowancesGuide() {
             >
               <h2 className="text-3xl md:text-4xl font-bold mb-4">Compare Agency Packages</h2>
               <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
-                Different agencies offer different support packages. Browse our directory to 
+                Different agencies offer different support packages. Browse our directory to
                 find agencies and enquire about their specific allowances and benefits.
               </p>
               <div className="flex flex-wrap gap-4 justify-center">
@@ -423,7 +423,7 @@ export default function FosteringAllowancesGuide() {
         </section>
       </main>
 
-      <Footer />
+
       <BackToTop />
     </div>
   );

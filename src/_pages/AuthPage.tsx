@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -39,7 +39,7 @@ export default function AuthPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  
+
   const { signIn, signUp, isAuthenticated } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
@@ -306,7 +306,7 @@ export default function AuthPage() {
           </Card>
         </motion.div>
       </main>
-      <Footer />
+
     </div>
   );
 }

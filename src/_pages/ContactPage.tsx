@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Send, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,7 @@ export default function ContactPage() {
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const { data: cmsContent, isLoading } = useCmsContentByPage("contact");
 
   const heroContent = getContentBySection(cmsContent, "hero");
@@ -34,10 +34,10 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // Simulate form submission
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    
+
     toast.success("Message sent successfully! We'll get back to you soon.");
     setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
     setIsSubmitting(false);
@@ -112,8 +112,8 @@ export default function ContactPage() {
                       <p className="text-muted-foreground text-sm mb-2">
                         {(emailContent?.metadata as Record<string, string> | null)?.subtitle || "For general enquiries"}
                       </p>
-                      <a 
-                        href={`mailto:${emailContent?.content || "hello@fostercare.uk"}`} 
+                      <a
+                        href={`mailto:${emailContent?.content || "hello@fostercare.uk"}`}
                         className="text-primary hover:underline"
                       >
                         {emailContent?.content || "hello@fostercare.uk"}
@@ -134,8 +134,8 @@ export default function ContactPage() {
                       <p className="text-muted-foreground text-sm mb-2">
                         {(phoneContent?.metadata as Record<string, string> | null)?.subtitle || "Mon-Fri, 9am-5pm"}
                       </p>
-                      <a 
-                        href={`tel:${(phoneContent?.content || "0800 123 4567").replace(/\s/g, "")}`} 
+                      <a
+                        href={`tel:${(phoneContent?.content || "0800 123 4567").replace(/\s/g, "")}`}
                         className="text-primary hover:underline"
                       >
                         {phoneContent?.content || "0800 123 4567"}
@@ -175,7 +175,7 @@ export default function ContactPage() {
                       {urgentContent?.title || "Need Urgent Support?"}
                     </h3>
                     <p className="text-primary-foreground/80 text-sm">
-                      {urgentContent?.content || 
+                      {urgentContent?.content ||
                         "If you're a foster carer in crisis or need immediate assistance, please contact your agency directly or call our emergency line."}
                     </p>
                   </CardContent>
@@ -285,7 +285,7 @@ export default function ContactPage() {
           </div>
         </section>
       </main>
-      <Footer />
+
     </div>
   );
 }

@@ -3,9 +3,9 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { motion } from "framer-motion";
-import { 
+import {
   Star, MapPin, BadgeCheck, ArrowLeft, Heart, AlertCircle, Loader2,
   Phone, Mail, Globe, Clock, Shield, Users, CheckCircle, Info,
   ExternalLink, Share2, Building2, Sparkles
@@ -40,11 +40,11 @@ export default function AgencyProfile() {
         .eq("agency_id", agency.id)
         .order("created_at", { ascending: false })
         .limit(10);
-      
+
       if (!isAdmin) {
         query = query.eq("is_approved", true);
       }
-      
+
       const { data, error } = await query;
       if (error) throw error;
       return data;
@@ -103,7 +103,7 @@ export default function AgencyProfile() {
             <p className="text-muted-foreground">Loading agency profile...</p>
           </div>
         </main>
-        <Footer />
+
       </div>
     );
   }
@@ -126,7 +126,7 @@ export default function AgencyProfile() {
             </Button>
           </div>
         </main>
-        <Footer />
+
       </div>
     );
   }
@@ -160,8 +160,8 @@ export default function AgencyProfile() {
                     <strong>Auto-generated profile</strong> – This listing was created using publicly available information. Some details may be limited.
                   </p>
                 </div>
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   className="rounded-full bg-unclaimed text-white hover:bg-unclaimed/90 whitespace-nowrap"
                   asChild
                 >
@@ -270,8 +270,8 @@ export default function AgencyProfile() {
 
                 {/* Quick Actions */}
                 <div className="flex flex-wrap gap-3">
-                  <Button 
-                    size="lg" 
+                  <Button
+                    size="lg"
                     className="rounded-full"
                     onClick={() => setShowLeadForm(true)}
                   >
@@ -309,11 +309,11 @@ export default function AgencyProfile() {
                         <div className="flex items-center justify-between">
                           <span className="text-muted-foreground text-sm">Ofsted Rating</span>
                           <Badge className={
-                            agency.ofsted_rating.toLowerCase() === 'outstanding' 
-                              ? 'bg-verified/15 text-verified border-verified/20' 
+                            agency.ofsted_rating.toLowerCase() === 'outstanding'
+                              ? 'bg-verified/15 text-verified border-verified/20'
                               : agency.ofsted_rating.toLowerCase() === 'good'
-                              ? 'bg-primary/15 text-primary border-primary/20'
-                              : 'bg-unclaimed-light text-unclaimed-foreground border-unclaimed/20'
+                                ? 'bg-primary/15 text-primary border-primary/20'
+                                : 'bg-unclaimed-light text-unclaimed-foreground border-unclaimed/20'
                           }>
                             {agency.ofsted_rating}
                           </Badge>
@@ -336,7 +336,7 @@ export default function AgencyProfile() {
                       {agency.website && isClaimed && (
                         <div className="flex items-center justify-between">
                           <span className="text-muted-foreground text-sm">Website</span>
-                          <a 
+                          <a
                             href={agency.website}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -352,7 +352,7 @@ export default function AgencyProfile() {
                     {agency.ofsted_urn && (
                       <>
                         <Separator className="my-4" />
-                        <a 
+                        <a
                           href={`https://reports.ofsted.gov.uk/provider/45/${agency.ofsted_urn}`}
                           target="_blank"
                           rel="noopener noreferrer"
@@ -392,7 +392,7 @@ export default function AgencyProfile() {
                     <div className="text-center py-6">
                       <Info className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
                       <p className="text-muted-foreground">
-                        {isUnclaimed 
+                        {isUnclaimed
                           ? "Detailed information will be available once this agency claims their profile."
                           : "No description available yet."}
                       </p>
@@ -404,8 +404,8 @@ export default function AgencyProfile() {
                       <p className="text-sm text-unclaimed-foreground">
                         <strong>Are you from this agency?</strong> Claim this listing to add detailed information, respond to reviews, and connect with potential foster carers.
                       </p>
-                      <Button 
-                        size="sm" 
+                      <Button
+                        size="sm"
                         className="mt-3 rounded-full"
                         variant="outline"
                         asChild
@@ -498,7 +498,7 @@ export default function AgencyProfile() {
                     <Star className="w-5 h-5 inline mr-2 text-primary" />
                     Reviews
                   </h2>
-                  
+
                   {reviews && reviews.length > 0 ? (
                     <div className="space-y-6">
                       {reviews.map((review) => (
@@ -506,9 +506,9 @@ export default function AgencyProfile() {
                           <div className="flex items-center gap-2 mb-2">
                             <div className="flex">
                               {[...Array(5)].map((_, i) => (
-                                <Star 
-                                  key={i} 
-                                  className={`w-4 h-4 ${i < review.rating ? 'text-primary fill-primary' : 'text-muted'}`} 
+                                <Star
+                                  key={i}
+                                  className={`w-4 h-4 ${i < review.rating ? 'text-primary fill-primary' : 'text-muted'}`}
                                 />
                               ))}
                             </div>
@@ -530,7 +530,7 @@ export default function AgencyProfile() {
                       <p className="text-sm text-muted-foreground mt-1">Be the first to share your experience</p>
                     </div>
                   )}
-                  
+
                   <Separator className="my-6" />
                   <ReviewForm agencyId={agency.id} agencyName={agency.name} />
                 </motion.div>
@@ -545,17 +545,17 @@ export default function AgencyProfile() {
                     <p className="text-muted-foreground text-sm mb-6">
                       Interested in learning more? Get in touch with {agency.name} to start your fostering journey.
                     </p>
-                    <Button 
+                    <Button
                       className="w-full rounded-full"
                       onClick={() => setShowLeadForm(true)}
                     >
                       Request Information
                     </Button>
-                    
+
                     {isClaimed && (
                       <div className="mt-6 space-y-3">
                         {agency.phone && (
-                          <a 
+                          <a
                             href={`tel:${agency.phone}`}
                             className="flex items-center gap-3 p-3 rounded-xl border border-border hover:bg-accent transition-colors"
                           >
@@ -564,7 +564,7 @@ export default function AgencyProfile() {
                           </a>
                         )}
                         {agency.email && (
-                          <a 
+                          <a
                             href={`mailto:${agency.email}`}
                             className="flex items-center gap-3 p-3 rounded-xl border border-border hover:bg-accent transition-colors"
                           >
@@ -573,7 +573,7 @@ export default function AgencyProfile() {
                           </a>
                         )}
                         {agency.website && (
-                          <a 
+                          <a
                             href={agency.website}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -593,7 +593,7 @@ export default function AgencyProfile() {
         </section>
       </main>
 
-      <Footer />
+
       <BackToTop />
 
       {/* Lead Form Dialog */}
@@ -602,7 +602,7 @@ export default function AgencyProfile() {
           <DialogHeader>
             <DialogTitle>Request Information from {agency.name}</DialogTitle>
           </DialogHeader>
-          <MultiStepLeadForm 
+          <MultiStepLeadForm
             sourceAgencyId={agency.id}
             onSuccess={() => setShowLeadForm(false)}
           />

@@ -1,16 +1,16 @@
 "use client";
 import Link from "next/link";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { BackToTop } from "@/components/shared/BackToTop";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { motion } from "framer-motion";
-import { 
-  CheckCircle, 
-  Clock, 
-  Users, 
-  Heart, 
-  FileText, 
+import {
+  CheckCircle,
+  Clock,
+  Users,
+  Heart,
+  FileText,
   Home,
   GraduationCap,
   MessageCircle,
@@ -132,7 +132,7 @@ export default function HowToBecomeGuide() {
         keywords={["become foster carer", "fostering application", "foster care training", "fostering requirements"]}
       />
       <Header />
-      
+
       <main className="flex-1">
         {/* Breadcrumb */}
         <div className="bg-muted/30 border-b border-border/50">
@@ -166,14 +166,14 @@ export default function HowToBecomeGuide() {
                 <GraduationCap className="w-4 h-4 mr-2" />
                 Complete Guide
               </Badge>
-              
+
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                 How to Become a{" "}
                 <span className="text-primary">Foster Carer</span>
               </h1>
-              
+
               <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed mb-8">
-                Everything you need to know about becoming a foster carer in England. 
+                Everything you need to know about becoming a foster carer in England.
                 From your first enquiry to welcoming a child into your home.
               </p>
 
@@ -232,7 +232,7 @@ export default function HowToBecomeGuide() {
             >
               <h2 className="text-3xl md:text-4xl font-bold mb-4">Basic Requirements</h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Before you apply, here's what you'll need. Don't worry if you're unsure about any of these – 
+                Before you apply, here's what you'll need. Don't worry if you're unsure about any of these –
                 agencies are happy to discuss your individual circumstances.
               </p>
             </motion.div>
@@ -280,7 +280,7 @@ export default function HowToBecomeGuide() {
               </Badge>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">The Fostering Process</h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Here's what to expect at each stage of your fostering journey. 
+                Here's what to expect at each stage of your fostering journey.
                 The entire process typically takes 4-6 months.
               </p>
             </motion.div>
@@ -301,7 +301,7 @@ export default function HowToBecomeGuide() {
                     {i < steps.length - 1 && (
                       <div className="absolute left-5 top-12 bottom-0 w-0.5 bg-gradient-to-b from-primary/50 to-primary/10" />
                     )}
-                    
+
                     {/* Step number circle */}
                     <div className="absolute left-0 top-0 w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-foreground font-bold text-sm shadow-lg shadow-primary/30">
                       {step.number}
@@ -386,7 +386,7 @@ export default function HowToBecomeGuide() {
             >
               <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Take the First Step?</h2>
               <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
-                Find a foster care agency near you and start your fostering journey today. 
+                Find a foster care agency near you and start your fostering journey today.
                 Our directory makes it easy to compare agencies and their support packages.
               </p>
               <div className="flex flex-wrap gap-4 justify-center">
@@ -407,7 +407,7 @@ export default function HowToBecomeGuide() {
         </section>
       </main>
 
-      <Footer />
+
       <BackToTop />
     </div>
   );

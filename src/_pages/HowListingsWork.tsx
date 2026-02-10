@@ -2,11 +2,11 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { SEOHead, getBreadcrumbSchema } from "@/components/seo/SEOHead";
 import { BackToTop } from "@/components/shared/BackToTop";
-import { 
-  Shield, CheckCircle, Search, BadgeCheck, Info, 
+import {
+  Shield, CheckCircle, Search, BadgeCheck, Info,
   ArrowRight, Star, Users, Building2, FileCheck
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -231,8 +231,8 @@ export default function HowListingsWork() {
                 Claim your listing today to take control of your profile, connect with potential foster carers, and showcase what makes your agency special.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   className="rounded-full bg-white text-secondary hover:bg-white/90"
                   asChild
                 >
@@ -241,8 +241,8 @@ export default function HowListingsWork() {
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Link>
                 </Button>
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   variant="outline"
                   className="rounded-full border-white/30 text-white hover:bg-white/10"
                   asChild
@@ -281,7 +281,7 @@ export default function HowListingsWork() {
         </section>
       </main>
 
-      <Footer />
+
       <BackToTop />
     </div>
   );

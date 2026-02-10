@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState, useMemo } from "react";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { motion } from "framer-motion";
 import { Search, Filter, Star, MapPin, BadgeCheck, ChevronDown, X, Building2, Shield, Users, Phone, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -61,7 +61,7 @@ export default function AgenciesListing() {
 
   const filteredAgencies = useMemo(() => {
     if (!agencies) return [];
-    
+
     return agencies.filter((agency) => {
       if (showVerifiedOnly && !agency.is_verified) return false;
       if (showFeaturedOnly && !agency.is_featured) return false;
@@ -98,7 +98,7 @@ export default function AgenciesListing() {
         <section className="relative py-24 md:py-32 overflow-hidden">
           {/* Dark Background */}
           <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
-          
+
           {/* Decorative Elements */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[180px] animate-pulse" />
@@ -119,7 +119,7 @@ export default function AgenciesListing() {
               <Badge className="bg-primary/20 text-primary border-primary/30 px-4 py-1.5 font-bold rounded-full text-sm mb-6">
                 Agency Directory
               </Badge>
-              
+
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6">
                 Find Foster Care Agencies
               </h1>
@@ -224,11 +224,10 @@ export default function AgenciesListing() {
                             <button
                               key={loc}
                               onClick={() => setSelectedLocation(loc)}
-                              className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
-                                selectedLocation === loc
+                              className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${selectedLocation === loc
                                   ? "bg-primary text-primary-foreground"
                                   : "text-white/70 hover:bg-slate-700"
-                              }`}
+                                }`}
                             >
                               {loc}
                             </button>
@@ -447,7 +446,7 @@ export default function AgenciesListing() {
           </div>
         </section>
       </main>
-      <Footer />
+
     </div>
   );
 }

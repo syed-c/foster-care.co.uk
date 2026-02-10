@@ -1,11 +1,11 @@
 "use client";
 import Link from "next/link";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { BackToTop } from "@/components/shared/BackToTop";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { motion } from "framer-motion";
-import { 
+import {
   Users,
   Clock,
   Heart,
@@ -122,7 +122,7 @@ export default function TypesOfFosteringGuide() {
         keywords={["types of fostering", "short term fostering", "emergency fostering", "respite care", "specialist fostering"]}
       />
       <Header />
-      
+
       <main className="flex-1">
         {/* Breadcrumb */}
         <div className="bg-muted/30 border-b border-border/50">
@@ -156,14 +156,14 @@ export default function TypesOfFosteringGuide() {
                 <Heart className="w-4 h-4 mr-2" />
                 Fostering Options
               </Badge>
-              
+
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                 Types of{" "}
                 <span className="text-primary">Fostering</span>
               </h1>
-              
+
               <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed mb-8">
-                There are many ways to foster. Discover the different types and find 
+                There are many ways to foster. Discover the different types and find
                 the right fit for your lifestyle, skills, and family situation.
               </p>
 
@@ -190,8 +190,8 @@ export default function TypesOfFosteringGuide() {
           <div className="container-main">
             <div className="max-w-3xl mx-auto text-center">
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Every child in care has unique needs, which is why fostering comes in many forms. 
-                Some carers specialise in one type, while others offer multiple types of care. 
+                Every child in care has unique needs, which is why fostering comes in many forms.
+                Some carers specialise in one type, while others offer multiple types of care.
                 The right choice depends on your circumstances, experience, and what you want to offer.
               </p>
             </div>
@@ -239,7 +239,7 @@ export default function TypesOfFosteringGuide() {
                               </Badge>
                             </div>
                             <p className="text-muted-foreground mb-4">{type.description}</p>
-                            
+
                             <div>
                               <p className="text-sm font-medium text-foreground/80 mb-2">Best suited for:</p>
                               <div className="flex flex-wrap gap-2">
@@ -274,12 +274,12 @@ export default function TypesOfFosteringGuide() {
               <Card className="border-0 bg-gradient-to-br from-background to-background-warm shadow-xl overflow-hidden">
                 <CardContent className="p-8 md:p-12">
                   <h2 className="text-2xl md:text-3xl font-bold mb-6">How to Choose</h2>
-                  
+
                   <div className="space-y-6 text-muted-foreground">
                     <p>
                       There's no "wrong" choice when it comes to fostering types. The best fit depends on:
                     </p>
-                    
+
                     <ul className="space-y-3">
                       {[
                         "Your daily schedule and work commitments",
@@ -297,7 +297,7 @@ export default function TypesOfFosteringGuide() {
                     </ul>
 
                     <p>
-                      Many foster carers start with one type and evolve as they gain experience. 
+                      Many foster carers start with one type and evolve as they gain experience.
                       Your fostering agency will help you identify the best fit during the assessment process.
                     </p>
                   </div>
@@ -331,7 +331,7 @@ export default function TypesOfFosteringGuide() {
             >
               <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Explore Fostering?</h2>
               <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
-                Connect with fostering agencies that specialise in the type of care you're interested in. 
+                Connect with fostering agencies that specialise in the type of care you're interested in.
                 Many offer all types, so you can discuss options with them directly.
               </p>
               <div className="flex flex-wrap gap-4 justify-center">
@@ -352,7 +352,7 @@ export default function TypesOfFosteringGuide() {
         </section>
       </main>
 
-      <Footer />
+
       <BackToTop />
     </div>
   );

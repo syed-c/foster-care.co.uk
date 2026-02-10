@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { motion } from "framer-motion";
 import { useLocationFromPath, useChildLocations, useLocationPath, buildLocationUrl, Location } from "@/hooks/useLocations";
 import { useAgenciesByLocation } from "@/hooks/useAgencies";
@@ -90,7 +90,6 @@ export default function UnifiedLocationPage() {
             </div>
           </section>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -115,7 +114,6 @@ export default function UnifiedLocationPage() {
             </Button>
           </motion.div>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -413,9 +411,9 @@ export default function UnifiedLocationPage() {
         )}
 
         {/* CTA Section */}
+        {/* CTA Section */}
         <LocationCTA locationName={location.name} />
       </main>
-      <Footer />
       <BackToTop />
     </div>
   );

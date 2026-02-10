@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { motion } from "framer-motion";
 import { MapPin, ChevronRight, Building2, Search, ArrowRight, Globe, Sparkles, Shield, Star, Users } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -49,13 +49,13 @@ function CountryCard({ country, index }: { country: Location; index: number }) {
             <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-300 border border-primary/20">
               {flag}
             </div>
-            
+
             <div className="flex-1 min-w-0">
               <h2 className="text-xl font-bold text-white mb-2 group-hover:text-primary transition-colors">
                 {country.name}
               </h2>
               <p className="text-white/50 text-sm mb-4 line-clamp-2 leading-relaxed">{country.description}</p>
-              
+
               {/* Stats pills */}
               <div className="flex flex-wrap gap-2">
                 <Badge className="bg-primary/20 text-primary border-primary/30 text-xs font-bold">
@@ -70,13 +70,13 @@ function CountryCard({ country, index }: { country: Location; index: number }) {
                 )}
               </div>
             </div>
-            
+
             <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
               <ArrowRight className="w-5 h-5 text-primary group-hover:text-primary-foreground" />
             </div>
           </div>
         </Link>
-        
+
         {/* Expandable regions */}
         {regions && regions.length > 0 && (
           <div className="border-t border-slate-700/50">
@@ -90,10 +90,10 @@ function CountryCard({ country, index }: { country: Location; index: number }) {
               </span>
               <ChevronRight className={`w-4 h-4 transition-transform duration-300 ${expanded ? 'rotate-90' : ''}`} />
             </button>
-            
+
             {expanded && (
-              <motion.div 
-                initial={{ height: 0, opacity: 0 }} 
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
                 transition={{ duration: 0.3 }}
                 className="px-6 pb-4 pt-2"
@@ -141,9 +141,9 @@ export default function LocationsIndex() {
   // Filter locations based on search query
   const searchResults = useMemo(() => {
     if (!searchQuery.trim() || !allLocations) return [];
-    
+
     const query = searchQuery.toLowerCase().trim();
-    
+
     return allLocations
       .filter((loc) => {
         const nameMatch = loc.name.toLowerCase().includes(query);
@@ -186,7 +186,7 @@ export default function LocationsIndex() {
         <section className="relative py-24 md:py-32 overflow-hidden">
           {/* Dark Background */}
           <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
-          
+
           {/* Decorative Elements */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[180px] animate-pulse" />
@@ -213,21 +213,21 @@ export default function LocationsIndex() {
                 <Globe className="w-4 h-4" />
                 Fostering Across the UK
               </motion.div>
-              
+
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
                 Find Foster Care Agencies
                 <br />
                 <span className="text-primary">Near You</span>
               </h1>
-              
+
               <p className="text-lg md:text-xl text-white/50 max-w-2xl mx-auto mb-10 leading-relaxed">
-                Explore verified fostering agencies across England, Scotland, Wales and Northern Ireland. 
+                Explore verified fostering agencies across England, Scotland, Wales and Northern Ireland.
                 Search by city, county, or postcode to find support in your area.
               </p>
 
               {/* Search Box */}
-              <motion.form 
-                onSubmit={handleSearch} 
+              <motion.form
+                onSubmit={handleSearch}
                 className="max-w-2xl mx-auto relative mb-10"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -247,8 +247,8 @@ export default function LocationsIndex() {
                     onBlur={() => setTimeout(() => setShowResults(false), 200)}
                     className="pl-14 pr-32 py-6 text-base rounded-2xl bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-primary/50"
                   />
-                  <Button 
-                    type="submit" 
+                  <Button
+                    type="submit"
                     size="lg"
                     className="absolute right-2 top-1/2 -translate-y-1/2 rounded-xl bg-primary hover:bg-primary-hover font-bold"
                   >
@@ -369,7 +369,7 @@ export default function LocationsIndex() {
           <div className="absolute inset-0">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[200px]" />
           </div>
-          
+
           <div className="container-main relative z-10">
             <div className="grid md:grid-cols-4 gap-6">
               {[
@@ -429,7 +429,7 @@ export default function LocationsIndex() {
           </div>
         </section>
       </main>
-      <Footer />
+
     </div>
   );
 }

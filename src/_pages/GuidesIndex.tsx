@@ -2,10 +2,10 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { SEOHead, getBreadcrumbSchema } from "@/components/seo/SEOHead";
 import { BackToTop } from "@/components/shared/BackToTop";
-import { 
+import {
   BookOpen, ArrowRight, Clock, Users, Heart, Home,
   FileQuestion, CheckSquare, Sparkles, GraduationCap
 } from "lucide-react";
@@ -227,8 +227,8 @@ export default function GuidesIndex() {
                 Browse our directory of verified fostering agencies in England and find the right match for you.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   className="rounded-full bg-white text-secondary hover:bg-white/90"
                   asChild
                 >
@@ -237,8 +237,8 @@ export default function GuidesIndex() {
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Link>
                 </Button>
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   variant="outline"
                   className="rounded-full border-white/30 text-white hover:bg-white/10"
                   asChild
@@ -253,7 +253,7 @@ export default function GuidesIndex() {
         </section>
       </main>
 
-      <Footer />
+
       <BackToTop />
     </div>
   );

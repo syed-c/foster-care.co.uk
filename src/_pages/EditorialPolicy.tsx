@@ -2,10 +2,10 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { SEOHead, getBreadcrumbSchema } from "@/components/seo/SEOHead";
 import { BackToTop } from "@/components/shared/BackToTop";
-import { 
+import {
   FileText, CheckCircle, Users, Shield, Eye, Scale,
   AlertTriangle, Heart, ArrowRight
 } from "lucide-react";
@@ -104,8 +104,8 @@ export default function EditorialPolicy() {
                 Our Mission
               </h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Foster Care UK exists to help connect children who need care with qualified, caring foster families. 
-                We achieve this by providing the most accurate, comprehensive directory of fostering agencies in England. 
+                Foster Care UK exists to help connect children who need care with qualified, caring foster families.
+                We achieve this by providing the most accurate, comprehensive directory of fostering agencies in England.
                 Every piece of content on our platform serves this mission.
               </p>
             </motion.div>
@@ -249,8 +249,8 @@ export default function EditorialPolicy() {
               <p className="text-secondary-foreground/80 text-lg mb-8">
                 If you have questions about our editorial standards or need to report an accuracy issue, we're here to help.
               </p>
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="rounded-full bg-white text-secondary hover:bg-white/90"
                 asChild
               >
@@ -264,7 +264,7 @@ export default function EditorialPolicy() {
         </section>
       </main>
 
-      <Footer />
+
       <BackToTop />
     </div>
   );

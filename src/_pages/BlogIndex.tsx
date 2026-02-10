@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { SEOHead, getArticleSchema } from "@/components/seo/SEOHead";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -44,7 +44,7 @@ const BlogIndex = () => {
         ]}
       />
       <Header />
-      
+
       <main className="flex-1 py-12 lg:py-16">
         <div className="container mx-auto px-4">
           {/* Header */}
@@ -84,8 +84,8 @@ const BlogIndex = () => {
                     <div className="grid md:grid-cols-2 gap-0">
                       <div className="h-64 md:h-auto bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center relative overflow-hidden">
                         {featuredPost.cover_image_url ? (
-                          <img 
-                            src={featuredPost.cover_image_url} 
+                          <img
+                            src={featuredPost.cover_image_url}
                             alt={featuredPost.title}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
@@ -142,8 +142,8 @@ const BlogIndex = () => {
                     <Card className="overflow-hidden bg-[#1a2228] text-white h-full group transition-all duration-300 hover:scale-105 hover:shadow-lg">
                       <div className="h-48 bg-gradient-to-br from-muted to-muted/50 relative overflow-hidden">
                         {post.cover_image_url ? (
-                          <img 
-                            src={post.cover_image_url} 
+                          <img
+                            src={post.cover_image_url}
                             alt={post.title}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
@@ -196,8 +196,8 @@ const BlogIndex = () => {
           )}
         </div>
       </main>
-      
-      <Footer />
+
+
     </div>
   );
 };

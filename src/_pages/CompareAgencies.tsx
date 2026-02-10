@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+
 import { SEOHead } from "@/components/seo/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -11,14 +11,14 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
-import { 
-  Star, 
-  MapPin, 
-  Phone, 
-  Mail, 
-  Globe, 
-  CheckCircle2, 
-  XCircle, 
+import {
+  Star,
+  MapPin,
+  Phone,
+  Mail,
+  Globe,
+  CheckCircle2,
+  XCircle,
   Award,
   Scale,
   X,
@@ -42,11 +42,11 @@ const CompareAgencies = () => {
         .select("*")
         .order("rating", { ascending: false });
       if (error) throw error;
-      return data;
+      return data as Agency[];
     },
   });
 
-  const selectedAgencyData = agencies?.filter(a => selectedAgencies.includes(a.id)) || [];
+  const selectedAgencyData: Agency[] = agencies?.filter(a => selectedAgencies.includes(a.id)) || [];
 
   const toggleAgency = (id: string) => {
     if (selectedAgencies.includes(id)) {
@@ -102,7 +102,7 @@ const CompareAgencies = () => {
         keywords={["compare foster agencies", "fostering agency comparison", "best foster care agencies UK"]}
       />
       <Header />
-      
+
       <main className="flex-1 py-8 lg:py-12">
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
@@ -127,7 +127,7 @@ const CompareAgencies = () => {
                   {selectedAgencies.length}/4 selected
                 </Badge>
               </div>
-              
+
               <ScrollArea className="h-64 rounded-md border border-border/50 bg-background p-4">
                 {isLoading ? (
                   <div className="flex items-center justify-center h-full">
@@ -138,11 +138,10 @@ const CompareAgencies = () => {
                     {agencies?.map((agency) => (
                       <div
                         key={agency.id}
-                        className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${
-                          selectedAgencies.includes(agency.id)
-                            ? "border-primary bg-primary/5 text-foreground"
-                            : "border-border hover:border-primary/50"
-                        } ${selectedAgencies.length >= 4 && !selectedAgencies.includes(agency.id) ? "opacity-50 cursor-not-allowed" : ""}`}
+                        className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${selectedAgencies.includes(agency.id)
+                          ? "border-primary bg-primary/5 text-foreground"
+                          : "border-border hover:border-primary/50"
+                          } ${selectedAgencies.length >= 4 && !selectedAgencies.includes(agency.id) ? "opacity-50 cursor-not-allowed" : ""}`}
                         onClick={() => toggleAgency(agency.id)}
                       >
                         <Checkbox
@@ -306,8 +305,8 @@ const CompareAgencies = () => {
           )}
         </div>
       </main>
-      
-      <Footer />
+
+
     </div>
   );
 };
