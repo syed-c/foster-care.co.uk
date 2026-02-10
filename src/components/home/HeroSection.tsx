@@ -20,10 +20,10 @@ export function HeroSection() {
   const [selectedType, setSelectedType] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const metadata = heroContent?.metadata as Record<string, string> | null;
-  const title = heroContent?.title || "Find the Right Foster Care Agency";
-  const subtitle = metadata?.subtitle || "The UK's Leading Fostering Directory";
-  const content = heroContent?.content || "Compare over 500 Ofsted-registered fostering agencies across England. Read genuine reviews from foster carers, compare allowances and support packages, and take the first step towards making a difference in a child's life.";
+  const metadata = (heroContent as any)?.metadata as Record<string, string> | null;
+  const title = (heroContent as any)?.title;
+  const subtitle = metadata?.subtitle;
+  const content = (heroContent as any)?.content;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -106,62 +106,69 @@ export function HeroSection() {
       </div>
 
       <div className="container-main relative z-10 text-center max-w-5xl mx-auto px-4 sm:px-6">
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.6, type: "spring" }}
-          className="inline-flex items-center gap-2 rounded-full text-sm font-bold bg-primary/20 text-primary border border-primary/30 mb-8 px-4 py-2"
-        >
-          <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }}>
-            <Sparkles className="w-4 h-4" />
+        {subtitle && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.6, type: "spring" }}
+            className="inline-flex items-center gap-2 rounded-full text-sm font-bold bg-primary/20 text-primary border border-primary/30 mb-8 px-4 py-2"
+          >
+            <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }}>
+              <Sparkles className="w-4 h-4" />
+            </motion.div>
+            {subtitle}
           </motion.div>
-          {subtitle}
-        </motion.div>
+        )}
 
         {/* Main Heading */}
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1, type: "spring" }}
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.08] mb-6 tracking-tight text-white"
-        >
-          {title}
-        </motion.h1>
+        {title && (
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1, type: "spring" }}
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.08] mb-6 tracking-tight text-white"
+          >
+            {title}
+          </motion.h1>
+        )}
 
         {/* Rotating Services Text */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.15 }}
-          className="text-lg md:text-xl text-white/60 mb-6 h-8 flex items-center justify-center gap-2"
-        >
-          <span>Specializing in</span>
-          <span className="text-primary font-bold relative inline-block min-w-[180px]">
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={rotatingServices[currentServiceIndex]}
-                initial={{ opacity: 0, y: 20, rotateX: -90 }}
-                animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                exit={{ opacity: 0, y: -20, rotateX: 90 }}
-                transition={{ duration: 0.4, type: "spring" }}
-                className="inline-block"
-              >
-                {rotatingServices[currentServiceIndex]}
-              </motion.span>
-            </AnimatePresence>
-          </span>
-        </motion.div>
+        {rotatingServices.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            className="text-lg md:text-xl text-white/60 mb-6 h-8 flex items-center justify-center gap-2"
+          >
+            <span>Specializing in</span>
+            <span className="text-primary font-bold relative inline-block min-w-[180px]">
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={rotatingServices[currentServiceIndex]}
+                  initial={{ opacity: 0, y: 20, rotateX: -90 }}
+                  animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                  exit={{ opacity: 0, y: -20, rotateX: 90 }}
+                  transition={{ duration: 0.4, type: "spring" }}
+                  className="inline-block"
+                >
+                  {rotatingServices[currentServiceIndex]}
+                </motion.span>
+              </AnimatePresence>
+            </span>
+          </motion.div>
+        )}
 
         {/* Description */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-base md:text-lg text-white/50 mb-10 max-w-2xl mx-auto leading-relaxed"
-        >
-          {content}
-        </motion.p>
+        {content && (
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-base md:text-lg text-white/50 mb-10 max-w-2xl mx-auto leading-relaxed"
+          >
+            {content}
+          </motion.p>
+        )}
 
         {/* Search Bar */}
         <motion.div

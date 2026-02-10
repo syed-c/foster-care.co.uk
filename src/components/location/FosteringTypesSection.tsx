@@ -42,10 +42,10 @@ export const FosteringTypesSection = ({ currentLocationPath, locationName }: Fos
   return (
     <section className="py-10 md:py-14 bg-slate-950 relative overflow-hidden">
       <div className="container-main relative z-10">
-        <motion.div 
-          initial={{ opacity: 0, y: 15 }} 
-          whileInView={{ opacity: 1, y: 0 }} 
-          viewport={{ once: true }} 
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.4 }}
           className="text-center mb-6"
         >
@@ -58,8 +58,8 @@ export const FosteringTypesSection = ({ currentLocationPath, locationName }: Fos
           </h2>
           <p className="text-white/40 text-sm">Find the right path for you</p>
         </motion.div>
-        
-        <motion.div 
+
+        <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -78,15 +78,15 @@ export const FosteringTypesSection = ({ currentLocationPath, locationName }: Fos
             </motion.div>
           ))}
         </motion.div>
-        
-        <motion.div 
+
+        <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           className="text-center mt-5"
         >
-          <Link 
-            href="/specialisms" 
+          <Link
+            href="/specialisms"
             className="inline-flex items-center gap-1 text-primary hover:text-primary-hover font-bold text-sm transition-colors"
           >
             View all specialisms

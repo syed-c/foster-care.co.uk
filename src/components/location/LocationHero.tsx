@@ -128,14 +128,16 @@ export const LocationHero = ({
           </motion.h1>
 
           {/* Description - Max 2 lines */}
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.2 }}
-            className="text-sm md:text-base text-white/50 max-w-xl mx-auto leading-relaxed mb-6 line-clamp-2"
-          >
-            {shortDescription || "Find verified foster care agencies in your area."}
-          </motion.p>
+          {shortDescription && (
+            <motion.p
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.2 }}
+              className="text-sm md:text-base text-white/50 max-w-xl mx-auto leading-relaxed mb-6 line-clamp-2"
+            >
+              {shortDescription}
+            </motion.p>
+          )}
 
           {/* Location Filter */}
           {childLocations.length > 0 && (
