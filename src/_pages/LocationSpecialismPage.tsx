@@ -161,7 +161,7 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
       {/* Hidden SEO Content for Crawlers */}
       <article className="sr-only" aria-hidden="false">
         <header>
-          <h1>{specialism.name} Foster Care in {location.name}</h1>
+          <div className="text-xl font-bold">{specialism.name} Foster Care in {location.name}</div>
           <p>Find verified {specialism.name.toLowerCase()} foster care agencies serving {location.name}.</p>
         </header>
 

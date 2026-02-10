@@ -247,7 +247,7 @@ export default function UnifiedLocationPage() {
         {/* Hidden SEO Content for Crawlers - Semantic HTML */}
         <article className="sr-only" aria-hidden="false">
           <header>
-            <h1>Foster Care Agencies in {location.name}</h1>
+            <div className="text-xl font-bold">Foster Care Agencies in {location.name}</div>
             <p>{getSeoDescription()}</p>
           </header>
 

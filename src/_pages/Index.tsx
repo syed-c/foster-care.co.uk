@@ -48,7 +48,7 @@ const Index = () => {
       <main className="flex-1">
         {/* SEO-optimized hidden content for search engines */}
         <div className="sr-only">
-          <h1>Foster Care Agencies Directory UK - Find Trusted Fostering Services</h1>
+          <div className="text-xl font-bold">Foster Care Agencies Directory UK - Find Trusted Fostering Services</div>
           <p>
             Welcome to the UK's most comprehensive foster care agency directory. We connect prospective foster carers
             with over 500 verified fostering agencies across England, Scotland, Wales, and Northern Ireland.
