@@ -116,8 +116,8 @@ export default function LocationPage() {
   }
 
   const breadcrumbItems = [
-    { name: "Home", url: "https://fostercare.uk" },
-    { name: "Locations", url: "https://fostercare.uk/locations" },
+    { name: "Home", url: "https://www.foster-care.co.uk" },
+    { name: "Locations", url: "https://www.foster-care.co.uk/locations" },
   ];
 
   if (locationPath) {
@@ -125,7 +125,7 @@ export default function LocationPage() {
       const pathToLoc = locationPath.slice(0, index + 1);
       breadcrumbItems.push({
         name: loc.name,
-        url: `https://fostercare.uk${buildLocationUrl(pathToLoc)}`,
+        url: `https://www.foster-care.co.uk${buildLocationUrl(pathToLoc)}`,
       });
     });
   }
@@ -158,7 +158,7 @@ export default function LocationPage() {
       <SEOHead
         title={heroContent?.title || location.seo_title || `Foster Care Agencies in ${location.name} | Find Local Fostering Support`}
         description={heroContent?.content?.slice(0, 160) || location.seo_description || `Discover trusted foster care agencies in ${location.name}. Compare ${totalAgencies}+ verified fostering agencies and start your journey today.`}
-        canonicalUrl={`https://fostercare.uk${currentPath}`}
+        canonicalUrl={`https://www.foster-care.co.uk${currentPath}`}
         keywords={[`foster care ${location.name}`, `fostering agencies ${location.name}`, `become foster carer ${location.name}`, location.name]}
         structuredData={{
           ...getBreadcrumbSchema(breadcrumbItems),

@@ -143,7 +143,7 @@ export default function AgencyProfile() {
       <SEOHead
         title={`${agency.name} | Foster Care Agency in ${agency.city || 'England'}`}
         description={agency.description || `${agency.name} is a foster care agency serving ${agency.city || 'England'}. Find reviews, contact details, and more.`}
-        canonicalUrl={`https://fostercare.uk/agencies/${slug}`}
+        canonicalUrl={`https://www.foster-care.co.uk/agencies/${slug}`}
         structuredData={getAgencySchema(agency)}
       />
       <Header />

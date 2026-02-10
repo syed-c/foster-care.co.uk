@@ -1,67 +1,67 @@
 export default async function sitemap() {
   const staticPages = [
     {
-      url: 'https://fostercare.uk/',
+      url: 'https://www.foster-care.co.uk/',
       lastModified: new Date(),
       changeFrequency: 'daily' as const,
       priority: 1.0,
     },
     {
-      url: 'https://fostercare.uk/agencies',
+      url: 'https://www.foster-care.co.uk/agencies',
       lastModified: new Date(),
       changeFrequency: 'daily' as const,
       priority: 0.9,
     },
     {
-      url: 'https://fostercare.uk/locations',
+      url: 'https://www.foster-care.co.uk/locations',
       lastModified: new Date(),
       changeFrequency: 'daily' as const,
       priority: 0.9,
     },
     {
-      url: 'https://fostercare.uk/guides',
+      url: 'https://www.foster-care.co.uk/guides',
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     },
     {
-      url: 'https://fostercare.uk/blog',
+      url: 'https://www.foster-care.co.uk/blog',
       lastModified: new Date(),
       changeFrequency: 'daily' as const,
       priority: 0.8,
     },
     {
-      url: 'https://fostercare.uk/about',
+      url: 'https://www.foster-care.co.uk/about',
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
       priority: 0.6,
     },
     {
-      url: 'https://fostercare.uk/contact',
+      url: 'https://www.foster-care.co.uk/contact',
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
       priority: 0.6,
     },
     {
-      url: 'https://fostercare.uk/pricing',
+      url: 'https://www.foster-care.co.uk/pricing',
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
       priority: 0.7,
     },
     {
-      url: 'https://fostercare.uk/compare',
+      url: 'https://www.foster-care.co.uk/compare',
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     },
     {
-      url: 'https://fostercare.uk/trust-verification',
+      url: 'https://www.foster-care.co.uk/trust-verification',
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
       priority: 0.7,
     },
     {
-      url: 'https://fostercare.uk/how-listings-work',
+      url: 'https://www.foster-care.co.uk/how-listings-work',
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
       priority: 0.5,
@@ -70,13 +70,13 @@ export default async function sitemap() {
 
   // Add location pages
   const locations = [
-    'england', 'london', 'manchester', 'birmingham', 'leeds', 'glasgow', 
-    'edinburgh', 'cardiff', 'belfast', 'south-east', 'south-west', 
+    'england', 'london', 'manchester', 'birmingham', 'leeds', 'glasgow',
+    'edinburgh', 'cardiff', 'belfast', 'south-east', 'south-west',
     'west-midlands', 'east-midlands', 'yorkshire', 'north-west', 'north-east'
   ];
 
   const locationPages = locations.map(location => ({
-    url: `https://fostercare.uk/locations/${location}`,
+    url: `https://www.foster-care.co.uk/locations/${location}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
@@ -90,7 +90,7 @@ export default async function sitemap() {
   ];
 
   const specialismPages = specialisms.map(specialism => ({
-    url: `https://fostercare.uk/specialisms/${specialism}`,
+    url: `https://www.foster-care.co.uk/specialisms/${specialism}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.7,
@@ -102,7 +102,7 @@ export default async function sitemap() {
   ];
 
   const guidePages = guides.map(guide => ({
-    url: `https://fostercare.uk/guides/${guide}`,
+    url: `https://www.foster-care.co.uk/guides/${guide}`,
     lastModified: new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.8,

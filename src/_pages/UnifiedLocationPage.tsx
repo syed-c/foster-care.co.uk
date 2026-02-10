@@ -141,8 +141,8 @@ export default function UnifiedLocationPage() {
   }
 
   const breadcrumbItems = [
-    { name: "Home", url: "https://fostercare.uk" },
-    { name: "Locations", url: "https://fostercare.uk/locations" },
+    { name: "Home", url: "https://www.foster-care.co.uk" },
+    { name: "Locations", url: "https://www.foster-care.co.uk/locations" },
   ];
 
   if (locationPath) {
@@ -150,7 +150,7 @@ export default function UnifiedLocationPage() {
       const pathToLoc = locationPath.slice(0, index + 1);
       breadcrumbItems.push({
         name: loc.name,
-        url: `https://fostercare.uk${buildLocationUrl(pathToLoc)}`,
+        url: `https://www.foster-care.co.uk${buildLocationUrl(pathToLoc)}`,
       });
     });
   }
@@ -235,7 +235,7 @@ export default function UnifiedLocationPage() {
       <SEOHead
         title={getSeoTitle()}
         description={getSeoDescription()}
-        canonicalUrl={`https://foster-care.co.uk${currentPath}`}
+        canonicalUrl={`https://www.foster-care.co.uk${currentPath}`}
         keywords={[`foster care ${location.name}`, `fostering agencies ${location.name}`, `become foster carer ${location.name}`, location.name]}
         structuredData={{
           ...getBreadcrumbSchema(breadcrumbItems),

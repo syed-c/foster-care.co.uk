@@ -48,11 +48,11 @@ export default function ContactPage() {
       <SEOHead
         title="Contact Us - Foster Care UK"
         description="Get in touch with Foster Care UK. We're here to help with any questions about foster care agencies or our directory."
-        canonicalUrl="https://fostercare.uk/contact"
+        canonicalUrl="https://www.foster-care.co.uk/contact"
         keywords={["contact foster care uk", "fostering enquiries", "foster care support"]}
         structuredData={getBreadcrumbSchema([
-          { name: "Home", url: "https://fostercare.uk" },
-          { name: "Contact", url: "https://fostercare.uk/contact" },
+          { name: "Home", url: "https://www.foster-care.co.uk" },
+          { name: "Contact", url: "https://www.foster-care.co.uk/contact" },
         ])}
       />
       <Header />

@@ -115,7 +115,7 @@ export default function FosteringAllowancesGuide() {
       <SEOHead
         title="Fostering Allowances & Pay Guide | Foster Care UK"
         description="Understand foster carer allowances and pay in England. Learn about maintenance allowances, skill fees, additional support, and tax relief for foster carers."
-        canonicalUrl="https://fostercare.uk/guides/fostering-allowances"
+        canonicalUrl="https://www.foster-care.co.uk/guides/fostering-allowances"
         keywords={["foster care allowance", "foster carer pay", "fostering income", "foster care fees"]}
       />
       <Header />

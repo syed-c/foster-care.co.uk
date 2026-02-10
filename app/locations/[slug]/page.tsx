@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       description: `Find the best foster care agencies in ${params.slug.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}. Compare services and read reviews.`,
     },
     alternates: {
-      canonical: `https://fostercare.uk/locations/${params.slug}`,
+      canonical: `https://www.foster-care.co.uk/locations/${params.slug}`,
     },
   };
 }

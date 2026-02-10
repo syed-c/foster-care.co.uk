@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/admin/', '/workspace/', '/api/'],
     },
-    sitemap: 'https://fostercare.uk/sitemap.xml',
+    sitemap: 'https://www.foster-care.co.uk/sitemap.xml',
   };
 }

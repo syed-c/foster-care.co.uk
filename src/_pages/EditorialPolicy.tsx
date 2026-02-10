@@ -55,7 +55,7 @@ export default function EditorialPolicy() {
       <SEOHead
         title="Editorial Policy | Foster Care UK Directory"
         description="Our commitment to accuracy, transparency, and child welfare in maintaining the UK's leading foster care agency directory."
-        canonicalUrl="https://fostercare.uk/editorial-policy"
+        canonicalUrl="https://www.foster-care.co.uk/editorial-policy"
         structuredData={getBreadcrumbSchema(breadcrumbs)}
       />
       <Header />

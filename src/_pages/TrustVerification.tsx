@@ -109,7 +109,7 @@ export default function TrustVerification() {
       <SEOHead
         title="Trust & Verification | Foster Care UK"
         description="Understand how Foster Care UK verifies agencies and maintains accurate, trustworthy information. Learn the difference between unclaimed and verified profiles."
-        canonicalUrl="https://fostercare.uk/trust-verification"
+        canonicalUrl="https://www.foster-care.co.uk/trust-verification"
         keywords={["verified agencies", "foster care trust", "agency verification", "profile verification"]}
       />
       <Header />

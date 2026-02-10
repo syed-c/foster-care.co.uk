@@ -37,7 +37,7 @@ export default function SpecialismsIndex() {
       <SEOHead
         title="Types of Foster Care | Specialisms & Services | Foster Care UK"
         description="Discover different fostering specialisms in England: emergency, therapeutic, respite, parent & child, sibling groups, teenagers, and more. Find agencies matching your interests and skills."
-        canonicalUrl="https://foster-care.co.uk/specialisms"
+        canonicalUrl="https://www.foster-care.co.uk/specialisms"
         keywords={["types of fostering", "foster care specialisms", "therapeutic fostering", "emergency foster care", "respite fostering", "sibling group fostering"]}
         structuredData={getBreadcrumbSchema(breadcrumbs)}
       />

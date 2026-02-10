@@ -73,7 +73,7 @@ export default function GuidesIndex() {
       <SEOHead
         title="Fostering Guides | How to Become a Foster Carer in England"
         description="Expert guides on becoming a foster carer in England. Learn about the assessment process, choosing an agency, allowances, and supporting children in care."
-        canonicalUrl="https://fostercare.uk/guides"
+        canonicalUrl="https://www.foster-care.co.uk/guides"
         structuredData={getBreadcrumbSchema(breadcrumbs)}
       />
       <Header />

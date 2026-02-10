@@ -153,9 +153,9 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
       <SEOHead
         title={`${specialism.name} in ${location.name} | Foster Care Agencies`}
         description={`Find ${specialism.name.toLowerCase()} foster care agencies in ${location.name}. Compare verified agencies offering ${specialism.name.toLowerCase()} placements with Ofsted ratings and reviews.`}
-        canonicalUrl={`https://foster-care.co.uk${currentPath}`}
+        canonicalUrl={`https://www.foster-care.co.uk${currentPath}`}
         keywords={[`${specialism.name.toLowerCase()} ${location.name}`, `foster care ${location.name}`, `${specialism.name.toLowerCase()} fostering`, `fostering agencies ${location.name}`]}
-        structuredData={getBreadcrumbSchema(breadcrumbs.map(b => ({ name: b.name, url: `https://foster-care.co.uk${b.url}` })))}
+        structuredData={getBreadcrumbSchema(breadcrumbs.map(b => ({ name: b.name, url: `https://www.foster-care.co.uk${b.url}` })))}
       />
 
       {/* Hidden SEO Content for Crawlers */}

@@ -42,7 +42,7 @@ export function SEOHead({
     // Basic meta tags
     updateMeta("description", description);
     updateMeta("keywords", keywords.join(", "));
-    
+
     if (noIndex) {
       updateMeta("robots", "noindex, nofollow");
     } else {
@@ -55,10 +55,10 @@ export function SEOHead({
     updateMeta("og:type", ogType, true);
     updateMeta("og:image", ogImage, true);
     updateMeta("og:site_name", "Foster Care UK", true);
-    
+
     if (canonicalUrl) {
       updateMeta("og:url", canonicalUrl, true);
-      
+
       // Canonical link
       let canonical = document.querySelector('link[rel="canonical"]');
       if (!canonical) {
@@ -106,8 +106,8 @@ export function getOrganizationSchema() {
     "@type": "Organization",
     name: "Foster Care UK",
     description: "The UK's leading directory of foster care agencies",
-    url: "https://fostercare.uk",
-    logo: "https://fostercare.uk/logo.png",
+    url: "https://www.foster-care.co.uk",
+    logo: "https://www.foster-care.co.uk/logo.png",
     sameAs: [
       "https://facebook.com/fostercareuk",
       "https://twitter.com/fostercareuk",
@@ -138,7 +138,7 @@ export function getAgencySchema(agency: {
   return {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "@id": `https://fostercare.uk/agencies/${agency.name.toLowerCase().replace(/\s+/g, "-")}`,
+    "@id": `https://www.foster-care.co.uk/agencies/${agency.name.toLowerCase().replace(/\s+/g, "-")}`,
     name: agency.name,
     description: agency.description,
     telephone: agency.phone,
@@ -221,7 +221,7 @@ export function getArticleSchema(article: {
       name: "Foster Care UK",
       logo: {
         "@type": "ImageObject",
-        url: "https://fostercare.uk/logo.png",
+        url: "https://www.foster-care.co.uk/logo.png",
       },
     },
   };

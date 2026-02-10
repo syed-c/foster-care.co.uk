@@ -98,7 +98,7 @@ const CompareAgencies = () => {
       <SEOHead
         title="Compare Foster Care Agencies | Foster Care UK"
         description="Compare foster care agencies side by side. View ratings, services, Ofsted ratings, and more to find the perfect fostering agency for you."
-        canonicalUrl="https://fostercare.uk/compare"
+        canonicalUrl="https://www.foster-care.co.uk/compare"
         keywords={["compare foster agencies", "fostering agency comparison", "best foster care agencies UK"]}
       />
       <Header />

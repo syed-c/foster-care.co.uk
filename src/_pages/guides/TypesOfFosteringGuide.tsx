@@ -118,7 +118,7 @@ export default function TypesOfFosteringGuide() {
       <SEOHead
         title="Types of Fostering | Complete Guide | Foster Care UK"
         description="Explore different types of fostering in England: short-term, long-term, emergency, respite, parent & child, and specialist fostering. Find the right fit for you."
-        canonicalUrl="https://fostercare.uk/guides/types-of-fostering"
+        canonicalUrl="https://www.foster-care.co.uk/guides/types-of-fostering"
         keywords={["types of fostering", "short term fostering", "emergency fostering", "respite care", "specialist fostering"]}
       />
       <Header />

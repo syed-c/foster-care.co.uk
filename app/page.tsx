@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Foster Care UK — Find Trusted Foster Care Agencies',
     description: 'Compare 500+ verified foster care agencies across the UK. Read real reviews and find the right fostering agency for your journey.',
-    url: 'https://fostercare.uk',
+    url: 'https://www.foster-care.co.uk',
     siteName: 'Foster Care UK',
     locale: 'en_GB',
     type: 'website',
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     description: 'Compare 500+ verified foster care agencies across the UK.',
   },
   alternates: {
-    canonical: 'https://fostercare.uk',
+    canonical: 'https://www.foster-care.co.uk',
   },
   robots: {
     index: true,

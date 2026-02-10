@@ -66,7 +66,7 @@ export default function PricingPage() {
       <SEOHead
         title="Fostering Agency Pricing Plans | Verified Listings | Foster Care UK"
         description="Affordable monthly plans for fostering agencies. Get verified listings, lead management, SEO optimization, and reputation management. No annual lock-ins. Cancel anytime."
-        canonicalUrl="https://foster-care.co.uk/pricing"
+        canonicalUrl="https://www.foster-care.co.uk/pricing"
         keywords={["fostering agency pricing", "foster care agency listing", "fostering agency marketing", "foster care lead generation"]}
       />
       <Header />

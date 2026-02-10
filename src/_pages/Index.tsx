@@ -26,7 +26,7 @@ const Index = () => {
       <SEOHead
         title="Foster Care Agencies UK | Compare 500+ Verified Fostering Services"
         description="Discover trusted foster care agencies across England. Compare Ofsted-rated services, read genuine reviews from foster carers, and find the right agency to start your fostering journey. Free directory with 500+ verified agencies."
-        canonicalUrl="https://foster-care.co.uk"
+        canonicalUrl="https://www.foster-care.co.uk"
         keywords={[
           "foster care agencies UK",
           "fostering agencies near me",

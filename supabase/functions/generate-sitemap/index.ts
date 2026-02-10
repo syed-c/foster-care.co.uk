@@ -5,12 +5,12 @@ const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-const SITE_URL = "https://foster-care.co.uk";
+const SITE_URL = "https://www.foster-care.co.uk";
 
 // Fostering specialisms for location-specialism combo pages
 const SPECIALISM_SLUGS = [
   "short-term-fostering",
-  "long-term-fostering", 
+  "long-term-fostering",
   "emergency-fostering",
   "respite-fostering",
   "therapeutic-fostering",
@@ -40,7 +40,7 @@ serve(async (req) => {
 
   try {
     const today = new Date().toISOString().split('T')[0];
-    
+
     // Fetch all locations
     const { data: locations, error: locError } = await supabase
       .from('locations')
@@ -122,15 +122,15 @@ serve(async (req) => {
     if (locations) {
       // Sort by type for proper hierarchy
       const typeOrder = { country: 1, region: 2, county: 3, city: 4, area: 5 };
-      const sortedLocations = [...locations].sort((a, b) => 
-        (typeOrder[a.type as keyof typeof typeOrder] || 99) - 
+      const sortedLocations = [...locations].sort((a, b) =>
+        (typeOrder[a.type as keyof typeof typeOrder] || 99) -
         (typeOrder[b.type as keyof typeof typeOrder] || 99)
       );
 
       for (const location of sortedLocations) {
         let urlPath = `/locations/${location.slug}`;
         let priority = "0.6";
-        
+
         // Set priority based on type
         if (location.type === 'country') {
           priority = "0.9";
@@ -142,7 +142,7 @@ serve(async (req) => {
           priority = "0.65";
         }
 
-        const lastmod = location.updated_at 
+        const lastmod = location.updated_at
           ? new Date(location.updated_at).toISOString().split('T')[0]
           : today;
 
@@ -170,7 +170,7 @@ serve(async (req) => {
     // Add agency profile pages
     if (agencies) {
       for (const agency of agencies) {
-        const lastmod = agency.updated_at 
+        const lastmod = agency.updated_at
           ? new Date(agency.updated_at).toISOString().split('T')[0]
           : today;
 
@@ -186,7 +186,7 @@ serve(async (req) => {
     // Add specialism pages
     if (specialisms) {
       for (const specialism of specialisms) {
-        const lastmod = specialism.updated_at 
+        const lastmod = specialism.updated_at
           ? new Date(specialism.updated_at).toISOString().split('T')[0]
           : today;
 
@@ -202,7 +202,7 @@ serve(async (req) => {
     // Add blog post pages
     if (blogPosts) {
       for (const post of blogPosts) {
-        const lastmod = post.updated_at 
+        const lastmod = post.updated_at
           ? new Date(post.updated_at).toISOString().split('T')[0]
           : today;
 
@@ -222,7 +222,7 @@ serve(async (req) => {
     console.log(`Generated sitemap with ${urlCount} URLs`);
 
     return new Response(xml, {
-      headers: { 
+      headers: {
         "Content-Type": "application/xml; charset=utf-8",
         "Cache-Control": "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400",
         "Access-Control-Allow-Origin": "*",
@@ -231,7 +231,7 @@ serve(async (req) => {
     });
   } catch (error) {
     console.error('Error generating sitemap:', error);
-    
+
     // Return a minimal fallback sitemap
     const fallbackXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -256,10 +256,10 @@ serve(async (req) => {
     <priority>0.9</priority>
   </url>
 </urlset>`;
-    
+
     return new Response(fallbackXml, {
       status: 200,
-      headers: { 
+      headers: {
         "Content-Type": "application/xml; charset=utf-8",
         "Access-Control-Allow-Origin": "*"
       },

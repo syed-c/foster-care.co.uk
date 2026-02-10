@@ -45,7 +45,7 @@ export default function HowListingsWork() {
       <SEOHead
         title="How Our Listings Work | Foster Care Agency Directory"
         description="Learn how we create, verify, and maintain fostering agency listings in our directory. Understand the difference between claimed and unclaimed profiles."
-        canonicalUrl="https://fostercare.uk/how-listings-work"
+        canonicalUrl="https://www.foster-care.co.uk/how-listings-work"
         structuredData={getBreadcrumbSchema(breadcrumbs)}
       />
       <Header />

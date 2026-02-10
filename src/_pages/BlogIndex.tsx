@@ -34,7 +34,7 @@ const BlogIndex = () => {
       <SEOHead
         title="Fostering Blog - Expert Advice & Stories | Foster Care UK"
         description="Read expert articles about fostering, foster carer stories, and helpful guides for your fostering journey. Stay informed with the latest fostering news and tips."
-        canonicalUrl="https://fostercare.uk/blog"
+        canonicalUrl="https://www.foster-care.co.uk/blog"
         keywords={[
           "fostering blog",
           "foster care articles",

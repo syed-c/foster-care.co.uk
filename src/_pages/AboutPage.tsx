@@ -31,11 +31,11 @@ export default function AboutPage() {
       <SEOHead
         title="About Us - Foster Care UK"
         description="Learn about Foster Care UK, the UK's leading directory for foster care agencies. Our mission is to connect families with trusted care."
-        canonicalUrl="https://fostercare.uk/about"
+        canonicalUrl="https://www.foster-care.co.uk/about"
         keywords={["about foster care uk", "foster care mission", "fostering support", "UK foster agencies"]}
         structuredData={getBreadcrumbSchema([
-          { name: "Home", url: "https://fostercare.uk" },
-          { name: "About", url: "https://fostercare.uk/about" },
+          { name: "Home", url: "https://www.foster-care.co.uk" },
+          { name: "About", url: "https://www.foster-care.co.uk/about" },
         ])}
       />
       <Header />

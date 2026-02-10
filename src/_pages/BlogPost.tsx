@@ -102,11 +102,11 @@ const BlogPost = () => {
       <SEOHead
         title={post.seo_title || `${post.title} | Foster Care UK Blog`}
         description={post.seo_description || post.excerpt || ""}
-        canonicalUrl={`https://fostercare.uk/blog/${post.slug}`}
+        canonicalUrl={`https://www.foster-care.co.uk/blog/${post.slug}`}
         structuredData={getArticleSchema({
           title: post.title,
           description: post.seo_description || post.excerpt || "",
-          url: `https://fostercare.uk/blog/${post.slug}`,
+          url: `https://www.foster-care.co.uk/blog/${post.slug}`,
           imageUrl: post.cover_image_url || undefined,
           publishedAt: post.published_at || post.created_at,
           author: post.author_name || "Foster Care UK"

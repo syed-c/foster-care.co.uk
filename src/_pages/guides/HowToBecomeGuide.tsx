@@ -128,7 +128,7 @@ export default function HowToBecomeGuide() {
       <SEOHead
         title="How to Become a Foster Carer | Step-by-Step Guide | Foster Care UK"
         description="Learn how to become a foster carer in England. Our comprehensive guide covers the application process, requirements, training, and what to expect at each stage."
-        canonicalUrl="https://fostercare.uk/guides/how-to-become-foster-carer"
+        canonicalUrl="https://www.foster-care.co.uk/guides/how-to-become-foster-carer"
         keywords={["become foster carer", "fostering application", "foster care training", "fostering requirements"]}
       />
       <Header />

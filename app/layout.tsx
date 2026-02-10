@@ -12,7 +12,7 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-    metadataBase: new URL('https://fostercare.uk'),
+    metadataBase: new URL('https://www.foster-care.co.uk'),
     title: {
         default: 'Foster Care Agencies UK | Compare 500+ Verified Fostering Services | Foster Care UK',
         template: '%s | Foster Care UK - Find Trusted Agencies',
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     openGraph: {
         type: 'website',
         locale: 'en_GB',
-        url: 'https://fostercare.uk',
+        url: 'https://www.foster-care.co.uk',
         siteName: 'Foster Care UK',
         title: 'Foster Care UK — Find Trusted Foster Care Agencies',
         description:
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
         google: 'googlee22e01f4ffca003f',
     },
     alternates: {
-        canonical: 'https://fostercare.uk',
+        canonical: 'https://www.foster-care.co.uk',
     },
 };
 

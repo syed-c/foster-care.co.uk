@@ -32,7 +32,7 @@ async function generateSitemap() {
     // Add static pages to XML
     for (const page of staticPages) {
       xml += `  <url>
-    <loc>https://foster-care.co.uk${page.url}</loc>
+    <loc>https://www.foster-care.co.uk${page.url}</loc>
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>
   </url>
@@ -46,27 +46,27 @@ async function generateSitemap() {
     if (!fs.existsSync(publicDir)) {
       fs.mkdirSync(publicDir, { recursive: true });
     }
-    
+
     fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), xml);
     console.log('Static sitemap generated successfully.');
   } catch (error) {
     console.error('Error generating sitemap:', error);
-    
+
     // Create a fallback sitemap in case of error
     const fallbackSitemap = `<?xml version="1.0" encoding="UTF-8"?>\n` +
       '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
       '  <url>\n' +
-      '    <loc>https://foster-care.co.uk/</loc>\n' +
+      '    <loc>https://www.foster-care.co.uk/</loc>\n' +
       '    <changefreq>daily</changefreq>\n' +
       '    <priority>1.0</priority>\n' +
       '  </url>\n' +
       '</urlset>';
-    
+
     const publicDir = path.join(process.cwd(), 'public');
     if (!fs.existsSync(publicDir)) {
       fs.mkdirSync(publicDir, { recursive: true });
     }
-    
+
     fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), fallbackSitemap);
     console.log('Error occurred, fallback sitemap generated.');
   }

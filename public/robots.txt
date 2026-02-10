@@ -1,5 +1,5 @@
 # Foster Care UK - Robots.txt
-# https://foster-care.co.uk
+# https://www.foster-care.co.uk
 # Last updated: January 2026
 
 # Default: Allow all crawlers full access
@@ -8,7 +8,7 @@ Allow: /
 Crawl-delay: 1
 
 # Sitemap location - Dynamic sitemap with all pages
-Sitemap: https://foster-care.co.uk/sitemap.xml
+Sitemap: https://www.foster-care.co.uk/sitemap.xml
 
 # ============================================
 # SEARCH ENGINE CRAWLERS

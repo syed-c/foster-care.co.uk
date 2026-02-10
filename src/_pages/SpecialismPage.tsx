@@ -82,7 +82,7 @@ export default function SpecialismPage() {
       <SEOHead
         title={specialism.seo_title || `${specialism.name} | Fostering Agencies in England`}
         description={specialism.seo_description || specialism.description || ""}
-        canonicalUrl={`https://fostercare.uk/specialisms/${slug}`}
+        canonicalUrl={`https://www.foster-care.co.uk/specialisms/${slug}`}
         structuredData={getBreadcrumbSchema(breadcrumbs)}
       />
       <Header />
