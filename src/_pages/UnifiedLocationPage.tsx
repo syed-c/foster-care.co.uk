@@ -38,29 +38,37 @@ const SPECIALISM_SLUGS = new Set(STATIC_SPECIALISMS.map(s => s.slug));
 
 export default function UnifiedLocationPage() {
   // Get all possible path segments from the URL
-  const params = useParams<{ "*": string }>();
-  const pathString = params["*"] || "";
-  const pathSegments = pathString.split("/").filter(Boolean);
-  
+  // Get all possible path segments from the URL
+  // Handle Next.js App Router dynamic segments
+  // In app/locations/[...segments]/page.tsx, the param is named "segments" (array)
+  const params = useParams();
+
+  const segmentsParam = params?.segments || params?.slug || [];
+  const pathSegments = Array.isArray(segmentsParam)
+    ? segmentsParam
+    : typeof segmentsParam === 'string'
+      ? [segmentsParam]
+      : [];
+
   // Check if the last segment is a specialism slug
   const lastSegment = pathSegments[pathSegments.length - 1];
   const isSpecialismPage = SPECIALISM_SLUGS.has(lastSegment);
-  
+
   // If it's a specialism page, render the LocationSpecialismPage component
   if (isSpecialismPage && pathSegments.length > 1) {
     const locationSegments = pathSegments.slice(0, -1);
     return <LocationSpecialismPage locationSegments={locationSegments} specialismSlug={lastSegment} />;
   }
-  
+
   // The last segment is the location we're trying to display
   const targetSlug = pathSegments[pathSegments.length - 1];
-  
+
   const { data: location, isLoading: locationLoading } = useLocationFromPath(pathSegments);
   const { data: childLocations, isLoading: childrenLoading } = useChildLocations(location?.id);
   const { data: locationPath } = useLocationPath(location?.id);
   const { data: locationFaqs } = useFaqsByLocation(location?.id);
   const { data: locationAgencies } = useAgenciesByLocation(location?.id, 50);
-  
+
   const cmsPageKey = targetSlug ? `location_${targetSlug}` : undefined;
   const { data: cmsContent } = useCmsContentByPage(cmsPageKey);
 
@@ -92,7 +100,7 @@ export default function UnifiedLocationPage() {
       <div className="min-h-screen flex flex-col bg-slate-950">
         <Header />
         <main className="flex-1 pt-20 flex items-center justify-center">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center max-w-md px-6"
@@ -113,7 +121,7 @@ export default function UnifiedLocationPage() {
   }
 
   const hasChildLocations = childLocations && childLocations.length > 0;
-  const totalAgencies = hasChildLocations 
+  const totalAgencies = hasChildLocations
     ? childLocations.reduce((sum, loc) => sum + (loc.agency_count || 0), 0)
     : location.agency_count || 0;
 
@@ -122,7 +130,7 @@ export default function UnifiedLocationPage() {
     { label: "Home", href: "/" },
     { label: "Locations", href: "/locations" },
   ];
-  
+
   if (locationPath) {
     locationPath.forEach((loc, index) => {
       const pathToLoc = locationPath.slice(0, index + 1);
@@ -138,7 +146,7 @@ export default function UnifiedLocationPage() {
     { name: "Home", url: "https://fostercare.uk" },
     { name: "Locations", url: "https://fostercare.uk/locations" },
   ];
-  
+
   if (locationPath) {
     locationPath.forEach((loc, index) => {
       const pathToLoc = locationPath.slice(0, index + 1);
@@ -157,7 +165,7 @@ export default function UnifiedLocationPage() {
   };
 
   const faqsForSchema = allFaqs?.map(f => ({ question: f.question, answer: f.answer })) || [];
-  
+
   const getChildTypeName = () => {
     switch (location.type) {
       case "country": return "Regions";
@@ -175,7 +183,7 @@ export default function UnifiedLocationPage() {
   const getSeoTitle = () => {
     if (heroContent?.title) return heroContent.title;
     if (location.seo_title) return location.seo_title;
-    
+
     switch (location.type) {
       case "country":
         return `Foster Care Agencies in ${location.name} | Find Local Fostering Services`;
@@ -244,13 +252,13 @@ export default function UnifiedLocationPage() {
             <h1>Foster Care Agencies in {location.name}</h1>
             <p>{getSeoDescription()}</p>
           </header>
-          
+
           <section>
             <h2>About Fostering in {location.name}</h2>
             <p>{getLocationIntro()}</p>
             <p>There are currently {locationStats.agencies} verified foster care agencies operating in {location.name}, supporting {locationStats.carersNeeded}+ foster carers and providing homes for {locationStats.childrenInCare}+ children.</p>
           </section>
-          
+
           <section>
             <h2>Types of Foster Care Available in {location.name}</h2>
             <ul>
@@ -262,7 +270,7 @@ export default function UnifiedLocationPage() {
               <li><strong>Parent and Child Fostering</strong> - Supporting young parents and their babies together in a nurturing environment.</li>
             </ul>
           </section>
-          
+
           <section>
             <h2>Why Foster in {location.name}?</h2>
             <ul>
@@ -273,7 +281,7 @@ export default function UnifiedLocationPage() {
               <li>Join a supportive network of foster carers in {location.name}</li>
             </ul>
           </section>
-          
+
           <section>
             <h2>How to Become a Foster Carer in {location.name}</h2>
             <ol>
@@ -285,7 +293,7 @@ export default function UnifiedLocationPage() {
               <li>Be matched with a child who suits your family</li>
             </ol>
           </section>
-          
+
           {hasChildLocations && (
             <section>
               <h2>{getChildTypeName()} in {location.name}</h2>
@@ -299,7 +307,7 @@ export default function UnifiedLocationPage() {
               </ul>
             </section>
           )}
-          
+
           {locationAgencies && locationAgencies.length > 0 && (
             <section>
               <h2>Foster Care Agencies in {location.name}</h2>
@@ -314,7 +322,7 @@ export default function UnifiedLocationPage() {
               </ul>
             </section>
           )}
-          
+
           {allFaqs && allFaqs.length > 0 && (
             <section>
               <h2>Frequently Asked Questions About Fostering in {location.name}</h2>
@@ -384,10 +392,10 @@ export default function UnifiedLocationPage() {
         {allFaqs && allFaqs.length > 0 && (
           <section className="py-14 md:py-20 bg-slate-900/80">
             <div className="container-main">
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }} 
-                whileInView={{ opacity: 1, y: 0 }} 
-                viewport={{ once: true }} 
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
                 className="text-center mb-10"
               >
@@ -396,7 +404,7 @@ export default function UnifiedLocationPage() {
                 </h2>
                 <p className="text-white/60 text-lg">Common questions about fostering in {location.name}</p>
               </motion.div>
-              
+
               <div className="max-w-3xl mx-auto">
                 <FaqSection faqs={allFaqs} />
               </div>
