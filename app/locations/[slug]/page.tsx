@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import LocationPage from '@/_pages/LocationPage';
+import UnifiedLocationPage from '@/_pages/UnifiedLocationPage';
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   return {
@@ -16,5 +16,5 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default function Page() {
-  return <LocationPage />;
+  return <UnifiedLocationPage />;
 }
