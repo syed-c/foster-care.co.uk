@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Index from '@/_pages/Index';
 
 export const metadata: Metadata = {
   title: 'Foster Care UK — Find Trusted Foster Care Agencies Near You',
@@ -43,3 +44,7 @@ export const metadata: Metadata = {
     },
   },
 };
+
+export default function Page() {
+  return <Index />;
+}

@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import LocationPage from '@/_pages/LocationPage';
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   return {
@@ -12,4 +13,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       canonical: `https://fostercare.uk/locations/${params.slug}`,
     },
   };
+}
+
+export default function Page() {
+  return <LocationPage />;
 }
