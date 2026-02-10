@@ -158,52 +158,7 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
         structuredData={getBreadcrumbSchema(breadcrumbs.map(b => ({ name: b.name, url: `https://www.foster-care.co.uk${b.url}` })))}
       />
 
-      {/* Hidden SEO Content for Crawlers */}
-      <article className="sr-only" aria-hidden="false">
-        <header>
-          <div className="text-xl font-bold">{specialism.name} Foster Care in {location.name}</div>
-          <p>Find verified {specialism.name.toLowerCase()} foster care agencies serving {location.name}.</p>
-        </header>
 
-        <section>
-          <h2>About {specialism.name} in {location.name}</h2>
-          <p>{specialismContent.intro}</p>
-        </section>
-
-        <section>
-          <h2>Benefits of {specialism.name} Fostering</h2>
-          <ul>
-            {specialismContent.benefits.map((benefit, i) => (
-              <li key={i}>{benefit}</li>
-            ))}
-          </ul>
-        </section>
-
-        {agencies.length > 0 && (
-          <section>
-            <h2>{specialism.name} Agencies in {location.name}</h2>
-            <ul>
-              {agencies.map((agency: any) => (
-                <li key={agency.id}>
-                  <a href={`/agencies/${agency.slug}`}>{agency.name}</a>
-                  {agency.city && ` - ${agency.city}`}
-                  {agency.ofsted_rating && ` - Ofsted: ${agency.ofsted_rating}`}
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
-
-        <section>
-          <h2>How to Start {specialism.name} Fostering in {location.name}</h2>
-          <ol>
-            <li>Contact a local agency specializing in {specialism.name.toLowerCase()}</li>
-            <li>Attend an information session about {specialism.name.toLowerCase()} placements</li>
-            <li>Complete assessment and specialist training</li>
-            <li>Get matched with children who need {specialism.name.toLowerCase()} care</li>
-          </ol>
-        </section>
-      </article>
 
       <Header />
 

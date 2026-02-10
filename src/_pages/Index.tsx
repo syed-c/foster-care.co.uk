@@ -46,38 +46,7 @@ const Index = () => {
       />
       <Header />
       <main className="flex-1">
-        {/* SEO-optimized hidden content for search engines */}
-        <div className="sr-only">
-          <div className="text-xl font-bold">Foster Care Agencies Directory UK - Find Trusted Fostering Services</div>
-          <p>
-            Welcome to the UK's most comprehensive foster care agency directory. We connect prospective foster carers
-            with over 500 verified fostering agencies across England, Scotland, Wales, and Northern Ireland.
-            Whether you're considering becoming a foster carer for the first time or looking to transfer to a new agency,
-            our platform helps you find the right match based on your location, preferences, and the type of fostering you're interested in.
-          </p>
-          <h2>Why Choose Our Foster Care Directory?</h2>
-          <p>
-            All agencies listed on our platform undergo verification checks. We display Ofsted ratings, genuine reviews
-            from foster carers, and detailed information about each agency's specialisms including emergency fostering,
-            therapeutic care, sibling groups, teenagers, parent and child placements, and support for unaccompanied asylum seekers.
-          </p>
-          <h2>Types of Fostering Available</h2>
-          <ul>
-            <li>Short-term foster care - temporary placements while long-term plans are made</li>
-            <li>Long-term foster care - providing a permanent family home until adulthood</li>
-            <li>Emergency foster care - immediate placements for children in crisis</li>
-            <li>Respite foster care - short breaks to support other foster families</li>
-            <li>Therapeutic foster care - specialized support for children with complex needs</li>
-            <li>Parent and child fostering - supporting young parents alongside their babies</li>
-          </ul>
-          <h2>Fostering in England</h2>
-          <p>
-            There are over 65,000 children in care in England, and the demand for foster carers continues to grow.
-            Our directory covers all regions including London, the South East, North West, West Midlands, Yorkshire,
-            and every city and county across the country. Find local fostering agencies in Birmingham, Manchester,
-            Leeds, Liverpool, Bristol, Sheffield, Newcastle, Nottingham, and more.
-          </p>
-        </div>
+
 
         <HeroSection />
         <TrustSection />
