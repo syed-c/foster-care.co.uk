@@ -1,7 +1,8 @@
+"use client";
+import Link from "next/link";
 import { motion } from 'framer-motion';
 import { Building2, Users, ArrowRight, CheckCircle, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
 import { Badge } from "@/components/ui/badge";
 
 interface AgencyType {
@@ -100,7 +101,7 @@ export const AgencyTypesSection = ({
                 ))}
               </ul>
 
-              <Link to="/agencies?type=independent">
+              <Link href="/agencies?type=independent">
                 <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-bold">
                   Explore Independent
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -141,7 +142,7 @@ export const AgencyTypesSection = ({
                 ))}
               </ul>
 
-              <Link to="/agencies?type=local-authority">
+              <Link href="/agencies?type=local-authority">
                 <Button variant="outline" className="w-full border-trust/50 bg-trust/10 text-trust hover:bg-trust hover:text-white rounded-xl font-bold">
                   Explore Local Authority
                   <ArrowRight className="w-4 h-4 ml-2" />

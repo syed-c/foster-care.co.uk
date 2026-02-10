@@ -1,5 +1,6 @@
+"use client";
+import Link from "next/link";
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { Star, MapPin, Shield, Phone, ExternalLink, Building2, ArrowRight } from 'lucide-react';
 import { ScrollReveal } from '@/components/shared/ScrollReveal';
 import { Button } from '@/components/ui/button';
@@ -83,7 +84,7 @@ export const CountryAgenciesSection = ({
             <p className="text-muted-foreground mb-6 max-w-md mx-auto">
               We're still adding agencies for this region. Check back soon or browse all agencies.
             </p>
-            <Link to="/agencies">
+            <Link href="/agencies">
               <Button>
                 Browse All Agencies
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -106,7 +107,7 @@ export const CountryAgenciesSection = ({
                   whileHover={{ y: -6, scale: 1.02 }}
                   className="group"
                 >
-                  <Link to={`/agencies/${agency.slug}`}>
+                  <Link href={`/agencies/${agency.slug}`}>
                     <div className="h-full bg-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-border/40 hover:border-primary/30 shadow-sm hover:shadow-xl hover:shadow-primary/10 transition-all duration-300">
                       {/* Header */}
                       <div className="flex items-start gap-3 sm:gap-4 mb-4">
@@ -200,7 +201,7 @@ export const CountryAgenciesSection = ({
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
             >
-              <Link to={`/agencies?location=${countrySlug}`}>
+              <Link href={`/agencies?location=${countrySlug}`}>
                 <Button size="lg" variant="outline" className="h-12 sm:h-14 px-6 sm:px-8 rounded-xl group">
                   View All Agencies in {countryName}
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />

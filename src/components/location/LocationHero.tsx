@@ -1,11 +1,12 @@
+"use client";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { ChevronRight, Building2, Star, Users, Shield, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 interface BreadcrumbItem {
   label: string;
@@ -37,9 +38,9 @@ export const LocationHero = ({
   childLocations = [],
   currentLocationPath = "",
 }: LocationHeroProps) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [selectedLocation, setSelectedLocation] = useState("");
-  
+
   const stats = [
     { icon: Building2, value: agencyCount > 0 ? agencyCount.toString() : "50+", label: "Agencies", color: "bg-primary/20 border-primary/40 text-primary" },
     { icon: Star, value: "4.8", label: "Rating", color: "bg-amber-500/20 border-amber-500/40 text-amber-400" },
@@ -51,12 +52,12 @@ export const LocationHero = ({
     setSelectedLocation(slug);
     if (slug) {
       const path = currentLocationPath ? `${currentLocationPath}/${slug}` : `/locations/${slug}`;
-      navigate(path);
+      router.push(path);
     }
   };
 
   // Truncate description to ~2 lines
-  const shortDescription = description && description.length > 120 
+  const shortDescription = description && description.length > 120
     ? description.slice(0, 120).trim() + "..."
     : description;
 
@@ -64,12 +65,12 @@ export const LocationHero = ({
     <section className="relative py-12 md:py-16 lg:py-20 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
-      
+
       {/* Decorative Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-primary/15 rounded-full blur-[120px]" />
         <div className="absolute bottom-0 right-1/4 w-[350px] h-[350px] bg-verified/10 rounded-full blur-[100px]" />
-        
+
         {/* Grid Pattern */}
         <div className="absolute inset-0 opacity-[0.02]" style={{
           backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
@@ -80,7 +81,7 @@ export const LocationHero = ({
       <div className="container-main relative z-10">
         {/* Breadcrumbs */}
         {breadcrumbs.length > 0 && (
-          <motion.nav 
+          <motion.nav
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
@@ -90,7 +91,7 @@ export const LocationHero = ({
               <span key={index} className="flex items-center gap-1.5">
                 {index > 0 && <ChevronRight className="w-3 h-3 text-white/40" />}
                 {crumb.href ? (
-                  <Link to={crumb.href} className="text-white/50 hover:text-white transition-colors">
+                  <Link href={crumb.href} className="text-white/50 hover:text-white transition-colors">
                     {crumb.label}
                   </Link>
                 ) : (
@@ -104,7 +105,7 @@ export const LocationHero = ({
         {/* Centered Content */}
         <div className="text-center max-w-3xl mx-auto">
           {/* Badge Row */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
@@ -115,9 +116,9 @@ export const LocationHero = ({
               {locationType} Directory
             </Badge>
           </motion.div>
-          
+
           {/* Title */}
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -125,9 +126,9 @@ export const LocationHero = ({
           >
             {title}
           </motion.h1>
-          
+
           {/* Description - Max 2 lines */}
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.2 }}
@@ -138,7 +139,7 @@ export const LocationHero = ({
 
           {/* Location Filter */}
           {childLocations.length > 0 && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.3 }}
@@ -152,8 +153,8 @@ export const LocationHero = ({
                   </SelectTrigger>
                   <SelectContent className="bg-slate-800 border-slate-700">
                     {childLocations.map((loc) => (
-                      <SelectItem 
-                        key={loc.id} 
+                      <SelectItem
+                        key={loc.id}
                         value={loc.slug}
                         className="text-white hover:bg-slate-700 focus:bg-slate-700"
                       >
@@ -163,7 +164,7 @@ export const LocationHero = ({
                   </SelectContent>
                 </Select>
               </div>
-              <Button 
+              <Button
                 onClick={() => selectedLocation && handleLocationSelect(selectedLocation)}
                 className="bg-primary hover:bg-primary-hover text-white font-bold rounded-xl px-5 py-5"
                 disabled={!selectedLocation}
@@ -174,7 +175,7 @@ export const LocationHero = ({
           )}
 
           {/* Compact Stats */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.4 }}
@@ -196,7 +197,7 @@ export const LocationHero = ({
           </motion.div>
         </div>
       </div>
-      
+
       {/* Bottom Wave */}
       <div className="absolute bottom-0 left-0 right-0">
         <svg viewBox="0 0 1440 50" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">

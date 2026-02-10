@@ -1,7 +1,8 @@
+"use client";
+import Link from "next/link";
 import { motion } from 'framer-motion';
 import { Building2, Star, MapPin, ArrowRight, BadgeCheck, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
 import { useAgenciesByRegion, type Agency } from '@/hooks/useAgenciesByRegion';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -76,7 +77,7 @@ export const RegionAgenciesSection = ({ regionSlug, regionName, limit = 6 }: Reg
             <p className="text-muted-foreground mb-6">
               We're still expanding our directory in {regionName}. Check back soon or browse all agencies.
             </p>
-            <Link to="/agencies">
+            <Link href="/agencies">
               <Button>Browse All Agencies</Button>
             </Link>
           </motion.div>
@@ -149,7 +150,7 @@ export const RegionAgenciesSection = ({ regionSlug, regionName, limit = 6 }: Reg
                   )}
 
                   {/* View Profile Button */}
-                  <Link to={`/agencies/${agency.slug}`}>
+                  <Link href={`/agencies/${agency.slug}`}>
                     <Button 
                       variant="outline" 
                       size="sm" 
@@ -171,7 +172,7 @@ export const RegionAgenciesSection = ({ regionSlug, regionName, limit = 6 }: Reg
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
-              <Link to="/agencies">
+              <Link href="/agencies">
                 <Button size="lg" className="h-12 sm:h-14 px-8 rounded-xl group">
                   View All Agencies
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />

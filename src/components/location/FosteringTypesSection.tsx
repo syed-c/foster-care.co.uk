@@ -1,5 +1,6 @@
+"use client";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { Clock, Heart, Shield, Users, GraduationCap, Award, Sparkles, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -67,7 +68,7 @@ export const FosteringTypesSection = ({ currentLocationPath, locationName }: Fos
         >
           {types.map((type) => (
             <motion.div key={type.title} variants={itemVariants}>
-              <Link to={getTypeUrl(type.slug)}>
+              <Link href={getTypeUrl(type.slug)}>
                 <div className={`group bg-gradient-to-br ${type.color} hover:scale-105 border rounded-xl p-3 transition-all duration-200 h-full text-center`}>
                   <type.icon className="w-6 h-6 text-white/70 mx-auto mb-2" />
                   <h3 className="font-bold text-white text-xs mb-0.5">{type.title}</h3>
@@ -85,7 +86,7 @@ export const FosteringTypesSection = ({ currentLocationPath, locationName }: Fos
           className="text-center mt-5"
         >
           <Link 
-            to="/specialisms" 
+            href="/specialisms" 
             className="inline-flex items-center gap-1 text-primary hover:text-primary-hover font-bold text-sm transition-colors"
           >
             View all specialisms

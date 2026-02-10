@@ -1,5 +1,6 @@
+"use client";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { Building2, Users, ArrowRight, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCmsContentSection } from "@/hooks/useCmsContent";
@@ -80,7 +81,7 @@ export function AgencyCTASection() {
                 ))}
               </ul>
 
-              <Link to="/claim">
+              <Link href="/claim">
                 <Button variant="secondary" className="w-full sm:w-auto group/btn text-white">
                   Claim Your Agency
                   <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
@@ -121,7 +122,7 @@ export function AgencyCTASection() {
                 ))}
               </ul>
 
-              <Link to="/agencies">
+              <Link href="/agencies">
                 <Button variant="secondary" className="w-full sm:w-auto group/btn">
                   Search Directory
                   <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />

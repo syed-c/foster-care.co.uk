@@ -1,6 +1,7 @@
+"use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import { Search, Shield, Users, Star, Clock, MapPin, Heart, Sparkles, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -11,7 +12,7 @@ import { Input } from "@/components/ui/input";
 const rotatingServices = ["Emergency Care", "Short-term Fostering", "Long-term Placements", "Sibling Groups", "Respite Care"];
 
 export function HeroSection() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { data: heroContent } = useCmsContentSection("home", "hero");
   const { data: locations } = useLocations();
   const [currentServiceIndex, setCurrentServiceIndex] = useState(0);
@@ -36,7 +37,7 @@ export function HeroSection() {
     if (selectedLocation && selectedLocation !== "all") params.set("location", selectedLocation);
     if (selectedType && selectedType !== "all") params.set("type", selectedType);
     if (searchQuery) params.set("search", searchQuery);
-    navigate(`/agencies${params.toString() ? `?${params.toString()}` : ""}`);
+    router.push(`/agencies${params.toString() ? `?${params.toString()}` : ""}`);
   };
 
   const stats = [
@@ -50,22 +51,22 @@ export function HeroSection() {
     <section className="relative min-h-[100svh] flex flex-col items-center justify-center pt-20 pb-16 overflow-hidden">
       {/* Dark Gradient Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
-      
+
       {/* Decorative Elements */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Glowing orbs */}
         <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[180px] animate-pulse" />
         <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-verified/15 rounded-full blur-[150px]" />
         <div className="absolute top-1/2 right-0 w-[400px] h-[400px] bg-trust/10 rounded-full blur-[120px]" />
-        
+
         {/* Grid Pattern */}
         <div className="absolute inset-0 opacity-[0.02]" style={{
           backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
           backgroundSize: '60px 60px',
         }} />
-        
+
         {/* Floating decorative icons */}
-        <motion.div 
+        <motion.div
           className="absolute top-32 left-[15%] hidden lg:block"
           animate={{ y: [0, -15, 0], rotate: [0, 8, 0] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
@@ -74,8 +75,8 @@ export function HeroSection() {
             <Heart className="w-7 h-7 text-primary" />
           </div>
         </motion.div>
-        
-        <motion.div 
+
+        <motion.div
           className="absolute top-48 right-[12%] hidden lg:block"
           animate={{ y: [0, 12, 0], rotate: [0, -6, 0] }}
           transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
@@ -84,8 +85,8 @@ export function HeroSection() {
             <Shield className="w-8 h-8 text-verified" />
           </div>
         </motion.div>
-        
-        <motion.div 
+
+        <motion.div
           className="absolute bottom-40 left-[10%] hidden xl:block"
           animate={{ y: [0, -18, 0] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
@@ -94,8 +95,8 @@ export function HeroSection() {
             <Star className="w-6 h-6 text-amber-400" />
           </div>
         </motion.div>
-        
-        <motion.div 
+
+        <motion.div
           className="absolute bottom-48 right-[18%] hidden xl:block"
           animate={{ scale: [1, 1.2, 1], opacity: [0.4, 0.8, 0.4] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}

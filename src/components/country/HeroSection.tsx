@@ -1,5 +1,6 @@
+"use client";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { ArrowRight, Search, Heart, Shield, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -49,13 +50,13 @@ export const HeroSection = ({ title, paragraphs, cta }: HeroSectionProps) => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
-          <Link to={cta?.button_url || "/agencies"}>
+          <Link href={cta?.button_url || "/agencies"}>
             <Button variant="default" size="lg" className="w-full sm:w-auto">
               {cta?.button_text || "Browse Agencies"}
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Link>
-          <Link to="/locations/england">
+          <Link href="/locations/england">
             <Button variant="outline" size="lg" className="w-full sm:w-auto">
               Find My Region
             </Button>

@@ -1,5 +1,6 @@
+"use client";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { ArrowRight, Heart, Sparkles, Star, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -93,7 +94,7 @@ export const LocationCTA = ({ locationName = "your area" }: LocationCTAProps) =>
               className="bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold rounded-2xl px-8 py-6 text-lg"
               asChild
             >
-              <Link to="/guides/how-to-become-foster-carer">Learn More</Link>
+              <Link href="/guides/how-to-become-foster-carer">Learn More</Link>
             </Button>
           </div>
         </motion.div>

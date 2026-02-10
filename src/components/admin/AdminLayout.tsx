@@ -1,13 +1,15 @@
+"use client";
+import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { 
-  LayoutDashboard, 
-  Building2, 
-  MapPin, 
-  HelpCircle, 
-  FileText, 
-  Users, 
+import {
+  LayoutDashboard,
+  Building2,
+  MapPin,
+  HelpCircle,
+  FileText,
+  Users,
   MessageSquare,
   Settings,
   LogOut,
@@ -47,8 +49,8 @@ export function AdminLayout({ children, title, description }: AdminLayoutProps) 
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { user, signOut, isAuthenticated, loading } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -98,21 +100,21 @@ export function AdminLayout({ children, title, description }: AdminLayoutProps) 
 
     if (!loading && !isLoading) {
       if (!isAuthenticated) {
-        navigate("/auth");
+        router.push("/auth");
       } else if (!isAdmin) {
         toast({
           title: "Access Denied",
           description: "You don't have permission to access the admin area.",
           variant: "destructive",
         });
-        navigate("/");
+        router.push("/");
       }
     }
-  }, [isAuthenticated, isAdmin, loading, isLoading, navigate, toast]);
+  }, [isAuthenticated, isAdmin, loading, isLoading, router, toast]);
 
   const handleSignOut = async () => {
     await signOut();
-    navigate("/");
+    router.push("/");
   };
 
   if (loading || isLoading) {
@@ -132,7 +134,7 @@ export function AdminLayout({ children, title, description }: AdminLayoutProps) 
   const Sidebar = () => (
     <div className="flex flex-col h-full">
       <div className="p-6 border-b border-border">
-        <Link to="/" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">
             FC
           </div>
@@ -142,17 +144,16 @@ export function AdminLayout({ children, title, description }: AdminLayoutProps) 
 
       <nav className="flex-1 p-4 space-y-1">
         {navItems.map((item) => {
-          const isActive = location.pathname === item.href;
+          const isActive = pathname === item.href;
           return (
             <Link
               key={item.href}
-              to={item.href}
+              href={item.href}
               onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
-                isActive
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${isActive
                   ? "bg-primary text-primary-foreground"
                   : "text-foreground hover:bg-secondary/20 hover:text-secondary-foreground"
-              }`}
+                }`}
             >
               <item.icon className="w-5 h-5" />
               {item.name}
@@ -163,7 +164,7 @@ export function AdminLayout({ children, title, description }: AdminLayoutProps) 
 
       <div className="p-4 border-t border-border space-y-1">
         <Link
-          to="/admin/settings"
+          href="/admin/settings"
           className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-foreground hover:bg-secondary/20 hover:text-secondary-foreground transition-colors"
         >
           <Settings className="w-5 h-5" />
@@ -189,7 +190,7 @@ export function AdminLayout({ children, title, description }: AdminLayoutProps) 
 
       {/* Mobile Header */}
       <header className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-background border-b border-border z-50 flex items-center justify-between px-4">
-        <Link to="/" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">
             FC
           </div>
@@ -217,10 +218,10 @@ export function AdminLayout({ children, title, description }: AdminLayoutProps) 
             className="mb-8"
           >
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-              <Link to="/admin" className="hover:text-foreground transition-colors">
+              <Link href="/admin" className="hover:text-foreground transition-colors">
                 Admin
               </Link>
-              {location.pathname !== "/admin" && (
+              {pathname !== "/admin" && (
                 <>
                   <ChevronRight className="w-4 h-4" />
                   <span className="text-foreground">{title}</span>

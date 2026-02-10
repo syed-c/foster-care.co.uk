@@ -1,5 +1,6 @@
+"use client";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { Building2, MapPin, Star, Eye, ArrowRight, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -103,7 +104,7 @@ export function AgencyRowListing({
               className="rounded-full font-semibold text-xs"
               asChild
             >
-              <Link to="/agencies">
+              <Link href="/agencies">
                 View All
                 <ArrowRight className="w-3 h-3 ml-1" />
               </Link>
@@ -205,7 +206,7 @@ export function AgencyRowListing({
                     className="rounded-full font-semibold text-xs px-4 py-2 h-auto"
                     asChild
                   >
-                    <Link to={`/agencies/${agency.slug}`}>
+                    <Link href={`/agencies/${agency.slug}`}>
                       <Eye className="w-3 h-3 mr-1.5" />
                       View Profile
                     </Link>
@@ -234,7 +235,7 @@ export function AgencyRowListing({
               className="rounded-full font-semibold"
               asChild
             >
-              <Link to="/agencies">Browse All Agencies</Link>
+              <Link href="/agencies">Browse All Agencies</Link>
             </Button>
           </motion.div>
         )}
@@ -252,7 +253,7 @@ export function AgencyRowListing({
               className="rounded-full px-6 font-semibold text-sm"
               asChild
             >
-              <Link to="/agencies">
+              <Link href="/agencies">
                 See All Agencies in England
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Link>

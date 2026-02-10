@@ -1,5 +1,6 @@
+"use client";
+import Link from "next/link";
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { ArrowRight, Heart, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -59,7 +60,7 @@ export const CTASection = ({
               {paragraph || "Connect with verified agencies that can support your fostering journey"}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link to="/agencies">
+              <Link href="/agencies">
                 <Button 
                   size="lg" 
                   className="w-full sm:w-auto bg-white text-primary hover:bg-white/90 rounded-xl h-12 sm:h-14 px-6 sm:px-8 font-bold shadow-lg hover:shadow-xl transition-all duration-300"
@@ -68,7 +69,7 @@ export const CTASection = ({
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
-              <Link to="/contact">
+              <Link href="/contact">
                 <Button 
                   size="lg" 
                   variant="outline"

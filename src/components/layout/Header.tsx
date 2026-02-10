@@ -1,5 +1,7 @@
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Phone, ShieldCheck, LogOut, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,7 +27,7 @@ const navLinks = [
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const location = useLocation();
+  const pathname = usePathname();
 
   const { user, isAuthenticated, signOut } = useAuth();
   const { isAdmin } = useUserRoles();
@@ -49,7 +51,7 @@ export function Header() {
       <div className="container-main">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3" aria-label="Foster Care UK home">
+          <Link href="/" className="flex items-center gap-3" aria-label="Foster Care UK home">
             <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-soft">
               <span className="text-primary-foreground font-bold text-lg">FC</span>
             </div>
@@ -63,12 +65,11 @@ export function Header() {
             {navLinks.map((link) => (
               <Link
                 key={link.href}
-                to={link.href}
-                className={`text-sm font-medium transition-colors duration-200 ${
-                  location.pathname === link.href
+                href={link.href}
+                className={`text-sm font-medium transition-colors duration-200 ${pathname === link.href
                     ? "text-primary"
                     : "text-foreground-muted hover:text-foreground"
-                }`}
+                  }`}
               >
                 {link.label}
               </Link>
@@ -82,7 +83,7 @@ export function Header() {
             </Button>
 
             {!isAuthenticated ? (
-              <Link to="/auth">
+              <Link href="/auth">
                 <Button variant="hero" size="default">
                   Sign in
                 </Button>
@@ -105,7 +106,7 @@ export function Header() {
                   <DropdownMenuSeparator />
                   {isAdmin && (
                     <DropdownMenuItem asChild>
-                      <Link to="/admin" className="cursor-pointer">
+                      <Link href="/admin" className="cursor-pointer">
                         <ShieldCheck className="mr-2 h-4 w-4" />
                         Admin
                       </Link>
@@ -145,13 +146,12 @@ export function Header() {
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
-                  to={link.href}
+                  href={link.href}
                   onClick={() => setIsMenuOpen(false)}
-                  className={`text-lg font-medium py-2 transition-colors ${
-                    location.pathname === link.href
+                  className={`text-lg font-medium py-2 transition-colors ${pathname === link.href
                       ? "text-primary"
                       : "text-foreground-muted hover:text-foreground"
-                  }`}
+                    }`}
                 >
                   {link.label}
                 </Link>
@@ -159,7 +159,7 @@ export function Header() {
 
               <div className="pt-4 border-t border-border space-y-3">
                 {isAuthenticated && isAdmin && (
-                  <Link to="/admin" onClick={() => setIsMenuOpen(false)}>
+                  <Link href="/admin" onClick={() => setIsMenuOpen(false)}>
                     <Button variant="secondary" className="w-full">
                       <ShieldCheck className="w-4 h-4" />
                       Admin
@@ -168,7 +168,7 @@ export function Header() {
                 )}
 
                 {!isAuthenticated ? (
-                  <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
+                  <Link href="/auth" onClick={() => setIsMenuOpen(false)}>
                     <Button variant="hero" className="w-full">
                       Sign in
                     </Button>
@@ -187,4 +187,3 @@ export function Header() {
     </header>
   );
 }
-

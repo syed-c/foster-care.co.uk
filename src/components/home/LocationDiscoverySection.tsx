@@ -1,5 +1,6 @@
+"use client";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { MapPin, ChevronRight, Globe } from "lucide-react";
 import { useLocations } from "@/hooks/useLocations";
 import { useCmsContentSection } from "@/hooks/useCmsContent";
@@ -132,7 +133,7 @@ export function LocationDiscoverySection() {
         margin: "-100px"
       }} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
           {ukRegions.map((region, index) => <motion.div key={region.name} variants={itemVariants}>
-              <Link to={`/locations/${region.slug}`} className="flex items-center justify-between p-5 rounded-2xl bg-background border border-border hover:border-primary/20 hover:shadow-card transition-all duration-300 group">
+              <Link href={`/locations/${region.slug}`} className="flex items-center justify-between p-5 rounded-2xl bg-background border border-border hover:border-primary/20 hover:shadow-card transition-all duration-300 group">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <MapPin className="w-5 h-5 text-primary" />
@@ -175,7 +176,7 @@ export function LocationDiscoverySection() {
             duration: 0.3,
             delay: index * 0.05
           }}>
-                <Link to={`/locations/england/${region.slug}`} className="inline-flex items-center gap-2 rounded-full text-secondary-foreground transition-all duration-300 group py-[8px] px-[14px] bg-sidebar-primary">
+                <Link href={`/locations/england/${region.slug}`} className="inline-flex items-center gap-2 rounded-full text-secondary-foreground transition-all duration-300 group py-[8px] px-[14px] bg-sidebar-primary">
                   <span className="font-medium group-hover:text-primary transition-colors">{region.name}</span>
                   <span className="text-sm text-muted-foreground bg-secondary/50 px-2 py-0.5 rounded-full">
                     {region.count}

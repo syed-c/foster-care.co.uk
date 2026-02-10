@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+"use client";
+import Link from "next/link";
 import { Heart, Mail, Phone, MapPin } from "lucide-react";
 
 const footerLinks = {
@@ -34,14 +35,14 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 pb-12 border-b border-background/10">
           {/* Brand Column */}
           <div className="lg:col-span-2">
-            <Link to="/" className="flex items-center gap-3 mb-6">
+            <Link href="/" className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
                 <span className="text-primary-foreground font-bold text-lg">FC</span>
               </div>
               <span className="font-semibold text-xl">Foster Care UK</span>
             </Link>
             <p className="text-secondary-foreground/70 mb-6 max-w-sm leading-relaxed">
-              Connecting families with trusted foster care agencies across the United Kingdom. 
+              Connecting families with trusted foster care agencies across the United Kingdom.
               Every child deserves a loving home.
             </p>
             <div className="flex flex-col gap-3 text-sm text-secondary-foreground/60">
@@ -67,7 +68,7 @@ export function Footer() {
               {footerLinks.directory.map((link) => (
                 <li key={link.href}>
                   <Link
-                    to={link.href}
+                    href={link.href}
                     className="text-background/60 hover:text-background transition-colors text-sm"
                   >
                     {link.label}
@@ -83,7 +84,7 @@ export function Footer() {
               {footerLinks.resources.map((link) => (
                 <li key={link.href}>
                   <Link
-                    to={link.href}
+                    href={link.href}
                     className="text-secondary-foreground/60 hover:text-secondary-foreground transition-colors text-sm"
                   >
                     {link.label}
@@ -99,7 +100,7 @@ export function Footer() {
               {footerLinks.forAgencies.map((link) => (
                 <li key={link.href}>
                   <Link
-                    to={link.href}
+                    href={link.href}
                     className="text-secondary-foreground/60 hover:text-secondary-foreground transition-colors text-sm"
                   >
                     {link.label}
@@ -119,7 +120,7 @@ export function Footer() {
             {footerLinks.legal.map((link) => (
               <Link
                 key={link.href}
-                to={link.href}
+                href={link.href}
                 className="text-secondary-foreground/50 hover:text-secondary-foreground transition-colors text-sm"
               >
                 {link.label}

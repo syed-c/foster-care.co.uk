@@ -1,7 +1,8 @@
+"use client";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Building2, Users, CheckCircle, ArrowRight, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Link } from "react-router-dom";
 
 export const AgencyTypesCompactSection = () => {
   return (
@@ -58,7 +59,7 @@ export const AgencyTypesCompactSection = () => {
                 ))}
               </ul>
               <Link 
-                to="/guides/how-to-become-foster-carer"
+                href="/guides/how-to-become-foster-carer"
                 className="inline-flex items-center gap-2 text-primary hover:text-primary-hover font-bold text-sm transition-colors"
               >
                 Learn more <ArrowRight className="w-4 h-4" />
@@ -92,7 +93,7 @@ export const AgencyTypesCompactSection = () => {
                 ))}
               </ul>
               <Link 
-                to="/guides/how-to-become-foster-carer"
+                href="/guides/how-to-become-foster-carer"
                 className="inline-flex items-center gap-2 text-trust hover:text-trust/80 font-bold text-sm transition-colors"
               >
                 Learn more <ArrowRight className="w-4 h-4" />

@@ -1,8 +1,9 @@
+"use client";
+import Link from "next/link";
 import { motion } from 'framer-motion';
 import { Search, MapPin, Building2 } from 'lucide-react';
 import { ScrollReveal } from '@/components/shared/ScrollReveal';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
 
 interface AgenciesSectionProps {
   title?: string;
@@ -30,13 +31,13 @@ export const AgenciesSection = ({ title, id }: AgenciesSectionProps) => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/agencies">
+              <Link href="/agencies">
                 <Button size="lg" className="w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-8 rounded-xl group">
                   <Search className="w-4 h-4 mr-2" />
                   Browse All Agencies
                 </Button>
               </Link>
-              <Link to="/locations">
+              <Link href="/locations">
                 <Button size="lg" variant="outline" className="w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-8 rounded-xl group">
                   <MapPin className="w-4 h-4 mr-2" />
                   Search by Location

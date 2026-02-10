@@ -1,5 +1,6 @@
+"use client";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { Building2, MapPin, Star, CheckCircle, Calendar, Eye, ArrowRight, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -99,7 +100,7 @@ export const AgencyListings = ({
               className="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg font-bold text-xs"
               asChild
             >
-              <Link to="/agencies">
+              <Link href="/agencies">
                 View All
                 <ArrowRight className="w-3 h-3 ml-1" />
               </Link>
@@ -197,7 +198,7 @@ export const AgencyListings = ({
                       className="bg-primary hover:bg-primary-hover text-white font-bold rounded-lg text-xs px-3 py-1.5 h-auto"
                       asChild
                     >
-                      <Link to={`/agencies/${agency.slug}`}>
+                      <Link href={`/agencies/${agency.slug}`}>
                         <Eye className="w-3 h-3 mr-1" />
                         View
                       </Link>
@@ -228,7 +229,7 @@ export const AgencyListings = ({
                 className="bg-primary hover:bg-primary-hover text-white font-bold rounded-lg"
                 asChild
               >
-                <Link to="/agencies">Browse All Agencies</Link>
+                <Link href="/agencies">Browse All Agencies</Link>
               </Button>
             </motion.div>
           )}
@@ -246,7 +247,7 @@ export const AgencyListings = ({
                 className="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-6 font-bold text-xs"
                 asChild
               >
-                <Link to="/agencies">
+                <Link href="/agencies">
                   See All Agencies
                   <ArrowRight className="w-3 h-3 ml-1" />
                 </Link>

@@ -1,5 +1,6 @@
+"use client";
+import Link from "next/link";
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { MapPin, ArrowRight, Building2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -79,7 +80,7 @@ export const RegionsGrid = ({ heading, list }: RegionsGridProps) => {
         >
           {regions.map((region) => (
             <motion.div key={region.slug} variants={itemVariants}>
-              <Link to={`/locations/england/${region.slug}`}>
+              <Link href={`/locations/england/${region.slug}`}>
                 <div className="group bg-slate-800/40 hover:bg-slate-800 border border-slate-700/50 hover:border-trust/50 rounded-2xl p-4 transition-all duration-300 h-full">
                   <div className="flex items-center justify-between mb-2">
                     <MapPin className="w-4 h-4 text-trust" />

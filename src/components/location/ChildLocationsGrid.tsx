@@ -1,5 +1,6 @@
+"use client";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { MapPin, ArrowRight, Building2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -80,7 +81,7 @@ export const ChildLocationsGrid = ({
         >
           {locations.map((location) => (
             <motion.div key={location.id} variants={itemVariants}>
-              <Link to={getLocationUrl(location)}>
+              <Link href={getLocationUrl(location)}>
                 <div className="group bg-slate-800/40 hover:bg-slate-800 border border-slate-700/40 hover:border-trust/40 rounded-xl p-3 transition-all duration-200 h-full">
                   <div className="flex items-center justify-between mb-1.5">
                     <MapPin className="w-3 h-3 text-trust" />

@@ -1,4 +1,6 @@
-import { Link, useLocation } from "react-router-dom";
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -101,7 +103,7 @@ interface SuperAdminSidebarProps {
 
 export function SuperAdminSidebar({ children, title, description }: SuperAdminSidebarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const location = useLocation();
+  const pathname = usePathname();
   const { signOut } = useAuth();
 
   // Fetch badge counts
@@ -133,7 +135,7 @@ export function SuperAdminSidebar({ children, title, description }: SuperAdminSi
     <div className="flex flex-col h-full bg-card">
       {/* Logo */}
       <div className="p-5 border-b border-border">
-        <Link to="/" className="flex items-center gap-3">
+        <Link href="/" className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-primary to-primary-glow flex items-center justify-center text-primary-foreground font-bold text-sm shadow-soft">
             FC
           </div>
@@ -166,13 +168,13 @@ export function SuperAdminSidebar({ children, title, description }: SuperAdminSi
             </p>
             <div className="space-y-0.5">
               {section.items.map((item) => {
-                const isActive = location.pathname === item.href;
+                const isActive = pathname === item.href;
                 const badgeCount = getBadgeCount(item.badge);
-                
+
                 return (
                   <Link
                     key={item.href}
-                    to={item.href}
+                    href={item.href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
                       "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
@@ -184,8 +186,8 @@ export function SuperAdminSidebar({ children, title, description }: SuperAdminSi
                     <item.icon className="w-4 h-4 flex-shrink-0" />
                     <span className="flex-1">{item.name}</span>
                     {badgeCount && (
-                      <Badge 
-                        variant="secondary" 
+                      <Badge
+                        variant="secondary"
                         className={cn(
                           "text-[10px] px-1.5 py-0 h-5 min-w-5 justify-center",
                           isActive ? "bg-primary-foreground/20 text-primary-foreground" : "bg-warm/10 text-warm"
@@ -257,10 +259,10 @@ export function SuperAdminSidebar({ children, title, description }: SuperAdminSi
           {/* Page Header */}
           <div className="mb-8">
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-              <Link to="/admin" className="hover:text-foreground transition-colors">
+              <Link href="/admin" className="hover:text-foreground transition-colors">
                 Admin
               </Link>
-              {location.pathname !== "/admin" && (
+              {pathname !== "/admin" && (
                 <>
                   <ChevronRight className="w-4 h-4" />
                   <span className="text-foreground font-medium">{title}</span>

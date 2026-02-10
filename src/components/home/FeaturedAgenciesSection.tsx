@@ -1,5 +1,6 @@
+"use client";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { Star, MapPin, BadgeCheck, ArrowRight, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -107,7 +108,7 @@ export function FeaturedAgenciesSection() {
               {content}
             </p>
           </div>
-          <Link to={ctaUrl}>
+          <Link href={ctaUrl}>
             <Button variant="secondary" size="lg" className="group text-white">
               {ctaText}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -129,7 +130,7 @@ export function FeaturedAgenciesSection() {
         margin: "-100px"
       }} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {displayAgencies.map(agency => <motion.div key={agency.id} variants={cardVariants}>
-                <Link to={`/agencies/${agency.slug}`}>
+                <Link href={`/agencies/${agency.slug}`}>
                   <Card className="h-full bg-[#1a2228] text-white group transition-all duration-300 hover:scale-105 hover:shadow-elevated hover:border-primary/20 overflow-hidden relative">
                     {/* Hover gradient */}
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

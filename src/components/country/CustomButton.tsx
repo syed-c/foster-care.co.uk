@@ -1,5 +1,6 @@
+"use client";
+import Link from "next/link";
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
 
 interface CustomButtonProps {
   text: string;
@@ -11,7 +12,7 @@ interface CustomButtonProps {
 
 export const CustomButton = ({ text, link, variant = 'default', size = 'default', className }: CustomButtonProps) => {
   return (
-    <Link to={link}>
+    <Link href={link}>
       <Button variant={variant} size={size} className={className}>
         {text}
       </Button>
