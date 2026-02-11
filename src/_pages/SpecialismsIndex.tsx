@@ -11,6 +11,11 @@ import {
   Heart, AlertCircle, Clock, Home, Coffee, Users,
   GraduationCap, Accessibility, Scale, ArrowRight, Sparkles
 } from "lucide-react";
+import { Specialism } from "@/services/dataService";
+
+interface SpecialismsIndexProps {
+  initialSpecialisms?: Specialism[];
+}
 
 const iconMap: { [key: string]: React.ElementType } = {
   Heart,
@@ -24,8 +29,11 @@ const iconMap: { [key: string]: React.ElementType } = {
   Scale,
 };
 
-export default function SpecialismsIndex() {
-  const { data: specialisms, isLoading } = useSpecialisms();
+export default function SpecialismsIndex({ initialSpecialisms }: SpecialismsIndexProps) {
+  const { data: specialismsData, isLoading: specialismsLoading } = useSpecialisms();
+
+  const specialisms = specialismsData || initialSpecialisms;
+  const isLoading = specialismsLoading && !initialSpecialisms;
 
   const breadcrumbs = [
     { name: "Home", url: "/" },

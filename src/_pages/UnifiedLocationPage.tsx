@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { Header } from "@/components/layout/Header";
 
 import { motion } from "framer-motion";
-import { useLocationFromPath, useChildLocations, useLocationPath, buildLocationUrl, Location } from "@/hooks/useLocations";
+import { useLocationFromPath, useChildLocations, useLocationPath, buildLocationUrl } from "@/hooks/useLocations";
 import { useAgenciesByLocation } from "@/hooks/useAgencies";
 import { useCmsContentByPage, getContentBySection } from "@/hooks/useCmsContent";
 import { useFaqsByLocation } from "@/hooks/useFaqs";
@@ -24,6 +24,18 @@ import { Button } from "@/components/ui/button";
 import { BackToTop } from "@/components/shared/BackToTop";
 import { STATIC_SPECIALISMS } from "@/hooks/useSpecialisms";
 import LocationSpecialismPage from "./LocationSpecialismPage";
+import { CmsContent, FAQ, Location, Agency, Specialism } from "@/services/dataService";
+
+interface UnifiedLocationPageProps {
+  initialLocation?: Location | null;
+  initialChildLocations?: Location[];
+  initialLocationPath?: Location[];
+  initialLocationFaqs?: FAQ[];
+  initialLocationAgencies?: Agency[];
+  initialCmsContent?: CmsContent[];
+  initialSpecialism?: Specialism | null;
+  initialSpecialismAgencies?: Agency[];
+}
 
 // Country flag emoji mapping
 const countryFlags: Record<string, string> = {
@@ -36,7 +48,16 @@ const countryFlags: Record<string, string> = {
 // Set of specialism slugs for quick lookup
 const SPECIALISM_SLUGS = new Set(STATIC_SPECIALISMS.map(s => s.slug));
 
-export default function UnifiedLocationPage() {
+export default function UnifiedLocationPage({
+  initialLocation,
+  initialChildLocations,
+  initialLocationPath,
+  initialLocationFaqs,
+  initialLocationAgencies,
+  initialCmsContent,
+  initialSpecialism,
+  initialSpecialismAgencies
+}: UnifiedLocationPageProps) {
   // Get all possible path segments from the URL
   // Get all possible path segments from the URL
   // Handle Next.js App Router dynamic segments
@@ -54,10 +75,18 @@ export default function UnifiedLocationPage() {
   const lastSegment = pathSegments[pathSegments.length - 1];
   const isSpecialismPage = SPECIALISM_SLUGS.has(lastSegment);
 
-  // If it's a specialism page, render the LocationSpecialismPage component
   if (isSpecialismPage && pathSegments.length > 1) {
     const locationSegments = pathSegments.slice(0, -1);
-    return <LocationSpecialismPage locationSegments={locationSegments} specialismSlug={lastSegment} />;
+    return (
+      <LocationSpecialismPage
+        locationSegments={locationSegments}
+        specialismSlug={lastSegment}
+        initialLocation={initialLocation}
+        initialSpecialism={initialSpecialism}
+        initialLocationPath={initialLocationPath}
+        initialAgencies={initialSpecialismAgencies}
+      />
+    );
   }
 
   // The last segment is the location we're trying to display
@@ -72,10 +101,18 @@ export default function UnifiedLocationPage() {
   const cmsPageKey = targetSlug ? `location_${targetSlug}` : undefined;
   const { data: cmsContent } = useCmsContentByPage(cmsPageKey);
 
-  const isLoading = locationLoading || childrenLoading;
-  const heroContent = getContentBySection(cmsContent, 'hero');
-  const whyFosteringContent = getContentBySection(cmsContent, 'why_fostering');
-  const allFaqs = locationFaqs || [];
+  // Combine client data with initial server data
+  const effectiveLocation = location || initialLocation;
+  const effectiveChildLocations = childLocations || initialChildLocations || [];
+  const effectiveLocationPath = locationPath || initialLocationPath || [];
+  const effectiveLocationFaqs = locationFaqs || initialLocationFaqs || [];
+  const effectiveLocationAgencies = locationAgencies || initialLocationAgencies || [];
+  const effectiveCmsContent = cmsContent || initialCmsContent || [];
+
+  const isLoading = locationLoading && !initialLocation;
+  const heroContent = getContentBySection(effectiveCmsContent, 'hero');
+  const whyFosteringContent = getContentBySection(effectiveCmsContent, 'why_fostering');
+  const allFaqs = effectiveLocationFaqs;
 
   if (isLoading) {
     return (
@@ -94,7 +131,7 @@ export default function UnifiedLocationPage() {
     );
   }
 
-  if (!location) {
+  if (!effectiveLocation) {
     return (
       <div className="min-h-screen flex flex-col bg-slate-950">
         <Header />
@@ -118,21 +155,21 @@ export default function UnifiedLocationPage() {
     );
   }
 
-  const hasChildLocations = childLocations && childLocations.length > 0;
+  const hasChildLocations = effectiveChildLocations && effectiveChildLocations.length > 0;
   const totalAgencies = hasChildLocations
-    ? childLocations.reduce((sum, loc) => sum + (loc.agency_count || 0), 0)
-    : location.agency_count || 0;
+    ? effectiveChildLocations.reduce((sum, loc) => sum + (loc.agency_count || 0), 0)
+    : effectiveLocation.agency_count || 0;
 
-  // Build breadcrumbs from the location path
+  // Build breadcrumbs from the effectiveLocation path
   const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "Locations", href: "/locations" },
   ];
 
-  if (locationPath) {
-    locationPath.forEach((loc, index) => {
-      const pathToLoc = locationPath.slice(0, index + 1);
-      const isLast = index === locationPath.length - 1;
+  if (effectiveLocationPath) {
+    effectiveLocationPath.forEach((loc, index) => {
+      const pathToLoc = effectiveLocationPath.slice(0, index + 1);
+      const isLast = index === effectiveLocationPath.length - 1;
       breadcrumbs.push({
         label: loc.name,
         href: isLast ? undefined : buildLocationUrl(pathToLoc),
@@ -145,9 +182,9 @@ export default function UnifiedLocationPage() {
     { name: "Locations", url: "https://www.foster-care.co.uk/locations" },
   ];
 
-  if (locationPath) {
-    locationPath.forEach((loc, index) => {
-      const pathToLoc = locationPath.slice(0, index + 1);
+  if (effectiveLocationPath) {
+    effectiveLocationPath.forEach((loc, index) => {
+      const pathToLoc = effectiveLocationPath.slice(0, index + 1);
       breadcrumbItems.push({
         name: loc.name,
         url: `https://www.foster-care.co.uk${buildLocationUrl(pathToLoc)}`,
@@ -156,8 +193,8 @@ export default function UnifiedLocationPage() {
   }
 
   const getChildLocationUrl = (childLoc: Location): string => {
-    if (locationPath) {
-      return buildLocationUrl([...locationPath, childLoc]);
+    if (effectiveLocationPath) {
+      return buildLocationUrl([...effectiveLocationPath, childLoc]);
     }
     return `/locations/${childLoc.slug}`;
   };
@@ -165,7 +202,7 @@ export default function UnifiedLocationPage() {
   const faqsForSchema = allFaqs?.map(f => ({ question: f.question, answer: f.answer })) || [];
 
   const getChildTypeName = () => {
-    switch (location.type) {
+    switch (effectiveLocation.type) {
       case "country": return "Regions";
       case "region": return "Counties & Cities";
       case "county": return "Cities & Towns";
@@ -174,48 +211,48 @@ export default function UnifiedLocationPage() {
     }
   };
 
-  const currentPath = locationPath ? buildLocationUrl(locationPath) : `/locations/${location.slug}`;
-  const flag = location.type === 'country' ? countryFlags[location.slug] : null;
+  const currentPath = effectiveLocationPath ? buildLocationUrl(effectiveLocationPath) : `/locations/${effectiveLocation.slug}`;
+  const flag = effectiveLocation.type === 'country' ? countryFlags[effectiveLocation.slug] : null;
 
-  // Generate unique SEO title based on location type
+  // Generate unique SEO title based on effectiveLocation type
   const getSeoTitle = () => {
     if (heroContent?.title) return heroContent.title;
-    if (location.seo_title) return location.seo_title;
+    if (effectiveLocation.seo_title) return effectiveLocation.seo_title;
 
-    switch (location.type) {
+    switch (effectiveLocation.type) {
       case "country":
-        return `Foster Care Agencies in ${location.name} | Find Local Fostering Services`;
+        return `Foster Care Agencies in ${effectiveLocation.name} | Find Local Fostering Services`;
       case "region":
-        return `Fostering Agencies in ${location.name} | Regional Foster Care Directory`;
+        return `Fostering Agencies in ${effectiveLocation.name} | Regional Foster Care Directory`;
       case "county":
-        return `Foster Care in ${location.name} | County Fostering Agencies`;
+        return `Foster Care in ${effectiveLocation.name} | County Fostering Agencies`;
       case "city":
-        return `Fostering Agencies in ${location.name} | Local Foster Care Services`;
+        return `Fostering Agencies in ${effectiveLocation.name} | Local Foster Care Services`;
       case "area":
-        return `Foster Care Services in ${location.name} | Find Fostering Agencies Near You`;
+        return `Foster Care Services in ${effectiveLocation.name} | Find Fostering Agencies Near You`;
       default:
-        return `Foster Care Agencies in ${location.name} | Find Local Fostering Support`;
+        return `Foster Care Agencies in ${effectiveLocation.name} | Find Local Fostering Support`;
     }
   };
 
   const getSeoDescription = () => {
-    if (location.seo_description) return location.seo_description;
-    return `Discover trusted foster care agencies in ${location.name}. Compare ${totalAgencies || 'local'}+ verified fostering agencies, read reviews, and start your fostering journey today.`;
+    if (effectiveLocation.seo_description) return effectiveLocation.seo_description;
+    return `Discover trusted foster care agencies in ${effectiveLocation.name}. Compare ${totalAgencies || 'local'}+ verified fostering agencies, read reviews, and start your fostering journey today.`;
   };
 
-  // Generate unique location-specific content for SEO
+  // Generate unique effectiveLocation-specific content for SEO
   const getLocationIntro = () => {
-    switch (location.type) {
+    switch (effectiveLocation.type) {
       case "country":
-        return `${location.name} has one of the most established foster care systems in the world, with hundreds of dedicated agencies working to provide loving homes for children in need. Whether you're in a major city or rural area, there are fostering opportunities waiting for caring individuals and families.`;
+        return `${effectiveLocation.name} has one of the most established foster care systems in the world, with hundreds of dedicated agencies working to provide loving homes for children in need. Whether you're in a major city or rural area, there are fostering opportunities waiting for caring individuals and families.`;
       case "region":
-        return `The ${location.name} region is home to numerous foster care agencies providing vital support to children and young people. Local authorities and independent fostering agencies work together to ensure every child has access to safe, nurturing placements with trained foster carers.`;
+        return `The ${effectiveLocation.name} region is home to numerous foster care agencies providing vital support to children and young people. Local authorities and independent fostering agencies work together to ensure every child has access to safe, nurturing placements with trained foster carers.`;
       case "county":
-        return `Foster care in ${location.name} is supported by a network of dedicated agencies offering various placement types. From emergency care to long-term fostering, local agencies provide comprehensive training, 24/7 support, and competitive allowances for foster carers.`;
+        return `Foster care in ${effectiveLocation.name} is supported by a network of dedicated agencies offering various placement types. From emergency care to long-term fostering, local agencies provide comprehensive training, 24/7 support, and competitive allowances for foster carers.`;
       case "city":
-        return `${location.name} has a diverse range of foster care agencies catering to the unique needs of urban communities. These agencies specialise in matching children with foster carers who understand local schools, healthcare facilities, and community resources.`;
+        return `${effectiveLocation.name} has a diverse range of foster care agencies catering to the unique needs of urban communities. These agencies specialise in matching children with foster carers who understand local schools, healthcare facilities, and community resources.`;
       default:
-        return `Foster care agencies in ${location.name} are committed to providing safe, loving homes for children who cannot live with their birth families. With full training and ongoing support, fostering in ${location.name} offers a rewarding way to make a real difference.`;
+        return `Foster care agencies in ${effectiveLocation.name} are committed to providing safe, loving homes for children who cannot live with their birth families. With full training and ongoing support, fostering in ${effectiveLocation.name} offers a rewarding way to make a real difference.`;
     }
   };
 
@@ -228,7 +265,7 @@ export default function UnifiedLocationPage() {
     };
   };
 
-  const locationStats = getLocationStats();
+  const effectiveLocationStats = getLocationStats();
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-950">
@@ -236,7 +273,7 @@ export default function UnifiedLocationPage() {
         title={getSeoTitle()}
         description={getSeoDescription()}
         canonicalUrl={`https://www.foster-care.co.uk${currentPath}`}
-        keywords={[`foster care ${location.name}`, `fostering agencies ${location.name}`, `become foster carer ${location.name}`, location.name]}
+        keywords={[`foster care ${effectiveLocation.name}`, `fostering agencies ${effectiveLocation.name}`, `become foster carer ${effectiveLocation.name}`, effectiveLocation.name]}
         structuredData={{
           ...getBreadcrumbSchema(breadcrumbItems),
           ...(faqsForSchema.length > 0 ? getFaqSchema(faqsForSchema) : {}),
@@ -248,31 +285,31 @@ export default function UnifiedLocationPage() {
 
         {/* Hero Section */}
         <LocationHero
-          title={heroContent?.title || `Fostering in ${location.name}`}
-          description={heroContent?.content || location.description || `Compare ${totalAgencies || 'trusted'} foster care agencies in ${location.name}. Find the right agency for your fostering journey.`}
-          badge={location.type}
+          title={heroContent?.title || `Fostering in ${effectiveLocation.name}`}
+          description={heroContent?.content || effectiveLocation.description || `Compare ${totalAgencies || 'trusted'} foster care agencies in ${effectiveLocation.name}. Find the right agency for your fostering journey.`}
+          badge={effectiveLocation.type}
           flag={flag || undefined}
-          locationType={location.type}
+          locationType={effectiveLocation.type}
           agencyCount={totalAgencies}
           breadcrumbs={breadcrumbs}
-          childLocations={childLocations?.map(c => ({ id: c.id, name: c.name, slug: c.slug })) || []}
+          childLocations={effectiveChildLocations?.map(c => ({ id: c.id, name: c.name, slug: c.slug })) || []}
           currentLocationPath={currentPath}
         />
 
         {/* Agency Listings - Always show, with real count */}
         <AgencyListings
-          agencies={locationAgencies || []}
-          title={`Agencies in ${location.name}`}
-          subtitle={`${locationAgencies?.length || 0} agencies serving ${location.name}`}
+          agencies={effectiveLocationAgencies || []}
+          title={`Agencies in ${effectiveLocation.name}`}
+          subtitle={`${effectiveLocationAgencies?.length || 0} agencies serving ${effectiveLocation.name}`}
           showFeaturedLabel={false}
-          locationName={location.name}
+          locationName={effectiveLocation.name}
         />
 
         {/* Child Locations Grid */}
         {hasChildLocations && (
           <ChildLocationsGrid
-            locations={childLocations}
-            title={`${getChildTypeName()} in ${location.name}`}
+            locations={effectiveChildLocations}
+            title={`${getChildTypeName()} in ${effectiveLocation.name}`}
             subtitle="Explore fostering agencies in specific areas"
             getLocationUrl={getChildLocationUrl}
           />
@@ -282,20 +319,20 @@ export default function UnifiedLocationPage() {
         <WhyFosteringSection
           title={whyFosteringContent?.title}
           description={whyFosteringContent?.content}
-          locationName={location.name}
+          locationName={effectiveLocation.name}
         />
 
         {/* Types of Fostering */}
-        <FosteringTypesSection currentLocationPath={currentPath} locationName={location.name} />
+        <FosteringTypesSection currentLocationPath={currentPath} locationName={effectiveLocation.name} />
 
         {/* Agency Types Explained */}
         <AgencyTypesCompactSection />
 
         {/* Lead Form Section */}
         <EnquirySection
-          locationName={location.name}
-          locationSlug={location.slug}
-          locationId={location.id}
+          locationName={effectiveLocation.name}
+          locationSlug={effectiveLocation.slug}
+          locationId={effectiveLocation.id}
         />
 
         {/* FAQ Section */}
@@ -312,7 +349,7 @@ export default function UnifiedLocationPage() {
                 <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-white mb-3 tracking-tight">
                   Frequently Asked Questions
                 </h2>
-                <p className="text-white/60 text-lg">Common questions about fostering in {location.name}</p>
+                <p className="text-white/60 text-lg">Common questions about fostering in {effectiveLocation.name}</p>
               </motion.div>
 
               <div className="max-w-3xl mx-auto">
@@ -324,7 +361,7 @@ export default function UnifiedLocationPage() {
 
         {/* CTA Section */}
         {/* CTA Section */}
-        <LocationCTA locationName={location.name} />
+        <LocationCTA locationName={effectiveLocation.name} />
       </main>
       <BackToTop />
     </div>

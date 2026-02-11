@@ -2,8 +2,13 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { MapPin, ChevronRight, Globe } from "lucide-react";
-import { useLocations } from "@/hooks/useLocations";
-import { useCmsContentSection } from "@/hooks/useCmsContent";
+import { useLocations, Location } from "@/hooks/useLocations";
+import { useCmsContentSection, getContentBySection, CmsContent } from "@/hooks/useCmsContent";
+
+interface LocationDiscoverySectionProps {
+  initialData?: CmsContent[];
+  initialLocations?: Location[];
+}
 const popularRegions = [{
   name: "London",
   count: 78,
@@ -61,25 +66,29 @@ const itemVariants = {
     }
   }
 };
-export function LocationDiscoverySection() {
+export function LocationDiscoverySection({ initialData, initialLocations }: LocationDiscoverySectionProps) {
   const {
     data: locations
   } = useLocations();
   const {
     data: locationContent
   } = useCmsContentSection("home", "locations");
-  const countries = locations?.filter(l => l.type === 'country') || [];
+
+  const effectiveLocationContent = locationContent || (initialData ? getContentBySection(initialData, "locations") : null);
+  const effectiveLocations = locations || initialLocations || [];
+
+  const countries = effectiveLocations.filter(l => l.type === 'country') || [];
   const ukRegions = countries.map(c => ({
     name: c.name,
     agencies: c.agency_count || 0,
     slug: c.slug
   }));
-  const metadata = (locationContent as any)?.metadata as Record<string, string> | null;
-  const title = (locationContent as any)?.title;
+  const metadata = (effectiveLocationContent as any)?.metadata as Record<string, string> | null;
+  const title = (effectiveLocationContent as any)?.title;
   const subtitle = metadata?.subtitle;
-  const content = (locationContent as any)?.content;
+  const content = (effectiveLocationContent as any)?.content;
 
-  if (!locationContent && ukRegions.length === 0) return null;
+  if (!effectiveLocationContent && ukRegions.length === 0) return null;
   return <section className="section-padding bg-background-warm relative overflow-hidden">
     {/* Background decoration */}
     <div className="absolute inset-0">

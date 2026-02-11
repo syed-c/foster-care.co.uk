@@ -23,14 +23,29 @@ import { ReviewForm } from "@/components/agency/ReviewForm";
 import { useUserRoles } from "@/hooks/useUserRoles";
 import { SEOHead, getAgencySchema, getBreadcrumbSchema } from "@/components/seo/SEOHead";
 import { BackToTop } from "@/components/shared/BackToTop";
+import { Agency, Location, Specialism } from "@/services/dataService";
 
-export default function AgencyProfile() {
+interface AgencyProfileProps {
+  initialAgency?: Agency | null;
+  initialReviews?: any[];
+  initialSpecialisms?: any[];
+  initialLocations?: any[];
+}
+
+export default function AgencyProfile({
+  initialAgency,
+  initialReviews,
+  initialSpecialisms,
+  initialLocations
+}: AgencyProfileProps) {
   const { slug } = useParams<{ slug: string }>();
-  const { data: agency, isLoading, error } = useAgencyBySlug(slug);
+  const { data: agencyData, isLoading: agencyLoading, error } = useAgencyBySlug(slug);
   const [showLeadForm, setShowLeadForm] = useState(false);
 
+  const agency = agencyData || initialAgency;
+
   const { isAdmin } = useUserRoles();
-  const { data: reviews } = useQuery({
+  const { data: reviewsData } = useQuery({
     queryKey: ["agencyReviews", agency?.id],
     queryFn: async () => {
       if (!agency?.id) return [];
@@ -52,13 +67,15 @@ export default function AgencyProfile() {
     enabled: !!agency?.id,
   });
 
+  const reviews = reviewsData || initialReviews || [];
+
   // Determine profile status - use claim_status from DB
   const isVerified = agency?.is_verified === true;
   const isClaimed = agency?.claim_status === 'claimed';
   const isUnclaimed = agency?.claim_status !== 'claimed';
 
   // Get specialisms for this agency
-  const { data: agencySpecialisms } = useQuery({
+  const { data: specialismsData } = useQuery({
     queryKey: ["agencySpecialisms", agency?.id],
     queryFn: async () => {
       if (!agency?.id) return [];
@@ -72,8 +89,10 @@ export default function AgencyProfile() {
     enabled: !!agency?.id,
   });
 
+  const agencySpecialisms = specialismsData || initialSpecialisms || [];
+
   // Get locations for this agency
-  const { data: agencyLocations } = useQuery({
+  const { data: locationsData } = useQuery({
     queryKey: ["agencyLocations", agency?.id],
     queryFn: async () => {
       if (!agency?.id) return [];
@@ -87,11 +106,15 @@ export default function AgencyProfile() {
     enabled: !!agency?.id,
   });
 
+  const agencyLocations = locationsData || initialLocations || [];
+
   const breadcrumbs = [
     { name: "Home", url: "/" },
     { name: "Agencies", url: "/agencies" },
     { name: agency?.name || "Agency", url: `/agencies/${slug}` },
   ];
+
+  const isLoading = agencyLoading && !initialAgency;
 
   if (isLoading) {
     return (

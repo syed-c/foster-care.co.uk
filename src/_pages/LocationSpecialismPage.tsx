@@ -18,6 +18,7 @@ import {
   Sparkles, MapPin, Star, BadgeCheck, Phone, Globe
 } from "lucide-react";
 import { useState } from "react";
+import { Location, Specialism, Agency } from "@/services/dataService";
 
 const iconMap: { [key: string]: React.ElementType } = {
   Heart,
@@ -34,17 +35,35 @@ const iconMap: { [key: string]: React.ElementType } = {
 interface LocationSpecialismPageProps {
   locationSegments: string[];
   specialismSlug: string;
+  initialLocation?: Location | null;
+  initialSpecialism?: Specialism | null;
+  initialLocationPath?: Location[];
+  initialAgencies?: Agency[];
 }
 
-export default function LocationSpecialismPage({ locationSegments, specialismSlug }: LocationSpecialismPageProps) {
+export default function LocationSpecialismPage({
+  locationSegments,
+  specialismSlug,
+  initialLocation,
+  initialSpecialism,
+  initialLocationPath,
+  initialAgencies
+}: LocationSpecialismPageProps) {
   const [selectedAgency, setSelectedAgency] = useState<any>(null);
 
-  const { data: location, isLoading: locationLoading } = useLocationFromPath(locationSegments);
-  const { data: specialism, isLoading: specialismLoading } = useSpecialismBySlug(specialismSlug);
-  const { data: locationPath } = useLocationPath(location?.id);
-  const { data: allAgencies, isLoading: agenciesLoading } = useAgenciesByLocationAndSpecialism(location?.id, specialismSlug, 50);
+  const { data: locationData, isLoading: locationLoading } = useLocationFromPath(locationSegments);
+  const { data: specialismData, isLoading: specialismLoading } = useSpecialismBySlug(specialismSlug);
 
-  const isLoading = locationLoading || specialismLoading;
+  const location = locationData || initialLocation;
+  const specialism = specialismData || initialSpecialism;
+
+  const { data: locationPathData } = useLocationPath(location?.id);
+  const { data: agenciesData, isLoading: agenciesLoading } = useAgenciesByLocationAndSpecialism(location?.id, specialismSlug, 50);
+
+  const locationPath = locationPathData || initialLocationPath || [];
+  const agencies = agenciesData || initialAgencies || [];
+
+  const isLoading = (locationLoading && !initialLocation) || (specialismLoading && !initialSpecialism);
 
   // Build breadcrumbs
   const breadcrumbs = [
@@ -65,7 +84,7 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
   if (specialism) {
     breadcrumbs.push({
       name: specialism.name,
-      url: locationPath ? `${buildLocationUrl(locationPath)}/${specialismSlug}` : `/specialisms/${specialismSlug}`,
+      url: locationPath ? `${buildLocationUrl(locationPath)}/${specialismSlug}` : `/locations/${specialismSlug}`,
     });
   }
 
@@ -80,7 +99,6 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
             <Skeleton className="h-96 rounded-3xl bg-white/10" />
           </div>
         </main>
-
       </div>
     );
   }
@@ -100,16 +118,12 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
             </Button>
           </div>
         </main>
-
       </div>
     );
   }
 
   const IconComponent = iconMap[specialism.icon || "Heart"] || Heart;
   const currentPath = locationPath ? `${buildLocationUrl(locationPath)}/${specialismSlug}` : `/locations/${location.slug}/${specialismSlug}`;
-
-  // Filter agencies - in real implementation, would filter by specialism
-  const agencies = allAgencies || [];
 
   // Generate unique SEO content for this location+specialism combination
   const getSpecialismLocationContent = () => {
@@ -157,8 +171,6 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
         keywords={[`${specialism.name.toLowerCase()} ${location.name}`, `foster care ${location.name}`, `${specialism.name.toLowerCase()} fostering`, `fostering agencies ${location.name}`]}
         structuredData={getBreadcrumbSchema(breadcrumbs.map(b => ({ name: b.name, url: `https://www.foster-care.co.uk${b.url}` })))}
       />
-
-
 
       <Header />
 
@@ -384,7 +396,6 @@ export default function LocationSpecialismPage({ locationSegments, specialismSlu
           </div>
         </section>
       </main>
-
 
       <BackToTop />
 

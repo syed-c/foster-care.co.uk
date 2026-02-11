@@ -1,112 +1,120 @@
-export default async function sitemap() {
-  const staticPages = [
-    {
-      url: 'https://www.foster-care.co.uk/',
-      lastModified: new Date(),
-      changeFrequency: 'daily' as const,
-      priority: 1.0,
-    },
-    {
-      url: 'https://www.foster-care.co.uk/agencies',
-      lastModified: new Date(),
-      changeFrequency: 'daily' as const,
-      priority: 0.9,
-    },
-    {
-      url: 'https://www.foster-care.co.uk/locations',
-      lastModified: new Date(),
-      changeFrequency: 'daily' as const,
-      priority: 0.9,
-    },
-    {
-      url: 'https://www.foster-care.co.uk/guides',
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    },
-    {
-      url: 'https://www.foster-care.co.uk/blog',
-      lastModified: new Date(),
-      changeFrequency: 'daily' as const,
-      priority: 0.8,
-    },
-    {
-      url: 'https://www.foster-care.co.uk/about',
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.6,
-    },
-    {
-      url: 'https://www.foster-care.co.uk/contact',
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.6,
-    },
-    {
-      url: 'https://www.foster-care.co.uk/pricing',
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    },
-    {
-      url: 'https://www.foster-care.co.uk/compare',
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
-    },
-    {
-      url: 'https://www.foster-care.co.uk/trust-verification',
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    },
-    {
-      url: 'https://www.foster-care.co.uk/how-listings-work',
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.5,
-    },
+import { createClient } from '@/lib/supabase/server';
+import { MetadataRoute } from 'next';
+
+const SITE_URL = 'https://www.foster-care.co.uk';
+
+const SPECIALISM_SLUGS = [
+  "short-term-fostering",
+  "long-term-fostering",
+  "emergency-fostering",
+  "respite-fostering",
+  "therapeutic-fostering",
+  "parent-child-fostering",
+  "sibling-groups-fostering",
+  "teenagers-fostering",
+  "asylum-seekers-fostering",
+  "disabilities-fostering",
+];
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const supabase = await createClient();
+
+  // Static pages
+  const staticPages: MetadataRoute.Sitemap = [
+    { url: `${SITE_URL}/`, priority: 1.0, changeFrequency: 'daily' },
+    { url: `${SITE_URL}/agencies`, priority: 0.9, changeFrequency: 'daily' },
+    { url: `${SITE_URL}/locations`, priority: 0.9, changeFrequency: 'daily' },
+    { url: `${SITE_URL}/specialisms`, priority: 0.8, changeFrequency: 'weekly' },
+    { url: `${SITE_URL}/compare`, priority: 0.7, changeFrequency: 'weekly' },
+    { url: `${SITE_URL}/guides`, priority: 0.8, changeFrequency: 'weekly' },
+    { url: `${SITE_URL}/blog`, priority: 0.8, changeFrequency: 'daily' },
+    { url: `${SITE_URL}/about`, priority: 0.6, changeFrequency: 'monthly' },
+    { url: `${SITE_URL}/contact`, priority: 0.6, changeFrequency: 'monthly' },
+    { url: `${SITE_URL}/trust-verification`, priority: 0.7, changeFrequency: 'monthly' },
+    { url: `${SITE_URL}/how-listings-work`, priority: 0.7, changeFrequency: 'monthly' },
+    { url: `${SITE_URL}/editorial-policy`, priority: 0.5, changeFrequency: 'monthly' },
+    { url: `${SITE_URL}/pricing`, priority: 0.7, changeFrequency: 'weekly' },
   ];
 
-  // Add location pages
-  const locations = [
-    'england', 'london', 'manchester', 'birmingham', 'leeds', 'glasgow',
-    'edinburgh', 'cardiff', 'belfast', 'south-east', 'south-west',
-    'west-midlands', 'east-midlands', 'yorkshire', 'north-west', 'north-east'
-  ];
+  // Fetch dynamic data
+  const [
+    { data: locations },
+    { data: agencies },
+    { data: specialisms },
+    { data: blogPosts }
+  ] = await Promise.all([
+    supabase.from('locations').select('slug, type, updated_at').eq('is_active', true),
+    supabase.from('agencies').select('slug, updated_at').eq('is_active', true),
+    supabase.from('specialisms').select('slug, updated_at').eq('is_active', true),
+    supabase.from('blog_posts').select('slug, updated_at').eq('status', 'published')
+  ]);
 
-  const locationPages = locations.map(location => ({
-    url: `https://www.foster-care.co.uk/locations/${location}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.8,
-  }));
+  const locationPages: MetadataRoute.Sitemap = [];
+  if (locations) {
+    locations.forEach((loc: any) => {
+      const lastModified = loc.updated_at ? new Date(loc.updated_at) : new Date();
 
-  // Add specialism pages
-  const specialisms = [
-    'short-term-fostering', 'long-term-fostering', 'emergency-fostering',
-    'respite-fostering', 'therapeutic-fostering', 'parent-child-fostering',
-    'sibling-groups-fostering', 'teenagers-fostering'
-  ];
+      // Base location page
+      locationPages.push({
+        url: `${SITE_URL}/locations/${loc.slug}`,
+        lastModified,
+        changeFrequency: 'weekly',
+        priority: loc.type === 'country' ? 0.9 : loc.type === 'region' ? 0.8 : 0.7,
+      });
 
-  const specialismPages = specialisms.map(specialism => ({
-    url: `https://www.foster-care.co.uk/specialisms/${specialism}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
+      // Location + Specialism combos for main types
+      if (['country', 'region', 'city'].includes(loc.type)) {
+        SPECIALISM_SLUGS.forEach(spec => {
+          locationPages.push({
+            url: `${SITE_URL}/locations/${loc.slug}/${spec}`,
+            lastModified,
+            changeFrequency: 'weekly',
+            priority: 0.6,
+          });
+        });
+      }
+    });
+  }
+
+  const agencyPages: MetadataRoute.Sitemap = (agencies || []).map((agency: any) => ({
+    url: `${SITE_URL}/agencies/${agency.slug}`,
+    lastModified: agency.updated_at ? new Date(agency.updated_at) : new Date(),
+    changeFrequency: 'weekly',
     priority: 0.7,
   }));
 
-  // Add guide pages
-  const guides = [
-    'how-to-become-foster-carer', 'fostering-allowances', 'types-of-fostering'
-  ];
+  const specialismPages: MetadataRoute.Sitemap = (specialisms || []).map((spec: any) => ({
+    url: `${SITE_URL}/specialisms/${spec.slug}`,
+    lastModified: spec.updated_at ? new Date(spec.updated_at) : new Date(),
+    changeFrequency: 'weekly',
+    priority: 0.7,
+  }));
 
-  const guidePages = guides.map(guide => ({
-    url: `https://www.foster-care.co.uk/guides/${guide}`,
+  const blogPages: MetadataRoute.Sitemap = (blogPosts || []).map((post: any) => ({
+    url: `${SITE_URL}/blog/${post.slug}`,
+    lastModified: post.updated_at ? new Date(post.updated_at) : new Date(),
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }));
+
+  // Guides subdirectory pages (hardcoded as they might not be in DB)
+  const guidePages: MetadataRoute.Sitemap = [
+    'how-to-become-foster-carer',
+    'fostering-allowances',
+    'types-of-fostering'
+  ].map(guide => ({
+    url: `${SITE_URL}/guides/${guide}`,
     lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
+    changeFrequency: 'monthly',
     priority: 0.8,
   }));
 
-  return [...staticPages, ...locationPages, ...specialismPages, ...guidePages];
+  return [
+    ...staticPages,
+    ...locationPages,
+    ...agencyPages,
+    ...specialismPages,
+    ...blogPages,
+    ...guidePages
+  ];
 }

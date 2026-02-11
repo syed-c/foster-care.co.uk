@@ -8,22 +8,30 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useCmsContentSection } from "@/hooks/useCmsContent";
 import { useLocations } from "@/hooks/useLocations";
 import { Input } from "@/components/ui/input";
+import { CmsContent, getContentBySection } from "@/hooks/useCmsContent";
 
 const rotatingServices = ["Emergency Care", "Short-term Fostering", "Long-term Placements", "Sibling Groups", "Respite Care"];
 
-export function HeroSection() {
+interface HeroSectionProps {
+  initialData?: CmsContent[];
+}
+
+export function HeroSection({ initialData }: HeroSectionProps) {
   const router = useRouter();
   const { data: heroContent } = useCmsContentSection("home", "hero");
+
+  // Use server-provided data if client query is still loading
+  const effectiveHeroContent = heroContent || (initialData ? getContentBySection(initialData, "hero") : null);
   const { data: locations } = useLocations();
   const [currentServiceIndex, setCurrentServiceIndex] = useState(0);
   const [selectedLocation, setSelectedLocation] = useState("");
   const [selectedType, setSelectedType] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const metadata = (heroContent as any)?.metadata as Record<string, string> | null;
-  const title = (heroContent as any)?.title;
+  const metadata = (effectiveHeroContent as any)?.metadata as Record<string, string> | null;
+  const title = (effectiveHeroContent as any)?.title;
   const subtitle = metadata?.subtitle;
-  const content = (heroContent as any)?.content;
+  const content = (effectiveHeroContent as any)?.content;
 
   useEffect(() => {
     const interval = setInterval(() => {

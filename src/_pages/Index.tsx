@@ -11,9 +11,16 @@ import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { SEOHead, getOrganizationSchema, getFaqSchema } from "@/components/seo/SEOHead";
 import { FaqSection } from "@/components/shared/FaqSection";
 import { useFaqs } from "@/hooks/useFaqs";
+import { CmsContent, FAQ, Location } from "@/services/dataService";
 
-const Index = () => {
-  const { data: faqs = [] } = useFaqs("home");
+interface IndexProps {
+  initialCmsContent?: CmsContent[];
+  initialFaqs?: FAQ[];
+  initialLocations?: Location[];
+}
+
+const Index = ({ initialCmsContent, initialFaqs, initialLocations }: IndexProps) => {
+  const { data: faqs = initialFaqs || [] } = useFaqs("home");
 
   // Structured FAQ data for schema
   const faqSchemaData = faqs.map(faq => ({
@@ -48,9 +55,9 @@ const Index = () => {
       <main className="flex-1">
 
 
-        <HeroSection />
-        <TrustSection />
-        <LocationDiscoverySection />
+        <HeroSection initialData={initialCmsContent} />
+        <TrustSection initialData={initialCmsContent} />
+        <LocationDiscoverySection initialData={initialCmsContent} initialLocations={initialLocations} />
         <FeaturedAgenciesSection />
         <TestimonialsSection />
         {faqs.length > 0 && (

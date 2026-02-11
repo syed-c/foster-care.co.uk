@@ -10,6 +10,11 @@ import { Input } from "@/components/ui/input";
 import { useAgencies } from "@/hooks/useAgencies";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
+import { Agency } from "@/services/dataService";
+
+interface AgenciesListingProps {
+  initialAgencies?: Agency[];
+}
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -46,18 +51,21 @@ const ratingOptions = [
   { value: 4.5, label: "4.5+ Stars" },
 ];
 
-export default function AgenciesListing() {
+export default function AgenciesListing({ initialAgencies }: AgenciesListingProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("All Locations");
   const [minRating, setMinRating] = useState(0);
   const [showVerifiedOnly, setShowVerifiedOnly] = useState(false);
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
 
-  const { data: agencies, isLoading } = useAgencies({
+  const { data: agenciesData, isLoading: agenciesLoading } = useAgencies({
     search: searchQuery || undefined,
     location: selectedLocation !== "All Locations" ? selectedLocation : undefined,
     minRating: minRating > 0 ? minRating : undefined,
   });
+
+  const agencies = agenciesData || initialAgencies;
+  const isLoading = agenciesLoading && !initialAgencies;
 
   const filteredAgencies = useMemo(() => {
     if (!agencies) return [];
@@ -225,8 +233,8 @@ export default function AgenciesListing() {
                               key={loc}
                               onClick={() => setSelectedLocation(loc)}
                               className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${selectedLocation === loc
-                                  ? "bg-primary text-primary-foreground"
-                                  : "text-white/70 hover:bg-slate-700"
+                                ? "bg-primary text-primary-foreground"
+                                : "text-white/70 hover:bg-slate-700"
                                 }`}
                             >
                               {loc}

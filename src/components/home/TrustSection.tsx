@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
 import { Shield, Heart, Users, CheckCircle, Award, Clock } from "lucide-react";
-import { useCmsContentSection } from "@/hooks/useCmsContent";
+import { useCmsContentSection, getContentBySection } from "@/hooks/useCmsContent";
+import type { Tables } from "@/integrations/supabase/types";
+
+type CmsContent = Tables<"cms_content">;
 const trustPoints = [{
   icon: Shield,
   title: "Ofsted Verified Agencies",
@@ -59,16 +62,23 @@ const itemVariants = {
     }
   }
 };
-export function TrustSection() {
+interface TrustSectionProps {
+  initialData?: CmsContent[];
+}
+
+export function TrustSection({ initialData }: TrustSectionProps) {
   const {
     data: trustContent
   } = useCmsContentSection("home", "trust");
-  const metadata = (trustContent as any)?.metadata as Record<string, string> | null;
-  const title = (trustContent as any)?.title;
-  const subtitle = metadata?.subtitle;
-  const content = (trustContent as any)?.content;
 
-  if (!trustContent) return null;
+  // Use server-provided data if client query is still loading
+  const effectiveTrustContent = trustContent || (initialData ? getContentBySection(initialData, "trust") : null);
+  const metadata = (effectiveTrustContent as any)?.metadata as Record<string, string> | null;
+  const title = (effectiveTrustContent as any)?.title;
+  const subtitle = metadata?.subtitle;
+  const content = (effectiveTrustContent as any)?.content;
+
+  if (!effectiveTrustContent) return null;
 
   return <section className="section-padding bg-background relative overflow-hidden">
     {/* Background Pattern */}

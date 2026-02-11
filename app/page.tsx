@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Index from '@/_pages/Index';
+import { getCmsContentByPage, getFaqsByPage, getLocations } from '@/services/dataService';
 
 export const metadata: Metadata = {
   title: 'Foster Care UK — Find Trusted Foster Care Agencies Near You',
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
     'foster agency reviews',
     'independent fostering agency',
     'UK fostering',
+    'foster care directory UK',
   ],
   openGraph: {
     title: 'Foster Care UK — Find Trusted Foster Care Agencies',
@@ -45,6 +47,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Page() {
-  return <Index />;
+export default async function Page() {
+  const [cmsContent, faqs, locations] = await Promise.all([
+    getCmsContentByPage('home'),
+    getFaqsByPage('home'),
+    getLocations(),
+  ]);
+
+  return (
+    <Index
+      initialCmsContent={cmsContent}
+      initialFaqs={faqs}
+      initialLocations={locations}
+    />
+  );
 }
