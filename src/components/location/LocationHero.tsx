@@ -82,7 +82,7 @@ export const LocationHero = ({
         {/* Breadcrumbs */}
         {breadcrumbs.length > 0 && (
           <motion.nav
-            initial={{ opacity: 0, y: -10 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
             className="flex items-center justify-center gap-1.5 text-xs mb-5 flex-wrap"
@@ -106,7 +106,7 @@ export const LocationHero = ({
         <div className="text-center max-w-3xl mx-auto">
           {/* Badge Row */}
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
             className="flex items-center justify-center gap-2 mb-4"
@@ -119,7 +119,7 @@ export const LocationHero = ({
 
           {/* Title */}
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-2xl md:text-3xl lg:text-4xl font-black text-white leading-tight mb-3 tracking-tight"
@@ -130,7 +130,7 @@ export const LocationHero = ({
           {/* Description - Max 2 lines */}
           {shortDescription && (
             <motion.p
-              initial={{ opacity: 0, y: 15 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.2 }}
               className="text-sm md:text-base text-white/50 max-w-xl mx-auto leading-relaxed mb-6 line-clamp-2"
@@ -142,7 +142,7 @@ export const LocationHero = ({
           {/* Location Filter */}
           {childLocations.length > 0 && (
             <motion.div
-              initial={{ opacity: 0, y: 15 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.3 }}
               className="flex items-center justify-center gap-2 mb-6 max-w-md mx-auto"
@@ -178,7 +178,7 @@ export const LocationHero = ({
 
           {/* Compact Stats */}
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.4 }}
             className="flex flex-wrap items-center justify-center gap-2"
@@ -186,7 +186,7 @@ export const LocationHero = ({
             {stats.map((stat, index) => (
               <motion.div
                 key={stat.label}
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={false}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.25, delay: 0.5 + index * 0.05 }}
                 className={`flex items-center gap-2 ${stat.color} backdrop-blur-sm border rounded-full px-3 py-1.5 shadow-lg`}

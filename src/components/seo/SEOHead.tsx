@@ -23,80 +23,40 @@ export function SEOHead({
 }: SEOHeadProps) {
   const fullTitle = title.includes("Foster Care UK") ? title : `${title} | Foster Care UK`;
 
-  useEffect(() => {
-    // Update document title
-    document.title = fullTitle;
-
-    // Update or create meta tags
-    const updateMeta = (name: string, content: string, isProperty = false) => {
-      const attr = isProperty ? "property" : "name";
-      let meta = document.querySelector(`meta[${attr}="${name}"]`);
-      if (!meta) {
-        meta = document.createElement("meta");
-        meta.setAttribute(attr, name);
-        document.head.appendChild(meta);
-      }
-      meta.setAttribute("content", content);
-    };
-
-    // Basic meta tags
-    updateMeta("description", description);
-    updateMeta("keywords", keywords.join(", "));
-
-    if (noIndex) {
-      updateMeta("robots", "noindex, nofollow");
-    } else {
-      updateMeta("robots", "index, follow");
-    }
-
-    // Open Graph tags
-    updateMeta("og:title", fullTitle, true);
-    updateMeta("og:description", description, true);
-    updateMeta("og:type", ogType, true);
-    updateMeta("og:image", ogImage, true);
-    updateMeta("og:site_name", "Foster Care UK", true);
-
-    if (canonicalUrl) {
-      updateMeta("og:url", canonicalUrl, true);
-
-      // Canonical link
-      let canonical = document.querySelector('link[rel="canonical"]');
-      if (!canonical) {
-        canonical = document.createElement("link");
-        canonical.setAttribute("rel", "canonical");
-        document.head.appendChild(canonical);
-      }
-      canonical.setAttribute("href", canonicalUrl);
-    }
-
-    // Twitter Card tags
-    updateMeta("twitter:card", "summary_large_image");
-    updateMeta("twitter:title", fullTitle);
-    updateMeta("twitter:description", description);
-    updateMeta("twitter:image", ogImage);
-
-    // Structured data
-    if (structuredData) {
-      let script = document.querySelector('script[data-seo="structured-data"]');
-      if (!script) {
-        script = document.createElement("script");
-        script.setAttribute("type", "application/ld+json");
-        script.setAttribute("data-seo", "structured-data");
-        document.head.appendChild(script);
-      }
-      script.textContent = JSON.stringify(structuredData);
-    }
-
-    // Cleanup function
-    return () => {
-      const ldScript = document.querySelector('script[data-seo="structured-data"]');
-      if (ldScript) {
-        ldScript.remove();
-      }
-    };
-  }, [fullTitle, description, canonicalUrl, ogImage, ogType, structuredData, keywords, noIndex]);
-
-  return null;
+  return (
+    <>
+      <title>{fullTitle}</title>
+      <meta name="description" content={description} />
+      <meta name="keywords" content={keywords.join(", ")} />
+      {noIndex ? (
+        <meta name="robots" content="noindex, nofollow" />
+      ) : (
+        <meta name="robots" content="index, follow" />
+      )}
+      <meta property="og:title" content={fullTitle} />
+      <meta property="og:description" content={description} />
+      <meta property="og:type" content={ogType} />
+      <meta property="og:image" content={ogImage} />
+      <meta property="og:site_name" content="Foster Care UK" />
+      {canonicalUrl && (
+        <>
+          <meta property="og:url" content={canonicalUrl} />
+          <link rel="canonical" href={canonicalUrl} />
+        </>
+      )}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={fullTitle} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={ogImage} />
+      {structuredData && (
+        <script
+          type="application/ld+json"
+          data-seo="structured-data"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      )}
+    </>
+  );
 }
 
 // Helper function to create Organization structured data

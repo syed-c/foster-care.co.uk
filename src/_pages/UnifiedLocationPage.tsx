@@ -279,7 +279,7 @@ export default function UnifiedLocationPage({
           ...(faqsForSchema.length > 0 ? getFaqSchema(faqsForSchema) : {}),
         }}
       />
-      <Header />
+
       <main className="flex-1 pt-16">
 
 
@@ -340,7 +340,7 @@ export default function UnifiedLocationPage({
           <section className="py-14 md:py-20 bg-slate-900/80">
             <div className="container-main">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={false}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}

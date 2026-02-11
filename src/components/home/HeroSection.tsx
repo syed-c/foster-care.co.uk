@@ -116,7 +116,7 @@ export function HeroSection({ initialData }: HeroSectionProps) {
       <div className="container-main relative z-10 text-center max-w-5xl mx-auto px-4 sm:px-6">
         {subtitle && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.9 }}
+            initial={false}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.6, type: "spring" }}
             className="inline-flex items-center gap-2 rounded-full text-sm font-bold bg-primary/20 text-primary border border-primary/30 mb-8 px-4 py-2"
@@ -131,7 +131,7 @@ export function HeroSection({ initialData }: HeroSectionProps) {
         {/* Main Heading */}
         {title && (
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1, type: "spring" }}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.08] mb-6 tracking-tight text-white"
@@ -143,7 +143,7 @@ export function HeroSection({ initialData }: HeroSectionProps) {
         {/* Rotating Services Text */}
         {rotatingServices.length > 0 && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
             className="text-lg md:text-xl text-white/60 mb-6 h-8 flex items-center justify-center gap-2"
@@ -169,7 +169,7 @@ export function HeroSection({ initialData }: HeroSectionProps) {
         {/* Description */}
         {content && (
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-base md:text-lg text-white/50 mb-10 max-w-2xl mx-auto leading-relaxed"

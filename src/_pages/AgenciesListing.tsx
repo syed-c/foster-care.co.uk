@@ -100,7 +100,7 @@ export default function AgenciesListing({ initialAgencies }: AgenciesListingProp
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
+
       <main className="flex-1 pt-20">
         {/* Hero Section - Dark Style */}
         <section className="relative py-24 md:py-32 overflow-hidden">
@@ -119,7 +119,7 @@ export default function AgenciesListing({ initialAgencies }: AgenciesListingProp
 
           <div className="container-main relative z-10">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               className="text-center max-w-4xl mx-auto"
@@ -162,7 +162,7 @@ export default function AgenciesListing({ initialAgencies }: AgenciesListingProp
                 {stats.map((stat, index) => (
                   <motion.div
                     key={stat.label}
-                    initial={{ opacity: 0, scale: 0.9 }}
+                    initial={false}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.3, delay: 0.2 + index * 0.08 }}
                     className={`flex items-center gap-3 ${stat.color} backdrop-blur-sm border rounded-full px-5 py-2.5 shadow-lg`}

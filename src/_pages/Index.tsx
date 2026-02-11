@@ -51,7 +51,7 @@ const Index = ({ initialCmsContent, initialFaqs, initialLocations }: IndexProps)
           ...(faqSchemaData.length > 0 ? getFaqSchema(faqSchemaData) : {})
         }}
       />
-      <Header />
+
       <main className="flex-1">
 
 
