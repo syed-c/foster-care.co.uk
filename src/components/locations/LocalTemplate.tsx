@@ -88,7 +88,7 @@ export function LocalTemplate({
                             <Button size="lg" className="w-full sm:w-auto rounded-full bg-primary hover:bg-primary/90 text-white font-bold h-14 px-8 text-lg shadow-lg shadow-primary/20">
                                 Enquire Now
                             </Button>
-                            <Button size="lg" variant="outline" className="w-full sm:w-auto rounded-full border-white/20 text-white hover:bg-white/10 h-14 px-8 text-lg font-bold">
+                            <Button size="lg" variant="outline" className="w-full sm:w-auto rounded-full bg-white border-white/20 text-slate-950 hover:bg-white/90 h-14 px-8 text-lg font-bold">
                                 See Local Agencies
                             </Button>
                         </div>
@@ -198,7 +198,7 @@ export function LocalTemplate({
                     </div>
                     <div className="bg-white/10 p-8 rounded-3xl border border-white/5">
                         <HelpCircle className="w-10 h-10 text-primary mb-4" />
-                        <h3 className="text-xl font-bold mb-2">Housing in {locationName}</h3>
+                        <h3 className="text-xl font-bold mb-2 text-white">Housing in {locationName}</h3>
                         <p className="text-white/60 mb-4">
                             We know housing in {locationName} can be tight. As long as you have a stable tenancy and a private bedroom for the child, you can foster.
                         </p>
