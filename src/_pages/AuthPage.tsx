@@ -46,7 +46,7 @@ export default function AuthPage() {
 
   // Redirect if already authenticated
   if (isAuthenticated) {
-    router.push("/", { replace: true });
+    router.replace("/");
     return null;
   }
 

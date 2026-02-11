@@ -1,17 +1,20 @@
 "use client";
 import Link from "next/link";
-import { useRouter,usePathname } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { Database } from "@/integrations/supabase/types";
+
+type Agency = Database['public']['Tables']['agencies']['Row'];
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { 
-  Building2, 
-  LayoutDashboard, 
-  MessageSquare, 
-  CheckSquare, 
+import {
+  Building2,
+  LayoutDashboard,
+  MessageSquare,
+  CheckSquare,
   Users,
   MapPin,
   FileText,
@@ -28,6 +31,7 @@ import {
 import { cn } from "@/lib/utils";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { WorkspaceProvider } from "@/context/WorkspaceContext";
 
 const navItems = [
   { label: "Dashboard", href: "/workspace", icon: LayoutDashboard },
@@ -41,7 +45,7 @@ const navItems = [
   { label: "Settings", href: "/workspace/settings", icon: Settings },
 ];
 
-export default function AgencyWorkspace() {
+export default function AgencyWorkspace({ children }: { children?: React.ReactNode }) {
   const { user, isAuthenticated, loading, signOut } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
@@ -54,7 +58,7 @@ export default function AgencyWorkspace() {
   }, [isAuthenticated, loading, router]);
 
   // Fetch agency owned by this user
-  const { data: agency, isLoading: agencyLoading } = useQuery({
+  const { data: agency, isLoading: agencyLoading } = useQuery<Agency | null>({
     queryKey: ["user-agency", user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -154,8 +158,8 @@ export default function AgencyWorkspace() {
           )}
           <div className="flex-1 min-w-0">
             <h2 className="font-bold text-sm truncate">{agency.name}</h2>
-            <StatusBadge 
-              variant={agency.is_verified ? "verified" : "unclaimed"} 
+            <StatusBadge
+              variant={agency.is_verified ? "verified" : "unclaimed"}
               className="mt-0.5"
               showIcon={false}
             >
@@ -176,8 +180,8 @@ export default function AgencyWorkspace() {
               onClick={() => setMobileMenuOpen(false)}
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors",
-                isActive 
-                  ? "bg-primary text-primary-foreground" 
+                isActive
+                  ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:bg-accent hover:text-foreground"
               )}
             >
@@ -284,7 +288,9 @@ export default function AgencyWorkspace() {
 
         {/* Page Content */}
         <main className="flex-1 overflow-auto p-4 lg:p-6">
-          <Outlet context={{ agency, workspace, user }} />
+          <WorkspaceProvider value={{ agency, workspace, user }}>
+            {children}
+          </WorkspaceProvider>
         </main>
       </div>
     </div>

@@ -1,4 +1,5 @@
 "use client";
+import { useOutletContext } from "@/context/WorkspaceContext";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";

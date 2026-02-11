@@ -24,8 +24,14 @@ export function createClient() {
                     }),
                     order: () => Promise.resolve({ data: [], error: null }),
                 }),
+                update: () => ({
+                    eq: () => Promise.resolve({ data: null, error: null }),
+                }),
+                insert: () => ({
+                    select: () => Promise.resolve({ data: null, error: null }),
+                }),
             }),
-        } as unknown as ReturnType<typeof createBrowserClient<Database>>;
+        } as any;
     }
 
     client = createBrowserClient<Database>(

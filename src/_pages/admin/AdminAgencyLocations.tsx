@@ -168,12 +168,12 @@ const AdminAgencyLocations = () => {
     return labels[type] || type;
   };
 
-  const groupedLocations = locations?.reduce((acc, loc) => {
-    const type = loc.type;
+  const groupedLocations = (locations || []).reduce((acc, loc) => {
+    const type = loc.type || 'other';
     if (!acc[type]) acc[type] = [];
     acc[type].push(loc);
     return acc;
-  }, {} as Record<string, typeof locations>);
+  }, {} as Record<string, any[]>);
 
   const filteredRelations = agencyLocations?.filter(
     (rel) => filterAgency === "all" || rel.agency_id === filterAgency
@@ -327,7 +327,7 @@ const AdminAgencyLocations = () => {
                           <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase">
                             {getLocationTypeLabel(type)}s
                           </div>
-                          {locs?.map((loc) => (
+                          {(locs as any[])?.map((loc) => (
                             <SelectItem key={loc.id} value={loc.id}>
                               {loc.name}
                             </SelectItem>

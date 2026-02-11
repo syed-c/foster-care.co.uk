@@ -14,8 +14,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { 
-  BarChart3, 
+import {
+  BarChart3,
   TrendingUp,
   Users,
   Building2,
@@ -123,17 +123,17 @@ export default function AdminAnalytics() {
   const totalAgencies = agenciesData?.length || 0;
   const verifiedAgencies = agenciesData?.filter(a => a.is_verified).length || 0;
   const activeAgencies = agenciesData?.filter(a => a.is_active).length || 0;
-  
+
   const totalLeads = leadsData?.length || 0;
   const newLeads = leadsData?.filter(l => l.status === "new").length || 0;
   const convertedLeads = leadsData?.filter(l => l.status === "converted").length || 0;
   const conversionRate = totalLeads > 0 ? Math.round((convertedLeads / totalLeads) * 100) : 0;
-  
+
   const totalReviews = reviewsData?.length || 0;
-  const avgRating = reviewsData && reviewsData.length > 0 
+  const avgRating = reviewsData && reviewsData.length > 0
     ? (reviewsData.reduce((sum, r) => sum + r.rating, 0) / reviewsData.length).toFixed(1)
     : "0.0";
-  
+
   const totalLocations = locationsData?.length || 0;
   const countriesCount = locationsData?.filter(l => l.type === "country").length || 0;
   const regionsCount = locationsData?.filter(l => l.type === "region").length || 0;
@@ -221,16 +221,16 @@ export default function AdminAnalytics() {
                   <div className="h-[200px] flex items-end justify-between gap-2">
                     {Object.entries(leadsByDay).slice(-7).map(([day, count]) => (
                       <div key={day} className="flex flex-col items-center gap-2 flex-1">
-                        <div 
+                        <div
                           className="w-full bg-primary/20 rounded-t-lg transition-all relative group"
                           style={{ height: `${Math.max((count as number) * 20, 10)}px` }}
                         >
-                          <div 
+                          <div
                             className="absolute inset-0 bg-primary rounded-t-lg"
                             style={{ height: '100%' }}
                           />
                           <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                            {count}
+                            {count as number}
                           </span>
                         </div>
                         <span className="text-[10px] text-muted-foreground">{day}</span>

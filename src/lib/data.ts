@@ -10,6 +10,9 @@ export interface Agency {
   description: string;
   rating: number;
   reviewCount: number;
+  phone?: string;
+  email?: string;
+  address?: string;
 }
 
 export interface Location {

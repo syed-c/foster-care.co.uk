@@ -32,7 +32,8 @@ const countryFlags: Record<string, string> = {
 
 export default function LocationPage() {
   const params = useParams();
-  const slug = params.city || params.county || params.region || params.country;
+  const rawSlug = params.city || params.county || params.region || params.country;
+  const slug = (Array.isArray(rawSlug) ? rawSlug[0] : rawSlug) as string;
 
   const { data: location, isLoading: locationLoading } = useLocationBySlug(slug);
   const { data: childLocations, isLoading: childrenLoading } = useChildLocations(location?.id);

@@ -88,6 +88,9 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en" className="light" suppressHydrationWarning>
+            <head>
+                <style dangerouslySetInnerHTML={{ __html: 'body{background:#fff;color:#000;}' }} />
+            </head>
             <body className={`${plusJakartaSans.variable} font-sans antialiased bg-white text-black`}>
                 <Providers>
                     <Header />

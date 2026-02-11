@@ -23,7 +23,7 @@ const steps = [
 ];
 
 export default function ClaimAgency() {
-  const [searchParams] = useSearchParams();
+  const searchParams = useSearchParams();
   const preselectedAgencyId = searchParams.get("agency");
 
   const [currentStep, setCurrentStep] = useState(1);
@@ -220,8 +220,8 @@ export default function ClaimAgency() {
                     <div key={step.id} className="flex items-center">
                       <div
                         className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${currentStep >= step.id
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-muted text-muted-foreground"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted text-muted-foreground"
                           }`}
                       >
                         {currentStep > step.id ? (

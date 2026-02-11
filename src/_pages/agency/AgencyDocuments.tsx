@@ -1,4 +1,5 @@
 "use client";
+import { useOutletContext } from "@/context/WorkspaceContext";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -8,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { 
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -29,10 +30,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { 
-  FileText, 
-  Upload, 
-  FolderOpen, 
+import {
+  FileText,
+  Upload,
+  FolderOpen,
   MoreVertical,
   Download,
   Trash2,
@@ -114,13 +115,13 @@ export default function AgencyDocuments() {
   const uploadMutation = useMutation({
     mutationFn: async () => {
       if (!uploadForm.file || !workspace?.id) throw new Error("Missing file or workspace");
-      
+
       setUploading(true);
 
       // Upload file to storage
       const fileExt = uploadForm.file.name.split(".").pop();
       const fileName = `${workspace.id}/${Date.now()}-${uploadForm.file.name}`;
-      
+
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from("agency-documents")
         .upload(fileName, uploadForm.file);
@@ -187,7 +188,7 @@ export default function AgencyDocuments() {
 
   // Filter documents
   const filteredDocuments = documents?.filter((doc) => {
-    const matchesSearch = !searchQuery || 
+    const matchesSearch = !searchQuery ||
       doc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       doc.description?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = categoryFilter === "all" || doc.category === categoryFilter;
@@ -401,11 +402,11 @@ export default function AgencyDocuments() {
                   <span>{categoryInfo?.icon || "📁"}</span>
                   {categoryInfo?.label || "Other"}
                   <Badge variant="secondary" className="ml-2">
-                    {docs?.length}
+                    {(docs as any[])?.length}
                   </Badge>
                 </h2>
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {docs?.map((doc) => {
+                  {(docs as any[])?.map((doc: any) => {
                     const FileIcon = getFileIcon(doc.file_type);
                     return (
                       <Card key={doc.id} className="group hover:shadow-lg transition-shadow">
@@ -448,7 +449,7 @@ export default function AgencyDocuments() {
                                     Download
                                   </a>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem 
+                                <DropdownMenuItem
                                   onClick={() => deleteMutation.mutate(doc.id)}
                                   className="text-destructive"
                                 >

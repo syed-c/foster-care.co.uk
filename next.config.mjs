@@ -1,32 +1,64 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    // Temporarily ignore TS/ESLint errors during migration — will re-enable after
-    typescript: {
-        ignoreBuildErrors: true,
-    },
-    eslint: {
-        ignoreDuringBuilds: true,
+    /* config options here */
+    experimental: {
+        optimizeCss: false,
+        optimizePackageImports: ['lucide-react'],
     },
     images: {
         remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'images.unsplash.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'plus.unsplash.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'placehold.co',
+            },
             {
                 protocol: 'https',
                 hostname: 'pfdcqlsafgszoaovbcvg.supabase.co',
                 pathname: '/storage/v1/object/public/**',
             },
         ],
+        // Optimize image loading
+        deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+        imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+        formats: ['image/webp', 'image/avif'],
+        minimumCacheTTL: 60,
     },
-    trailingSlash: false,
-    skipTrailingSlashRedirect: true,
     async rewrites() {
         return [
             {
                 source: '/sitemap.xml',
-                destination:
-                    'https://pfdcqlsafgszoaovbcvg.supabase.co/functions/v1/generate-sitemap',
+                destination: 'https://pfdcqlsafgszoaovbcvg.supabase.co/functions/v1/generate-sitemap',
             },
         ];
     },
+    // Bundle optimization
+    webpack: (config, { isServer }) => {
+        // Reduce bundle size for client-side
+        if (!isServer) {
+            if (config.optimization) {
+                config.optimization.splitChunks = {
+                    chunks: 'all',
+                    cacheGroups: {
+                        vendor: {
+                            test: /[\\/]node_modules[\\/]/,
+                            name: 'vendors',
+                            chunks: 'all',
+                        },
+                    },
+                };
+            }
+        }
+        return config;
+    },
+    // Performance headers
     async headers() {
         return [
             {
@@ -39,10 +71,14 @@ const nextConfig = {
                         key: 'Permissions-Policy',
                         value: 'camera=(), microphone=(), geolocation=(self)',
                     },
+                    {
+                        key: 'X-XSS-Protection',
+                        value: '1; mode=block',
+                    },
                 ],
             },
             {
-                source: '/:path*.(js|css|svg|png|jpg|jpeg|webp|ico|woff|woff2)',
+                source: '/:path*.(js|css|svg|png|jpg|jpeg|webp|ico|woff|woff2|avif|gif)',
                 headers: [
                     {
                         key: 'Cache-Control',
@@ -52,6 +88,13 @@ const nextConfig = {
             },
         ];
     },
+    // Compression
+    compress: true,
+    // Trailing slash configuration
+    trailingSlash: false,
+    skipTrailingSlashRedirect: true,
+    // React strict mode
+    reactStrictMode: true,
 };
 
 export default nextConfig;

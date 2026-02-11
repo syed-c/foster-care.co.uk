@@ -1,4 +1,5 @@
 "use client";
+import { useOutletContext } from "@/context/WorkspaceContext";
 import { useState, useMemo, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -86,7 +87,7 @@ export default function AgencyCoverageManager() {
   // Initialize selected locations from database
   useEffect(() => {
     if (agencyLocations && selectedLocations.size === 0 && !hasChanges) {
-      const initialSelected = new Set(agencyLocations.map(al => al.location_id));
+      const initialSelected = new Set<string>(agencyLocations.map(al => al.location_id as string));
       if (initialSelected.size > 0) {
         setSelectedLocations(initialSelected);
       }
@@ -278,7 +279,7 @@ export default function AgencyCoverageManager() {
           />
 
           <TypeIcon className="w-4 h-4 text-muted-foreground" />
-          
+
           <span
             className={cn(
               "flex-1 text-sm",

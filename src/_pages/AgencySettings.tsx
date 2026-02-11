@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
+import { Agency } from "@/services/dataService";
 import { toast } from "sonner";
 import {
   Building2,
@@ -60,7 +61,7 @@ const AgencySettings = () => {
   }, [isAuthenticated, loading, router]);
 
   // Fetch agency owned by this user
-  const { data: agency, isLoading: agencyLoading } = useQuery({
+  const { data: agency, isLoading: agencyLoading } = useQuery<Agency | null>({
     queryKey: ["user-agency", user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -92,13 +93,13 @@ const AgencySettings = () => {
     }
   }, [agency]);
 
-  const updateAgencyMutation = useMutation({
+  const updateAgencyMutation = useMutation<void, Error, Partial<AgencyFormData>>({
     mutationFn: async (updatedData: Partial<AgencyFormData>) => {
       if (!agency?.id) throw new Error("Agency not found");
 
       const { error } = await supabase
         .from("agencies")
-        .update(updatedData)
+        .update(updatedData as any)
         .eq("id", agency.id);
 
       if (error) throw error;
@@ -153,7 +154,7 @@ const AgencySettings = () => {
       const updateData = { [field]: publicUrl.publicUrl };
       const { error: updateError } = await supabase
         .from('agencies')
-        .update(updateData)
+        .update(updateData as any)
         .eq('id', agency.id);
 
       if (updateError) throw updateError;
@@ -207,7 +208,7 @@ const AgencySettings = () => {
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-4 mb-8">
-            <Button variant="secondary" onClick={() => router.push(-1)}>
+            <Button variant="secondary" onClick={() => router.back()}>
               Back
             </Button>
             <h1 className="text-3xl font-semibold">Agency Settings</h1>
@@ -402,8 +403,8 @@ const AgencySettings = () => {
                       </p>
                     </div>
                     <div className={`px-3 py-1 rounded-full text-sm font-medium ${agency.is_verified
-                        ? "bg-green-100 text-green-800"
-                        : "bg-yellow-100 text-yellow-800"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-yellow-100 text-yellow-800"
                       }`}>
                       {agency.is_verified ? "Verified" : "Pending"}
                     </div>

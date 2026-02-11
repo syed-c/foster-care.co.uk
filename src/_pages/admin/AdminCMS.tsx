@@ -26,9 +26,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { 
-  FileText, 
-  Search, 
+import {
+  FileText,
+  Search,
   Plus,
   Eye,
   Pencil,
@@ -270,10 +270,10 @@ export default function AdminCMS() {
                           <Globe className="w-4 h-4" />
                         )}
                         {category}
-                        <Badge variant="secondary" className="ml-2">{pages.length}</Badge>
+                        <Badge variant="secondary" className="ml-2">{(pages as any[]).length}</Badge>
                       </h3>
                       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                        {pages.map((page) => {
+                        {(pages as any[]).map((page) => {
                           const blocks = getPageBlocks(page.key);
                           return (
                             <div
@@ -448,12 +448,12 @@ export default function AdminCMS() {
 }
 
 // Page Blocks Editor Component
-function PageBlocksEditor({ 
-  pageKey, 
-  blocks, 
-  onSave, 
-  onDelete, 
-  onClose 
+function PageBlocksEditor({
+  pageKey,
+  blocks,
+  onSave,
+  onDelete,
+  onClose
 }: {
   pageKey: string;
   blocks: any[];
@@ -482,9 +482,9 @@ function PageBlocksEditor({
                     <Button variant="ghost" size="sm" onClick={() => setEditingBlock(block)}>
                       <Pencil className="w-4 h-4" />
                     </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
+                    <Button
+                      variant="ghost"
+                      size="sm"
                       className="text-destructive"
                       onClick={() => {
                         if (confirm("Delete this block?")) onDelete(block.id);
@@ -511,7 +511,7 @@ function PageBlocksEditor({
         <Button variant="outline" className="flex-1 rounded-xl" onClick={onClose}>
           Close
         </Button>
-        <Button 
+        <Button
           className="flex-1 rounded-xl"
           onClick={() => setEditingBlock({ page_key: pageKey, block_type: "text", block_key: "", title: "", content: "" })}
         >

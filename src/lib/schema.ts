@@ -1,4 +1,4 @@
-import { Agency } from '@/types';
+import { Agency } from '@/lib/data';
 
 interface SchemaGeneratorProps {
   type: 'organization' | 'website' | 'localBusiness' | 'breadcrumb' | 'faq' | 'article';
@@ -6,10 +6,10 @@ interface SchemaGeneratorProps {
   agencies?: Agency[];
 }
 
-export function generateSchemaMarkup({ type, data, agencies = [] }: SchemaGeneratorProps): string {
+export function generateSchemaMarkup({ type, data, agencies = [] }: SchemaGeneratorProps): any {
   switch (type) {
     case 'organization':
-      return JSON.stringify({
+      return {
         "@context": "https://schema.org",
         "@type": "Organization",
         "name": "Foster Care UK",
@@ -26,10 +26,10 @@ export function generateSchemaMarkup({ type, data, agencies = [] }: SchemaGenera
           "contactType": "customer service",
           "availableLanguage": "English"
         }
-      });
+      };
 
     case 'website':
-      return JSON.stringify({
+      return {
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "Foster Care UK",
@@ -39,11 +39,11 @@ export function generateSchemaMarkup({ type, data, agencies = [] }: SchemaGenera
           "target": "https://fostercare.uk/search?q={search_term_string}",
           "query-input": "required name=search_term_string"
         }
-      });
+      };
 
     case 'localBusiness':
-      if (!data) return '';
-      return JSON.stringify({
+      if (!data) return {};
+      return {
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
         "name": data.name,
@@ -59,11 +59,11 @@ export function generateSchemaMarkup({ type, data, agencies = [] }: SchemaGenera
         },
         "url": `https://fostercare.uk/agencies/${data.slug}`,
         "priceRange": "£££",
-        "review": agencies.slice(0, 5).map((agency: Agency) => ({
+        "review": agencies.slice(0, 5).map((agency: any) => ({
           "@type": "Review",
           "reviewRating": {
             "@type": "Rating",
-            "ratingValue": agency.averageRating || 4.5,
+            "ratingValue": agency.rating || 4.5,
             "bestRating": "5"
           },
           "author": {
@@ -71,11 +71,11 @@ export function generateSchemaMarkup({ type, data, agencies = [] }: SchemaGenera
             "name": "Verified Foster Carer"
           }
         }))
-      });
+      };
 
     case 'breadcrumb':
-      if (!data?.breadcrumbs) return '';
-      return JSON.stringify({
+      if (!data?.breadcrumbs) return {};
+      return {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         "itemListElement": data.breadcrumbs.map((crumb: any, index: number) => ({
@@ -84,11 +84,11 @@ export function generateSchemaMarkup({ type, data, agencies = [] }: SchemaGenera
           "name": crumb.name,
           "item": crumb.url
         }))
-      });
+      };
 
     case 'faq':
-      if (!data?.questions) return '';
-      return JSON.stringify({
+      if (!data?.questions) return {};
+      return {
         "@context": "https://schema.org",
         "@type": "FAQPage",
         "mainEntity": data.questions.map((faq: any) => ({
@@ -99,11 +99,11 @@ export function generateSchemaMarkup({ type, data, agencies = [] }: SchemaGenera
             "text": faq.answer
           }
         }))
-      });
+      };
 
     case 'article':
-      if (!data) return '';
-      return JSON.stringify({
+      if (!data) return {};
+      return {
         "@context": "https://schema.org",
         "@type": "Article",
         "headline": data.title,
@@ -123,9 +123,9 @@ export function generateSchemaMarkup({ type, data, agencies = [] }: SchemaGenera
         "datePublished": data.publishedAt,
         "dateModified": data.updatedAt,
         "image": data.image || "https://fostercare.uk/default-blog.png"
-      });
+      };
 
     default:
-      return '';
+      return {};
   }
 }

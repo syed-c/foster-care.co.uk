@@ -182,7 +182,7 @@ export async function getAgenciesByLocationAndSpecialism(
         return locationAgencies.map((item: any) => item.agencies).filter(Boolean);
     }
 
-    const agencyIds = locationAgencies.map(al => al.agency_id);
+    const agencyIds = (locationAgencies as any[]).map(al => (al as any).agency_id);
     const specialismId = (specialism as any).id;
 
     // Get agencies that also have the specialism
@@ -264,7 +264,7 @@ export async function getAgenciesBySpecialism(specialismId: string, limit = 50) 
 
     if (idError || !agencyIdsData || agencyIdsData.length === 0) return [];
 
-    const agencyIds = agencyIdsData.map(item => item.agency_id);
+    const agencyIds = (agencyIdsData as any[]).map(item => (item as any).agency_id);
     const { data, error } = await supabase
         .from('agencies')
         .select('*')
