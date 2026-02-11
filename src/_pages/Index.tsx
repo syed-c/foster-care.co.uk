@@ -8,7 +8,7 @@ import { FeaturedAgenciesSection } from "@/components/home/FeaturedAgenciesSecti
 import { LeadCTASection } from "@/components/home/LeadCTASection";
 import { AgencyCTASection } from "@/components/home/AgencyCTASection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
-import { SEOHead, getOrganizationSchema, getFaqSchema } from "@/components/seo/SEOHead";
+import { getOrganizationSchema, getFaqSchema } from "@/components/seo/SEOHead";
 import { FaqSection } from "@/components/shared/FaqSection";
 import { useFaqs } from "@/hooks/useFaqs";
 import { CmsContent, FAQ, Location } from "@/services/dataService";
@@ -30,27 +30,7 @@ const Index = ({ initialCmsContent, initialFaqs, initialLocations }: IndexProps)
 
   return (
     <div className="min-h-screen flex flex-col">
-      <SEOHead
-        title="Foster Care Agencies UK | Compare 500+ Verified Fostering Services"
-        description="Discover trusted foster care agencies across England. Compare Ofsted-rated services, read genuine reviews from foster carers, and find the right agency to start your fostering journey. Free directory with 500+ verified agencies."
-        canonicalUrl="https://www.foster-care.co.uk"
-        keywords={[
-          "foster care agencies UK",
-          "fostering agencies near me",
-          "become a foster carer",
-          "foster care services England",
-          "Ofsted rated fostering agencies",
-          "independent fostering agencies",
-          "local authority fostering",
-          "foster care directory UK",
-          "fostering allowances",
-          "emergency foster care"
-        ]}
-        structuredData={{
-          ...getOrganizationSchema(),
-          ...(faqSchemaData.length > 0 ? getFaqSchema(faqSchemaData) : {})
-        }}
-      />
+
 
       <main className="flex-1">
 

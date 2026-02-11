@@ -12,42 +12,10 @@ interface SEOHeadProps {
 }
 
 export function SEOHead({
-  title,
-  description = "Find trusted foster care agencies across the UK. Compare services, read reviews, and start your fostering journey today.",
-  canonicalUrl,
-  ogImage = "/og-image.jpg",
-  ogType = "website",
   structuredData,
-  keywords = ["foster care", "fostering", "foster agencies", "UK fostering"],
-  noIndex = false,
 }: SEOHeadProps) {
-  const fullTitle = title.includes("Foster Care UK") ? title : `${title} | Foster Care UK`;
-
   return (
     <>
-      <title>{fullTitle}</title>
-      <meta name="description" content={description} />
-      <meta name="keywords" content={keywords.join(", ")} />
-      {noIndex ? (
-        <meta name="robots" content="noindex, nofollow" />
-      ) : (
-        <meta name="robots" content="index, follow" />
-      )}
-      <meta property="og:title" content={fullTitle} />
-      <meta property="og:description" content={description} />
-      <meta property="og:type" content={ogType} />
-      <meta property="og:image" content={ogImage} />
-      <meta property="og:site_name" content="Foster Care UK" />
-      {canonicalUrl && (
-        <>
-          <meta property="og:url" content={canonicalUrl} />
-          <link rel="canonical" href={canonicalUrl} />
-        </>
-      )}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={fullTitle} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={ogImage} />
       {structuredData && (
         <script
           type="application/ld+json"

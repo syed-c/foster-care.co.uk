@@ -10,7 +10,7 @@ import { useCmsContentByPage, getContentBySection } from "@/hooks/useCmsContent"
 import { useFaqsByLocation } from "@/hooks/useFaqs";
 import { FaqSection } from "@/components/shared/FaqSection";
 import { Skeleton } from "@/components/ui/skeleton";
-import { SEOHead, getBreadcrumbSchema, getFaqSchema } from "@/components/seo/SEOHead";
+import { getBreadcrumbSchema, getFaqSchema } from "@/components/seo/SEOHead";
 import { LocationHero } from "@/components/location/LocationHero";
 import { AgencyListings } from "@/components/location/AgencyListings";
 import { ChildLocationsGrid } from "@/components/location/ChildLocationsGrid";
@@ -269,16 +269,7 @@ export default function UnifiedLocationPage({
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-950">
-      <SEOHead
-        title={getSeoTitle()}
-        description={getSeoDescription()}
-        canonicalUrl={`https://www.foster-care.co.uk${currentPath}`}
-        keywords={[`foster care ${effectiveLocation.name}`, `fostering agencies ${effectiveLocation.name}`, `become foster carer ${effectiveLocation.name}`, effectiveLocation.name]}
-        structuredData={{
-          ...getBreadcrumbSchema(breadcrumbItems),
-          ...(faqsForSchema.length > 0 ? getFaqSchema(faqsForSchema) : {}),
-        }}
-      />
+
 
       <main className="flex-1 pt-16">
 
