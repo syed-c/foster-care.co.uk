@@ -177,7 +177,7 @@ export function LocalTemplate({
             <section className="py-24 bg-slate-950 text-white">
                 <div className="container-main grid lg:grid-cols-2 gap-16 items-center">
                     <div>
-                        <h2 className="text-3xl md:text-4xl font-black mb-6">Requirements in {locationName}</h2>
+                        <h2 className="text-3xl md:text-4xl font-black mb-6 text-white">Requirements in {locationName}</h2>
                         <p className="text-white/60 text-lg mb-8">
                             Most people in {locationName} can foster. You need a spare room and the passion to care.
                         </p>

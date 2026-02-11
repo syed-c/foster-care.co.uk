@@ -188,7 +188,7 @@ export function CountryTemplate({
             {/* 5. Local Support Overview (National Level) */}
             <section className="py-24 bg-slate-950 text-white">
                 <div className="container-main text-center">
-                    <h2 className="text-3xl md:text-4xl font-black mb-6">National Support Network</h2>
+                    <h2 className="text-3xl md:text-4xl font-black mb-6 text-white">National Support Network</h2>
                     <p className="max-w-2xl mx-auto text-white/60 mb-12 text-lg">
                         We connect you with agencies across the country providing 24/7 support, training hubs, and peer mentoring.
                     </p>

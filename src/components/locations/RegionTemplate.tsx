@@ -125,9 +125,10 @@ export function RegionTemplate({
             </section>
 
             {/* 4. Support Systems */}
+            {/* 4. Support Systems */}
             <section className="py-24 bg-slate-950 text-white">
                 <div className="container-main text-center max-w-4xl mx-auto">
-                    <h2 className="text-3xl md:text-4xl font-black mb-12">Regional Support Network</h2>
+                    <h2 className="text-3xl md:text-4xl font-black mb-12 text-white">Regional Support Network</h2>
                     <div className="grid md:grid-cols-3 gap-8 text-left">
                         {[
                             {
@@ -148,7 +149,7 @@ export function RegionTemplate({
                         ].map((item, i) => (
                             <div key={i} className="p-8 rounded-[2rem] bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
                                 <item.icon className="w-10 h-10 text-primary mb-6" />
-                                <h3 className="text-xl font-bold mb-4">{item.title}</h3>
+                                <h3 className="text-xl font-bold mb-4 text-white">{item.title}</h3>
                                 <p className="text-white/60 leading-relaxed">{item.desc}</p>
                             </div>
                         ))}
@@ -179,20 +180,20 @@ export function RegionTemplate({
                 </div>
             </section>
 
-            {/* 6. Borough Directory */}
+            {/* 6. Borough Directory - DARK MODE */}
             {childLocations.length > 0 && (
-                <section className="py-24 bg-white">
+                <section className="py-24 bg-slate-950 text-white">
                     <div className="container-main">
-                        <h2 className="text-3xl md:text-4xl font-black mb-12 text-slate-950 text-center">Find Your Local Area</h2>
+                        <h2 className="text-3xl md:text-4xl font-black mb-12 text-white text-center">Find Your Local Area</h2>
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             {childLocations.map((child) => (
                                 <Link
                                     key={child.id}
                                     href={`/locations/${location.slug}/${child.slug}`}
-                                    className="block p-6 rounded-2xl bg-slate-50 hover:bg-primary/5 hover:border-primary/50 border border-slate-200 transition-all group"
+                                    className="block p-6 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all group"
                                 >
-                                    <span className="font-bold text-slate-900 group-hover:text-primary text-lg">{child.name}</span>
-                                    <span className="block text-xs uppercase tracking-widest text-slate-400 mt-2">View Profile</span>
+                                    <span className="font-bold text-white group-hover:text-primary transition-colors text-lg">{child.name}</span>
+                                    <span className="block text-xs uppercase tracking-widest text-white/50 mt-2">View Profile</span>
                                 </Link>
                             ))}
                         </div>
