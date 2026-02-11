@@ -13,7 +13,7 @@ import {
   Specialism,
   Agency
 } from '@/services/dataService';
-import { STATIC_SPECIALISMS } from "@/hooks/useSpecialisms";
+import { STATIC_SPECIALISMS } from "@/constants/specialisms";
 
 const SPECIALISM_SLUGS = new Set(STATIC_SPECIALISMS.map(s => s.slug));
 

@@ -22,7 +22,7 @@ import { LocationCTA } from "@/components/location/LocationCTA";
 import { MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BackToTop } from "@/components/shared/BackToTop";
-import { STATIC_SPECIALISMS } from "@/hooks/useSpecialisms";
+import { STATIC_SPECIALISMS } from "@/constants/specialisms";
 import LocationSpecialismPage from "./LocationSpecialismPage";
 import { CmsContent, FAQ, Location, Agency, Specialism } from "@/services/dataService";
 
