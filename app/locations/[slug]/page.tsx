@@ -18,11 +18,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const name = location?.name || params.slug.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
 
   return {
-    title: `Foster Care Agencies in ${name} | Foster Care UK`,
-    description: `Find the best foster care agencies in ${name}. Compare services, read reviews, and connect with verified fostering agencies in your area.`,
+    title: `Foster Care in ${name} | Start Your Fostering Journey | Foster Care UK`,
+    description: `Discover how you can make a life-changing difference. Become a foster carer in ${name}. Compare local agencies, access 24/7 support, and start your journey today.`,
     openGraph: {
-      title: `Foster Care Agencies in ${name} | Foster Care UK`,
-      description: `Find the best foster care agencies in ${name}. Compare services and read reviews.`,
+      title: `Foster Care in ${name} | Start Your Fostering Journey`,
+      description: `Become a foster carer in ${name}. Search verified local agencies and start your journey today.`,
     },
     alternates: {
       canonical: `https://www.foster-care.co.uk/locations/${params.slug}`,

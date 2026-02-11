@@ -30,11 +30,13 @@ export async function generateMetadata({ params }: { params: { segments: string[
 
   const title = isSpecialism
     ? `${specialismName} Foster Care in ${locationName} | Foster Care UK`
-    : `Foster Care Agencies in ${locationName} | Foster Care UK`;
+    : `Foster Care in ${locationName} | Start Your Fostering Journey | Foster Care UK`;
 
   return {
     title,
-    description: `Find verified foster care agencies in ${locationName}. Compare services and read reviews.`,
+    description: isSpecialism
+      ? `Looking for ${specialismName} in ${locationName}? Connect with verified agencies specializing in ${specialismName} across ${locationName}.`
+      : `Discover how you can make a life-changing difference. Become a foster carer in ${locationName}. Compare local agencies and start your journey today.`,
     alternates: {
       canonical: `https://www.foster-care.co.uk/locations/${segments.join('/')}`,
     },
