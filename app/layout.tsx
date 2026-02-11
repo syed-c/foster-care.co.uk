@@ -87,8 +87,8 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="en" suppressHydrationWarning>
-            <body className={`${plusJakartaSans.variable} font-sans antialiased`}>
+        <html lang="en" className="light" suppressHydrationWarning>
+            <body className={`${plusJakartaSans.variable} font-sans antialiased bg-white text-black`}>
                 <Providers>
                     <Header />
                     <main>{children}</main>
