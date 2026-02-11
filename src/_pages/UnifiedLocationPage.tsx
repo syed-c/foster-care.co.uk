@@ -6,19 +6,9 @@ import { Header } from "@/components/layout/Header";
 import { motion } from "framer-motion";
 import { useLocationFromPath, useChildLocations, useLocationPath, buildLocationUrl } from "@/hooks/useLocations";
 import { useAgenciesByLocation } from "@/hooks/useAgencies";
-import { useCmsContentByPage, getContentBySection } from "@/hooks/useCmsContent";
 import { useFaqsByLocation } from "@/hooks/useFaqs";
-import { FaqSection } from "@/components/shared/FaqSection";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getBreadcrumbSchema, getFaqSchema } from "@/components/seo/SEOHead";
-import { LocationHero } from "@/components/location/LocationHero";
-import { AgencyListings } from "@/components/location/AgencyListings";
-import { ChildLocationsGrid } from "@/components/location/ChildLocationsGrid";
-import { WhyFosteringSection } from "@/components/location/WhyFosteringSection";
-import { FosteringTypesSection } from "@/components/location/FosteringTypesSection";
-import { AgencyTypesCompactSection } from "@/components/location/AgencyTypesSection";
-import { EnquirySection } from "@/components/location/EnquirySection";
-import { LocationCTA } from "@/components/location/LocationCTA";
+
 import { MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BackToTop } from "@/components/shared/BackToTop";
@@ -38,14 +28,6 @@ interface UnifiedLocationPageProps {
   initialSpecialism?: Specialism | null;
   initialSpecialismAgencies?: Agency[];
 }
-
-// Country flag emoji mapping
-const countryFlags: Record<string, string> = {
-  "england": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-  "scotland": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
-  "wales": "🏴󠁧󠁢󠁷󠁬󠁳󠁿",
-  "northern-ireland": "🇬🇧",
-};
 
 // Set of specialism slugs for quick lookup
 const SPECIALISM_SLUGS = new Set(STATIC_SPECIALISMS.map(s => s.slug));
@@ -91,17 +73,13 @@ export default function UnifiedLocationPage({
     );
   }
 
-  // The last segment is the location we're trying to display
-  const targetSlug = pathSegments[pathSegments.length - 1];
-
   const { data: location, isLoading: locationLoading } = useLocationFromPath(pathSegments);
-  const { data: childLocations, isLoading: childrenLoading } = useChildLocations(location?.id);
+  const { data: childLocations } = useChildLocations(location?.id);
   const { data: locationPath } = useLocationPath(location?.id);
   const { data: locationFaqs } = useFaqsByLocation(location?.id);
   const { data: locationAgencies } = useAgenciesByLocation(location?.id, 50);
 
-  const cmsPageKey = targetSlug ? `location_${targetSlug}` : undefined;
-  const { data: cmsContent } = useCmsContentByPage(cmsPageKey);
+
 
   // Combine client data with initial server data
   const effectiveLocation = location || initialLocation;
@@ -109,11 +87,8 @@ export default function UnifiedLocationPage({
   const effectiveLocationPath = locationPath || initialLocationPath || [];
   const effectiveLocationFaqs = locationFaqs || initialLocationFaqs || [];
   const effectiveLocationAgencies = locationAgencies || initialLocationAgencies || [];
-  const effectiveCmsContent = cmsContent || initialCmsContent || [];
 
   const isLoading = locationLoading && !initialLocation;
-  const heroContent = getContentBySection(effectiveCmsContent, 'hero');
-  const whyFosteringContent = getContentBySection(effectiveCmsContent, 'why_fostering');
   const allFaqs = effectiveLocationFaqs;
 
   if (isLoading) {
@@ -162,23 +137,6 @@ export default function UnifiedLocationPage({
     ? effectiveChildLocations.reduce((sum, loc) => sum + (loc.agency_count || 0), 0)
     : effectiveLocation.agency_count || 0;
 
-  // Build breadcrumbs from the effectiveLocation path
-  const breadcrumbs = [
-    { label: "Home", href: "/" },
-    { label: "Locations", href: "/locations" },
-  ];
-
-  if (effectiveLocationPath) {
-    effectiveLocationPath.forEach((loc, index) => {
-      const pathToLoc = effectiveLocationPath.slice(0, index + 1);
-      const isLast = index === effectiveLocationPath.length - 1;
-      breadcrumbs.push({
-        label: loc.name,
-        href: isLast ? undefined : buildLocationUrl(pathToLoc),
-      });
-    });
-  }
-
   const breadcrumbItems = [
     { name: "Home", url: "https://www.foster-care.co.uk" },
     { name: "Locations", url: "https://www.foster-care.co.uk/locations" },
@@ -194,31 +152,11 @@ export default function UnifiedLocationPage({
     });
   }
 
-  const getChildLocationUrl = (childLoc: Location): string => {
-    if (effectiveLocationPath) {
-      return buildLocationUrl([...effectiveLocationPath, childLoc]);
-    }
-    return `/locations/${childLoc.slug}`;
-  };
-
   const faqsForSchema = allFaqs?.map(f => ({ question: f.question, answer: f.answer })) || [];
-
-  const getChildTypeName = () => {
-    switch (effectiveLocation.type) {
-      case "country": return "Regions";
-      case "region": return "Counties & Cities";
-      case "county": return "Cities & Towns";
-      case "city": return "Local Areas";
-      default: return "Areas";
-    }
-  };
-
   const currentPath = effectiveLocationPath ? buildLocationUrl(effectiveLocationPath) : `/locations/${effectiveLocation.slug}`;
-  const flag = effectiveLocation.type === 'country' ? countryFlags[effectiveLocation.slug] : null;
 
   // Generate unique SEO title based on effectiveLocation type
   const getSeoTitle = () => {
-    if (heroContent?.title) return heroContent.title;
     if (effectiveLocation.seo_title) return effectiveLocation.seo_title;
 
     switch (effectiveLocation.type) {
@@ -242,37 +180,12 @@ export default function UnifiedLocationPage({
     return `Discover trusted foster care agencies in ${effectiveLocation.name}. Compare ${totalAgencies || 'local'}+ verified fostering agencies, read reviews, and start your fostering journey today.`;
   };
 
-  // Generate unique effectiveLocation-specific content for SEO
-  const getLocationIntro = () => {
-    switch (effectiveLocation.type) {
-      case "country":
-        return `${effectiveLocation.name} has one of the most established foster care systems in the world, with hundreds of dedicated agencies working to provide loving homes for children in need. Whether you're in a major city or rural area, there are fostering opportunities waiting for caring individuals and families.`;
-      case "region":
-        return `The ${effectiveLocation.name} region is home to numerous foster care agencies providing vital support to children and young people. Local authorities and independent fostering agencies work together to ensure every child has access to safe, nurturing placements with trained foster carers.`;
-      case "county":
-        return `Foster care in ${effectiveLocation.name} is supported by a network of dedicated agencies offering various placement types. From emergency care to long-term fostering, local agencies provide comprehensive training, 24/7 support, and competitive allowances for foster carers.`;
-      case "city":
-        return `${effectiveLocation.name} has a diverse range of foster care agencies catering to the unique needs of urban communities. These agencies specialise in matching children with foster carers who understand local schools, healthcare facilities, and community resources.`;
-      default:
-        return `Foster care agencies in ${effectiveLocation.name} are committed to providing safe, loving homes for children who cannot live with their birth families. With full training and ongoing support, fostering in ${effectiveLocation.name} offers a rewarding way to make a real difference.`;
-    }
-  };
 
-  const getLocationStats = () => {
-    const baseStats = totalAgencies || Math.floor(Math.random() * 30) + 20;
-    return {
-      agencies: baseStats,
-      carersNeeded: baseStats * 15,
-      childrenInCare: baseStats * 8,
-    };
-  };
-
-  const effectiveLocationStats = getLocationStats();
 
   const getRichStats = () => {
     const baseAgencies = totalAgencies || 25;
     return {
-      childrenInCare: baseAgencies * 8,
+      childrenInCare: baseAgencies * 12,
       boroughs: effectiveChildLocations.length || 1,
       agenciesCount: baseAgencies,
     };
@@ -282,14 +195,37 @@ export default function UnifiedLocationPage({
   const seoTitle = getSeoTitle();
   const seoDescription = getSeoDescription();
 
+  // Generate Place Schema
+  const getPlaceSchema = () => {
+    const schemaType = effectiveLocation.type === 'country' ? 'Country' :
+      effectiveLocation.type === 'city' ? 'City' :
+        'AdministrativeArea';
+
+    return {
+      "@context": "https://schema.org",
+      "@type": schemaType,
+      "name": effectiveLocation.name,
+      "description": `Foster care services and information for ${effectiveLocation.name}`,
+      "url": `https://www.foster-care.co.uk${currentPath}`,
+      "containsPlace": effectiveChildLocations.map(child => ({
+        "@type": "Place",
+        "name": child.name,
+        "url": `https://www.foster-care.co.uk${currentPath}/${child.slug}`
+      }))
+    };
+  };
+
+  const placeSchema = getPlaceSchema();
+
   return (
-    <div className="min-h-screen flex flex-col bg-background-sand">
+    <div className="min-h-screen flex flex-col bg-white">
       <SEOHead
         title={seoTitle}
         description={seoDescription}
         canonicalUrl={`https://www.foster-care.co.uk${currentPath}`}
         breadcrumbs={breadcrumbItems}
-        faqData={faqsForSchema}
+        faqData={faqsForSchema.length > 0 ? faqsForSchema : undefined}
+        structuredData={placeSchema}
       />
       <Header />
 
@@ -303,18 +239,7 @@ export default function UnifiedLocationPage({
           stats={richStats}
         />
 
-        {/* We keep the Agency Listings but we might want to integrate them better or show them below */}
-        <section className="py-20 bg-white">
-          <div className="container-main">
-            <AgencyListings
-              agencies={effectiveLocationAgencies || []}
-              title={`Verified Agencies in ${effectiveLocation.name}`}
-              subtitle={`Browse ${effectiveLocationAgencies?.length || 0} independent and local authority agencies`}
-              showFeaturedLabel={false}
-              locationName={effectiveLocation.name}
-            />
-          </div>
-        </section>
+
       </main>
 
       <BackToTop />
