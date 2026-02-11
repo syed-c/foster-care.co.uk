@@ -1,23 +1,23 @@
-import { createClient } from '@/lib/supabase/server';
+import { createClient } from '@supabase/supabase-js';
 import { MetadataRoute } from 'next';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 3600; // 1 hour
 
 const SITE_URL = 'https://www.foster-care.co.uk';
 
-const SPECIALISM_SLUGS = [
-  "short-term-fostering",
-  "long-term-fostering",
-  "emergency-fostering",
-  "respite-fostering",
-  "therapeutic-fostering",
-  "parent-child-fostering",
-  "sibling-groups-fostering",
-  "teenagers-fostering",
-  "asylum-seekers-fostering",
-  "disabilities-fostering",
-];
+
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const supabase = await createClient();
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
+  if (!supabaseUrl || !supabaseKey) {
+    console.error('Sitemap: Supabase credentials missing');
+    return [];
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseKey);
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
@@ -37,17 +37,33 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // Fetch dynamic data
+  console.log('Sitemap: Fetching dynamic data...');
   const [
-    { data: locations },
-    { data: agencies },
-    { data: specialisms },
-    { data: blogPosts }
+    { data: locations, error: locError },
+    { data: agencies, error: agError },
+    { data: specialisms, error: specError },
+    { data: blogPosts, error: blogError }
   ] = await Promise.all([
-    supabase.from('locations').select('slug, type, updated_at').eq('is_active', true),
-    supabase.from('agencies').select('slug, updated_at').eq('is_active', true),
+    supabase.from('locations').select('slug, type, updated_at'),
+    supabase.from('agencies').select('slug, updated_at'),
     supabase.from('specialisms').select('slug, updated_at').eq('is_active', true),
     supabase.from('blog_posts').select('slug, updated_at').eq('status', 'published')
   ]);
+
+  if (locError) console.error('Sitemap: Error fetching locations:', locError);
+  if (agError) console.error('Sitemap: Error fetching agencies:', agError);
+  if (specError) console.error('Sitemap: Error fetching specialisms:', specError);
+  if (blogError) console.error('Sitemap: Error fetching blog posts:', blogError);
+
+  console.log('Sitemap Counts:', {
+    locations: locations?.length || 0,
+    agencies: agencies?.length || 0,
+    specialisms: specialisms?.length || 0,
+    blogPosts: blogPosts?.length || 0
+  });
+
+  // Create specialism combo slugs from DB data
+  const specialismSlugsFromDb = (specialisms || []).map((s: any) => s.slug);
 
   const locationPages: MetadataRoute.Sitemap = [];
   if (locations) {
@@ -63,10 +79,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       });
 
       // Location + Specialism combos for main types
-      if (['country', 'region', 'city'].includes(loc.type)) {
-        SPECIALISM_SLUGS.forEach(spec => {
+      if (['country', 'region', 'city', 'county'].includes(loc.type)) {
+        specialismSlugsFromDb.forEach(specSlug => {
           locationPages.push({
-            url: `${SITE_URL}/locations/${loc.slug}/${spec}`,
+            url: `${SITE_URL}/locations/${loc.slug}/${specSlug}`,
             lastModified,
             changeFrequency: 'weekly',
             priority: 0.6,
@@ -109,7 +125,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [
+  const allPages = [
     ...staticPages,
     ...locationPages,
     ...agencyPages,
@@ -117,4 +133,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...blogPages,
     ...guidePages
   ];
+
+  console.log(`Sitemap: Generated ${allPages.length} URLs`);
+  return allPages;
 }
