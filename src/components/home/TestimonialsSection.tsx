@@ -55,7 +55,7 @@ export const TestimonialsSection = () => {
   } = useCmsContentSection("home", "testimonials");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
-  const metadata = testimonialsContent?.metadata ? (testimonialsContent.metadata as Record<string, string>) : null;
+  const metadata = testimonialsContent?.metadata ? (testimonialsContent.metadata as any) : null;
   const title = testimonialsContent?.title || "Hear From Our Foster Families";
   const subtitle = metadata?.subtitle || "Foster Carer Stories";
   const content = testimonialsContent?.content || "Real stories from foster carers across the UK sharing their experiences and the joy that fostering brings";

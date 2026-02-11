@@ -70,7 +70,7 @@ export function FeaturedAgenciesSection() {
     slug: "compass-fostering"
   }];
   const displayAgencies = agencies && agencies.length > 0 ? agencies.slice(0, 3) : fallbackAgencies;
-  const metadata = featuredContent?.metadata ? (featuredContent.metadata as Record<string, string>) : null;
+  const metadata = featuredContent?.metadata ? (featuredContent.metadata as any) : null;
   const title = featuredContent?.title || "Top-Rated Fostering Agencies";
   const subtitle = metadata?.subtitle || "Recommended by Foster Carers";
   const content = featuredContent?.content || "Explore highly-rated independent and local authority fostering agencies recommended by current foster carers. Each agency offers Ofsted registration, comprehensive training, and competitive allowances.";

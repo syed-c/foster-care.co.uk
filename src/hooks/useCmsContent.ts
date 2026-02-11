@@ -8,11 +8,11 @@ export type CmsContent = Tables<"cms_content">;
 
 // Fetch all CMS content for a specific page
 export function useCmsContentByPage(pageKey: string | undefined) {
-  return useQuery({
+  return useQuery<CmsContent[]>({
     queryKey: ["cms-content", "page", pageKey],
     queryFn: async () => {
       if (!pageKey) return [];
-      
+
       const { data, error } = await supabase
         .from("cms_content")
         .select("*")
@@ -21,7 +21,7 @@ export function useCmsContentByPage(pageKey: string | undefined) {
         .order("section");
 
       if (error) throw error;
-      return data;
+      return data || [];
     },
     enabled: !!pageKey,
   });
@@ -29,11 +29,11 @@ export function useCmsContentByPage(pageKey: string | undefined) {
 
 // Fetch a specific CMS content section
 export function useCmsContentSection(pageKey: string | undefined, sectionKey: string) {
-  return useQuery({
+  return useQuery<CmsContent | null>({
     queryKey: ["cms-content", "section", pageKey, sectionKey],
     queryFn: async () => {
       if (!pageKey) return null;
-      
+
       const { data, error } = await supabase
         .from("cms_content")
         .select("*")
@@ -55,7 +55,7 @@ export function useFaqsByPage(pageKey: string | undefined) {
     queryKey: ["faqs", "page", pageKey],
     queryFn: async () => {
       if (!pageKey) return [];
-      
+
       const { data, error } = await supabase
         .from("faqs")
         .select("*")
