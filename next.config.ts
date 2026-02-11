@@ -92,6 +92,9 @@ const nextConfig: NextConfig = {
   },
   // Compression
   compress: true,
+  // Trailing slash configuration
+  trailingSlash: false,
+  skipTrailingSlashRedirect: true,
   // React strict mode
   reactStrictMode: true,
 };

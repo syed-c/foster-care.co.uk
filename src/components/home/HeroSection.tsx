@@ -9,6 +9,7 @@ import { useCmsContentSection } from "@/hooks/useCmsContent";
 import { useLocations } from "@/hooks/useLocations";
 import { Input } from "@/components/ui/input";
 import { CmsContent, getContentBySection } from "@/hooks/useCmsContent";
+import Image from "next/image";
 
 const rotatingServices = ["Emergency Care", "Short-term Fostering", "Long-term Placements", "Sibling Groups", "Respite Care"];
 
@@ -59,6 +60,18 @@ export function HeroSection({ initialData }: HeroSectionProps) {
     <section className="relative min-h-[100svh] flex flex-col items-center justify-center pt-20 pb-16 overflow-hidden">
       {/* Dark Gradient Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
+
+      {/* Static BG Fallback for SEO/Performance */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/foster-family-hero.png"
+          alt="Happy foster family"
+          fill
+          priority
+          className="object-cover opacity-20 pointer-events-none select-none"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/50" />
+      </div>
 
       {/* Decorative Elements */}
       <div className="absolute inset-0 overflow-hidden">

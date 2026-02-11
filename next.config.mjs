@@ -16,6 +16,8 @@ const nextConfig = {
             },
         ],
     },
+    trailingSlash: false,
+    skipTrailingSlashRedirect: true,
     async rewrites() {
         return [
             {
