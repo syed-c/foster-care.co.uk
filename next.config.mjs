@@ -95,6 +95,20 @@ const nextConfig = {
     skipTrailingSlashRedirect: true,
     // React strict mode
     reactStrictMode: true,
+    async redirects() {
+        return [
+            {
+                source: '/locations/:region',
+                destination: '/locations/england/:region',
+                permanent: true,
+            },
+            {
+                source: '/locations/:region/:county',
+                destination: '/locations/england/:region/:county',
+                permanent: true,
+            },
+        ];
+    },
 };
 
 export default nextConfig;

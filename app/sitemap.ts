@@ -44,7 +44,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { data: specialisms, error: specError },
     { data: blogPosts, error: blogError }
   ] = await Promise.all([
-    supabase.from('locations').select('slug, type, updated_at'),
+    supabase.from('locations').select('id, parent_id, slug, type, updated_at'),
     supabase.from('agencies').select('slug, updated_at'),
     supabase.from('specialisms').select('slug, updated_at').eq('is_active', true),
     supabase.from('blog_posts').select('slug, updated_at').eq('status', 'published')
@@ -65,30 +65,71 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Create specialism combo slugs from DB data
   const specialismSlugsFromDb = (specialisms || []).map((s: any) => s.slug);
 
+  /* 
+   * NEW HIERARCHICAL SITEMAP LOGIC 
+   * We need to build paths like: /locations/england/london/barnet
+   * Fetch all locations and build a tree/map to traverse parents.
+   */
   const locationPages: MetadataRoute.Sitemap = [];
+
   if (locations) {
+    // 1. Build a map of id -> location for O(1) lookup
+    const locMap = new Map<string, any>();
     locations.forEach((loc: any) => {
+      locMap.set(loc.id, loc);
+    });
+
+    // 2. Helper to resolve full path slug
+    const getPathSlug = (loc: any): string | null => {
+      const parts = [loc.slug];
+      let current = loc;
+
+      // Safety break to prevent infinite loops
+      let depth = 0;
+      while (current.parent_id && depth < 5) {
+        const parent = locMap.get(current.parent_id);
+        if (!parent) break; // Orphaned relationship
+        parts.unshift(parent.slug);
+        current = parent;
+        depth++;
+      }
+
+      // Optional: If top level is not a country, strict hierarchy validation?
+      // User requested: /locations/:country/:region/:county
+      // So checking type hierarchy:
+      // If original loc is county, parent should be region, grandparent country.
+
+      return parts.join('/');
+    };
+
+    locations.forEach((loc: any) => {
+      // Only include specific types in sitemap as per user request
+      // "Only include routes under: /locations/:country..."
+      if (!['country', 'region', 'city', 'county', 'borough'].includes(loc.type)) return;
+
+      const pathSlug = getPathSlug(loc);
+      if (!pathSlug) return;
+
       const lastModified = loc.updated_at ? new Date(loc.updated_at) : new Date();
 
-      // Base location page
       locationPages.push({
-        url: `${SITE_URL}/locations/${loc.slug}`,
+        url: `${SITE_URL}/locations/${pathSlug}`,
         lastModified,
         changeFrequency: 'weekly',
         priority: loc.type === 'country' ? 0.9 : loc.type === 'region' ? 0.8 : 0.7,
       });
 
-      // Location + Specialism combos for main types
-      if (['country', 'region', 'city', 'county'].includes(loc.type)) {
-        specialismSlugsFromDb.forEach(specSlug => {
-          locationPages.push({
-            url: `${SITE_URL}/locations/${loc.slug}/${specSlug}`,
-            lastModified,
-            changeFrequency: 'weekly',
-            priority: 0.6,
-          });
+      // Location + Specialism combos
+      // We only want these if they are valid locations (e.g. region or county)
+      // Assuming specialisms apply to all valid locations
+      specialismSlugsFromDb.forEach(specSlug => {
+        locationPages.push({
+          url: `${SITE_URL}/locations/${pathSlug}/${specSlug}`,
+          lastModified,
+          changeFrequency: 'weekly',
+          priority: 0.6,
         });
-      }
+      });
     });
   }
 
