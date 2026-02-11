@@ -30,7 +30,7 @@ export function AgencyCTASection() {
 
       <div className="container-main relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
@@ -51,7 +51,7 @@ export function AgencyCTASection() {
         <div className="grid lg:grid-cols-2 gap-6">
           {/* For Agencies */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
+            initial={false}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
@@ -66,9 +66,9 @@ export function AgencyCTASection() {
                   <p className="text-muted-foreground text-sm">Claim your profile today</p>
                 </div>
               </div>
-              
+
               <p className="text-foreground-muted mb-6 leading-relaxed">
-                Join hundreds of agencies already using our directory to reach families 
+                Join hundreds of agencies already using our directory to reach families
                 who are ready to make a difference.
               </p>
 
@@ -92,7 +92,7 @@ export function AgencyCTASection() {
 
           {/* For Social Workers */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
+            initial={false}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -107,9 +107,9 @@ export function AgencyCTASection() {
                   <p className="text-muted-foreground text-sm">Find the right placements</p>
                 </div>
               </div>
-              
+
               <p className="text-foreground-muted mb-6 leading-relaxed">
-                Access our comprehensive database of verified foster care agencies. 
+                Access our comprehensive database of verified foster care agencies.
                 Filter by location, specialization, and availability.
               </p>
 

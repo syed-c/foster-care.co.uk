@@ -18,7 +18,7 @@ export function LeadCTASection() {
     <section className="section-padding bg-background-sand relative overflow-hidden">
       <div className="container-main">
         <motion.div
-          initial={{ opacity: 0, scale: 0.98 }}
+          initial={false}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
@@ -30,21 +30,21 @@ export function LeadCTASection() {
             <div className="absolute bottom-0 left-0 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-radial from-primary/5 to-transparent rounded-full" />
           </div>
-          
+
           {/* Grid Pattern Overlay */}
           <div className="absolute inset-0 opacity-5">
-            <div className="w-full h-full" style={{ 
+            <div className="w-full h-full" style={{
               backgroundImage: 'linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)',
               backgroundSize: '40px 40px'
             }} />
           </div>
-          
+
           <div className="relative z-10 p-8 md:p-12 lg:p-16">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               {/* Content */}
               <div>
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={false}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.2 }}
@@ -52,9 +52,9 @@ export function LeadCTASection() {
                 >
                   <MessageCircle className="w-8 h-8 text-primary-foreground" />
                 </motion.div>
-                
+
                 <motion.h2
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={false}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.3 }}
@@ -68,9 +68,9 @@ export function LeadCTASection() {
                     </>
                   )}
                 </motion.h2>
-                
+
                 <motion.p
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={false}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.4 }}
@@ -78,18 +78,18 @@ export function LeadCTASection() {
                 >
                   {ctaContent?.content || "Whether you're considering fostering or looking for the right agency, we're here to help guide you through the process."}
                 </motion.p>
-                
+
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={false}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.5 }}
                   className="flex flex-col sm:flex-row gap-4"
                 >
                   <Link href="/contact">
-                    <Button 
-                      variant="hero" 
-                      size="lg" 
+                    <Button
+                      variant="hero"
+                      size="lg"
                       className="w-full sm:w-auto group shadow-lg shadow-primary/30"
                     >
                       Get Support
@@ -97,9 +97,9 @@ export function LeadCTASection() {
                     </Button>
                   </Link>
                   <Link href="/agencies">
-                    <Button 
-                      variant="secondary" 
-                      size="lg" 
+                    <Button
+                      variant="secondary"
+                      size="lg"
                       className="w-full sm:w-auto text-white"
                     >
                       Browse Agencies
@@ -110,7 +110,7 @@ export function LeadCTASection() {
 
               {/* Benefits */}
               <motion.div
-                initial={{ opacity: 0, x: 20 }}
+                initial={false}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.5 }}
@@ -119,7 +119,7 @@ export function LeadCTASection() {
                 {benefits.map((benefit, index) => (
                   <motion.div
                     key={benefit.text}
-                    initial={{ opacity: 0, x: 20 }}
+                    initial={false}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.4, delay: 0.6 + index * 0.1 }}

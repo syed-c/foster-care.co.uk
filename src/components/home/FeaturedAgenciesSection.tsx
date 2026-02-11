@@ -70,24 +70,21 @@ export function FeaturedAgenciesSection() {
     slug: "compass-fostering"
   }];
   const displayAgencies = agencies && agencies.length > 0 ? agencies.slice(0, 3) : fallbackAgencies;
-  const metadata = featuredContent?.metadata as Record<string, string> | null;
+  const metadata = featuredContent?.metadata ? (featuredContent.metadata as Record<string, string>) : null;
   const title = featuredContent?.title || "Top-Rated Fostering Agencies";
   const subtitle = metadata?.subtitle || "Recommended by Foster Carers";
   const content = featuredContent?.content || "Explore highly-rated independent and local authority fostering agencies recommended by current foster carers. Each agency offers Ofsted registration, comprehensive training, and competitive allowances.";
   const ctaText = metadata?.cta_text || "View All 500+ Agencies";
   const ctaUrl = metadata?.cta_url || "/agencies";
   return <section className="section-padding bg-background relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-72 h-72 bg-accent/30 rounded-full blur-3xl" />
-      </div>
+    {/* Background decoration */}
+    <div className="absolute inset-0">
+      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-72 h-72 bg-accent/30 rounded-full blur-3xl" />
+    </div>
 
-      <div className="container-main relative z-10">
-        <motion.div initial={{
-        opacity: 0,
-        y: 20
-      }} whileInView={{
+    <div className="container-main relative z-10">
+      <motion.div initial={false} whileInView={{
         opacity: 1,
         y: 0
       }} viewport={{
@@ -96,90 +93,90 @@ export function FeaturedAgenciesSection() {
       }} transition={{
         duration: 0.6
       }} className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-          <div>
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-secondary-foreground mb-4 bg-sidebar-primary">
-              <Star className="w-4 h-4" />
-              {subtitle}
-            </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-2">
-              {title}
-            </h2>
-            <p className="text-foreground-muted max-w-xl text-base">
-              {content}
-            </p>
-          </div>
-          <Link href={ctaUrl}>
-            <Button variant="secondary" size="lg" className="group text-white">
-              {ctaText}
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
-          </Link>
-        </motion.div>
+        <div>
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-secondary-foreground mb-4 bg-sidebar-primary">
+            <Star className="w-4 h-4" />
+            {subtitle}
+          </span>
+          <h2 className="text-3xl md:text-4xl font-bold mb-2">
+            {title}
+          </h2>
+          <p className="text-foreground-muted max-w-xl text-base">
+            {content}
+          </p>
+        </div>
+        <Link href={ctaUrl}>
+          <Button variant="secondary" size="lg" className="group text-white">
+            {ctaText}
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Button>
+        </Link>
+      </motion.div>
 
-        {isLoading ? <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3].map(i => <Card key={i} className="h-full bg-[#1a2228] text-white">
-                <CardContent className="p-6">
-                  <Skeleton className="h-6 w-3/4 mb-2" />
-                  <Skeleton className="h-4 w-1/2 mb-4" />
-                  <Skeleton className="h-16 w-full mb-4" />
-                  <Skeleton className="h-8 w-full" />
-                </CardContent>
-              </Card>)}
-          </div> : <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{
+      {isLoading ? <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[1, 2, 3].map(i => <Card key={i} className="h-full bg-[#1a2228] text-white">
+          <CardContent className="p-6">
+            <Skeleton className="h-6 w-3/4 mb-2" />
+            <Skeleton className="h-4 w-1/2 mb-4" />
+            <Skeleton className="h-16 w-full mb-4" />
+            <Skeleton className="h-8 w-full" />
+          </CardContent>
+        </Card>)}
+      </div> : <motion.div variants={containerVariants} initial={false} whileInView="visible" viewport={{
         once: true,
         margin: "-100px"
       }} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {displayAgencies.map(agency => <motion.div key={agency.id} variants={cardVariants}>
-                <Link href={`/agencies/${agency.slug}`}>
-                  <Card className="h-full bg-[#1a2228] text-white group transition-all duration-300 hover:scale-105 hover:shadow-elevated hover:border-primary/20 overflow-hidden relative">
-                    {/* Hover gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    
-                    <CardContent className="p-6 relative">
-                      {/* Header */}
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <Building2 className="w-6 h-6 text-white" />
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <h3 className="font-semibold text-lg text-white group-hover:text-white transition-colors line-clamp-1">
-                                {agency.name}
-                              </h3>
-                              {agency.is_verified && <BadgeCheck className="w-5 h-5 text-white flex-shrink-0" />}
-                            </div>
-                            <div className="flex items-center gap-1 text-sm text-white/60">
-                              <MapPin className="w-4 h-4 text-white" />
-                              {agency.city || "UK"}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+        {displayAgencies.map(agency => <motion.div key={agency.id} variants={cardVariants}>
+          <Link href={`/agencies/${agency.slug}`}>
+            <Card className="h-full bg-[#1a2228] text-white group transition-all duration-300 hover:scale-105 hover:shadow-elevated hover:border-primary/20 overflow-hidden relative">
+              {/* Hover gradient */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                      {/* Description */}
-                      <p className="text-white/80 text-sm mb-4 line-clamp-2">
-                        {agency.description || "Providing exceptional foster care support and services."}
-                      </p>
-
-                      {/* Rating */}
-                      <div className="flex items-center justify-between pt-4 border-t border-border">
-                        <div className="flex items-center gap-3">
-                          <div className="flex items-center gap-1.5 bg-primary/10 px-3 py-1.5 rounded-full">
-                            <Star className="w-4 h-4 text-primary fill-primary" />
-                            <span className="font-semibold text-sm">{agency.rating?.toFixed(1) || "4.8"}</span>
-                          </div>
-                          <span className="text-sm text-white/60">
-                            ({agency.review_count || 0} reviews)
-                          </span>
-                        </div>
-                        <ArrowRight className="w-5 h-5 text-white group-hover:text-white group-hover:translate-x-1 transition-all" />
+              <CardContent className="p-6 relative">
+                {/* Header */}
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <Building2 className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="font-semibold text-lg text-white group-hover:text-white transition-colors line-clamp-1">
+                          {agency.name}
+                        </h3>
+                        {agency.is_verified && <BadgeCheck className="w-5 h-5 text-white flex-shrink-0" />}
                       </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              </motion.div>)}
-          </motion.div>}
-      </div>
-    </section>;
+                      <div className="flex items-center gap-1 text-sm text-white/60">
+                        <MapPin className="w-4 h-4 text-white" />
+                        {agency.city || "UK"}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Description */}
+                <p className="text-white/80 text-sm mb-4 line-clamp-2">
+                  {agency.description || "Providing exceptional foster care support and services."}
+                </p>
+
+                {/* Rating */}
+                <div className="flex items-center justify-between pt-4 border-t border-border">
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-1.5 bg-primary/10 px-3 py-1.5 rounded-full">
+                      <Star className="w-4 h-4 text-primary fill-primary" />
+                      <span className="font-semibold text-sm">{agency.rating?.toFixed(1) || "4.8"}</span>
+                    </div>
+                    <span className="text-sm text-white/60">
+                      ({agency.review_count || 0} reviews)
+                    </span>
+                  </div>
+                  <ArrowRight className="w-5 h-5 text-white group-hover:text-white group-hover:translate-x-1 transition-all" />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+        </motion.div>)}
+      </motion.div>}
+    </div>
+  </section>;
 }

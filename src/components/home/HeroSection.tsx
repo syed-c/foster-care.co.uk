@@ -180,7 +180,7 @@ export function HeroSection({ initialData }: HeroSectionProps) {
 
         {/* Search Bar */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
           className="relative max-w-xl mx-auto mb-10"
@@ -205,7 +205,7 @@ export function HeroSection({ initialData }: HeroSectionProps) {
 
         {/* Stats Boxes */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
           className="flex flex-wrap items-center justify-center gap-3 md:gap-4 mb-12"
@@ -213,7 +213,7 @@ export function HeroSection({ initialData }: HeroSectionProps) {
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={false}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3, delay: 0.5 + index * 0.08 }}
               whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
@@ -228,7 +228,7 @@ export function HeroSection({ initialData }: HeroSectionProps) {
 
         {/* Trust Badges */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
@@ -245,7 +245,7 @@ export function HeroSection({ initialData }: HeroSectionProps) {
             ].map((partner, index) => (
               <motion.div
                 key={partner.name}
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={false}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.6 + index * 0.1 }}
                 whileHover={{ scale: 1.05, y: -2 }}

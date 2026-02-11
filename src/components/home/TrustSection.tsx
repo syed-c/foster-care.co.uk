@@ -88,10 +88,7 @@ export function TrustSection({ initialData }: TrustSectionProps) {
     </div>
 
     <div className="container-main relative z-10">
-      <motion.div initial={{
-        opacity: 0,
-        y: 20
-      }} whileInView={{
+      <motion.div initial={false} whileInView={{
         opacity: 1,
         y: 0
       }} viewport={{
@@ -119,7 +116,7 @@ export function TrustSection({ initialData }: TrustSectionProps) {
       </motion.div>
 
       {/* Trust Points Grid */}
-      <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{
+      <motion.div variants={containerVariants} initial={false} whileInView="visible" viewport={{
         once: true,
         margin: "-100px"
       }} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
@@ -136,10 +133,7 @@ export function TrustSection({ initialData }: TrustSectionProps) {
       </motion.div>
 
       {/* Stats Bar */}
-      <motion.div initial={{
-        opacity: 0,
-        y: 20
-      }} whileInView={{
+      <motion.div initial={false} whileInView={{
         opacity: 1,
         y: 0
       }} viewport={{
@@ -148,10 +142,7 @@ export function TrustSection({ initialData }: TrustSectionProps) {
         duration: 0.6
       }} className="bg-secondary rounded-3xl p-8 md:p-10 text-secondary-foreground">
         <div className="grid md:grid-cols-3 gap-8 md:gap-4">
-          {stats.map((stat, index) => <motion.div key={stat.label} initial={{
-            opacity: 0,
-            scale: 0.9
-          }} whileInView={{
+          {stats.map((stat, index) => <motion.div key={stat.label} initial={false} whileInView={{
             opacity: 1,
             scale: 1
           }} viewport={{

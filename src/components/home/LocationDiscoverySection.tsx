@@ -97,10 +97,7 @@ export function LocationDiscoverySection({ initialData, initialLocations }: Loca
     </div>
 
     <div className="container-main relative z-10">
-      <motion.div initial={{
-        opacity: 0,
-        y: 20
-      }} whileInView={{
+      <motion.div initial={false} whileInView={{
         opacity: 1,
         y: 0
       }} viewport={{
@@ -128,7 +125,7 @@ export function LocationDiscoverySection({ initialData, initialLocations }: Loca
       </motion.div>
 
       {/* UK Countries Grid */}
-      <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{
+      <motion.div variants={containerVariants} initial={false} whileInView="visible" viewport={{
         once: true,
         margin: "-100px"
       }} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
@@ -149,10 +146,7 @@ export function LocationDiscoverySection({ initialData, initialLocations }: Loca
       </motion.div>
 
       {/* Popular Regions */}
-      <motion.div initial={{
-        opacity: 0,
-        y: 20
-      }} whileInView={{
+      <motion.div initial={false} whileInView={{
         opacity: 1,
         y: 0
       }} viewport={{
@@ -164,10 +158,7 @@ export function LocationDiscoverySection({ initialData, initialLocations }: Loca
       }} className="text-center">
         <h3 className="text-xl font-semibold mb-6">Popular Regions in England</h3>
         <div className="flex flex-wrap justify-center gap-3">
-          {popularRegions.map((region, index) => <motion.div key={region.name} initial={{
-            opacity: 0,
-            scale: 0.9
-          }} whileInView={{
+          {popularRegions.map((region, index) => <motion.div key={region.name} initial={false} whileInView={{
             opacity: 1,
             scale: 1
           }} viewport={{
