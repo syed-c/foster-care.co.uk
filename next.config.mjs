@@ -96,28 +96,7 @@ const nextConfig = {
     // React strict mode
     reactStrictMode: true,
     async redirects() {
-        return [
-            {
-                source: '/locations/:region((?!england$)[^/]+)',
-                destination: '/locations/england/:region',
-                permanent: true,
-            },
-            {
-                source: '/locations/:region((?!england$)[^/]+)/:county',
-                destination: '/locations/england/:region/:county',
-                permanent: true,
-            },
-            {
-                source: '/locations/:country/:country/:region',
-                destination: '/locations/:country/:region',
-                permanent: true,
-            },
-            {
-                source: '/locations/:country/:country/:country',
-                destination: '/locations/:country',
-                permanent: true,
-            },
-        ];
+        return [];
     },
 };
 
