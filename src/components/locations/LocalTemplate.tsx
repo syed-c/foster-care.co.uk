@@ -1,13 +1,13 @@
-"use strict";
+"use client";
 import { motion } from "framer-motion";
-import { MapPin, ArrowRight, Shield, Clock, Heart, CheckCircle, HelpCircle } from "lucide-react";
+import { MapPin, ArrowRight, Heart, Users, GraduationCap, Home, CheckCircle, Info, Sparkles, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import Link from "next/link";
 import { Location, Agency, FAQ } from "@/services/dataService";
-import { cn } from "@/lib/utils";
 import { AgencyListings } from "@/components/location/AgencyListings";
+import { ProcessSection } from "./shared/ProcessSection";
+import { CTASection } from "./shared/CTASection";
 
 export interface LocationPageProps {
     location: Location;
@@ -30,195 +30,208 @@ export function LocalTemplate({
 }: LocationPageProps) {
     const locationName = location.name;
 
-    // Fallback content if empty
-    const localEmotionalPitch = `There is an urgent need for foster carers in ${locationName}. Use your spare room to change a local child's story.`;
-    const localWhyFoster = `Fostering in ${locationName} allows children to stay connected to their schools, friends, and community. By fostering locally, you provide stability when it's needed most.`;
-
     const defaultFaqs = [
         {
-            question: `How much do foster carers get paid in ${locationName}?`,
-            answer: `Foster carers in ${locationName} receive a weekly allowance that covers the cost of caring for a child, plus a professional fee. Amounts vary by agency and the child's needs.`
+            question: `How many children need foster care in ${locationName}?`,
+            answer: `Currently, there are over ${stats.childrenInCare.toLocaleString()} children in the ${locationName} area who require stable, loving foster homes. The demand is particularly high for sibling groups and children with additional needs.`
         },
         {
-            question: "Can I foster if I work full time?",
-            answer: "Yes, many foster carers work. It depends on your flexibility and the needs of the child."
+            question: "Can I choose the age of the children I foster?",
+            answer: "Yes. During your assessment, we'll discuss your preferences and help you decide which age range and type of fostering (e.g., short-term, long-term) best suits your family and lifestyle."
         },
         {
-            question: `Are there local support groups in ${locationName}?`,
-            answer: `Yes, ${locationName} has active foster carer support groups that meet regularly for coffee mornings and training sessions.`
+            question: "What if I have never worked with children before?",
+            answer: "Experience is helpful but not essential. We provide comprehensive training and ongoing support to ensure you have all the skills and confidence needed to provide excellent care."
         }
     ];
 
     const displayFaqs = (faqs && faqs.length > 0) ? faqs : defaultFaqs;
 
     return (
-        <div className="flex flex-col min-h-screen font-sans selection:bg-primary/20 selection:text-primary">
+        <div className="flex flex-col min-h-screen font-sans selection:bg-primary/20 selection:text-primary bg-white">
 
-            {/* 1. Local Hero - Conversion Focused */}
-            <section className="relative pt-24 pb-20 md:pt-32 md:pb-28 overflow-hidden bg-slate-950 text-white">
+            {/* 1. Local Hero - Hyperlocal & Conversion Focused */}
+            <section className="relative pt-32 pb-24 md:pt-40 md:pb-36 overflow-hidden bg-slate-950 text-white">
                 <div className="absolute inset-0 z-0">
                     <img
                         src="/images/locations/generic-hero.png"
-                        alt={`Fostering in ${locationName}`}
-                        className="w-full h-full object-cover opacity-20"
+                        alt={`Supporting foster care in ${locationName}`}
+                        className="w-full h-full object-cover opacity-20 scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 via-slate-950/80 to-slate-900/50" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-900/50" />
                 </div>
 
-                <div className="container-main relative z-10 grid lg:grid-cols-2 gap-12 items-center">
-                    <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.5 }}
-                    >
-                        <Badge className="bg-primary text-white border-none mb-6 px-4 py-1.5 rounded-full font-bold tracking-wide uppercase text-[10px]">
-                            <MapPin className="w-3 h-3 mr-2 inline" />
-                            Local Opportunity
-                        </Badge>
+                <div className="container-main relative z-10">
+                    <div className="grid lg:grid-cols-2 gap-16 items-center">
+                        <motion.div
+                            initial={{ opacity: 0, x: -30 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.6 }}
+                        >
+                            <Badge className="bg-primary/10 text-primary border-primary/20 mb-8 px-5 py-2 rounded-full font-bold tracking-widest uppercase text-[11px]">
+                                <Sparkles className="w-3.5 h-3.5 mr-2 inline" />
+                                Community Impact
+                            </Badge>
 
-                        <h1 className="text-4xl md:text-6xl font-black mb-6 tracking-tighter leading-[1.05] text-white">
-                            Fostering in <span className="text-primary">{locationName}</span>
-                        </h1>
+                            <h1 className="text-5xl md:text-7xl font-black mb-8 tracking-tighter leading-[0.95] text-white">
+                                Foster in <span className="text-primary italic">{locationName}</span>
+                            </h1>
 
-                        <p className="text-lg md:text-xl text-white/90 mb-8 leading-relaxed font-medium">
-                            {localEmotionalPitch}
-                        </p>
+                            <p className="text-xl md:text-2xl text-white/80 mb-12 leading-relaxed font-medium">
+                                Help us keep <span className="text-white font-black underline decoration-primary/50 underline-offset-4">{locationName}</span> children in their local community. Your spare room can change a life today.
+                            </p>
 
-                        <div className="flex flex-col sm:flex-row gap-4">
-                            <Button size="lg" className="w-full sm:w-auto rounded-full bg-primary hover:bg-primary/90 text-white font-bold h-14 px-8 text-lg shadow-lg shadow-primary/20">
-                                Enquire Now
-                            </Button>
-                            <Button size="lg" variant="outline" className="w-full sm:w-auto rounded-full bg-white border-white/20 text-slate-950 hover:bg-white/90 h-14 px-8 text-lg font-bold">
-                                See Local Agencies
-                            </Button>
-                        </div>
-                    </motion.div>
-
-                    <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10">
-                        <h3 className="text-white font-bold text-xl mb-6">Current Need in {locationName}</h3>
-                        <div className="space-y-6">
-                            <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                                <span className="text-white/60">Children needing homes</span>
-                                <span className="text-2xl font-black text-primary">{Math.ceil(stats.childrenInCare / 30)}+</span>
+                            <div className="flex flex-col sm:flex-row items-center gap-5">
+                                <Button size="lg" className="w-full sm:w-auto rounded-full group bg-primary hover:bg-primary/90 text-white font-black h-16 px-10 text-xl shadow-2xl shadow-primary/20">
+                                    Enquire Now
+                                    <ArrowRight className="w-6 h-6 ml-2 group-hover:translate-x-1 transition-transform" />
+                                </Button>
+                                <div className="flex items-center gap-3">
+                                    <div className="flex -space-x-4">
+                                        {[1, 2, 3].map(i => (
+                                            <div key={i} className="w-10 h-10 rounded-full border-2 border-slate-950 bg-slate-800 flex items-center justify-center overflow-hidden">
+                                                <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="Carer" />
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="text-xs font-bold text-white/40 uppercase tracking-widest leading-tight">
+                                        Join {stats.agenciesCount * 15}+ carers <br /> in {locationName}
+                                    </div>
+                                </div>
                             </div>
-                            <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                                <span className="text-white/60">Active local families</span>
-                                <span className="text-2xl font-black text-white">~{Math.ceil(stats.childrenInCare / 40)}</span>
+                        </motion.div>
+
+                        <div className="hidden lg:grid grid-cols-2 gap-6">
+                            <div className="p-8 rounded-[3rem] bg-white/5 border border-white/10 backdrop-blur-sm">
+                                <div className="text-4xl font-black text-primary mb-2">{stats.childrenInCare.toLocaleString()}</div>
+                                <div className="text-xs uppercase tracking-widest text-white/40 font-bold">{locationName} Children in Care</div>
                             </div>
-                            <div className="flex items-center justify-between">
-                                <span className="text-white/60">Agencies covering area</span>
-                                <span className="text-2xl font-black text-white">{stats.agenciesCount}</span>
+                            <div className="p-8 rounded-[3rem] bg-white/5 border border-white/10 backdrop-blur-sm mt-12">
+                                <div className="text-4xl font-black text-white mb-2">24/7</div>
+                                <div className="text-xs uppercase tracking-widest text-white/40 font-bold">Local Support</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* 2. Why Foster in [Borough] - Hyperlocal */}
-            <section className="py-24 bg-white">
-                <div className="container-main max-w-4xl mx-auto text-center">
-                    <Heart className="w-12 h-12 text-primary mx-auto mb-6" />
-                    <h2 className="text-3xl md:text-4xl font-black mb-6 text-slate-950">Keep {locationName}'s Children Local</h2>
-                    <p className="text-xl text-slate-600 leading-relaxed mb-10">
-                        {localWhyFoster}
-                    </p>
-                    <div className="grid md:grid-cols-2 gap-8 text-left">
-                        <div className="bg-slate-50 p-8 rounded-3xl">
-                            <h3 className="font-bold text-lg mb-2">School Stability</h3>
-                            <p className="text-slate-500">Local fostering means children don't have to change schools, keeping their education on track.</p>
-                        </div>
-                        <div className="bg-slate-50 p-8 rounded-3xl">
-                            <h3 className="font-bold text-lg mb-2">Community Roots</h3>
-                            <p className="text-slate-500">Maintain vital links with friends, clubs, and extended family within {locationName}.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* 3. How Fostering Works Here */}
-            <section className="py-24 bg-background-sand">
+            {/* 2. Keeping Children Local - Peer-to-peer/Emotional appeal */}
+            <section className="py-24 md:py-32 bg-background-sand overflow-hidden">
                 <div className="container-main">
-                    <div className="flex items-center gap-4 mb-12">
-                        <Clock className="w-8 h-8 text-slate-950" />
-                        <h2 className="text-3xl font-black text-slate-950">The Process in {locationName}</h2>
-                    </div>
-
-                    <div className="grid md:grid-cols-4 gap-4">
-                        {[
-                            { step: "1", title: "Chat", desc: "15 min call" },
-                            { step: "2", title: "Visit", desc: "Home consultation" },
-                            { step: "3", title: "Train", desc: "Local workshops" },
-                            { step: "4", title: "Foster", desc: "First placement" }
-                        ].map((s, i) => (
-                            <div key={i} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
-                                <span className="text-4xl font-black text-primary/20 mb-4">{s.step}</span>
-                                <h3 className="text-xl font-bold mb-1">{s.title}</h3>
-                                <p className="text-sm text-slate-400 font-bold uppercase tracking-wider">{s.desc}</p>
+                    <div className="grid lg:grid-cols-2 gap-20 items-center">
+                        <div className="relative order-2 lg:order-1">
+                            <div className="aspect-square rounded-[4rem] overflow-hidden shadow-2xl relative z-10 border-8 border-white">
+                                <img
+                                    src="/images/locations/generic-hero.png"
+                                    alt={`Fostering in ${locationName}`}
+                                    className="w-full h-full object-cover"
+                                />
                             </div>
-                        ))}
+                            <div className="absolute -top-10 -left-10 w-40 h-40 bg-primary/20 rounded-full blur-3xl -z-0" />
+                        </div>
+
+                        <motion.div
+                            initial={{ opacity: 0, x: 40 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8 }}
+                            className="order-1 lg:order-2"
+                        >
+                            <div className="inline-flex items-center gap-2 text-primary font-black text-xs uppercase tracking-widest mb-6">
+                                <div className="w-10 h-px bg-primary" />
+                                Hyperlocal Impact
+                            </div>
+                            <h2 className="text-4xl md:text-6xl font-black mb-10 tracking-tighter text-slate-950 leading-[1.1]">
+                                Keeping Children in <span className="text-primary italic">{locationName}</span>
+                            </h2>
+                            <div className="space-y-6 text-xl text-slate-700 leading-relaxed font-medium">
+                                <p>
+                                    When a child needs a foster home in {locationName}, our priority is to keep them close to their school, friends, and everything they know. This continuity is vital for their emotional well-being and long-term success.
+                                </p>
+                                <p>
+                                    By fostering locally, you are helping to maintain the fabric of our community. You're ensuring that a child from {locationName} doesn't have to face the additional trauma of moving to a completely unfamiliar area.
+                                </p>
+                            </div>
+
+                            <div className="mt-12 flex items-center gap-6 p-6 rounded-3xl bg-white shadow-sm border border-slate-100">
+                                <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                                    <Heart className="w-6 h-6 text-primary" />
+                                </div>
+                                <p className="text-sm font-bold text-slate-600 leading-snug italic">
+                                    "Knowing my foster child could stay at the same school made all the difference to their confidence during such a big change."
+                                    <span className="block not-italic text-slate-400 mt-1">— Local {locationName} Carer</span>
+                                </p>
+                            </div>
+                        </motion.div>
                     </div>
                 </div>
             </section>
 
-            {/* 4. Local Agencies */}
-            <section className="py-24 bg-white border-y border-slate-100">
+            {/* 3. Local Process Section */}
+            <ProcessSection locationName={locationName} />
+
+            {/* 4. Verified Agencies in Area */}
+            <section className="py-24 md:py-32 bg-white border-y border-slate-100">
                 <div className="container-main">
                     <AgencyListings
                         agencies={agencies}
-                        title={`Agencies covering ${locationName}`}
-                        subtitle={`Compare vetted agencies that support carers in ${locationName}.`}
+                        title={`Best Fostering Agencies in ${locationName}`}
+                        subtitle={`We've hand-picked the highest rated agencies operating specifically within the ${locationName} area.`}
                         showFeaturedLabel={true}
                         locationName={locationName}
                     />
                 </div>
             </section>
 
-            {/* 5. Can I Foster in [Borough]? */}
-            <section className="py-24 bg-slate-950 text-white">
-                <div className="container-main grid lg:grid-cols-2 gap-16 items-center">
-                    <div>
-                        <h2 className="text-3xl md:text-4xl font-black mb-6 text-white">Requirements in {locationName}</h2>
-                        <p className="text-white/60 text-lg mb-8">
-                            Most people in {locationName} can foster. You need a spare room and the passion to care.
-                        </p>
-                        <ul className="space-y-4">
-                            <li className="flex gap-4 items-center">
-                                <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center"><CheckCircle className="w-5 h-5 text-primary" /></div>
-                                <span className="font-bold">Spare bedroom required</span>
-                            </li>
-                            <li className="flex gap-4 items-center">
-                                <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center"><CheckCircle className="w-5 h-5 text-primary" /></div>
-                                <span className="font-bold">Over 21 years old</span>
-                            </li>
-                            <li className="flex gap-4 items-center">
-                                <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center"><CheckCircle className="w-5 h-5 text-primary" /></div>
-                                <span className="font-bold">Permanent UK resident</span>
-                            </li>
-                        </ul>
+            {/* 5. Requirements Checklist */}
+            <section className="py-24 md:py-32 bg-background-sand">
+                <div className="container-main max-w-4xl mx-auto">
+                    <div className="text-center mb-16">
+                        <h2 className="text-4xl md:text-5xl font-black mb-6 text-slate-950 tracking-tighter">Can You Foster?</h2>
+                        <p className="text-xl text-slate-600 font-medium">Basic requirements for residents of {locationName}.</p>
                     </div>
-                    <div className="bg-white/10 p-8 rounded-3xl border border-white/5">
-                        <HelpCircle className="w-10 h-10 text-primary mb-4" />
-                        <h3 className="text-xl font-bold mb-2 text-white">Housing in {locationName}</h3>
-                        <p className="text-white/60 mb-4">
-                            We know housing in {locationName} can be tight. As long as you have a stable tenancy and a private bedroom for the child, you can foster.
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {[
+                            "A spare bedroom in your home",
+                            "Aged 21 or over",
+                            "Full-time resident of the UK",
+                            "A genuine desire to help local children",
+                            "Stability in your own life",
+                            "Good health and emotional resilience"
+                        ].map((req, i) => (
+                            <div key={i} className="flex items-center gap-4 p-6 rounded-[2rem] bg-white border border-slate-100 shadow-sm">
+                                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                                    <CheckCircle className="w-6 h-6 text-green-600" />
+                                </div>
+                                <span className="text-slate-800 font-bold text-lg">{req}</span>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="mt-12 text-center">
+                        <p className="text-slate-500 font-medium">
+                            <Info className="w-4 h-4 inline mr-2 text-primary" />
+                            Every agency has their own specific criteria, but these are the foundations.
                         </p>
                     </div>
                 </div>
             </section>
 
+            {/* 6. FAQ Block */}
+            <section className="py-24 md:py-32 bg-white">
+                <div className="container-main max-w-4xl mx-auto">
+                    <div className="text-center mb-16">
+                        <h2 className="text-4xl md:text-5xl font-black mb-6 text-slate-950 tracking-tighter">Fostering FAQs</h2>
+                        <p className="text-xl text-slate-600 font-medium">Find answers to common questions in {locationName}.</p>
+                    </div>
 
-            {/* 6. FAQ: Foster Care in [Borough] */}
-            <section className="py-24 bg-white">
-                <div className="container-main max-w-3xl">
-                    <h2 className="text-3xl font-black mb-12 text-slate-950 text-center">Local Questions</h2>
                     <Accordion type="single" collapsible className="space-y-4">
                         {displayFaqs.map((faq, i) => (
-                            <AccordionItem key={i} value={`item-${i}`} className="border border-slate-100 rounded-2xl px-6">
-                                <AccordionTrigger className="text-lg font-bold hover:no-underline text-left">
-                                    {faq.question.replace("[Location]", locationName)}
-                                </AccordionTrigger>
-                                <AccordionContent className="text-slate-600 pb-4">
-                                    {faq.answer.replace("[Location]", locationName)}
+                            <AccordionItem key={i} value={`item-${i}`} className="border-none rounded-3xl bg-slate-50 px-8 py-2 overflow-hidden hover:bg-slate-100 transition-colors">
+                                <AccordionTrigger className="text-xl font-bold hover:no-underline text-slate-950 py-6 text-left">{faq.question}</AccordionTrigger>
+                                <AccordionContent className="text-slate-600 text-lg leading-relaxed pb-8 font-medium">
+                                    {faq.answer}
                                 </AccordionContent>
                             </AccordionItem>
                         ))}
@@ -226,18 +239,8 @@ export function LocalTemplate({
                 </div>
             </section>
 
-            {/* 7. Big CTA Block */}
-            <section className="py-24 bg-primary text-white text-center">
-                <div className="container-main max-w-4xl">
-                    <h2 className="text-4xl md:text-6xl font-black mb-8 tracking-tighter">Ready to Start Your Fostering Journey in {locationName}?</h2>
-                    <p className="text-xl text-white/80 mb-12 font-medium">
-                        Take the first step today. We'll connect you with the best local agencies to guide you through the process.
-                    </p>
-                    <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-black h-16 px-12 text-xl rounded-full shadow-2xl hover:scale-105 transition-transform">
-                        Get Started in {locationName}
-                    </Button>
-                </div>
-            </section>
+            {/* 7. Shared CTA Section */}
+            <CTASection locationName={locationName} theme="dark" className="bg-white" />
         </div>
     );
 }

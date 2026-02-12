@@ -5,21 +5,8 @@ const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+// Site constants
 const SITE_URL = "https://www.foster-care.co.uk";
-
-// Fostering specialisms for location-specialism combo pages
-const SPECIALISM_SLUGS = [
-  "short-term-fostering",
-  "long-term-fostering",
-  "emergency-fostering",
-  "respite-fostering",
-  "therapeutic-fostering",
-  "parent-child-fostering",
-  "sibling-groups-fostering",
-  "teenagers-fostering",
-  "asylum-seekers-fostering",
-  "disabilities-fostering",
-];
 
 serve(async (req) => {
   // Handle CORS preflight
@@ -117,17 +104,35 @@ serve(async (req) => {
   </url>\n`;
     }
 
+    // Build location path map for hierarchical URLs
+    const locationMap = new Map();
+    if (locations) {
+      locations.forEach(loc => locationMap.set(loc.id, loc));
+    }
+
+    const buildFullLocationPath = (location: any): string => {
+      const segments: string[] = [];
+      let current = location;
+
+      while (current) {
+        segments.unshift(current.slug);
+        if (!current.parent_id) break;
+        current = locationMap.get(current.parent_id);
+      }
+
+      // Ensure 'england' is prepended if not a country and no country parent
+      const validCountries = ['england', 'scotland', 'wales', 'northern-ireland'];
+      if (segments.length > 0 && !validCountries.includes(segments[0].toLowerCase())) {
+        segments.unshift('england');
+      }
+
+      return `/locations/${segments.join('/')}`;
+    };
+
     // Add location pages with proper hierarchy
     if (locations) {
-      // Sort by type for proper hierarchy
-      const typeOrder = { country: 1, region: 2, county: 3, city: 4, area: 5 };
-      const sortedLocations = [...locations].sort((a, b) =>
-        (typeOrder[a.type as keyof typeof typeOrder] || 99) -
-        (typeOrder[b.type as keyof typeof typeOrder] || 99)
-      );
-
-      for (const location of sortedLocations) {
-        let urlPath = `/locations/${location.slug}`;
+      for (const location of locations) {
+        const urlPath = buildFullLocationPath(location);
         let priority = "0.6";
 
         // Set priority based on type

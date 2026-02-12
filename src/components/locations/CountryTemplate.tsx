@@ -1,12 +1,14 @@
-"use strict";
+"use client";
 import { motion } from "framer-motion";
-import { MapPin, ArrowRight, CheckCircle, Shield, Info, MessageCircle, ChevronRight } from "lucide-react";
+import { MapPin, ArrowRight, CheckCircle, Info, MessageCircle, ChevronRight, Activity, Users, ShieldCheck, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import Link from "next/link";
 import { Location, Agency, FAQ } from "@/services/dataService";
 import { cn } from "@/lib/utils";
+import { ProcessSection } from "./shared/ProcessSection";
+import { CTASection } from "./shared/CTASection";
 
 export interface LocationPageProps {
     location: Location;
@@ -30,78 +32,82 @@ export function CountryTemplate({
     const locationName = location.name;
 
     // Default National Content
-    const emotionalPitch = "Join the heart of fostering in England. With thousands of children requiring care every day, your decision to foster can create a legacy of love and opportunity for generations to come.";
-    const whyFosterParagraph = "England's foster care system is a vital safety net for thousands of vulnerable young people. From major urban hubs to rural communities, the demand for high-quality, professional foster care is constant. By fostering in England, you become part of a nationwide effort to ensure every child has access to a safe and nurturing home. The network of support available to English foster carers is world-class, offering comprehensive training and competitive allowances.";
+    const emotionalPitch = `Lead the way in fostering excellence across ${locationName}. With over ${stats.childrenInCare.toLocaleString()} children currently in care, your decision to foster is a powerful commitment to the next generation.`;
+    const whyFosterParagraph = `${locationName}'s foster care system is one of the most robust in the world, offering unparalleled support and training for carers. From bustling cities to quiet coastal towns, the demand for nurturing homes remains high. By choosing to foster here, you're joining a dedicated national network of professionals and families committed to providing every child with the stability and love they deserve. The national framework ensures you receive competitive allowances, comprehensive training, and 24/7 support throughout your journey.`;
 
     const defaultFaqs = [
         {
-            question: "What is the process to foster in England?",
-            answer: "The process typically takes 4-6 months and involves an initial enquiry, home visits, a comprehensive assessment (Form F), preparation training, and approval by a fostering panel."
+            question: `What is the national process for fostering in ${locationName}?`,
+            answer: `The process in ${locationName} is standardized and highly professional. It typically takes 4-6 months, including an initial enquiry, home visits, a comprehensive 'Form F' assessment, and finally approval by a fostering panel.`
         },
         {
-            question: "Do I need to own my home?",
-            answer: "No, you can foster whether you rent or own, as long as you have a stable tenancy and a spare bedroom for the foster child."
+            question: "Do I need a specific background to foster?",
+            answer: "No. We welcome carers from all walks of life. Whether you are single, married, in a same-sex relationship, or have your own children, what matters most is your ability to provide a safe and loving home."
         },
         {
-            question: "What support is available nationally?",
-            answer: "In England, all foster carers receive a weekly allowance, dedicated social worker support, and access to ongoing training and peer support groups."
+            question: "What financial support is available nationally?",
+            answer: `In ${locationName}, all foster carers are entitled to a weekly allowance that covers the child's living costs. Many agencies also provide an additional professional fee to recognize the skill and dedication of the carer.`
         }
     ];
 
     const displayFaqs = (faqs && faqs.length > 0) ? faqs : defaultFaqs;
 
     return (
-        <div className="flex flex-col min-h-screen font-sans selection:bg-primary/20 selection:text-primary">
+        <div className="flex flex-col min-h-screen font-sans selection:bg-primary/20 selection:text-primary bg-white">
 
-            {/* 1. Emotive Hero - Country Level */}
-            <section className="relative pt-24 pb-20 md:pt-32 md:pb-28 overflow-hidden bg-slate-950 text-white">
+            {/* 1. National Hero - High Impact */}
+            <section className="relative pt-32 pb-24 md:pt-40 md:pb-36 overflow-hidden bg-slate-950 text-white">
                 <div className="absolute inset-0 z-0">
                     <img
                         src="/images/locations/england-hero.png"
                         alt={`Supporting foster care in ${locationName}`}
-                        className="w-full h-full object-cover opacity-30"
+                        className="w-full h-full object-cover opacity-20 scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-slate-950/80" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-900/50" />
                 </div>
 
                 <div className="container-main relative z-10">
                     <div className="max-w-4xl mx-auto text-center">
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5 }}
+                            transition={{ duration: 0.6 }}
                         >
-                            <Badge className="bg-primary/20 text-primary border-primary/30 mb-6 px-4 py-1.5 rounded-full font-bold tracking-wide uppercase text-[10px]">
-                                <MapPin className="w-3 h-3 mr-2 inline" />
-                                National Coverage
+                            <Badge className="bg-primary/10 text-primary border-primary/20 mb-8 px-5 py-2 rounded-full font-bold tracking-widest uppercase text-[11px]">
+                                <Activity className="w-3.5 h-3.5 mr-2 inline" />
+                                National Fostering Overview
                             </Badge>
 
-                            <h1 className="text-4xl md:text-5xl lg:text-7xl font-black mb-6 tracking-tighter leading-[1.05] text-white">
-                                Foster Care in <span className="text-primary">{locationName}</span>
+                            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 tracking-tighter leading-[0.95] text-white">
+                                Fostering in <span className="text-primary italic">{locationName}</span>
                             </h1>
 
-                            <p className="text-lg md:text-xl text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed font-medium">
+                            <p className="text-xl md:text-2xl text-white/80 mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
                                 {emotionalPitch}
                             </p>
 
-                            <div className="flex flex-wrap items-center justify-center gap-6 md:gap-12 mb-12">
-                                <div className="flex flex-col items-center">
-                                    <span className="text-3xl md:text-5xl font-black text-primary">{stats.childrenInCare}+</span>
-                                    <span className="text-xs uppercase tracking-widest text-white/50 font-bold mt-1">Children in Care</span>
+                            {/* National Stats Grid */}
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-8 mb-14 max-w-3xl mx-auto">
+                                <div className="p-6 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-sm">
+                                    <div className="text-3xl md:text-5xl font-black text-primary mb-1">{stats.childrenInCare.toLocaleString()}+</div>
+                                    <div className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Children in Care</div>
                                 </div>
-                                <div className="w-px h-12 bg-white/10 hidden md:block" />
-                                <div className="flex flex-col items-center">
-                                    <span className="text-3xl md:text-5xl font-black text-primary">{childLocations.length}</span>
-                                    <span className="text-xs uppercase tracking-widest text-white/50 font-bold mt-1">Regions Covered</span>
+                                <div className="p-6 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-sm">
+                                    <div className="text-3xl md:text-5xl font-black text-white mb-1">{childLocations.length}</div>
+                                    <div className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Regions Covered</div>
+                                </div>
+                                <div className="p-6 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-sm col-span-2 md:col-span-1">
+                                    <div className="text-3xl md:text-5xl font-black text-white mb-1">{stats.agenciesCount}+</div>
+                                    <div className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Verified Agencies</div>
                                 </div>
                             </div>
 
-                            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                                <Button size="lg" className="w-full sm:w-auto rounded-full group bg-primary hover:bg-primary/90 text-white font-bold h-14 px-8 text-lg shadow-lg shadow-primary/20">
+                            <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
+                                <Button size="lg" className="w-full sm:w-auto rounded-full group bg-primary hover:bg-primary/90 text-white font-black h-16 px-10 text-xl shadow-2xl shadow-primary/20">
                                     Start Your Journey
-                                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                                    <ArrowRight className="w-6 h-6 ml-2 group-hover:translate-x-1 transition-transform" />
                                 </Button>
-                                <Button size="lg" className="w-full sm:w-auto rounded-full bg-white text-slate-950 hover:bg-slate-100 h-14 px-8 text-lg font-bold border-0 shadow-lg">
+                                <Button size="lg" variant="outline" className="w-full sm:w-auto rounded-full border-white/20 text-white hover:bg-white/10 h-16 px-10 text-xl font-black">
                                     Browse Regions
                                 </Button>
                             </div>
@@ -110,144 +116,178 @@ export function CountryTemplate({
                 </div>
             </section>
 
-            {/* 2. Why Foster Nationally */}
-            <section className="py-24 md:py-32 bg-background-sand">
+            {/* 2. Why Foster Nationally - Long-form SEO */}
+            <section className="py-24 md:py-32 bg-background-sand overflow-hidden">
                 <div className="container-main">
-                    <div className="grid lg:grid-cols-2 gap-16 items-center">
+                    <div className="grid lg:grid-cols-2 gap-20 items-center">
                         <motion.div
-                            initial={{ opacity: 0, x: -30 }}
+                            initial={{ opacity: 0, x: -40 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
-                            transition={{ duration: 0.6 }}
+                            transition={{ duration: 0.8 }}
                         >
-                            <h2 className="text-3xl md:text-5xl font-black mb-8 tracking-tighter text-slate-950 leading-tight">
-                                Why Foster in {locationName}?
+                            <div className="inline-flex items-center gap-2 text-primary font-black text-xs uppercase tracking-widest mb-6">
+                                <div className="w-10 h-px bg-primary" />
+                                National Impact
+                            </div>
+                            <h2 className="text-4xl md:text-6xl font-black mb-10 tracking-tighter text-slate-950 leading-[1.1]">
+                                Why Foster in <br /><span className="text-primary">{locationName}?</span>
                             </h2>
-                            <p className="text-lg text-slate-700/80 leading-relaxed mb-6">
-                                {whyFosterParagraph}
-                            </p>
-                            <blockquote className="border-l-4 border-primary pl-6 py-2 italic text-slate-600 my-8 bg-white/50 rounded-r-xl">
-                                "Fostering has changed our lives. Knowing we are part of a national community of carers gives us strength every day."
-                                <footer className="text-sm font-bold text-slate-900 mt-2">— Sarah & Tom, Foster Carers in England</footer>
-                            </blockquote>
-                        </motion.div>
-                        <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl relative">
-                            <img
-                                src="/images/locations/england-hero.png"
-                                alt={`Fostering in ${locationName}`}
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </section>
+                            <div className="space-y-6 text-xl text-slate-700 leading-relaxed font-medium">
+                                <p>{whyFosterParagraph}</p>
+                                <p>Nationwide policies ensure that every foster carer has access to high-quality therapeutic support, legal protection, and a voice within the fostering community.</p>
+                            </div>
 
-            {/* 3. Getting Started Guide */}
-            <section className="py-24 bg-white">
-                <div className="container-main text-center">
-                    <h2 className="text-3xl md:text-4xl font-black mb-12 text-slate-950">How to Become a Foster Carer</h2>
-                    <div className="mt-8 relative h-64 md:h-80 rounded-[3rem] overflow-hidden border border-slate-100 shadow-sm mx-auto max-w-4xl">
-                        <img
-                            src="/images/locations/steps-visual.png"
-                            alt="Fostering Steps Visual"
-                            className="w-full h-full object-contain bg-[#f3f0e9]"
-                        />
-                    </div>
-                </div>
-            </section>
-
-            {/* 4. Requirements Checklist */}
-            <section className="py-24 bg-background-sand">
-                <div className="container-main">
-                    <div className="max-w-4xl mx-auto bg-white rounded-[3rem] p-12 md:p-16 shadow-xl border border-slate-100">
-                        <div className="text-center mb-12">
-                            <h2 className="text-3xl md:text-4xl font-black mb-4 text-slate-950">Can I Foster in {locationName}?</h2>
-                            <p className="text-slate-500 text-lg">National eligibility criteria overview.</p>
-                        </div>
-                        <div className="grid md:grid-cols-2 gap-y-6 gap-x-12">
-                            {[
-                                "At least 21 years of age",
-                                "Spare bedroom for a child",
-                                "British citizenship or indefinite leave to remain",
-                                "Time to care for a child",
-                                "Good health and fitness",
-                                "No disqualifying criminal convictions"
-                            ].map((req, i) => (
-                                <div key={i} className="flex items-center gap-4">
-                                    <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                                        <CheckCircle className="w-5 h-5 text-green-600" />
-                                    </div>
-                                    <span className="text-slate-700 font-bold text-lg">{req}</span>
+                            <div className="mt-12 grid grid-cols-2 gap-8">
+                                <div className="flex flex-col gap-2">
+                                    <ShieldCheck className="w-10 h-10 text-primary" />
+                                    <h3 className="font-bold text-slate-950 text-lg">National Standards</h3>
+                                    <p className="text-slate-500 text-sm">Strict quality control across all agencies.</p>
                                 </div>
-                            ))}
+                                <div className="flex flex-col gap-2">
+                                    <Users className="w-10 h-10 text-primary" />
+                                    <h3 className="font-bold text-slate-950 text-lg">Peer Network</h3>
+                                    <p className="text-slate-500 text-sm">Tens of thousands of carers nationwide.</p>
+                                </div>
+                            </div>
+                        </motion.div>
+
+                        <div className="relative">
+                            <div className="aspect-[4/5] rounded-[4rem] overflow-hidden shadow-2xl relative z-10 border-8 border-white">
+                                <img
+                                    src="/images/locations/england-hero.png"
+                                    alt={`Fostering in ${locationName}`}
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                            {/* Decorative elements */}
+                            <div className="absolute -top-10 -right-10 w-40 h-40 bg-primary/20 rounded-full blur-3xl -z-0" />
+                            <div className="absolute -bottom-10 -left-10 w-60 h-60 bg-primary/10 rounded-full blur-3xl -z-0" />
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* 5. Local Support Overview (National Level) */}
-            <section className="py-24 bg-white text-slate-950 border-t border-slate-100">
-                <div className="container-main text-center">
-                    <h2 className="text-3xl md:text-4xl font-black mb-6 text-slate-950">National Support Network</h2>
-                    <p className="max-w-2xl mx-auto text-slate-600 mb-12 text-lg">
-                        We connect you with agencies across the country providing 24/7 support, training hubs, and peer mentoring.
-                    </p>
+            {/* 3. National Process Section */}
+            <ProcessSection locationName={locationName} />
+
+            {/* 4. Support available countrywide */}
+            <section className="py-24 md:py-32 bg-white">
+                <div className="container-main">
+                    <div className="text-center max-w-3xl mx-auto mb-20">
+                        <h2 className="text-4xl md:text-5xl font-black mb-6 text-slate-950 tracking-tighter">Support Across {locationName}</h2>
+                        <p className="text-xl text-slate-600 font-medium leading-relaxed">
+                            No matter where you are in {locationName}, you are supported by a world-class network of dedicated professionals.
+                        </p>
+                    </div>
+
                     <div className="grid md:grid-cols-3 gap-8">
                         {[
-                            { title: "Training", desc: "Comprehensive national training standards." },
-                            { title: "Allowances", desc: "Standardized minimum allowances plus agency uplifts." },
-                            { title: "Community", desc: "Access to thousands of other carers." }
+                            {
+                                title: "24/7 Helpline",
+                                desc: "Round-the-clock access to experienced social workers who can offer advice and support when you need it most.",
+                                icon: MessageCircle
+                            },
+                            {
+                                title: "Training Hubs",
+                                desc: "Local and regional training centers providing specialized workshops in therapeutic care and child development.",
+                                icon: GraduationCap
+                            },
+                            {
+                                title: "Financial Security",
+                                desc: "Competitive national allowances plus additional benefits, including tax exemptions and national insurance credits.",
+                                icon: ShieldCheck
+                            }
                         ].map((item, i) => (
-                            <div key={i} className="p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:shadow-lg transition-shadow">
-                                <h3 className="text-xl font-bold mb-2 text-slate-950">{item.title}</h3>
-                                <p className="text-slate-500">{item.desc}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* 6. Regions Grid */}
-            <section className="py-24 bg-white">
-                <div className="container-main">
-                    <h2 className="text-3xl md:text-4xl font-black mb-12 text-slate-950 text-center">Explore Regions in {locationName}</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {childLocations.map((region) => (
-                            <Link key={region.id} href={`/locations/${location.slug}/${region.slug}`} className="group relative overflow-hidden rounded-3xl aspect-[4/3] bg-slate-100">
-                                <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-slate-900/10 transition-colors" />
-                                <div className="absolute bottom-0 left-0 p-8">
-                                    <h3 className="text-2xl font-black text-white mb-1 group-hover:text-primary transition-colors">{region.name}</h3>
-                                    <span className="text-white/80 font-medium flex items-center gap-2">
-                                        Explore Region <ArrowRight className="w-4 h-4" />
-                                    </span>
+                            <motion.div
+                                key={i}
+                                whileHover={{ y: -10 }}
+                                className="p-10 rounded-[3rem] bg-slate-50 border border-slate-100 hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300"
+                            >
+                                <div className="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center mb-8 border border-slate-50">
+                                    <item.icon className="w-8 h-8 text-primary" />
                                 </div>
-                            </Link>
+                                <h3 className="text-2xl font-black mb-4 text-slate-950">{item.title}</h3>
+                                <p className="text-slate-600 font-medium leading-relaxed">{item.desc}</p>
+                            </motion.div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* 7. FAQ + CTA */}
-            <section className="py-24 bg-background-sand">
-                <div className="container-main max-w-4xl">
-                    <h2 className="text-3xl md:text-4xl font-black mb-12 text-slate-950 text-center">Frequently Asked Questions</h2>
+            {/* 5. Regions Browser UI */}
+            <section className="py-24 md:py-32 bg-slate-950 text-white rounded-[4rem] mx-4 my-8">
+                <div className="container-main">
+                    <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
+                        <div className="max-w-2xl">
+                            <h2 className="text-4xl md:text-6xl font-black mb-6 tracking-tighter leading-tight">Explore Regions in <br /><span className="text-primary italic">{locationName}</span></h2>
+                            <p className="text-xl text-white/60 font-medium leading-relaxed">
+                                Start your local journey by exploring the unique foster care landscapes across {locationName}'s key regions.
+                            </p>
+                        </div>
+                        <div className="hidden md:block">
+                            <div className="text-8xl font-black text-white/5 select-none">{locationName.slice(0, 3).toUpperCase()}</div>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {childLocations.map((region, i) => (
+                            <motion.div
+                                key={region.id}
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: i * 0.05 }}
+                                viewport={{ once: true }}
+                            >
+                                <Link href={`/locations/${location.slug}/${region.slug}`} className="group block relative overflow-hidden rounded-[3rem] aspect-[4/3] bg-slate-800 border border-white/5">
+                                    <div className="absolute inset-0 bg-slate-900/60 group-hover:bg-slate-900/40 transition-colors z-10" />
+                                    <img
+                                        src="/images/locations/generic-hero.png"
+                                        alt={region.name}
+                                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                    />
+                                    <div className="absolute top-8 right-8 z-20">
+                                        <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover:bg-primary group-hover:border-primary transition-all">
+                                            <ArrowRight className="w-6 h-6 text-white" />
+                                        </div>
+                                    </div>
+                                    <div className="absolute bottom-10 left-10 right-10 z-20">
+                                        <div className="text-[10px] uppercase tracking-widest text-primary font-black mb-2 flex items-center gap-2">
+                                            <div className="w-6 h-0.5 bg-primary" />
+                                            Regional Hub
+                                        </div>
+                                        <h3 className="text-3xl font-black text-white leading-tight">{region.name}</h3>
+                                    </div>
+                                </Link>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* 6. FAQ Block */}
+            <section className="py-24 md:py-32 bg-white">
+                <div className="container-main max-w-4xl mx-auto">
+                    <div className="text-center mb-16">
+                        <h2 className="text-4xl md:text-5xl font-black mb-6 text-slate-950 tracking-tighter">Frequently Asked Questions</h2>
+                        <p className="text-xl text-slate-600 font-medium">Common questions about fostering on a national level.</p>
+                    </div>
+
                     <Accordion type="single" collapsible className="space-y-4">
                         {displayFaqs.map((faq, i) => (
-                            <AccordionItem key={i} value={`item-${i}`} className="border-b-0 rounded-2xl bg-white px-6 py-2">
-                                <AccordionTrigger className="text-lg font-bold hover:no-underline">{faq.question}</AccordionTrigger>
-                                <AccordionContent className="text-slate-600 text-base">{faq.answer}</AccordionContent>
+                            <AccordionItem key={i} value={`item-${i}`} className="border-none rounded-3xl bg-slate-50 px-8 py-2 overflow-hidden hover:bg-slate-100 transition-colors">
+                                <AccordionTrigger className="text-xl font-bold hover:no-underline text-slate-950 py-6 text-left">{faq.question}</AccordionTrigger>
+                                <AccordionContent className="text-slate-600 text-lg leading-relaxed pb-8 font-medium">
+                                    {faq.answer}
+                                </AccordionContent>
                             </AccordionItem>
                         ))}
                     </Accordion>
-
-                    <div className="mt-20 p-12 rounded-[3rem] bg-white border border-slate-200 text-center shadow-2xl">
-                        <h2 className="text-3xl md:text-5xl font-black mb-6 text-slate-950">Start Your Journey Today</h2>
-                        <Button size="lg" className="rounded-full bg-primary text-white font-bold h-14 px-8 text-lg hover:scale-105 transition-transform shadow-xl shadow-primary/20">
-                            Enquire Now
-                        </Button>
-                    </div>
                 </div>
             </section>
+
+            {/* 7. Shared CTA Section */}
+            <CTASection locationName={locationName} theme="dark" className="bg-white" />
         </div>
     );
 }
