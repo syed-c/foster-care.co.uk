@@ -190,7 +190,7 @@ export function RegionTemplate({
                             {childLocations.map((child) => (
                                 <Link
                                     key={child.id}
-                                    href={`/locations/${path.map(p => p.slug).join('/')}/${child.slug}`}
+                                    href={`/locations/${(path || []).map(p => p.slug).join('/') || location.slug}/${child.slug}`}
                                     className="block p-6 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all group"
                                 >
                                     <span className="font-bold text-white group-hover:text-primary transition-colors text-lg">{child.name}</span>
