@@ -15,7 +15,6 @@ import { LocationHero } from "@/components/location/LocationHero";
 import { AgencyListings } from "@/components/location/AgencyListings";
 import { ChildLocationsGrid } from "@/components/location/ChildLocationsGrid";
 import { WhyFosteringSection } from "@/components/location/WhyFosteringSection";
-import { FosteringTypesSection } from "@/components/location/FosteringTypesSection";
 import { AgencyTypesCompactSection } from "@/components/location/AgencyTypesSection";
 import { EnquirySection } from "@/components/location/EnquirySection";
 import { LocationCTA } from "@/components/location/LocationCTA";
@@ -209,9 +208,6 @@ export default function LocationPage() {
           description={whyFosteringContent?.content}
           locationName={location.name}
         />
-
-        {/* Types of Fostering */}
-        <FosteringTypesSection />
 
         {/* Agency Types Explained */}
         <AgencyTypesCompactSection />

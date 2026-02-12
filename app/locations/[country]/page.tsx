@@ -35,6 +35,12 @@ export async function generateMetadata({ params }: { params: { country: string }
 }
 
 export default async function CountryPage({ params }: { params: { country: string } }) {
+    const serviceSlugs = ['parent-child', 'short-term', 'respite', 'emergency', 'therapeutic', 'long-term', 'sibling-groups', 'teenagers', 'asylum-seekers', 'disabilities', 'short-term-fostering', 'long-term-fostering', 'emergency-fostering', 'respite-fostering', 'therapeutic-fostering', 'parent-child-fostering', 'sibling-groups-fostering', 'teenagers-fostering', 'asylum-seekers-fostering', 'disabilities-fostering'];
+
+    if (serviceSlugs.includes(params.country)) {
+        notFound();
+    }
+
     const locationData = await getLocationBySlug(params.country);
 
     if (!locationData) {

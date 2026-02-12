@@ -6,7 +6,6 @@ const footerLinks = {
   directory: [
     { href: "/agencies", label: "Find Agencies" },
     { href: "/locations/england", label: "Browse by Location" },
-    { href: "/specialisms", label: "Specialisms" },
     { href: "/compare", label: "Compare Agencies" },
   ],
   resources: [

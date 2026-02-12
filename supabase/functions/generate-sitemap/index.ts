@@ -93,7 +93,6 @@ serve(async (req) => {
       { url: "/", priority: "1.0", changefreq: "daily" },
       { url: "/agencies", priority: "0.9", changefreq: "daily" },
       { url: "/locations", priority: "0.9", changefreq: "daily" },
-      { url: "/specialisms", priority: "0.8", changefreq: "weekly" },
       { url: "/compare", priority: "0.7", changefreq: "weekly" },
       { url: "/guides", priority: "0.8", changefreq: "weekly" },
       { url: "/guides/how-to-become-foster-carer", priority: "0.8", changefreq: "monthly" },
@@ -152,18 +151,6 @@ serve(async (req) => {
     <changefreq>weekly</changefreq>
     <priority>${priority}</priority>
   </url>\n`;
-
-        // Add location + specialism combo pages for main location types
-        if (['country', 'region', 'city'].includes(location.type)) {
-          for (const specSlug of SPECIALISM_SLUGS) {
-            xml += `  <url>
-    <loc>${SITE_URL}${urlPath}/${specSlug}</loc>
-    <lastmod>${lastmod}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>\n`;
-          }
-        }
       }
     }
 
@@ -183,23 +170,7 @@ serve(async (req) => {
       }
     }
 
-    // Add specialism pages
-    if (specialisms) {
-      for (const specialism of specialisms) {
-        const lastmod = specialism.updated_at
-          ? new Date(specialism.updated_at).toISOString().split('T')[0]
-          : today;
-
-        xml += `  <url>
-    <loc>${SITE_URL}/specialisms/${specialism.slug}</loc>
-    <lastmod>${lastmod}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>\n`;
-      }
-    }
-
-    // Add blog post pages
+    // Blog post pages
     if (blogPosts) {
       for (const post of blogPosts) {
         const lastmod = post.updated_at

@@ -19,7 +19,6 @@ import { useUserRoles } from "@/hooks/useUserRoles";
 const navLinks = [
   { href: "/agencies", label: "Find Agencies" },
   { href: "/locations/england", label: "Locations" },
-  { href: "/specialisms", label: "Specialisms" },
   { href: "/guides", label: "Guides" },
   { href: "/blog", label: "Blog" },
   { href: "/about", label: "About" },
@@ -67,8 +66,8 @@ export function Header() {
                 key={link.href}
                 href={link.href}
                 className={`text-sm font-medium transition-colors duration-200 ${pathname === link.href
-                    ? "text-primary"
-                    : "text-foreground-muted hover:text-foreground"
+                  ? "text-primary"
+                  : "text-foreground-muted hover:text-foreground"
                   }`}
               >
                 {link.label}
@@ -149,8 +148,8 @@ export function Header() {
                   href={link.href}
                   onClick={() => setIsMenuOpen(false)}
                   className={`text-lg font-medium py-2 transition-colors ${pathname === link.href
-                      ? "text-primary"
-                      : "text-foreground-muted hover:text-foreground"
+                    ? "text-primary"
+                    : "text-foreground-muted hover:text-foreground"
                     }`}
                 >
                   {link.label}

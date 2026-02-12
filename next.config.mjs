@@ -96,7 +96,23 @@ const nextConfig = {
     // React strict mode
     reactStrictMode: true,
     async redirects() {
-        return [];
+        return [
+            {
+                source: '/locations/:country/:service(short-term-fostering|long-term-fostering|emergency-fostering|respite-fostering|therapeutic-fostering|parent-child-fostering|sibling-groups-fostering|teenagers-fostering|asylum-seekers-fostering|disabilities-fostering|parent-child|short-term|respite)',
+                destination: '/locations/:country',
+                permanent: true,
+            },
+            {
+                source: '/locations/:country/:region/:service(short-term-fostering|long-term-fostering|emergency-fostering|respite-fostering|therapeutic-fostering|parent-child-fostering|sibling-groups-fostering|teenagers-fostering|asylum-seekers-fostering|disabilities-fostering|parent-child|short-term|respite)',
+                destination: '/locations/:country/:region',
+                permanent: true,
+            },
+            {
+                source: '/locations/:country/:region/:county/:service(short-term-fostering|long-term-fostering|emergency-fostering|respite-fostering|therapeutic-fostering|parent-child-fostering|sibling-groups-fostering|teenagers-fostering|asylum-seekers-fostering|disabilities-fostering|parent-child|short-term|respite)',
+                destination: '/locations/:country/:region/:county',
+                permanent: true,
+            },
+        ];
     },
 };
 

@@ -37,11 +37,13 @@ export async function generateMetadata({ params }: { params: { country: string; 
 }
 
 export default async function CountyPage({ params }: { params: { country: string; region: string; county: string } }) {
-    // Prevent duplicate slugs
+    const serviceSlugs = ['parent-child', 'short-term', 'respite', 'emergency', 'therapeutic', 'long-term', 'sibling-groups', 'teenagers', 'asylum-seekers', 'disabilities', 'short-term-fostering', 'long-term-fostering', 'emergency-fostering', 'respite-fostering', 'therapeutic-fostering', 'parent-child-fostering', 'sibling-groups-fostering', 'teenagers-fostering', 'asylum-seekers-fostering', 'disabilities-fostering'];
+
     if (
         params.country === params.county ||
         params.region === params.county ||
-        params.country === params.region
+        params.country === params.region ||
+        serviceSlugs.includes(params.county)
     ) {
         notFound();
     }

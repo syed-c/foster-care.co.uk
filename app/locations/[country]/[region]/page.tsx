@@ -37,9 +37,10 @@ export async function generateMetadata({ params }: { params: { country: string; 
 }
 
 export default async function RegionPage({ params }: { params: { country: string; region: string } }) {
-    // Prevent duplicate slugs (e.g. /locations/england/england)
-    if (params.country === params.region) {
-        notFound(); // or redirect(`/locations/${params.country}`)
+    const serviceSlugs = ['parent-child', 'short-term', 'respite', 'emergency', 'therapeutic', 'long-term', 'sibling-groups', 'teenagers', 'asylum-seekers', 'disabilities', 'short-term-fostering', 'long-term-fostering', 'emergency-fostering', 'respite-fostering', 'therapeutic-fostering', 'parent-child-fostering', 'sibling-groups-fostering', 'teenagers-fostering', 'asylum-seekers-fostering', 'disabilities-fostering'];
+
+    if (params.country === params.region || serviceSlugs.includes(params.region)) {
+        notFound();
     }
 
     const locationSlug = params.region;

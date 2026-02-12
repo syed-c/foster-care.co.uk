@@ -27,13 +27,6 @@ const LINK_DATABASE: InternalLink[] = [
   { title: "Foster Care Agencies in Leeds", href: "/locations/leeds", description: "Find verified foster care agencies in Leeds", priority: "medium", category: "location" },
   { title: "Foster Care Agencies in Glasgow", href: "/locations/glasgow", description: "Find verified foster care agencies in Glasgow", priority: "medium", category: "location" },
 
-  // Specialism-based links
-  { title: "Emergency Fostering Services", href: "/specialisms/emergency-fostering", description: "24/7 emergency fostering placements across the UK", priority: "high", category: "specialism" },
-  { title: "Short-term Fostering", href: "/specialisms/short-term-fostering", description: "Flexible short-term fostering opportunities", priority: "high", category: "specialism" },
-  { title: "Long-term Fostering", href: "/specialisms/long-term-fostering", description: "Stable long-term fostering placements for children", priority: "high", category: "specialism" },
-  { title: "Therapeutic Fostering", href: "/specialisms/therapeutic-fostering", description: "Specialized therapeutic fostering for complex needs", priority: "high", category: "specialism" },
-  { title: "Respite Fostering", href: "/specialisms/respite-fostering", description: "Short-term respite care for foster families", priority: "medium", category: "specialism" },
-
   // Guide-based links
   { title: "How to Become a Foster Carer", href: "/guides/how-to-become-foster-carer", description: "Complete step-by-step guide to becoming a foster carer", priority: "high", category: "guide" },
   { title: "Fostering Allowance Calculator", href: "/guides/fostering-allowances", description: "Calculate potential fostering payments and allowances", priority: "high", category: "guide" },
@@ -44,7 +37,6 @@ const LINK_DATABASE: InternalLink[] = [
   { title: "All UK Foster Care Agencies", href: "/agencies", description: "Browse our complete directory of 500+ agencies", priority: "high", category: "general" },
   { title: "Fostering Blog & News", href: "/blog", description: "Latest news and insights from the fostering community", priority: "medium", category: "general" },
   { title: "Fostering Locations Directory", href: "/locations", description: "Find agencies by region, city, or county", priority: "high", category: "general" },
-  { title: "Fostering Specialisms", href: "/specialisms", description: "Explore different types of fostering services", priority: "high", category: "general" },
 ];
 
 export function SmartInternalLinking({
