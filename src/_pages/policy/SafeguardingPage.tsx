@@ -17,8 +17,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { SEOHead, getBreadcrumbSchema } from "@/components/seo/SEOHead";
 import { CTASection } from "@/components/locations/shared/CTASection";
 
@@ -61,7 +59,7 @@ export default function SafeguardingPage() {
     ];
 
     return (
-        <div className="flex flex-col min-h-screen font-sans selection:bg-primary/20 selection:text-primary bg-white">
+        <>
             <SEOHead
                 title="Safeguarding & Vetting Policy | Foster Care UK"
                 description="Learn about our rigorous safeguarding and vetting processes for foster carers, including DBS checks, home safety audits, and continuous monitoring."
@@ -72,7 +70,6 @@ export default function SafeguardingPage() {
                     { name: "Safeguarding", url: "https://www.foster-care.co.uk/policy/safeguarding" },
                 ])}
             />
-            <Header />
 
             <main className="flex-1">
                 {/* Hero Section */}
@@ -94,7 +91,7 @@ export default function SafeguardingPage() {
                                     Safety is Our Priority
                                 </Badge>
 
-                                <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-6 md:mb-8 tracking-tighter leading-[0.95]">
+                                <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-6 md:mb-8 tracking-tighter leading-[0.95] text-white">
                                     Our <span className="text-emerald-400 italic">Safeguarding</span> Policy
                                 </h1>
 
@@ -205,7 +202,7 @@ export default function SafeguardingPage() {
                                     <PhoneCall className="w-16 h-16 md:w-24 md:h-24 text-emerald-500" />
                                 </div>
                                 <div className="text-center md:text-left">
-                                    <h2 className="text-3xl md:text-5xl font-black mb-6 tracking-tighter">Reporting & Support</h2>
+                                    <h2 className="text-3xl md:text-5xl font-black mb-6 tracking-tighter text-white">Reporting & Support</h2>
                                     <p className="text-lg md:text-xl text-white/70 font-medium leading-relaxed mb-8">
                                         Safeguarding isn't just about prevention; it's about responsive action. We provide 24/7 incident reporting channels and immediate therapeutic support for both carers and children.
                                     </p>
@@ -219,10 +216,7 @@ export default function SafeguardingPage() {
                     </div>
                 </section>
 
-                <CTASection locationName="the UK" />
             </main>
-
-            <Footer />
-        </div>
+        </>
     );
 }

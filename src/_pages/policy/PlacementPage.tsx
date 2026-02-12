@@ -18,8 +18,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { SEOHead, getBreadcrumbSchema } from "@/components/seo/SEOHead";
 import { CTASection } from "@/components/locations/shared/CTASection";
 
@@ -87,7 +85,7 @@ export default function PlacementPage() {
     ];
 
     return (
-        <div className="flex flex-col min-h-screen font-sans selection:bg-primary/20 selection:text-primary bg-white">
+        <>
             <SEOHead
                 title="Types of Foster Care Placements & Matching | Foster Care UK"
                 description="Learn about the different types of foster care placements, including short-term, long-term, and emergency care. Understand the matching process."
@@ -98,7 +96,6 @@ export default function PlacementPage() {
                     { name: "Placements & Matching", url: "https://www.foster-care.co.uk/policy/placement" },
                 ])}
             />
-            <Header />
 
             <main className="flex-1">
                 {/* Hero Section */}
@@ -114,13 +111,13 @@ export default function PlacementPage() {
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ duration: 0.6 }}
                             >
-                                <Badge className="bg-primary/10 text-primary border-primary/20 mb-6 md:mb-8 px-5 py-2 rounded-full font-bold tracking-widest uppercase text-[10px] md:text-[11px]">
+                                <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 mb-6 md:mb-8 px-5 py-2 rounded-full font-bold tracking-widest uppercase text-[10px] md:text-[11px]">
                                     <Network className="w-3.5 h-3.5 mr-2 inline" />
                                     Finding the Perfect Fit
                                 </Badge>
 
-                                <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-6 md:mb-8 tracking-tighter leading-[0.95]">
-                                    Placement <span className="text-primary italic">Types</span>
+                                <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-6 md:mb-8 tracking-tighter leading-[0.95] text-white">
+                                    Placement <span className="text-emerald-400 italic">Types</span>
                                 </h1>
 
                                 <p className="text-lg md:text-2xl text-white/80 mb-10 md:mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
@@ -229,10 +226,7 @@ export default function PlacementPage() {
                     </div>
                 </section>
 
-                <CTASection locationName="the UK" />
             </main>
-
-            <Footer />
-        </div>
+        </>
     );
 }

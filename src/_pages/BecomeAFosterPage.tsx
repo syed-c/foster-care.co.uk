@@ -19,8 +19,6 @@ import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { SEOHead, getBreadcrumbSchema } from "@/components/seo/SEOHead";
 import { ProcessSection } from "@/components/locations/shared/ProcessSection";
 import { CTASection } from "@/components/locations/shared/CTASection";
@@ -85,7 +83,7 @@ export default function BecomeAFosterPage() {
     ];
 
     return (
-        <div className="flex flex-col min-h-screen font-sans selection:bg-primary/20 selection:text-primary bg-white">
+        <>
             <SEOHead
                 title="How to Become a Foster Carer - Guide & Eligibility | Foster Care UK"
                 description="Discover how to become a foster carer in the UK. Learn about eligibility, requirements, the application process, and common concerns. Start your journey today."
@@ -96,7 +94,6 @@ export default function BecomeAFosterPage() {
                     { name: "Become a Foster Carer", url: "https://www.foster-care.co.uk/become-a-foster" },
                 ])}
             />
-            <Header />
 
             <main className="flex-1">
                 {/* Hero Section */}
@@ -117,13 +114,13 @@ export default function BecomeAFosterPage() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6 }}
                             >
-                                <Badge className="bg-primary/10 text-primary border-primary/20 mb-6 md:mb-8 px-5 py-2 rounded-full font-bold tracking-widest uppercase text-[10px] md:text-[11px]">
+                                <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 mb-6 md:mb-8 px-5 py-2 rounded-full font-bold tracking-widest uppercase text-[10px] md:text-[11px]">
                                     <UserPlus className="w-3.5 h-3.5 mr-2 inline" />
                                     Your Fostering Journey Starts Here
                                 </Badge>
 
-                                <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-6 md:mb-8 tracking-tighter leading-[0.95]">
-                                    Become a <span className="text-primary italic">Foster Carer</span>
+                                <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-6 md:mb-8 tracking-tighter leading-[0.95] text-white">
+                                    Become a <span className="text-emerald-400 italic">Foster Carer</span>
                                 </h1>
 
                                 <p className="text-lg md:text-2xl text-white/80 mb-10 md:mb-12 max-w-2xl leading-relaxed font-medium">
@@ -282,10 +279,7 @@ export default function BecomeAFosterPage() {
                     </div>
                 </section>
 
-                <CTASection locationName="the UK" />
             </main>
-
-            <Footer />
-        </div>
+        </>
     );
 }

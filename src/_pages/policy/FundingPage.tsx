@@ -18,8 +18,6 @@ import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { SEOHead, getBreadcrumbSchema } from "@/components/seo/SEOHead";
 import { CTASection } from "@/components/locations/shared/CTASection";
 
@@ -71,7 +69,7 @@ export default function FundingPage() {
     ];
 
     return (
-        <div className="flex flex-col min-h-screen font-sans selection:bg-primary/20 selection:text-primary bg-white">
+        <>
             <SEOHead
                 title="Foster Care Funding & Allowances Guide | Foster Care UK"
                 description="Learn about foster care funding, including the national minimum allowance, tax-free status, and what the allowance covers. Professional support for foster carers."
@@ -83,7 +81,6 @@ export default function FundingPage() {
                     { name: "Funding & Allowances", url: "https://www.foster-care.co.uk/policy/funding" },
                 ])}
             />
-            <Header />
 
             <main className="flex-1">
                 {/* Hero Section */}
@@ -99,13 +96,13 @@ export default function FundingPage() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6 }}
                             >
-                                <Badge className="bg-primary/10 text-primary border-primary/20 mb-6 md:mb-8 px-5 py-2 rounded-full font-bold tracking-widest uppercase text-[10px] md:text-[11px]">
+                                <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 mb-6 md:mb-8 px-5 py-2 rounded-full font-bold tracking-widest uppercase text-[10px] md:text-[11px]">
                                     <Coins className="w-3.5 h-3.5 mr-2 inline" />
                                     Financial Support & Security
                                 </Badge>
 
-                                <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-6 md:mb-8 tracking-tighter leading-[0.95]">
-                                    Fostering <span className="text-primary italic">Allowances</span>
+                                <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-6 md:mb-8 tracking-tighter leading-[0.95] text-white">
+                                    Fostering <span className="text-emerald-400 italic">Allowances</span>
                                 </h1>
 
                                 <p className="text-lg md:text-2xl text-white/80 mb-10 md:mb-12 max-w-2xl leading-relaxed font-medium">
@@ -204,12 +201,12 @@ export default function FundingPage() {
                             <div className="w-20 h-20 rounded-3xl bg-primary/20 flex items-center justify-center mb-10 mx-auto">
                                 <HeartHandshake className="w-10 h-10 text-primary" />
                             </div>
-                            <h2 className="text-3xl md:text-5xl font-black mb-8 tracking-tighter">Fostering with Purpose</h2>
+                            <h2 className="text-3xl md:text-5xl font-black mb-8 tracking-tighter text-white">Fostering with Purpose</h2>
                             <p className="text-lg md:text-2xl text-white/70 font-medium leading-relaxed mb-10">
                                 "We believe that talking about money shouldn't be taboo. Provide the best life for a child requires resources, and we are committed to ensuring our carers are professionally compensated for their vital work."
                             </p>
                             <div className="flex flex-col items-center gap-6">
-                                <Link href="/policy/support" className="text-primary font-bold hover:text-primary/80 flex items-center gap-2 transition-colors">
+                                <Link href="/policy/support" className="text-emerald-400 font-bold hover:text-emerald-300 flex items-center gap-2 transition-colors">
                                     Explore the support network available to you <ArrowRight className="w-5 h-5" />
                                 </Link>
                                 <div className="flex justify-center gap-2">
@@ -248,10 +245,7 @@ export default function FundingPage() {
                     </div>
                 </section>
 
-                <CTASection locationName="the UK" />
             </main>
-
-            <Footer />
-        </div>
+        </>
     );
 }
