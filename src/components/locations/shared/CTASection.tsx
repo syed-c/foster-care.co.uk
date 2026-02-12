@@ -67,7 +67,7 @@ export function CTASection({ locationName, className, theme = "light" }: CTASect
                                     className={cn(
                                         "w-full sm:w-auto rounded-full font-black h-16 px-12 text-xl border-2 hover:scale-105 transition-all duration-300",
                                         isDark
-                                            ? "border-white/10 text-white hover:bg-white/5"
+                                            ? "border-white bg-white text-slate-950 hover:bg-white/90"
                                             : "border-slate-200 text-slate-950 hover:bg-slate-50"
                                     )}
                                 >
