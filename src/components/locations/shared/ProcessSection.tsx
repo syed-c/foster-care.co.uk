@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MessageCircle, Home, GraduationCap, Heart, ArrowRight } from "lucide-react";
+import { MessageCircle, Home, GraduationCap, Heart, ArrowRight, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ProcessSectionProps {
@@ -13,25 +13,29 @@ const steps = [
     {
         icon: MessageCircle,
         title: "Chat",
-        desc: "15 min initial call",
+        desc: "Initial Contact",
+        timeline: "15 min call",
         detail: "A friendly, no-obligation chat to answer your initial questions and understand your situation."
     },
     {
         icon: Home,
         title: "Visit",
         desc: "Home consultation",
+        timeline: "1-2 hours",
         detail: "We'll visit your home to discuss fostering in more detail and help you understand the requirements."
     },
     {
         icon: GraduationCap,
         title: "Train",
-        desc: "Preparation training",
-        detail: "Free, local training workshops to prepare you for the rewards and challenges of fostering."
+        desc: "Skills to Foster",
+        timeline: "3-4 days",
+        detail: "Comprehensive training workshops to prepare you for the rewards and challenges of fostering."
     },
     {
         icon: Heart,
         title: "Foster",
         desc: "First placement",
+        timeline: "4-6 months",
         detail: "Begin your journey as an approved foster carer and transform a local child's life."
     }
 ];
@@ -74,7 +78,11 @@ export function ProcessSection({ locationName, className }: ProcessSectionProps)
                                         <span className="text-4xl font-black text-primary/10 select-none">0{i + 1}</span>
                                         <h3 className="text-2xl font-bold text-slate-950">{step.title}</h3>
                                     </div>
-                                    <p className="text-sm font-black text-primary uppercase tracking-widest mb-4">{step.desc}</p>
+                                    <p className="text-sm font-black text-primary uppercase tracking-widest mb-1">{step.desc}</p>
+                                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter mb-4 flex items-center gap-1">
+                                        <Clock className="w-3 h-3" />
+                                        Timeline: {step.timeline}
+                                    </div>
                                     <p className="text-slate-500 leading-relaxed font-medium mb-6">
                                         {step.detail.replace("In Location", `In ${locationName}`)}
                                     </p>

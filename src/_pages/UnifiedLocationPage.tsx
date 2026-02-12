@@ -160,6 +160,8 @@ export default function UnifiedLocationPage({
       childrenInCare: baseAgencies * 12,
       boroughs: effectiveChildLocations.length || 1,
       agenciesCount: baseAgencies,
+      totalCarers: baseAgencies * 45,
+      weeklyAllowance: "£450 - £650",
     };
   };
 
