@@ -181,7 +181,7 @@ export function CountryTemplate({
                                         <ArrowRight className="w-6 h-6 ml-2 group-hover:translate-x-1 transition-transform" />
                                     </Link>
                                 </Button>
-                                <Button size="lg" variant="outline" className="w-full sm:w-auto rounded-full border-white/20 text-white hover:bg-white/10 h-14 md:h-16 px-8 md:px-10 text-lg md:text-xl font-black" asChild>
+                                <Button size="lg" variant="outline" className="w-full sm:w-auto rounded-full bg-white border-white text-slate-950 hover:bg-white/90 h-14 md:h-16 px-8 md:px-10 text-lg md:text-xl font-black shadow-xl shrink-0" asChild>
                                     <Link href="#agencies">
                                         View Local Agencies
                                     </Link>
@@ -250,10 +250,10 @@ export function CountryTemplate({
                                 Local Expertise
                             </div>
                             <h2 className="text-3xl md:text-5xl font-black mb-4 tracking-tighter text-slate-950">
-                                Agencies in <span className="text-primary italic">{locationName}</span>
+                                Featured Agencies in <span className="text-primary italic">{locationName}</span>
                             </h2>
                             <p className="text-lg text-slate-600 font-medium">
-                                Showing {agencies.length} Agencies in {locationName} ready to support your journey.
+                                Showing top-rated agencies in {locationName} ready to support your journey.
                             </p>
                         </div>
                         {agencies.length > 12 && (
@@ -267,7 +267,7 @@ export function CountryTemplate({
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {agencies.slice(0, 12).map((agency) => (
+                        {agencies.slice(0, 3).map((agency) => (
                             <motion.div
                                 key={agency.id}
                                 initial={{ opacity: 0, y: 20 }}
@@ -482,39 +482,6 @@ export function CountryTemplate({
                             </div>
                         ))}
                     </div>
-
-                    {topAgencies.length > 0 && (
-                        <div className="bg-slate-50 rounded-[2.5rem] md:rounded-[4rem] p-8 md:p-20">
-                            <div className="text-center mb-12">
-                                <h3 className="text-2xl md:text-3xl font-black text-slate-950 mb-4">Featured Agencies in {locationName}</h3>
-                                <p className="text-slate-500 font-medium">Work with the highest-rated agencies in the country.</p>
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                                {topAgencies.map((agency) => (
-                                    <Link
-                                        key={agency.id}
-                                        href={`/agencies/${agency.slug}`}
-                                        className="group bg-white p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] shadow-sm border border-slate-100 hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-500 block text-center"
-                                    >
-                                        <div className="aspect-video mb-6 rounded-2xl bg-slate-100 overflow-hidden relative">
-                                            {agency.logo_url ? (
-                                                <img src={agency.logo_url} alt={agency.name} className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-500" />
-                                            ) : (
-                                                <div className="w-full h-full flex items-center justify-center text-slate-300 uppercase font-black tracking-widest">{agency.name[0]}</div>
-                                            )}
-                                        </div>
-                                        <h4 className="text-lg md:text-xl font-black text-slate-950 mb-2">{agency.name}</h4>
-                                        <div className="flex items-center justify-center gap-1 text-amber-400 mb-4">
-                                            {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
-                                        </div>
-                                        <div className="text-primary font-black text-xs md:text-sm flex items-center justify-center gap-2 group-hover:gap-4 transition-all">
-                                            View Profile <ArrowRight className="w-4 h-4" />
-                                        </div>
-                                    </Link>
-                                ))}
-                            </div>
-                        </div>
-                    )}
                 </div>
             </section>
 

@@ -5,7 +5,7 @@ import { Header } from "@/components/layout/Header";
 
 import { motion } from "framer-motion";
 import { useLocationFromPath, useChildLocations, useLocationPath, buildLocationUrl } from "@/hooks/useLocations";
-import { useAgenciesByLocation } from "@/hooks/useAgencies";
+import { useAgenciesByLocation, useFeaturedAgencies } from "@/hooks/useAgencies";
 import { useFaqsByLocation } from "@/hooks/useFaqs";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -50,6 +50,7 @@ export default function UnifiedLocationPage({
   const { data: locationPath } = useLocationPath(location?.id);
   const { data: locationFaqs } = useFaqsByLocation(location?.id);
   const { data: locationAgencies } = useAgenciesByLocation(location?.id, 50);
+  const { data: fallbackAgencies } = useFeaturedAgencies(12);
 
 
 
@@ -58,7 +59,13 @@ export default function UnifiedLocationPage({
   const effectiveChildLocations = childLocations || initialChildLocations || [];
   const effectiveLocationPath = locationPath || initialLocationPath || [];
   const effectiveLocationFaqs = locationFaqs || initialLocationFaqs || [];
-  const effectiveLocationAgencies = locationAgencies || initialLocationAgencies || [];
+
+  // For country pages, if no specific location agencies found, fallback to featured global agencies
+  const effectiveLocationAgencies = (locationAgencies && locationAgencies.length > 0)
+    ? locationAgencies
+    : (location?.type === 'country' && fallbackAgencies && fallbackAgencies.length > 0)
+      ? fallbackAgencies
+      : initialLocationAgencies || [];
 
   const isLoading = locationLoading && !initialLocation;
   const allFaqs = effectiveLocationFaqs;
