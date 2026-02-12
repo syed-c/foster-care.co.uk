@@ -98,12 +98,12 @@ const nextConfig = {
     async redirects() {
         return [
             {
-                source: '/locations/:region',
+                source: '/locations/:region((?!england$)[^/]+)',
                 destination: '/locations/england/:region',
                 permanent: true,
             },
             {
-                source: '/locations/:region/:county',
+                source: '/locations/:region((?!england$)[^/]+)/:county',
                 destination: '/locations/england/:region/:county',
                 permanent: true,
             },
