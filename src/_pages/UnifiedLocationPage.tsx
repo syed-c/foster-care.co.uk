@@ -14,9 +14,8 @@ import { Button } from "@/components/ui/button";
 import { BackToTop } from "@/components/shared/BackToTop";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { STATIC_SPECIALISMS } from "@/constants/specialisms";
-import LocationSpecialismPage from "./LocationSpecialismPage";
 import { RichLocationPage } from "@/components/locations/RichLocationPage";
-import { CmsContent, FAQ, Location, Agency, Specialism } from "@/services/dataService";
+import { CmsContent, FAQ, Location, Agency } from "@/services/dataService";
 
 interface UnifiedLocationPageProps {
   initialLocation?: Location | null;
@@ -25,12 +24,7 @@ interface UnifiedLocationPageProps {
   initialLocationFaqs?: FAQ[];
   initialLocationAgencies?: Agency[];
   initialCmsContent?: CmsContent[];
-  initialSpecialism?: Specialism | null;
-  initialSpecialismAgencies?: Agency[];
 }
-
-// Set of specialism slugs for quick lookup
-const SPECIALISM_SLUGS = new Set(STATIC_SPECIALISMS.map(s => s.slug));
 
 export default function UnifiedLocationPage({
   initialLocation,
@@ -39,39 +33,17 @@ export default function UnifiedLocationPage({
   initialLocationFaqs,
   initialLocationAgencies,
   initialCmsContent,
-  initialSpecialism,
-  initialSpecialismAgencies
 }: UnifiedLocationPageProps) {
-  // Get all possible path segments from the URL
-  // Get all possible path segments from the URL
-  // Handle Next.js App Router dynamic segments
-  // In app/locations/[...segments]/page.tsx, the param is named "segments" (array)
   const params = useParams();
+  const slugParam = params?.slug || params?.segments;
 
-  const segmentsParam = params?.segments || params?.slug || [];
-  const pathSegments = Array.isArray(segmentsParam)
-    ? segmentsParam
-    : typeof segmentsParam === 'string'
-      ? [segmentsParam]
-      : [];
-
-  // Check if the last segment is a specialism slug
-  const lastSegment = pathSegments[pathSegments.length - 1];
-  const isSpecialismPage = SPECIALISM_SLUGS.has(lastSegment);
-
-  if (isSpecialismPage && pathSegments.length > 1) {
-    const locationSegments = pathSegments.slice(0, -1);
-    return (
-      <LocationSpecialismPage
-        locationSegments={locationSegments}
-        specialismSlug={lastSegment}
-        initialLocation={initialLocation}
-        initialSpecialism={initialSpecialism}
-        initialLocationPath={initialLocationPath}
-        initialAgencies={initialSpecialismAgencies}
-      />
-    );
-  }
+  const pathSegments = Array.isArray(slugParam)
+    ? slugParam
+    : typeof slugParam === 'string'
+      ? [slugParam]
+      : (params?.country || params?.region || params?.county)
+        ? [params.country, params.region, params.county].filter((p): p is string => typeof p === 'string')
+        : [];
 
   const { data: location, isLoading: locationLoading } = useLocationFromPath(pathSegments);
   const { data: childLocations } = useChildLocations(location?.id);

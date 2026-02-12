@@ -18,11 +18,10 @@ const itemVariants = {
 };
 
 interface FosteringTypesSectionProps {
-  currentLocationPath?: string;
   locationName?: string;
 }
 
-export const FosteringTypesSection = ({ currentLocationPath, locationName }: FosteringTypesSectionProps) => {
+export const FosteringTypesSection = ({ locationName }: FosteringTypesSectionProps) => {
   const types = [
     { icon: Clock, title: "Short-Term", slug: "short-term-fostering", desc: "Temporary placements", color: "from-blue-500/20 to-blue-600/10 border-blue-500/30" },
     { icon: Heart, title: "Long-Term", slug: "long-term-fostering", desc: "Permanent care", color: "from-rose-500/20 to-rose-600/10 border-rose-500/30" },
@@ -33,9 +32,6 @@ export const FosteringTypesSection = ({ currentLocationPath, locationName }: Fos
   ];
 
   const getTypeUrl = (slug: string) => {
-    if (currentLocationPath) {
-      return `${currentLocationPath}/${slug}`;
-    }
     return `/specialisms/${slug}`;
   };
 

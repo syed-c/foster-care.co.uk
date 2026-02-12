@@ -118,18 +118,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: 'weekly',
         priority: loc.type === 'country' ? 0.9 : loc.type === 'region' ? 0.8 : 0.7,
       });
-
-      // Location + Specialism combos
-      // We only want these if they are valid locations (e.g. region or county)
-      // Assuming specialisms apply to all valid locations
-      specialismSlugsFromDb.forEach(specSlug => {
-        locationPages.push({
-          url: `${SITE_URL}/locations/${pathSlug}/${specSlug}`,
-          lastModified,
-          changeFrequency: 'weekly',
-          priority: 0.6,
-        });
-      });
     });
   }
 
@@ -140,12 +128,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  const specialismPages: MetadataRoute.Sitemap = (specialisms || []).map((spec: any) => ({
-    url: `${SITE_URL}/specialisms/${spec.slug}`,
-    lastModified: spec.updated_at ? new Date(spec.updated_at) : new Date(),
-    changeFrequency: 'weekly',
-    priority: 0.7,
-  }));
+
 
   const blogPages: MetadataRoute.Sitemap = (blogPosts || []).map((post: any) => ({
     url: `${SITE_URL}/blog/${post.slug}`,
@@ -170,7 +153,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...staticPages,
     ...locationPages,
     ...agencyPages,
-    ...specialismPages,
     ...blogPages,
     ...guidePages
   ];

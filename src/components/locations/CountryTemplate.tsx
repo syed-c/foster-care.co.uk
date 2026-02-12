@@ -186,10 +186,10 @@ export function CountryTemplate({
             </section>
 
             {/* 5. Local Support Overview (National Level) */}
-            <section className="py-24 bg-slate-950 text-white">
+            <section className="py-24 bg-white text-slate-950 border-t border-slate-100">
                 <div className="container-main text-center">
-                    <h2 className="text-3xl md:text-4xl font-black mb-6 text-white">National Support Network</h2>
-                    <p className="max-w-2xl mx-auto text-white/60 mb-12 text-lg">
+                    <h2 className="text-3xl md:text-4xl font-black mb-6 text-slate-950">National Support Network</h2>
+                    <p className="max-w-2xl mx-auto text-slate-600 mb-12 text-lg">
                         We connect you with agencies across the country providing 24/7 support, training hubs, and peer mentoring.
                     </p>
                     <div className="grid md:grid-cols-3 gap-8">
@@ -198,9 +198,9 @@ export function CountryTemplate({
                             { title: "Allowances", desc: "Standardized minimum allowances plus agency uplifts." },
                             { title: "Community", desc: "Access to thousands of other carers." }
                         ].map((item, i) => (
-                            <div key={i} className="p-8 rounded-3xl bg-white/5 border border-white/10">
-                                <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                                <p className="text-white/50">{item.desc}</p>
+                            <div key={i} className="p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:shadow-lg transition-shadow">
+                                <h3 className="text-xl font-bold mb-2 text-slate-950">{item.title}</h3>
+                                <p className="text-slate-500">{item.desc}</p>
                             </div>
                         ))}
                     </div>
@@ -240,9 +240,9 @@ export function CountryTemplate({
                         ))}
                     </Accordion>
 
-                    <div className="mt-20 p-12 rounded-[3rem] bg-slate-950 text-white text-center">
-                        <h2 className="text-3xl md:text-5xl font-black mb-6">Start Your Journey Today</h2>
-                        <Button size="lg" className="rounded-full bg-primary text-white font-bold h-14 px-8 text-lg hover:scale-105 transition-transform">
+                    <div className="mt-20 p-12 rounded-[3rem] bg-white border border-slate-200 text-center shadow-2xl">
+                        <h2 className="text-3xl md:text-5xl font-black mb-6 text-slate-950">Start Your Journey Today</h2>
+                        <Button size="lg" className="rounded-full bg-primary text-white font-bold h-14 px-8 text-lg hover:scale-105 transition-transform shadow-xl shadow-primary/20">
                             Enquire Now
                         </Button>
                     </div>

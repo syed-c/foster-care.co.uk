@@ -8,18 +8,12 @@ import {
     getFaqsByLocation,
     getAgenciesByLocation,
     getCmsContentByPage,
-    getSpecialismBySlug,
-    getAgenciesByLocationAndSpecialism,
     Location,
 } from '@/services/dataService';
 import { notFound } from 'next/navigation';
-import { STATIC_SPECIALISMS } from "@/constants/specialisms";
-
-const SPECIALISM_SLUGS = new Set(STATIC_SPECIALISMS.map(s => s.slug));
 
 export async function generateMetadata({ params }: { params: { country: string; region: string; county: string } }): Promise<Metadata> {
-    const isSpecialism = SPECIALISM_SLUGS.has(params.county);
-    const locationSlug = isSpecialism ? params.region : params.county;
+    const locationSlug = params.county;
 
     const location = await getLocationBySlug(locationSlug);
 
@@ -28,17 +22,6 @@ export async function generateMetadata({ params }: { params: { country: string; 
     }
 
     const name = location.name;
-
-    if (isSpecialism) {
-        const specialismName = STATIC_SPECIALISMS.find(s => s.slug === params.county)?.name || '';
-        return {
-            title: `${specialismName} Foster Care in ${name} | Foster Care UK`,
-            description: `Looking for ${specialismName} in ${name}? Connect with verified agencies specializing in ${specialismName} across ${name}.`,
-            alternates: {
-                canonical: `https://www.foster-care.co.uk/locations/${params.country}/${params.region}/${params.county}`,
-            },
-        };
-    }
 
     return {
         title: `Foster Care in ${name} | Start Your Fostering Journey | Foster Care UK`,
@@ -63,8 +46,7 @@ export default async function CountyPage({ params }: { params: { country: string
         notFound();
     }
 
-    const isSpecialism = SPECIALISM_SLUGS.has(params.county);
-    const locationSlug = isSpecialism ? params.region : params.county;
+    const locationSlug = params.county;
 
     const locationData = await getLocationBySlug(locationSlug);
 
@@ -88,16 +70,6 @@ export default async function CountyPage({ params }: { params: { country: string
         getCmsContentByPage(`location_${locationSlug}`)
     ]);
 
-    let specialism = null;
-    let specialismAgencies: any[] = [];
-
-    if (isSpecialism) {
-        [specialism, specialismAgencies] = await Promise.all([
-            getSpecialismBySlug(params.county),
-            getAgenciesByLocationAndSpecialism(location.id, params.county)
-        ]);
-    }
-
     return (
         <UnifiedLocationPage
             initialLocation={location}
@@ -106,8 +78,6 @@ export default async function CountyPage({ params }: { params: { country: string
             initialLocationFaqs={locationFaqs}
             initialLocationAgencies={locationAgencies}
             initialCmsContent={cmsContent}
-            initialSpecialism={specialism}
-            initialSpecialismAgencies={specialismAgencies}
         />
     );
 }

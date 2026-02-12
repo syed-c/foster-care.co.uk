@@ -186,15 +186,27 @@ export function RegionTemplate({
                 <section className="py-24 bg-slate-950 text-white">
                     <div className="container-main">
                         <h2 className="text-3xl md:text-4xl font-black mb-12 text-white text-center">Find Your Local Area</h2>
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {childLocations.map((child) => (
                                 <Link
                                     key={child.id}
                                     href={`/locations/${(path || []).map(p => p.slug).join('/') || location.slug}/${child.slug}`}
-                                    className="block p-6 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all group"
+                                    className="group relative overflow-hidden rounded-3xl aspect-[4/3] bg-slate-800 border border-white/10"
                                 >
-                                    <span className="font-bold text-white group-hover:text-primary transition-colors text-lg">{child.name}</span>
-                                    <span className="block text-xs uppercase tracking-widest text-white/50 mt-2">View Profile</span>
+                                    <div className="absolute inset-0 bg-slate-900/40 group-hover:bg-slate-900/30 transition-colors z-10" />
+                                    {/* Placeholder Image - In real app, would need child.image_url */}
+                                    <img
+                                        src="/images/locations/generic-hero.png"
+                                        alt={`Foster care in ${child.name}`}
+                                        className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-105 transition-transform duration-700"
+                                    />
+
+                                    <div className="absolute bottom-0 left-0 p-8 z-20">
+                                        <h3 className="text-2xl font-black text-white mb-2 group-hover:text-primary transition-colors">{child.name}</h3>
+                                        <span className="text-white/80 font-medium flex items-center gap-2 text-sm uppercase tracking-wider">
+                                            View Profile <ArrowRight className="w-4 h-4" />
+                                        </span>
+                                    </div>
                                 </Link>
                             ))}
                         </div>
