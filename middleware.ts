@@ -20,30 +20,40 @@ export async function middleware(request: NextRequest) {
                 'disabilities-fostering'
             ];
 
-            let newSegments = segments.slice(1); // everything after 'locations'
+            // Get segments after 'locations'
+            let pathSegments = segments.slice(1);
 
             // 1. Remove service slugs
-            newSegments = newSegments.filter(s => !serviceSlugs.includes(s.toLowerCase()));
+            pathSegments = pathSegments.filter(s => !serviceSlugs.includes(s.toLowerCase()));
 
-            // 2. Remove consecutive duplicates (e.g., england/england -> england)
-            newSegments = newSegments.filter((s, i) => s.toLowerCase() !== newSegments[i - 1]?.toLowerCase());
+            // 2. Remove consecutive duplicates
+            let normalized: string[] = [];
+            for (const s of pathSegments) {
+                if (normalized.length === 0 || s.toLowerCase() !== normalized[normalized.length - 1].toLowerCase()) {
+                    normalized.push(s);
+                }
+            }
 
             // 3. Ensure starts with valid country
-            if (newSegments.length > 0 && !validCountries.includes(newSegments[0].toLowerCase())) {
-                newSegments.unshift('england');
+            if (normalized.length > 0 && !validCountries.includes(normalized[0].toLowerCase())) {
+                normalized.unshift('england');
             }
 
-            // 4. Limit to 3 segments max (country/region/county)
-            if (newSegments.length > 3) {
-                newSegments = newSegments.slice(0, 3);
+            // 4. Limit to 3 segments max
+            if (normalized.length > 3) {
+                normalized = normalized.slice(0, 3);
             }
 
-            const newPath = `/locations/${newSegments.join('/')}`;
-            const currentPath = `/${segments.join('/')}`;
+            const newPathname = `/locations/${normalized.join('/')}`;
+            const targetUrl = new URL(newPathname, request.url);
 
-            if (newPath.toLowerCase() !== currentPath.toLowerCase()) {
-                // Redirect to the cleaned path
-                return NextResponse.redirect(new URL(newPath, request.url), { status: 301 });
+            // Normalize current path for comparison (remove trailing slashes, lowercase)
+            const currentPathNormalized = pathname.toLowerCase().replace(/\/+$/, '');
+            const newPathNormalized = targetUrl.pathname.toLowerCase().replace(/\/+$/, '');
+
+            if (newPathNormalized !== currentPathNormalized && newPathNormalized !== "") {
+                // Only redirect if the path actually changed structurally
+                return NextResponse.redirect(targetUrl, { status: 301 });
             }
         }
     }
