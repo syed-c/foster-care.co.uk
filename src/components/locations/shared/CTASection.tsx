@@ -16,9 +16,9 @@ export function CTASection({ locationName, className, theme = "light" }: CTASect
 
     return (
         <section className={cn("py-24", className)}>
-            <div className="container-main">
+            <div className="container-main px-4">
                 <div className={cn(
-                    "relative overflow-hidden rounded-[3rem] p-12 md:p-20 text-center shadow-2xl",
+                    "relative overflow-hidden rounded-[2.5rem] md:rounded-[3rem] p-8 md:p-20 text-center shadow-2xl",
                     isDark
                         ? "bg-slate-950 text-white border border-white/5"
                         : "bg-white text-slate-950 border border-slate-100"
@@ -56,16 +56,16 @@ export function CTASection({ locationName, className, theme = "light" }: CTASect
                             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                                 <Button
                                     size="lg"
-                                    className="w-full sm:w-auto rounded-full bg-primary hover:bg-primary/90 text-white font-black h-16 px-12 text-xl shadow-xl shadow-primary/20 group hover:scale-105 transition-all duration-300"
+                                    className="w-full sm:w-auto rounded-full bg-primary hover:bg-primary/90 text-white font-black h-14 md:h-16 px-8 md:px-12 text-lg md:text-xl shadow-xl shadow-primary/20 group hover:scale-105 transition-all duration-300"
                                 >
                                     Enquire Now
-                                    <ArrowRight className="w-6 h-6 ml-2 group-hover:translate-x-1 transition-transform" />
+                                    <ArrowRight className="w-5 h-5 md:w-6 md:h-6 ml-2 group-hover:translate-x-1 transition-transform" />
                                 </Button>
                                 <Button
                                     size="lg"
                                     variant="outline"
                                     className={cn(
-                                        "w-full sm:w-auto rounded-full font-black h-16 px-12 text-xl border-2 hover:scale-105 transition-all duration-300",
+                                        "w-full sm:w-auto rounded-full font-black h-14 md:h-16 px-8 md:px-12 text-lg md:text-xl border-2 hover:scale-105 transition-all duration-300",
                                         isDark
                                             ? "border-white bg-white text-slate-950 hover:bg-white/90"
                                             : "border-slate-200 text-slate-950 hover:bg-slate-50"

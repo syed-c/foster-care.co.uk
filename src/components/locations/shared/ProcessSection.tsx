@@ -43,11 +43,11 @@ const steps = [
 export function ProcessSection({ locationName, className }: ProcessSectionProps) {
     return (
         <section className={cn("py-24 bg-background-sand overflow-hidden", className)}>
-            <div className="container-main">
-                <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-                    <div className="max-w-2xl">
-                        <h2 className="text-3xl md:text-5xl font-black text-slate-950 tracking-tighter mb-4">
-                            Your Journey to <span className="text-primary">Fostering</span> in {locationName}
+            <div className="container-main px-4">
+                <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 text-center md:text-left">
+                    <div className="max-w-2xl mx-auto md:mx-0">
+                        <h2 className="text-3xl md:text-5xl font-black text-slate-950 tracking-tighter mb-4 leading-tight">
+                            Your Journey to <span className="text-primary italic">Fostering</span> in {locationName}
                         </h2>
                         <p className="text-lg text-slate-600 font-medium">
                             We've simplified the process into four clear steps, supporting you at every stage of your application.
