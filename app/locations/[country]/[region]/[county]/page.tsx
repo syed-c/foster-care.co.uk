@@ -54,6 +54,15 @@ export async function generateMetadata({ params }: { params: { country: string; 
 }
 
 export default async function CountyPage({ params }: { params: { country: string; region: string; county: string } }) {
+    // Prevent duplicate slugs
+    if (
+        params.country === params.county ||
+        params.region === params.county ||
+        params.country === params.region
+    ) {
+        notFound();
+    }
+
     const isSpecialism = SPECIALISM_SLUGS.has(params.county);
     const locationSlug = isSpecialism ? params.region : params.county;
 

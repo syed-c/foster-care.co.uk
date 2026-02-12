@@ -107,6 +107,16 @@ const nextConfig = {
                 destination: '/locations/england/:region/:county',
                 permanent: true,
             },
+            {
+                source: '/locations/:country/:country/:region',
+                destination: '/locations/:country/:region',
+                permanent: true,
+            },
+            {
+                source: '/locations/:country/:country/:country',
+                destination: '/locations/:country',
+                permanent: true,
+            },
         ];
     },
 };

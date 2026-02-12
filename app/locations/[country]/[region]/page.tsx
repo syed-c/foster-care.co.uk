@@ -54,6 +54,11 @@ export async function generateMetadata({ params }: { params: { country: string; 
 }
 
 export default async function RegionPage({ params }: { params: { country: string; region: string } }) {
+    // Prevent duplicate slugs (e.g. /locations/england/england)
+    if (params.country === params.region) {
+        notFound(); // or redirect(`/locations/${params.country}`)
+    }
+
     const isSpecialism = SPECIALISM_SLUGS.has(params.region);
     const locationSlug = isSpecialism ? params.country : params.region;
 
