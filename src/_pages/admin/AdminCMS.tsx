@@ -280,7 +280,7 @@ export default function AdminCMS() {
 
       {/* Editor Sheet */}
       <Sheet open={!!editingPage} onOpenChange={(open) => !open && setEditingPage(null)}>
-        <SheetContent side="right" className="w-full sm:max-w-xl md:max-w-2xl p-0 flex flex-col h-full bg-white border-l shadow-2xl z-[100] translate-x-0" style={{ transform: 'none' }}>
+        <SheetContent side="right" className="w-full sm:max-w-xl md:max-w-2xl p-0 flex flex-col h-full bg-white border-l shadow-2xl z-[100]">
           {editingPage ? (
             <PageEditorSheet
               page={editingPage}
@@ -414,10 +414,22 @@ function PageEditorSheet({ page, onClose, onDataChanged }: { page: any, onClose:
             {loading ? (
               <div className="py-12 flex justify-center"><Loader2 className="animate-spin text-muted-foreground" /></div>
             ) : blocks.length === 0 ? (
-              <div className="text-center py-12 text-muted-foreground border-2 border-dashed rounded-xl">
-                <LayoutGrid className="w-12 h-12 mx-auto mb-2 opacity-20" />
-                <p>No content blocks found.</p>
-                <Button variant="link" onClick={handleSeed}>Generate Defaults</Button>
+              <div className="flex flex-col items-center justify-center py-12 text-muted-foreground border-2 border-dashed rounded-xl gap-4">
+                <LayoutGrid className="w-12 h-12 opacity-20" />
+                <div className="text-center">
+                  <p className="font-medium">No content blocks found.</p>
+                  <p className="text-sm mt-1 mb-4">Generate default blocks or add a custom one.</p>
+                  <div className="flex gap-2 justify-center">
+                    <Button variant="outline" onClick={handleSeed} disabled={seeding}>
+                      {seeding ? <Loader2 className="w-3 h-3 animate-spin mr-2" /> : <Sparkles className="w-3 h-3 mr-2" />}
+                      Generate Defaults
+                    </Button>
+                    <Button onClick={() => setEditBlock({ page_key: page.key, block_type: 'text', block_key: '', title: '', content: '', display_order: 10, is_active: true })}>
+                      <Plus className="w-3 h-3 mr-2" />
+                      Add Block
+                    </Button>
+                  </div>
+                </div>
               </div>
             ) : (
               <div className="space-y-3">
@@ -494,7 +506,7 @@ function PageEditorSheet({ page, onClose, onDataChanged }: { page: any, onClose:
 
       {/* Nested Dialogs for Editors */}
       <Dialog open={!!editBlock} onOpenChange={(open) => !open && setEditBlock(null)}>
-        <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
+        <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto z-[200]">
           <DialogHeader>
             <DialogTitle>{editBlock?.id ? "Edit Block" : "New Block"}</DialogTitle>
             <DialogDescription>Configure content block details.</DialogDescription>
@@ -506,7 +518,7 @@ function PageEditorSheet({ page, onClose, onDataChanged }: { page: any, onClose:
       </Dialog>
 
       <Dialog open={!!editFaq} onOpenChange={(open) => !open && setEditFaq(null)}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md z-[200]">
           <DialogHeader>
             <DialogTitle>{editFaq?.id ? "Edit FAQ" : "New FAQ"}</DialogTitle>
             <DialogDescription>Configure FAQ details.</DialogDescription>
