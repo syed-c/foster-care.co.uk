@@ -4,10 +4,14 @@ import { motion } from "framer-motion";
 import { MessageCircle, Home, GraduationCap, Heart, ArrowRight, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+import { usePageBlocks, getBlock, ContentBlock } from "@/hooks/usePageBlocks";
+import { DynamicContent } from "@/components/shared/DynamicContent";
+
 interface ProcessSectionProps {
     locationName: string;
     className?: string;
     inverted?: boolean;
+    blocks?: ContentBlock[];
 }
 
 const steps = [
@@ -41,17 +45,23 @@ const steps = [
     }
 ];
 
-export function ProcessSection({ locationName, className, inverted = false }: ProcessSectionProps) {
+export function ProcessSection({ locationName, className, inverted = false, blocks }: ProcessSectionProps) {
     return (
         <div className={cn("py-24 overflow-hidden", inverted ? "bg-transparent" : "bg-background-sand", className)}>
             <div className="container-main px-4">
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 text-center md:text-left">
                     <div className="max-w-2xl mx-auto md:mx-0">
                         <h2 className={cn("text-3xl md:text-5xl font-black tracking-tighter mb-4 leading-tight", inverted ? "text-white" : "text-slate-950")}>
-                            Your Journey to <span className="text-primary italic">Fostering</span> in {locationName}
+                            <DynamicContent
+                                block={getBlock(blocks, "process_title")}
+                                fallback={<>Your Journey to <span className="text-primary italic">Fostering</span> in {locationName}</>}
+                            />
                         </h2>
                         <p className={cn("text-lg font-medium", inverted ? "text-slate-400" : "text-slate-600")}>
-                            We've simplified the process into four clear steps, supporting you at every stage of your application.
+                            <DynamicContent
+                                block={getBlock(blocks, "process_subtitle")}
+                                fallback="We've simplified the process into four clear steps, supporting you at every stage of your application."
+                            />
                         </p>
                     </div>
                 </div>

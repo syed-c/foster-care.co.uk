@@ -4,14 +4,18 @@ import { motion } from "framer-motion";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { usePageBlocks, getBlock, ContentBlock } from "@/hooks/usePageBlocks";
+import { DynamicContent, getBlockMetadata } from "@/components/shared/DynamicContent";
+import Link from "next/link";
 
 interface CTASectionProps {
     locationName: string;
     className?: string;
     theme?: "light" | "dark";
+    blocks?: ContentBlock[];
 }
 
-export function CTASection({ locationName, className, theme = "light" }: CTASectionProps) {
+export function CTASection({ locationName, className, theme = "light", blocks }: CTASectionProps) {
     const isDark = theme === "dark";
 
     return (
@@ -43,23 +47,35 @@ export function CTASection({ locationName, className, theme = "light" }: CTASect
                                 "text-4xl md:text-6xl font-black mb-8 tracking-tighter leading-tight",
                                 isDark ? "text-white" : "text-slate-950"
                             )}>
-                                Ready to Foster in <span className="text-primary">{locationName}?</span>
+                                <DynamicContent
+                                    block={getBlock(blocks, "cta_title")}
+                                    fallback={<>Ready to Foster in <span className="text-primary">{locationName}?</span></>}
+                                />
                             </h2>
 
                             <p className={cn(
                                 "text-xl md:text-2xl font-medium mb-12 max-w-2xl mx-auto leading-relaxed",
                                 isDark ? "text-white/70" : "text-slate-600"
                             )}>
-                                Take the first step today. We'll connect you with the most suitable local agencies who will guide you every step of the way.
+                                <DynamicContent
+                                    block={getBlock(blocks, "cta_subtitle")}
+                                    fallback="Take the first step today. We'll connect you with the most suitable local agencies who will guide you every step of the way."
+                                />
                             </p>
 
                             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                                 <Button
                                     size="lg"
                                     className="w-full sm:w-auto rounded-full bg-primary hover:bg-primary/90 text-white font-black h-14 md:h-16 px-8 md:px-12 text-lg md:text-xl shadow-xl shadow-primary/20 group hover:scale-105 transition-all duration-300"
+                                    asChild
                                 >
-                                    Enquire Now
-                                    <ArrowRight className="w-5 h-5 md:w-6 md:h-6 ml-2 group-hover:translate-x-1 transition-transform" />
+                                    <Link href={getBlockMetadata(getBlock(blocks, "cta_primary"), "cta_url", "/become-a-foster")}>
+                                        <DynamicContent
+                                            block={getBlock(blocks, "cta_primary")}
+                                            fallback="Enquire Now"
+                                        />
+                                        <ArrowRight className="w-5 h-5 md:w-6 md:h-6 ml-2 group-hover:translate-x-1 transition-transform" />
+                                    </Link>
                                 </Button>
                                 <Button
                                     size="lg"

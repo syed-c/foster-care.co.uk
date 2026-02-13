@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { MapPin, ArrowRight, Heart, Users, GraduationCap, Home, CheckCircle, Info, Sparkles, MessageCircle, Quote, Activity, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 import { Location, Agency, FAQ } from "@/services/dataService";
 import { AgencyListings } from "@/components/location/AgencyListings";
 import { ProcessSection } from "./shared/ProcessSection";
@@ -91,9 +92,14 @@ export function LocalTemplate({
                                 </p>
 
                                 <div className="flex flex-col sm:flex-row items-center gap-6">
-                                    <Button size="lg" className="w-full sm:w-auto rounded-full group bg-primary hover:bg-primary/90 text-white font-black h-18 px-12 text-xl shadow-2xl shadow-primary/30">
-                                        Enquire Now
-                                        <ArrowRight className="w-6 h-6 ml-2 group-hover:translate-x-2 transition-transform" />
+                                    <Button size="lg" className="w-full sm:w-auto rounded-full group bg-primary hover:bg-primary/90 text-white font-black h-18 px-12 text-xl shadow-2xl shadow-primary/30" asChild>
+                                        <Link href={getBlockMetadata(getBlock(blocks, "hero_cta"), "cta_url", "/become-a-foster")}>
+                                            <DynamicContent
+                                                block={getBlock(blocks, "hero_cta")}
+                                                fallback="Enquire Now"
+                                            />
+                                            <ArrowRight className="w-6 h-6 ml-2 group-hover:translate-x-2 transition-transform" />
+                                        </Link>
                                     </Button>
                                     <div className="flex items-center gap-4 p-2 bg-white/5 rounded-full border border-white/10 pr-6">
                                         <div className="flex -space-x-3 ml-2">
@@ -181,7 +187,7 @@ export function LocalTemplate({
             </section>
 
             {/* 3. Local Process Section */}
-            <ProcessSection locationName={locationName} />
+            <ProcessSection locationName={locationName} blocks={blocks} />
 
             {/* 4. Verified Agencies in Area */}
             <section className="py-24 md:py-32 bg-white border-y border-slate-100">
@@ -261,7 +267,7 @@ export function LocalTemplate({
             </section>
 
             {/* 7. Shared CTA Section */}
-            <CTASection locationName={locationName} theme="dark" className="bg-white" />
+            <CTASection locationName={locationName} theme="dark" className="bg-white" blocks={blocks} />
         </div>
     );
 }

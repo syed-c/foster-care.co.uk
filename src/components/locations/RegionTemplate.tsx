@@ -174,7 +174,7 @@ export function RegionTemplate({
             </section>
 
             {/* 4. Shared Process Section */}
-            <ProcessSection locationName={locationName} className="bg-white" />
+            <ProcessSection locationName={locationName} className="bg-white" blocks={blocks} />
 
             {/* 5. Support Systems */}
             <section className="py-24 md:py-32 bg-slate-950 text-white rounded-[4rem] mx-4 my-8 relative overflow-hidden">
@@ -275,7 +275,7 @@ export function RegionTemplate({
             )}
 
             {/* 7. Shared CTA Section */}
-            <CTASection locationName={locationName} theme="light" className="bg-background-sand" />
+            <CTASection locationName={locationName} theme="light" className="bg-background-sand" blocks={blocks} />
         </div>
     );
 }

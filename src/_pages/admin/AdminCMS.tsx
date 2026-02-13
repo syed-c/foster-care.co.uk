@@ -195,13 +195,16 @@ export default function AdminCMS() {
     page.path.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Group pages by category
-  const pagesByCategory = filteredPages.reduce((acc, page) => {
-    const cat = page.category;
-    if (!acc[cat]) acc[cat] = [];
-    acc[cat].push(page);
-    return acc;
-  }, {} as Record<string, typeof allPages>);
+  // Group pages by category explicitly
+  const categoryMap = {
+    "Static": allPages.filter(p => p.type === "static"),
+    "Countries": allPages.filter(p => p.category === "Countries"),
+    "Regions": allPages.filter(p => p.category === "Regions"),
+    "Counties": allPages.filter(p => p.category === "Counties"),
+    "Cities": allPages.filter(p => p.category === "Cities"),
+  };
+
+  const [pageSubTab, setPageSubTab] = useState("Static");
 
   // Get blocks for a page
   const getPageBlocks = (pageKey: string) => {
@@ -215,7 +218,7 @@ export default function AdminCMS() {
 
   return (
     <SuperAdminSidebar title="Content Management" description="Manage website pages and content blocks">
-      <div className="space-y-6">
+      <div className="space-y-6 pb-20 relative min-h-full">
         {/* Stats */}
         <div className="grid gap-4 sm:grid-cols-3">
           <StatCard
@@ -267,60 +270,65 @@ export default function AdminCMS() {
                   />
                 </div>
 
+                <Tabs value={pageSubTab} onValueChange={setPageSubTab} className="mb-6">
+                  <TabsList className="bg-muted/30 p-1 flex-wrap h-auto">
+                    {Object.keys(categoryMap).map(cat => (
+                      <TabsTrigger key={cat} value={cat} className="px-4 py-2 rounded-lg text-xs">
+                        {cat}
+                        <Badge variant="outline" className="ml-1.5 h-4 px-1 min-w-[1.25rem] text-[10px] bg-muted-foreground/10 border-none">
+                          {categoryMap[cat as keyof typeof categoryMap].length}
+                        </Badge>
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+                </Tabs>
+
                 <div className="space-y-6">
-                  {Object.entries(pagesByCategory).map(([category, pages]) => (
-                    <div key={category}>
-                      <h3 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
-                        {category === "Countries" || category === "Regions" || category === "Cities" ? (
-                          <MapPin className="w-4 h-4" />
-                        ) : (
-                          <Globe className="w-4 h-4" />
-                        )}
-                        {category}
-                        <Badge variant="secondary" className="ml-2">{(pages as any[]).length}</Badge>
-                      </h3>
-                      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                        {(pages as any[]).map((page) => {
-                          const blocks = getPageBlocks(page.key);
-                          return (
-                            <div
-                              key={page.key}
-                              className="p-4 rounded-xl border bg-card hover:bg-muted/50 transition-colors"
-                            >
-                              <div className="flex items-start justify-between mb-2">
-                                <h4 className="font-medium">{page.name}</h4>
-                                <Badge variant="outline" className="text-[10px]">
-                                  {blocks.length} blocks
-                                </Badge>
-                              </div>
-                              <p className="text-xs text-muted-foreground font-mono mb-3">{page.path}</p>
-                              <div className="flex gap-2">
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  className="flex-1 rounded-lg text-xs"
-                                  onClick={() => setEditingPage(page.key)}
-                                >
-                                  <Pencil className="w-3 h-3 mr-1" />
-                                  Edit
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="rounded-lg"
-                                  asChild
-                                >
-                                  <a href={page.path} target="_blank" rel="noopener noreferrer">
-                                    <ExternalLink className="w-3 h-3" />
-                                  </a>
-                                </Button>
-                              </div>
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {categoryMap[pageSubTab as keyof typeof categoryMap]
+                      .filter(page =>
+                        page.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        page.path.toLowerCase().includes(searchQuery.toLowerCase())
+                      )
+                      .map((page) => {
+                        const blocks = getPageBlocks(page.key);
+                        return (
+                          <div
+                            key={page.key}
+                            className="p-4 rounded-xl border bg-card hover:bg-muted/50 transition-colors"
+                          >
+                            <div className="flex items-start justify-between mb-2">
+                              <h4 className="font-medium">{page.name}</h4>
+                              <Badge variant="outline" className="text-[10px]">
+                                {blocks.length} blocks
+                              </Badge>
                             </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  ))}
+                            <p className="text-xs text-muted-foreground font-mono mb-3">{page.path}</p>
+                            <div className="flex gap-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="flex-1 rounded-lg text-xs"
+                                onClick={() => setEditingPage(page.key)}
+                              >
+                                <Pencil className="w-3 h-3 mr-1" />
+                                Edit
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="rounded-lg"
+                                asChild
+                              >
+                                <a href={page.path} target="_blank" rel="noopener noreferrer">
+                                  <ExternalLink className="w-3 h-3" />
+                                </a>
+                              </Button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -417,7 +425,7 @@ export default function AdminCMS() {
             </DialogHeader>
             {editingPage && (
               <PageManagementDialog
-                page={allPages.find(p => p.key === editingPage)!}
+                page={allPages.find(p => p.key === editingPage) || { key: editingPage, name: "Unknown Page" }}
                 onClose={() => setEditingPage(null)}
               />
             )}
@@ -792,65 +800,78 @@ function BlockEditor({
         </div>
       )}
 
-      {(formData.block_type === "button" || formData.block_key.includes("button")) && (
+      {(formData.block_type === "cta" || formData.block_key.includes("button") || formData.block_key.includes("cta")) && (
         <div className="space-y-4 p-4 rounded-xl border bg-muted/30">
-          <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Button Metadata</Label>
+          <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">CTA / Button Metadata</Label>
           <div className="space-y-2">
-            <Label>Label</Label>
+            <Label>Button Text</Label>
             <Input
-              value={(formData.metadata as any)?.label || ""}
-              onChange={(e) => updateMetadata("label", e.target.value)}
-              placeholder="Button text"
+              value={(formData.metadata as any)?.cta_text || ""}
+              onChange={(e) => updateMetadata("cta_text", e.target.value)}
+              placeholder="e.g., Get Started"
               className="rounded-xl"
             />
           </div>
           <div className="space-y-2">
-            <Label>Link (Path)</Label>
+            <Label>Button URL</Label>
             <Input
-              value={(formData.metadata as any)?.path || ""}
-              onChange={(e) => updateMetadata("path", e.target.value)}
-              placeholder="/become-a-foster"
+              value={(formData.metadata as any)?.cta_url || ""}
+              onChange={(e) => updateMetadata("cta_url", e.target.value)}
+              placeholder="e.g., /contact"
               className="rounded-xl"
             />
           </div>
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label>Display Order</Label>
-          <Input
-            type="number"
-            value={formData.display_order}
-            onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) || 0 })}
-            className="rounded-xl"
-          />
+      {formData.block_type === "hero" && (
+        <div className="space-y-4 p-4 rounded-xl border bg-muted/30">
+          <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Hero Metadata</Label>
+          <div className="space-y-2">
+            <Label>Badge Text</Label>
+            <Input
+              value={(formData.metadata as any)?.badge || ""}
+              onChange={(e) => updateMetadata("badge", e.target.value)}
+              placeholder="e.g., New Service"
+              className="rounded-xl"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>Secondary Button Text</Label>
+            <Input
+              value={(formData.metadata as any)?.secondary_cta_text || ""}
+              onChange={(e) => updateMetadata("secondary_cta_text", e.target.value)}
+              placeholder="e.g., Learn More"
+              className="rounded-xl"
+            />
+          </div>
         </div>
-        <div className="flex items-center justify-between p-3 rounded-xl border">
-          <Label className="cursor-pointer">Active</Label>
-          <Switch
-            checked={formData.is_active}
-            onCheckedChange={(checked) => setFormData({ ...formData, is_active: checked })}
-          />
-        </div>
+      )}
+
+      <div className="space-y-2">
+        <Label>Display Order</Label>
+        <Input
+          type="number"
+          value={formData.display_order}
+          onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) || 0 })}
+          className="rounded-xl"
+        />
       </div>
 
-      <div className="flex gap-3 pt-4">
-        <Button variant="outline" className="flex-1 rounded-xl" onClick={onCancel}>
-          Cancel
-        </Button>
+      <div className="flex items-center gap-2 pt-4">
+        <Switch
+          id="block-active"
+          checked={formData.is_active}
+          onCheckedChange={(v) => setFormData({ ...formData, is_active: v })}
+        />
+        <Label htmlFor="block-active">Active</Label>
+      </div>
+
+      <div className="flex gap-3 pt-6">
+        <Button variant="outline" className="flex-1 rounded-xl" onClick={onCancel}>Cancel</Button>
         <Button className="flex-1 rounded-xl" onClick={handleSave} disabled={isSaving}>
-          {isSaving ? (
-            <>
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Saving...
-            </>
-          ) : (
-            <>
-              <Save className="w-4 h-4 mr-2" />
-              Save Block
-            </>
-          )}
+          {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+          {block?.id ? "Update Block" : "Create Block"}
         </Button>
       </div>
     </div>

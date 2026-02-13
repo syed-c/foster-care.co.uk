@@ -256,8 +256,11 @@ export function CountryTemplate({
                                     className="w-full sm:w-auto rounded-full bg-primary hover:bg-primary/90 text-white font-black h-16 px-12 text-xl shadow-2xl shadow-primary/40 transition-all hover:scale-105 active:scale-95 group"
                                     asChild
                                 >
-                                    <Link href="/become-a-foster">
-                                        Start Your Journey
+                                    <Link href={getBlockMetadata(getBlock(blocks, "hero_cta"), "cta_url", "/become-a-foster")}>
+                                        <DynamicContent
+                                            block={getBlock(blocks, "hero_cta")}
+                                            fallback="Start Your Journey"
+                                        />
                                         <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform" />
                                     </Link>
                                 </Button>
@@ -267,8 +270,11 @@ export function CountryTemplate({
                                     className="w-full sm:w-auto rounded-full bg-white/5 border-white/20 text-white hover:bg-white/10 hover:border-white/40 h-16 px-12 text-xl font-black backdrop-blur-md transition-all hover:scale-105 active:scale-95"
                                     asChild
                                 >
-                                    <Link href="#agencies">
-                                        View Local Agencies
+                                    <Link href={getBlockMetadata(getBlock(blocks, "hero_secondary_cta"), "cta_url", "#agencies")}>
+                                        <DynamicContent
+                                            block={getBlock(blocks, "hero_secondary_cta")}
+                                            fallback="View Local Agencies"
+                                        />
                                     </Link>
                                 </Button>
                             </div>
@@ -938,6 +944,7 @@ export function CountryTemplate({
             {/* 20. CTA Section */}
             <CTASection
                 locationName={locationName}
+                blocks={blocks}
             />
         </div>
     );
