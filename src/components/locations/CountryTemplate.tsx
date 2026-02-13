@@ -56,9 +56,11 @@ export function CountryTemplate({
 }: LocationPageProps) {
     const locationName = location.name;
 
+    const isEngland = location.slug === "england" || locationName === "England";
+
     // Fallback stats
-    const totalCarers = stats.totalCarers || (stats.agenciesCount * 45);
-    const weeklyAllowance = stats.weeklyAllowance || "£450 - £650";
+    const totalCarers = isEngland ? 24300 : (stats.totalCarers || (stats.agenciesCount * 45));
+    const weeklyAllowance = isEngland ? "£450–£650" : (stats.weeklyAllowance || "£450 - £650");
 
     const whyFosterParagraphs = [
         `Fostering in ${locationName} is more than just providing a bed; it's about offering stability, safety, and a future to children who need it most. Currently, with over ${stats.childrenInCare.toLocaleString()} children in care across the nation, the need for compassionate, dedicated foster carers has never been more urgent.`,
@@ -161,15 +163,21 @@ export function CountryTemplate({
                             {/* Stats Grid */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mb-10 md:mb-14 max-w-4xl mx-auto">
                                 <div className="p-6 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-sm flex flex-col items-center justify-center">
-                                    <div className="text-3xl md:text-5xl font-black text-primary mb-1">{totalCarers.toLocaleString()}+</div>
+                                    <div className="text-3xl md:text-5xl font-black text-primary mb-1">
+                                        {isEngland ? "24,300+" : `${totalCarers.toLocaleString()}+`}
+                                    </div>
                                     <div className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Approved Carers</div>
                                 </div>
                                 <div className="p-6 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-sm flex flex-col items-center justify-center">
-                                    <div className="text-3xl md:text-5xl font-black text-white mb-1">{stats.agenciesCount}+</div>
+                                    <div className="text-3xl md:text-5xl font-black text-white mb-1">
+                                        {isEngland ? "540+" : `${stats.agenciesCount}+`}
+                                    </div>
                                     <div className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Approved Agencies</div>
                                 </div>
                                 <div className="p-6 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-sm sm:col-span-2 lg:col-span-1 flex flex-col items-center justify-center">
-                                    <div className="text-3xl md:text-5xl font-black text-white mb-1">{weeklyAllowance}</div>
+                                    <div className="text-3xl md:text-5xl font-black text-white mb-1">
+                                        {isEngland ? "£450–£650" : weeklyAllowance}
+                                    </div>
                                     <div className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Weekly Allowance</div>
                                 </div>
                             </div>
@@ -240,7 +248,7 @@ export function CountryTemplate({
                 </div>
             </section>
 
-            {/* NEW: Agencies Listings Section */}
+            {/* 3. Featured Agencies in England / Country */}
             <section id="agencies" className="py-20 md:py-32 bg-white scroll-mt-20">
                 <div className="container-main px-4">
                     <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
@@ -267,7 +275,9 @@ export function CountryTemplate({
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {agencies.slice(0, 3).map((agency) => (
+                        {agencies
+                            .slice(0, 3)
+                            .map((agency) => (
                             <motion.div
                                 key={agency.id}
                                 initial={{ opacity: 0, y: 20 }}
@@ -296,13 +306,21 @@ export function CountryTemplate({
                                             {agency.name}
                                         </h3>
 
-                                        <div className="flex items-center gap-1.5 text-sm text-slate-500 mb-4">
+                                        <div className="flex items-center gap-1.5 text-sm text-slate-500 mb-2">
                                             <MapPin className="w-4 h-4 text-primary" />
                                             {agency.city || locationName}
                                         </div>
+                                        {agency.ofsted_rating && (
+                                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 mb-3">
+                                                <BadgeCheck className="w-4 h-4 text-emerald-600" />
+                                                <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest">
+                                                    Ofsted: {agency.ofsted_rating}
+                                                </span>
+                                            </div>
+                                        )}
 
                                         <p className="text-slate-600 text-sm mb-6 line-clamp-2 leading-relaxed">
-                                            {agency.description || `Providing expert foster care support and training for families across ${locationName}.`}
+                                            {agency.description || `Providing expert foster care support, training and matching for families across ${locationName}.`}
                                         </p>
 
                                         <div className="mt-auto pt-6 border-t border-slate-50 flex items-center justify-between">
@@ -332,7 +350,66 @@ export function CountryTemplate({
                 </div>
             </section>
 
-            {/* 3. Types of Fostering */}
+            {/* 4. Independent and Local Authority Agencies */}
+            <section className="py-20 md:py-28 bg-background-sand">
+                <div className="container-main px-4">
+                    <div className="max-w-3xl mb-10 md:mb-12">
+                        <div className="inline-flex items-center gap-2 text-primary font-black text-xs uppercase tracking-widest mb-4">
+                            <Building2 className="w-4 h-4" />
+                            Agency Types
+                        </div>
+                        <h2 className="text-3xl md:text-4xl font-black text-slate-950 mb-4 tracking-tighter">
+                            Independent agencies and local authorities
+                        </h2>
+                        <p className="text-lg text-slate-600 leading-relaxed">
+                            In {locationName}, you can foster through an Independent Fostering Agency (IFA) or directly with
+                            your Local Authority (LA). Both are Ofsted-regulated, but the way they support you can feel
+                            different.
+                        </p>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+                        <div className="rounded-3xl bg-white border border-slate-200 p-6 md:p-8 shadow-sm">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center">
+                                    <Building2 className="w-5 h-5 text-primary" />
+                                </div>
+                                <h3 className="text-xl md:text-2xl font-black text-slate-950">
+                                    Independent Fostering Agencies (IFAs)
+                                </h3>
+                            </div>
+                            <p className="text-sm md:text-base text-slate-600 mb-4 leading-relaxed">
+                                IFAs are specialist organisations that focus solely on recruiting, training and supporting carers.
+                            </p>
+                            <ul className="space-y-2 text-sm md:text-base text-slate-700">
+                                <li>• Often provide very close, relationship-based support for your whole household.</li>
+                                <li>• May offer enhanced training, therapeutic input and peer groups.</li>
+                                <li>• Work with multiple local authorities to find the right matches for you.</li>
+                            </ul>
+                        </div>
+                        <div className="rounded-3xl bg-white border border-slate-200 p-6 md:p-8 shadow-sm">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="w-10 h-10 rounded-2xl bg-slate-900/5 flex items-center justify-center">
+                                    <ShieldCheck className="w-5 h-5 text-slate-900" />
+                                </div>
+                                <h3 className="text-xl md:text-2xl font-black text-slate-950">
+                                    Local Authority (Council) Fostering
+                                </h3>
+                            </div>
+                            <p className="text-sm md:text-base text-slate-600 mb-4 leading-relaxed">
+                                Fostering directly with your local council means being part of the team that holds legal
+                                responsibility for children in care.
+                            </p>
+                            <ul className="space-y-2 text-sm md:text-base text-slate-700">
+                                <li>• You work closely with social workers based in your local area.</li>
+                                <li>• Placements are usually within your region to keep children connected to their communities.</li>
+                                <li>• Support, allowances and training are set by the council’s fostering service.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 5. Types of Fostering in England */}
             <section className="py-20 md:py-32 bg-slate-950 text-white overflow-hidden">
                 <div className="container-main px-4">
                     <div className="text-center mb-16">
@@ -367,7 +444,7 @@ export function CountryTemplate({
                 </div>
             </section>
 
-            {/* 4. Is Fostering Right for Me? */}
+            {/* 4. Is Fostering Right for Me? (Search Intent Targeting) */}
             <section className="py-20 md:py-32 bg-white relative overflow-hidden">
                 <div className="container-main px-4 relative z-10">
                     <div className="max-w-4xl mx-auto">
@@ -400,7 +477,7 @@ export function CountryTemplate({
                                 ))}
                                 <Button className="w-full mt-6 rounded-full h-14 md:h-16 font-black text-lg shadow-xl shadow-primary/10 transition-all active:scale-95" asChild>
                                     <Link href="/become-a-foster">
-                                        Check Your Eligibility
+                                        Talk to Someone First
                                     </Link>
                                 </Button>
                             </div>
@@ -410,35 +487,85 @@ export function CountryTemplate({
                 <div className="hidden lg:block absolute top-0 right-0 w-1/3 h-full bg-slate-50 opacity-40 -z-0 rounded-l-[10rem]" />
             </section>
 
-            {/* 5. The Fostering Process Section */}
+            {/* 7. The Process of Becoming a Foster Carer */}
             <ProcessSection locationName={locationName} />
 
-            {/* 6. Support You’ll Receive */}
+            {/* 8. Ofsted-Rated Agencies in England / Country */}
+            {isEngland && (
+                <section className="py-20 md:py-28 bg-background-sand">
+                    <div className="container-main px-4 max-w-4xl mx-auto">
+                        <div className="mb-10 md:mb-12">
+                            <div className="inline-flex items-center gap-2 text-primary font-black text-xs uppercase tracking-widest mb-4">
+                                <ShieldCheck className="w-4 h-4" />
+                                Why Ofsted Ratings Matter
+                            </div>
+                            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black mb-5 tracking-tighter text-slate-950">
+                                Choosing a Safe, Well-Led Fostering Agency
+                            </h2>
+                            <p className="text-lg md:text-xl text-slate-700 leading-relaxed font-medium">
+                                Every agency you see on this page is regulated by Ofsted. Their rating gives you a
+                                clear signal about how seriously they take quality, safety, and outcomes for children.
+                            </p>
+                        </div>
+                        <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+                            {[
+                                {
+                                    title: "Safeguarding",
+                                    desc: "How well agencies protect children, listen to concerns, and respond quickly when something isn’t right."
+                                },
+                                {
+                                    title: "Leadership",
+                                    desc: "Whether leaders create a safe, stable culture for carers, staff, and children."
+                                },
+                                {
+                                    title: "Outcomes",
+                                    desc: "The difference agencies actually make to children’s lives, education, stability, and wellbeing."
+                                }
+                            ].map((item) => (
+                                <div key={item.title} className="p-6 md:p-7 rounded-3xl bg-white border border-slate-100 shadow-sm">
+                                    <h3 className="text-lg md:text-xl font-black text-slate-950 mb-3">{item.title}</h3>
+                                    <p className="text-sm md:text-base text-slate-600 leading-relaxed">
+                                        {item.desc}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                        <p className="mt-8 text-sm md:text-base text-slate-600">
+                            Look for agencies in the <span className="font-bold text-primary">Featured Agencies</span> section
+                            above that clearly display their Ofsted rating. This can be a helpful starting point when comparing options.
+                        </p>
+                    </div>
+                </section>
+            )}
+
+            {/* 9. Support for Foster Carers */}
             <section className="py-20 md:py-32 bg-slate-900 text-white">
                 <div className="container-main px-4">
                     <div className="text-center max-w-3xl mx-auto mb-16 md:mb-20">
-                        <h2 className="text-3xl md:text-5xl font-black mb-6 tracking-tighter text-white">Support Across {locationName}</h2>
+                        <h2 className="text-3xl md:text-5xl font-black mb-6 tracking-tighter text-white">
+                            Support for Foster Carers in {locationName}
+                        </h2>
                         <p className="text-lg md:text-xl text-white/60 font-medium leading-relaxed">
-                            No matter where you are in {locationName}, you are supported by a world-class network of dedicated professionals.
+                            From finances to emotional backup, you’ll never be expected to do this alone.
                         </p>
                     </div>
 
                     <div className="grid md:grid-cols-3 gap-6 md:gap-8">
                         {[
                             {
-                                title: "24/7 Hotline",
-                                desc: "Round-the-clock access to experienced social workers who can offer advice and support when you need it most.",
-                                icon: MessageCircle
+                                title: "Financial Support",
+                                desc: "Weekly allowances, tax relief and additional payments to recognise the time and care you provide.",
+                                icon: ShieldCheck
                             },
                             {
-                                title: "Training Hubs",
-                                desc: "Local and regional training centers providing specialized workshops in therapeutic care and child development.",
+                                title: "Training",
+                                desc: "Ongoing training on attachment, trauma, education and everyday situations so you feel confident and equipped.",
                                 icon: GraduationCap
                             },
                             {
-                                title: "Financial Security",
-                                desc: "Competitive national allowances plus additional benefits, including tax exemptions and national insurance credits.",
-                                icon: ShieldCheck
+                                title: "24/7 Help & Community",
+                                desc: "Round-the-clock advice plus peer support groups, events and access to professionals when things feel tough.",
+                                icon: MessageCircle
                             }
                         ].map((item, i) => (
                             <motion.div
@@ -451,16 +578,25 @@ export function CountryTemplate({
                                 </div>
                                 <h3 className="text-xl md:text-2xl font-black mb-4 text-white">{item.title}</h3>
                                 <p className="text-white/70 font-medium leading-relaxed mb-6 text-sm md:text-base">{item.desc}</p>
-                                <Link href="/policy/funding" className="text-primary font-black flex items-center gap-2 text-xs md:text-sm group-hover:gap-3 transition-all">
-                                    Learn more about funding <ArrowRight className="w-4 h-4" />
-                                </Link>
                             </motion.div>
                         ))}
                     </div>
+
+                    {isEngland && (
+                        <div className="mt-16 max-w-2xl mx-auto text-center border border-white/10 rounded-3xl p-6 md:p-8 bg-white/5">
+                            <p className="text-sm md:text-base text-white/80 italic leading-relaxed">
+                                “The difference for us was the support. Someone picked up the phone at 2am when we were
+                                scared we’d got it wrong. We were reminded we weren’t doing this on our own.”
+                            </p>
+                            <p className="mt-4 text-xs md:text-sm text-white/60 font-medium">
+                                Foster carer in England
+                            </p>
+                        </div>
+                    )}
                 </div>
             </section>
 
-            {/* 7. Social Proof */}
+            {/* 10. Fostering by the Numbers */}
             <section className="py-20 md:py-32 bg-white relative overflow-hidden">
                 <div className="container-main px-4">
                     <div className="text-center mb-16">
@@ -469,12 +605,24 @@ export function CountryTemplate({
                         </h2>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-16 md:mb-24">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-16 md:mb-24 overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none pb-2">
                         {[
-                            { value: `${totalCarers.toLocaleString()}+`, label: `Approved Carers in ${locationName}` },
-                            { value: "4,000+", label: "New Approvals Last Year" },
-                            { value: "98%", label: "Placement Success Rate" },
-                            { value: "24/7", label: "Professional Support" }
+                            {
+                                value: isEngland ? "24,300+" : `${totalCarers.toLocaleString()}+`,
+                                label: `Approved Carers in ${locationName}`
+                            },
+                            {
+                                value: isEngland ? "4,000+" : "4,000+",
+                                label: isEngland ? "Active Placements" : "New Approvals Last Year"
+                            },
+                            {
+                                value: "98%",
+                                label: "Carer Satisfaction"
+                            },
+                            {
+                                value: "24/7",
+                                label: "Support Available"
+                            }
                         ].map((stat, i) => (
                             <div key={i} className="text-center p-6 bg-slate-50 rounded-3xl md:bg-transparent">
                                 <div className="text-4xl md:text-6xl font-black text-slate-950 mb-2">{stat.value}</div>
@@ -485,7 +633,7 @@ export function CountryTemplate({
                 </div>
             </section>
 
-            {/* 8. Testimonials Section */}
+            {/* 11. Voices from England (Testimonials) */}
             <section className="py-20 md:py-32 bg-slate-950 text-white rounded-[2.5rem] md:rounded-[4rem] mx-4 my-8">
                 <div className="container-main px-4">
                     <div className="text-center max-w-3xl mx-auto mb-16 md:mb-20">
@@ -517,7 +665,7 @@ export function CountryTemplate({
                 </div>
             </section>
 
-            {/* 9. Regions Browser */}
+            {/* 12. Explore Regions in England / Country */}
             <section id="regions" className="py-20 md:py-32 bg-white scroll-mt-20">
                 <div className="container-main px-4">
                     <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
@@ -532,7 +680,7 @@ export function CountryTemplate({
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
                         {childLocations.map((region, i) => (
                             <motion.div
                                 key={region.id}
@@ -567,12 +715,16 @@ export function CountryTemplate({
                 </div>
             </section>
 
-            {/* 10. FAQ Block */}
+            {/* 13. England Foster Care FAQ */}
             <section className="py-20 md:py-32 bg-background-sand">
                 <div className="container-main px-4 max-w-4xl mx-auto">
                     <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-5xl font-black mb-6 text-slate-950 tracking-tighter">Frequently Asked Questions</h2>
-                        <p className="text-lg md:text-xl text-slate-600 font-medium">Clear, honest answers for prospective carers in {locationName}.</p>
+                        <h2 className="text-3xl md:text-5xl font-black mb-6 text-slate-950 tracking-tighter">
+                            {isEngland ? "England Foster Care FAQ" : "Frequently Asked Questions"}
+                        </h2>
+                        <p className="text-lg md:text-xl text-slate-600 font-medium">
+                            Clear, honest answers for prospective carers in {locationName}.
+                        </p>
                     </div>
 
                     <Accordion type="single" collapsible className="space-y-4">
@@ -590,7 +742,114 @@ export function CountryTemplate({
                 </div>
             </section>
 
-            {/* 11. Final CTA */}
+            {/* 14. Who This Guide Is For */}
+            <section className="py-20 md:py-28 bg-white">
+                <div className="container-main px-4 max-w-5xl mx-auto">
+                    <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-start">
+                        <div>
+                            <div className="inline-flex items-center gap-2 text-primary font-black text-xs uppercase tracking-widest mb-4">
+                                <Info className="w-4 h-4" />
+                                Who this guide is for
+                            </div>
+                            <h2 className="text-3xl md:text-4xl font-black text-slate-950 mb-4 tracking-tighter">
+                                A calm space to compare, reflect and decide
+                            </h2>
+                            <p className="text-lg text-slate-600 leading-relaxed">
+                                This page is designed to give you clear, pressure-free information. You can take your time,
+                                explore different options, and come back whenever you’re ready to move forward.
+                            </p>
+                        </div>
+                        <div className="space-y-4">
+                            {[
+                                "People exploring fostering for the first time and unsure where to start.",
+                                "Existing foster carers considering switching agencies within England.",
+                                "Families comparing independent fostering agencies with local authorities.",
+                                "Professionals, friends or relatives supporting someone who is thinking about fostering.",
+                                "Anyone who wants a simple, human explanation of how fostering works here."
+                            ].map((item) => (
+                                <div key={item} className="flex items-start gap-3">
+                                    <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center mt-1">
+                                        <CheckCircle className="w-3.5 h-3.5 text-primary" />
+                                    </div>
+                                    <p className="text-sm md:text-base text-slate-700 leading-relaxed">
+                                        {item}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 15. Glossary Section */}
+            <section className="py-20 md:py-28 bg-background-sand">
+                <div className="container-main px-4 max-w-5xl mx-auto">
+                    <h2 className="text-3xl md:text-4xl font-black text-slate-950 mb-8 tracking-tighter">
+                        Quick glossary for England fostering
+                    </h2>
+                    <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+                        {[
+                            {
+                                term: "Carer",
+                                def: "A foster carer is the person or family providing day-to-day care for a child in their home."
+                            },
+                            {
+                                term: "IFA (Independent Fostering Agency)",
+                                def: "A regulated organisation that recruits, trains and supports foster carers, separate from the local council."
+                            },
+                            {
+                                term: "LA (Local Authority)",
+                                def: "Your local council, which holds legal responsibility for children in care and sometimes runs its own fostering service."
+                            },
+                            {
+                                term: "Ofsted",
+                                def: "The independent regulator that inspects and rates fostering agencies and local authorities in England."
+                            },
+                            {
+                                term: "Allowance",
+                                def: "The weekly payment you receive to cover the costs of caring for a child, plus a reward element for your time."
+                            }
+                        ].map((item) => (
+                            <details
+                                key={item.term}
+                                className="group rounded-2xl bg-white border border-slate-100 px-5 py-4 open:shadow-md transition-all"
+                            >
+                                <summary className="flex items-center justify-between gap-4 cursor-pointer list-none">
+                                    <span className="font-bold text-slate-900 text-sm md:text-base">
+                                        {item.term}
+                                    </span>
+                                    <span className="text-xs font-bold uppercase tracking-widest text-primary">
+                                        {`Learn more`}
+                                    </span>
+                                </summary>
+                                <p className="mt-3 text-sm md:text-base text-slate-600 leading-relaxed">
+                                    {item.def}
+                                </p>
+                            </details>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* 16. Safeguarding & Responsibility Notice */}
+            <section className="py-16 md:py-20 bg-white">
+                <div className="container-main px-4 max-w-4xl mx-auto">
+                    <div className="rounded-3xl border border-slate-200 bg-slate-50/60 px-6 md:px-10 py-8 md:py-10">
+                        <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-3">
+                            Safeguarding & responsibility
+                        </h3>
+                        <p className="text-sm md:text-base text-slate-700 leading-relaxed">
+                            Foster-care.co.uk is an independent information and comparison platform. We are not a fostering
+                            agency and we do not make placement decisions. Our role is to help you understand your options,
+                            connect with trusted, Ofsted-regulated agencies, and make informed choices about your fostering
+                            journey. Always speak directly to your chosen agency or local authority for personalised advice
+                            and safeguarding guidance.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            {/* 17. Final CTA Section */}
             <CTASection locationName={locationName} theme="dark" className="bg-white" />
         </div>
     );

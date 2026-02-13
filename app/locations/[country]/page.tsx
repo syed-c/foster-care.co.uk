@@ -21,6 +21,21 @@ export async function generateMetadata({ params }: { params: { country: string }
 
     const name = location.name;
 
+    // Custom meta for England country page
+    if (location.slug === "england") {
+        return {
+            title: "Fostering Agencies in England | Find Trusted Foster Care",
+            description: "Explore trusted fostering agencies in England. Compare support, training, and Ofsted-rated services to find the right match for your fostering journey.",
+            openGraph: {
+                title: "Fostering Agencies in England | Find Trusted Foster Care",
+                description: "Explore trusted fostering agencies in England. Compare support, training, and Ofsted-rated services to find the right match for your fostering journey.",
+            },
+            alternates: {
+                canonical: `https://www.foster-care.co.uk/locations/${params.country}`,
+            },
+        };
+    }
+
     return {
         title: `Foster Care in ${name} | Start Your Fostering Journey | Foster Care UK`,
         description: `Discover how you can make a life-changing difference. Become a foster carer in ${name}. Compare local agencies, access 24/7 support, and start your journey today.`,

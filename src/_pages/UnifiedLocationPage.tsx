@@ -138,6 +138,11 @@ export default function UnifiedLocationPage({
   const getSeoTitle = () => {
     if (effectiveLocation.seo_title) return effectiveLocation.seo_title;
 
+    // Custom SEO for England locations country page
+    if (effectiveLocation.slug === "england") {
+      return "Fostering Agencies in England | Find Trusted Foster Care";
+    }
+
     switch (effectiveLocation.type) {
       case "country":
         return `Foster Care Agencies in ${effectiveLocation.name} | Find Local Fostering Services`;
@@ -156,6 +161,11 @@ export default function UnifiedLocationPage({
 
   const getSeoDescription = () => {
     if (effectiveLocation.seo_description) return effectiveLocation.seo_description;
+
+    if (effectiveLocation.slug === "england") {
+      return "Explore trusted fostering agencies in England. Compare support, training, and Ofsted-rated services to find the right match for your fostering journey.";
+    }
+
     return `Discover trusted foster care agencies in ${effectiveLocation.name}. Compare ${totalAgencies || 'local'}+ verified fostering agencies, read reviews, and start your fostering journey today.`;
   };
 

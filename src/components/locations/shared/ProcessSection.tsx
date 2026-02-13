@@ -33,10 +33,10 @@ const steps = [
     },
     {
         icon: Heart,
-        title: "Foster",
-        desc: "First placement",
+        title: "Panel",
+        desc: "Approval decision",
         timeline: "4-6 months",
-        detail: "Begin your journey as an approved foster carer and transform a local child's life."
+        detail: "Your fostering panel reviews your assessment, confirms approval, and gets you ready for your first placement."
     }
 ];
 
