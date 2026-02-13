@@ -105,7 +105,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     locations.forEach((loc: any) => {
       // Only include specific types in sitemap as per user request
       // "Only include routes under: /locations/:country..."
-      if (!['country', 'region'].includes(loc.type)) return;
+      if (!['country', 'region', 'county'].includes(loc.type)) return;
 
       const pathSlug = getPathSlug(loc);
       if (!pathSlug) return;
@@ -121,14 +121,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
   }
 
-  const agencyPages: MetadataRoute.Sitemap = (agencies || []).map((agency: any) => ({
-    url: `${SITE_URL}/agencies/${agency.slug}`,
-    lastModified: agency.updated_at ? new Date(agency.updated_at) : new Date(),
-    changeFrequency: 'weekly',
-    priority: 0.7,
-  }));
-
-
+  // Agencies removed as per user request
+  // const agencyPages: MetadataRoute.Sitemap = (agencies || []).map((agency: any) => ({ ... }));
 
   const blogPages: MetadataRoute.Sitemap = (blogPosts || []).map((post: any) => ({
     url: `${SITE_URL}/blog/${post.slug}`,
@@ -152,7 +146,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const allPages = [
     ...staticPages,
     ...locationPages,
-    ...agencyPages,
+    // ...agencyPages, // Removed
     ...blogPages,
     ...guidePages
   ];
