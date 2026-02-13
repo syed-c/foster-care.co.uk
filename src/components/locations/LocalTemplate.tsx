@@ -11,6 +11,8 @@ import { ScrollReveal, ScrollRevealItem } from "./shared/ScrollReveal";
 import { InteractiveCard } from "./shared/InteractiveCard";
 import { SectionIntro } from "./shared/SectionIntro";
 import { CollapsibleFAQ } from "./shared/CollapsibleFAQ";
+import { usePageBlocks, getBlock } from "@/hooks/usePageBlocks";
+import { DynamicContent, getBlockMetadata } from "@/components/shared/DynamicContent";
 
 export interface LocationPageProps {
     location: Location;
@@ -31,6 +33,7 @@ export function LocalTemplate({
     faqs,
     stats
 }: LocationPageProps) {
+    const { data: blocks } = usePageBlocks(`loc_${location.slug}`);
     const locationName = location.name;
 
     const defaultFaqs = [
@@ -74,11 +77,17 @@ export function LocalTemplate({
                                 </Badge>
 
                                 <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 tracking-tighter leading-[0.9] text-white">
-                                    Foster in <br /><span className="text-primary italic">{locationName}</span>
+                                    <DynamicContent
+                                        block={getBlock(blocks, "hero_title")}
+                                        fallback={<>Foster in <br /><span className="text-primary italic">{locationName}</span></>}
+                                    />
                                 </h1>
 
                                 <p className="text-xl md:text-2xl text-white/80 mb-12 leading-relaxed font-medium max-w-xl">
-                                    Help us keep <span className="text-white font-black underline decoration-primary/50 underline-offset-4">{locationName}</span> children in their local community.
+                                    <DynamicContent
+                                        block={getBlock(blocks, "hero_subtitle")}
+                                        fallback={<>Help us keep <span className="text-white font-black underline decoration-primary/50 underline-offset-4">{locationName}</span> children in their local community.</>}
+                                    />
                                 </p>
 
                                 <div className="flex flex-col sm:flex-row items-center gap-6">
@@ -138,10 +147,18 @@ export function LocalTemplate({
                             />
                             <div className="space-y-6 text-xl text-slate-700 leading-relaxed font-medium">
                                 <p>
-                                    When a child needs a foster home in {locationName}, our priority is to keep them close to their school, friends, and everything they know. Continuity is vital for their emotional well-being.
+                                    <DynamicContent
+                                        block={getBlock(blocks, "local_priority_content")}
+                                        asHtml={true}
+                                        fallback={<>When a child needs a foster home in {locationName}, our priority is to keep them close to their school, friends, and everything they know. Continuity is vital for their emotional well-being.</>}
+                                    />
                                 </p>
                                 <p>
-                                    By fostering locally, you ensure that a child from {locationName} doesn't have to face the additional trauma of moving to an unfamiliar area.
+                                    <DynamicContent
+                                        block={getBlock(blocks, "local_benefit_content")}
+                                        asHtml={true}
+                                        fallback={<>By fostering locally, you ensure that a child from {locationName} doesn't have to face the additional trauma of moving to an unfamiliar area.</>}
+                                    />
                                 </p>
                             </div>
 

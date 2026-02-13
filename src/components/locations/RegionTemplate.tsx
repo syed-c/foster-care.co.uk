@@ -14,6 +14,8 @@ import { InteractiveCard } from "./shared/InteractiveCard";
 import { SectionIntro } from "./shared/SectionIntro";
 import { SwipeableCards } from "./shared/SwipeableCards";
 import { CarouselSection } from "./shared/CarouselSection";
+import { usePageBlocks, getBlock } from "@/hooks/usePageBlocks";
+import { DynamicContent, getBlockMetadata } from "@/components/shared/DynamicContent";
 
 export interface LocationPageProps {
     location: Location;
@@ -35,6 +37,7 @@ export function RegionTemplate({
     stats,
     path
 }: LocationPageProps) {
+    const { data: blocks } = usePageBlocks(`loc_${location.slug}`);
     const locationName = location.name;
 
     return (
@@ -61,7 +64,10 @@ export function RegionTemplate({
                                 </Badge>
 
                                 <h1 className="text-5xl md:text-7xl lg:text-9xl font-black mb-12 tracking-tighter leading-[0.9] text-white">
-                                    Foster Care in <span className="text-primary italic">{locationName}</span>
+                                    <DynamicContent
+                                        block={getBlock(blocks, "hero_title")}
+                                        fallback={<>Foster Care in <span className="text-primary italic">{locationName}</span></>}
+                                    />
                                 </h1>
                             </div>
                         </ScrollReveal>
@@ -138,8 +144,8 @@ export function RegionTemplate({
                         <ScrollReveal effect="slideRight" className="relative group">
                             <div className="aspect-[4/3] rounded-[4rem] overflow-hidden shadow-2xl relative z-10 border-8 border-white group-hover:-rotate-1 transition-transform duration-500">
                                 <img
-                                    src="/images/locations/generic-hero.png"
-                                    alt={`Fostering in ${locationName}`}
+                                    src={getBlockMetadata(getBlock(blocks, "region_unique_image"), "url", "/images/locations/generic-hero.png")}
+                                    alt={getBlockMetadata(getBlock(blocks, "region_unique_image"), "alt", `Fostering in ${locationName}`)}
                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                 />
                             </div>

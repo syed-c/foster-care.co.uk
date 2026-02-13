@@ -29,6 +29,8 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Location, Agency, FAQ } from "@/services/dataService";
 import { cn } from "@/lib/utils";
+import { usePageBlocks, getBlock } from "@/hooks/usePageBlocks";
+import { DynamicContent, getBlockMetadata } from "@/components/shared/DynamicContent";
 import { ProcessSection } from "./shared/ProcessSection";
 import { CTASection } from "./shared/CTASection";
 import { ScrollReveal, ScrollRevealItem } from "./shared/ScrollReveal";
@@ -63,6 +65,7 @@ export function CountryTemplate({
     agencies,
     stats
 }: LocationPageProps) {
+    const { data: blocks } = usePageBlocks(`loc_${location.slug}`);
     const locationName = location.name;
     const heroRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll();
@@ -175,20 +178,33 @@ export function CountryTemplate({
                         >
                             <div className="inline-flex items-center gap-2 mb-10 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-slate-300 shadow-2xl backdrop-blur-md">
                                 <Activity className="w-3.5 h-3.5 text-primary" />
-                                <span className="text-[10px] font-bold uppercase tracking-[0.2em]">National Fostering Excellence</span>
+                                <span className="text-[10px] font-bold uppercase tracking-[0.2em]">
+                                    <DynamicContent
+                                        block={getBlock(blocks, "hero_badge")}
+                                        fallback="National Fostering Excellence"
+                                    />
+                                </span>
                             </div>
 
                             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black mb-10 tracking-tight leading-[1] text-white">
-                                Fostering in <span className="text-primary italic relative">
-                                    {locationName}
-                                    <svg className="absolute -bottom-2 left-0 w-full h-3 text-primary/30" viewBox="0 0 100 10" preserveAspectRatio="none">
-                                        <path d="M0 5 Q 25 0, 50 5 T 100 5" fill="none" stroke="currentColor" strokeWidth="4" />
-                                    </svg>
-                                </span>
+                                <DynamicContent
+                                    block={getBlock(blocks, "hero_title")}
+                                    fallback={
+                                        <>Fostering in <span className="text-primary italic relative">
+                                            {locationName}
+                                            <svg className="absolute -bottom-2 left-0 w-full h-3 text-primary/30" viewBox="0 0 100 10" preserveAspectRatio="none">
+                                                <path d="M0 5 Q 25 0, 50 5 T 100 5" fill="none" stroke="currentColor" strokeWidth="4" />
+                                            </svg>
+                                        </span></>
+                                    }
+                                />
                             </h1>
 
                             <p className="text-xl md:text-2xl text-slate-300 mb-16 max-w-4xl mx-auto leading-relaxed font-medium">
-                                Help us transform lives. Discover the rewards of fostering and join {locationName}'s largest network of approved agencies.
+                                <DynamicContent
+                                    block={getBlock(blocks, "hero_subtitle")}
+                                    fallback={`Help us transform lives. Discover the rewards of fostering and join ${locationName}'s largest network of approved agencies.`}
+                                />
                             </p>
 
                             {/* Stats Grid - Glassmorphism Premium */}
@@ -293,9 +309,13 @@ export function CountryTemplate({
                                 />
 
                                 <div className="space-y-6 text-base md:text-lg text-slate-600 leading-relaxed font-medium">
-                                    {whyFosterParagraphs.map((p, i) => (
-                                        <p key={i}>{p}</p>
-                                    ))}
+                                    <DynamicContent
+                                        block={getBlock(blocks, "why_foster_content")}
+                                        asHtml={true}
+                                        fallback={whyFosterParagraphs.map((p, i) => (
+                                            <p key={i}>{p}</p>
+                                        ))}
+                                    />
                                 </div>
 
                                 <div className="mt-12 flex flex-wrap gap-8">
@@ -311,8 +331,8 @@ export function CountryTemplate({
                             <ScrollReveal effect="slideRight" className="relative">
                                 <div className="aspect-[4/5] rounded-2xl overflow-hidden shadow-sm relative z-10 border border-slate-200">
                                     <img
-                                        src="/images/locations/england-hero.png"
-                                        alt={`Fostering in ${locationName}`}
+                                        src={getBlockMetadata(getBlock(blocks, "why_foster_image"), "url", "/images/locations/england-hero.png")}
+                                        alt={getBlockMetadata(getBlock(blocks, "why_foster_image"), "alt", `Fostering in ${locationName}`)}
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
@@ -383,8 +403,16 @@ export function CountryTemplate({
 
                         <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-start mt-16">
                             <ScrollReveal effect="slideLeft" className="space-y-6 text-base md:text-lg text-slate-300 leading-relaxed font-medium pt-2">
-                                <p>Becoming a foster carer is a significant lifestyle change. It's natural to have questions about how it will affect your family, your work, and your daily routine.</p>
-                                <p>We believe that anyone with a spare room and a big heart can potentially foster. Whether you're single, married, in a same-sex relationship, or have your own children, what matters most is your stability and your commitment to a child's wellbeing.</p>
+                                <DynamicContent
+                                    block={getBlock(blocks, "is_right_content")}
+                                    asHtml={true}
+                                    fallback={
+                                        <>
+                                            <p>Becoming a foster carer is a significant lifestyle change. It's natural to have questions about how it will affect your family, your work, and your daily routine.</p>
+                                            <p>We believe that anyone with a spare room and a big heart can potentially foster. Whether you're single, married, in a same-sex relationship, or have your own children, what matters most is your stability and your commitment to a child's wellbeing.</p>
+                                        </>
+                                    }
+                                />
                             </ScrollReveal>
 
                             <ScrollReveal effect="slideRight" staggerChildren staggerDelay={0.08}>

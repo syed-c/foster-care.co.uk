@@ -3,6 +3,7 @@ import type { Tables } from '@/integrations/supabase/types';
 
 export type Location = Tables<"locations">;
 export type CmsContent = Tables<"cms_content">;
+export type ContentBlock = Tables<"page_content_blocks">;
 export type FAQ = Tables<"faqs">;
 export type Agency = Tables<"agencies">;
 export type Specialism = Tables<"specialisms">;
@@ -17,6 +18,33 @@ export async function getCmsContentByPage(pageKey: string) {
         .order('section');
 
     if (error) return [];
+    return data;
+}
+
+export async function getPageBlocks(pageKey: string) {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from('page_content_blocks')
+        .select('*')
+        .eq('page_key', pageKey)
+        .eq('is_active', true)
+        .order('display_order');
+
+    if (error) return [];
+    return data;
+}
+
+export async function getBlockByKey(pageKey: string, blockKey: string) {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from('page_content_blocks')
+        .select('*')
+        .eq('page_key', pageKey)
+        .eq('block_key', blockKey)
+        .eq('is_active', true)
+        .maybeSingle();
+
+    if (error) return null;
     return data;
 }
 

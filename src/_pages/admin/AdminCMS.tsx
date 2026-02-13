@@ -47,14 +47,21 @@ import { toast } from "sonner";
 // Page definitions
 const STATIC_PAGES = [
   { key: "home", name: "Home", path: "/", category: "General" },
+  { key: "become-a-foster", name: "Become a Foster", path: "/become-a-foster", category: "Core" },
   { key: "about", name: "About", path: "/about", category: "General" },
   { key: "contact", name: "Contact", path: "/contact", category: "General" },
-  { key: "agencies", name: "Agencies Listing", path: "/agencies", category: "General" },
-  { key: "locations", name: "Locations Index", path: "/locations", category: "General" },
-  { key: "specialisms", name: "Specialisms Index", path: "/specialisms", category: "General" },
-  { key: "guides", name: "Guides Index", path: "/guides", category: "General" },
-  { key: "blog", name: "Blog Index", path: "/blog", category: "General" },
+  { key: "agencies", name: "Agencies Listing", path: "/agencies", category: "Browse" },
+  { key: "locations", name: "Locations Index", path: "/locations", category: "Browse" },
+  { key: "specialisms", name: "Specialisms Index", path: "/specialisms", category: "Browse" },
+  { key: "guides", name: "Guides Index", path: "/guides", category: "Resources" },
+  { key: "blog", name: "Blog Index", path: "/blog", category: "Resources" },
   { key: "pricing", name: "Pricing", path: "/pricing", category: "General" },
+  // Policy Pages
+  { key: "policy-funding", name: "Funding Policy", path: "/policy/funding", category: "Policy" },
+  { key: "policy-training", name: "Training Policy", path: "/policy/training", category: "Policy" },
+  { key: "policy-support", name: "Support Policy", path: "/policy/support", category: "Policy" },
+  { key: "policy-process", name: "Process Policy", path: "/policy/process", category: "Policy" },
+  { key: "policy-requirements", name: "Requirements Policy", path: "/policy/requirements", category: "Policy" },
 ];
 
 // Block types
@@ -169,10 +176,10 @@ export default function AdminCMS() {
 
   // Build location pages list
   const locationPages = (locations || []).map(loc => ({
-    key: `location_${loc.slug}`,
+    key: `loc_${loc.slug}`,
     name: loc.name,
     path: `/locations/${loc.slug}`,
-    category: loc.type === "country" ? "Countries" : loc.type === "region" ? "Regions" : "Cities",
+    category: loc.type === "country" ? "Countries" : loc.type === "region" ? "Regions" : loc.type === "county" ? "Counties" : "Cities",
     type: "location",
   }));
 
@@ -409,11 +416,8 @@ export default function AdminCMS() {
               </DialogTitle>
             </DialogHeader>
             {editingPage && (
-              <PageBlocksEditor
-                pageKey={editingPage}
-                blocks={getPageBlocks(editingPage)}
-                onSave={(block) => saveBlockMutation.mutate(block)}
-                onDelete={(id) => deleteBlockMutation.mutate(id)}
+              <PageManagementDialog
+                page={allPages.find(p => p.key === editingPage)!}
                 onClose={() => setEditingPage(null)}
               />
             )}
@@ -447,98 +451,213 @@ export default function AdminCMS() {
   );
 }
 
-// Page Blocks Editor Component
-function PageBlocksEditor({
-  pageKey,
-  blocks,
-  onSave,
-  onDelete,
+// Comprehensive Page Management Component
+function PageManagementDialog({
+  page,
   onClose
 }: {
-  pageKey: string;
-  blocks: any[];
-  onSave: (block: any) => void;
-  onDelete: (id: string) => void;
+  page: any;
   onClose: () => void;
 }) {
+  const queryClient = useQueryClient();
+  const { data: blocks, isLoading: blocksLoading } = useQuery({
+    queryKey: ["admin-page-blocks", page.key],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("page_content_blocks")
+        .select("*")
+        .eq("page_key", page.key)
+        .order("display_order");
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const { data: faqs, isLoading: faqsLoading } = useQuery({
+    queryKey: ["admin-page-faqs", page.key],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("faqs")
+        .select("*")
+        .eq("page_key", page.key)
+        .order("display_order");
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const saveBlockMutation = useMutation({
+    mutationFn: async (block: any) => {
+      const { id, ...payload } = block;
+      if (id) {
+        const { error } = await supabase.from("page_content_blocks").update(payload).eq("id", id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from("page_content_blocks").insert(payload);
+        if (error) throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-page-blocks", page.key] });
+      queryClient.invalidateQueries({ queryKey: ["page-blocks", page.key] });
+      toast.success("Block saved successfully");
+    },
+    onError: (error: any) => toast.error(error.message),
+  });
+
+  const deleteBlockMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("page_content_blocks").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-page-blocks", page.key] });
+      queryClient.invalidateQueries({ queryKey: ["page-blocks", page.key] });
+      toast.success("Block deleted");
+    },
+  });
+
+  const saveFaqMutation = useMutation({
+    mutationFn: async (faq: any) => {
+      const { id, ...payload } = faq;
+      if (id) {
+        const { error } = await supabase.from("faqs").update(payload).eq("id", id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from("faqs").insert(payload);
+        if (error) throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-page-faqs", page.key] });
+      queryClient.invalidateQueries({ queryKey: ["faqs"] });
+      toast.success("FAQ saved successfully");
+    },
+    onError: (error: any) => toast.error(error.message),
+  });
+
   const [editingBlock, setEditingBlock] = useState<any>(null);
+  const [editingFaq, setEditingFaq] = useState<any>(null);
 
   return (
-    <div className="space-y-4">
-      <ScrollArea className="h-[60vh]">
-        <div className="space-y-3 pr-4">
-          {blocks.length > 0 ? (
-            blocks.map((block) => (
-              <div
-                key={block.id}
-                className="p-4 rounded-xl border bg-card"
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <Badge variant="outline">{block.block_type}</Badge>
-                    <span className="font-medium">{block.title || block.block_key}</span>
+    <Tabs defaultValue="content" className="w-full">
+      <TabsList className="grid w-full grid-cols-2 rounded-xl mb-6">
+        <TabsTrigger value="content" className="rounded-lg">Content Blocks</TabsTrigger>
+        <TabsTrigger value="faqs" className="rounded-lg">FAQs</TabsTrigger>
+      </TabsList>
+
+      <TabsContent value="content">
+        <div className="space-y-4">
+          <ScrollArea className="h-[50vh]">
+            <div className="space-y-3 pr-4">
+              {blocksLoading ? (
+                <div className="flex justify-center py-12"><Loader2 className="animate-spin" /></div>
+              ) : blocks?.length ? (
+                blocks.map((block) => (
+                  <div key={block.id} className="p-4 rounded-xl border bg-card flex justify-between items-start">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline">{block.block_type}</Badge>
+                        <span className="font-medium">{block.title || block.block_key}</span>
+                      </div>
+                      {block.content && <p className="text-sm text-muted-foreground line-clamp-1">{block.content}</p>}
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="ghost" size="sm" onClick={() => setEditingBlock(block)}>
+                        <Pencil className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-destructive"
+                        onClick={() => confirm("Delete?") && deleteBlockMutation.mutate(block.id)}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
                   </div>
-                  <div className="flex gap-2">
-                    <Button variant="ghost" size="sm" onClick={() => setEditingBlock(block)}>
-                      <Pencil className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-destructive"
-                      onClick={() => {
-                        if (confirm("Delete this block?")) onDelete(block.id);
-                      }}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-                {block.content && (
-                  <p className="text-sm text-muted-foreground line-clamp-2">{block.content}</p>
-                )}
-              </div>
-            ))
-          ) : (
-            <div className="text-center py-12 text-muted-foreground">
-              No content blocks for this page yet.
+                ))
+              ) : (
+                <div className="text-center py-12 text-muted-foreground">No blocks yet.</div>
+              )}
             </div>
-          )}
+          </ScrollArea>
+          <div className="flex gap-3 pt-4 border-t">
+            <Button variant="outline" className="flex-1 rounded-xl" onClick={onClose}>Close</Button>
+            <Button
+              className="flex-1 rounded-xl"
+              onClick={() => setEditingBlock({ page_key: page.key, block_type: "text", block_key: "", title: "", content: "" })}
+            >
+              <Plus className="w-4 h-4 mr-2" /> Add Block
+            </Button>
+          </div>
         </div>
-      </ScrollArea>
+      </TabsContent>
 
-      <div className="flex gap-3 pt-4 border-t">
-        <Button variant="outline" className="flex-1 rounded-xl" onClick={onClose}>
-          Close
-        </Button>
-        <Button
-          className="flex-1 rounded-xl"
-          onClick={() => setEditingBlock({ page_key: pageKey, block_type: "text", block_key: "", title: "", content: "" })}
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Add Block
-        </Button>
-      </div>
+      <TabsContent value="faqs">
+        <div className="space-y-4">
+          <ScrollArea className="h-[50vh]">
+            <div className="space-y-3 pr-4">
+              {faqsLoading ? (
+                <div className="flex justify-center py-12"><Loader2 className="animate-spin" /></div>
+              ) : faqs?.length ? (
+                faqs.map((faq) => (
+                  <div key={faq.id} className="p-4 rounded-xl border bg-card flex justify-between items-start">
+                    <div className="space-y-1">
+                      <p className="font-medium line-clamp-1">{faq.question}</p>
+                      <p className="text-sm text-muted-foreground line-clamp-1">{faq.answer}</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="ghost" size="sm" onClick={() => setEditingFaq(faq)}>
+                        <Pencil className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-destructive"
+                        onClick={() => confirm("Delete?") && supabase.from("faqs").delete().eq("id", faq.id).then(() => queryClient.invalidateQueries({ queryKey: ["admin-page-faqs", page.key] }))}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-12 text-muted-foreground">No FAQs yet.</div>
+              )}
+            </div>
+          </ScrollArea>
+          <div className="flex gap-3 pt-4 border-t">
+            <Button variant="outline" className="flex-1 rounded-xl" onClick={onClose}>Close</Button>
+            <Button
+              className="flex-1 rounded-xl"
+              onClick={() => setEditingFaq({ page_key: page.key, question: "", answer: "", is_active: true, display_order: 0 })}
+            >
+              <Plus className="w-4 h-4 mr-2" /> Add FAQ
+            </Button>
+          </div>
+        </div>
+      </TabsContent>
 
-      {/* Inline Block Editor */}
+      {/* Editors */}
       <Dialog open={!!editingBlock} onOpenChange={(open) => !open && setEditingBlock(null)}>
         <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle>{editingBlock?.id ? "Edit Block" : "Add Block"}</DialogTitle>
-          </DialogHeader>
-          {editingBlock && (
-            <BlockEditor
-              block={editingBlock}
-              onSave={(block) => {
-                onSave(block);
-                setEditingBlock(null);
-              }}
-              onCancel={() => setEditingBlock(null)}
-            />
-          )}
+          <DialogHeader><DialogTitle>{editingBlock?.id ? "Edit Block" : "Add Block"}</DialogTitle></DialogHeader>
+          {editingBlock && <BlockEditor block={editingBlock} onSave={(b) => { saveBlockMutation.mutate(b); setEditingBlock(null); }} onCancel={() => setEditingBlock(null)} />}
         </DialogContent>
       </Dialog>
-    </div>
+
+      <Dialog open={!!editingFaq} onOpenChange={(open) => !open && setEditingFaq(null)}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader><DialogTitle>{editingFaq?.id ? "Edit FAQ" : "Add FAQ"}</DialogTitle></DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2"><Label>Question</Label><Input value={editingFaq?.question} onChange={(e) => setEditingFaq({ ...editingFaq, question: e.target.value })} /></div>
+            <div className="space-y-2"><Label>Answer</Label><Textarea value={editingFaq?.answer} onChange={(e) => setEditingFaq({ ...editingFaq, answer: e.target.value })} rows={4} /></div>
+            <div className="flex justify-end gap-3"><Button variant="outline" onClick={() => setEditingFaq(null)}>Cancel</Button><Button onClick={() => saveFaqMutation.mutate(editingFaq)}>Save FAQ</Button></div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </Tabs>
   );
 }
 
@@ -560,6 +679,7 @@ function BlockEditor({
     block_type: block?.block_type || "text",
     title: block?.title || "",
     content: block?.content || "",
+    metadata: block?.metadata || {},
     is_active: block?.is_active ?? true,
     display_order: block?.display_order || 0,
   });
@@ -574,8 +694,18 @@ function BlockEditor({
     onSave({ ...block, ...formData });
   };
 
+  const updateMetadata = (key: string, value: string) => {
+    setFormData({
+      ...formData,
+      metadata: {
+        ...(formData.metadata as Record<string, any>),
+        [key]: value
+      }
+    });
+  };
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
       {pages && (
         <div className="space-y-2">
           <Label>Page</Label>
@@ -637,6 +767,54 @@ function BlockEditor({
           className="rounded-xl"
         />
       </div>
+
+      {(formData.block_type === "image" || formData.block_key.includes("image")) && (
+        <div className="space-y-4 p-4 rounded-xl border bg-muted/30">
+          <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Image Metadata</Label>
+          <div className="space-y-2">
+            <Label>Image URL</Label>
+            <Input
+              value={(formData.metadata as any)?.url || ""}
+              onChange={(e) => updateMetadata("url", e.target.value)}
+              placeholder="/images/..."
+              className="rounded-xl"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>Alt Text</Label>
+            <Input
+              value={(formData.metadata as any)?.alt || ""}
+              onChange={(e) => updateMetadata("alt", e.target.value)}
+              placeholder="Description for accessibility"
+              className="rounded-xl"
+            />
+          </div>
+        </div>
+      )}
+
+      {(formData.block_type === "button" || formData.block_key.includes("button")) && (
+        <div className="space-y-4 p-4 rounded-xl border bg-muted/30">
+          <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Button Metadata</Label>
+          <div className="space-y-2">
+            <Label>Label</Label>
+            <Input
+              value={(formData.metadata as any)?.label || ""}
+              onChange={(e) => updateMetadata("label", e.target.value)}
+              placeholder="Button text"
+              className="rounded-xl"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>Link (Path)</Label>
+            <Input
+              value={(formData.metadata as any)?.path || ""}
+              onChange={(e) => updateMetadata("path", e.target.value)}
+              placeholder="/become-a-foster"
+              className="rounded-xl"
+            />
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
