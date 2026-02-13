@@ -280,13 +280,17 @@ export default function AdminCMS() {
 
       {/* Editor Sheet */}
       <Sheet open={!!editingPage} onOpenChange={(open) => !open && setEditingPage(null)}>
-        <SheetContent side="right" className="w-full sm:max-w-xl md:max-w-2xl p-0 flex flex-col h-full bg-background border-l shadow-2xl">
-          {editingPage && (
+        <SheetContent side="right" className="w-full sm:max-w-xl md:max-w-2xl p-0 flex flex-col h-full bg-white border-l shadow-2xl z-[100] translate-x-0" style={{ transform: 'none' }}>
+          {editingPage ? (
             <PageEditorSheet
               page={editingPage}
               onClose={() => setEditingPage(null)}
               onDataChanged={fetchData}
             />
+          ) : (
+            <div className="flex items-center justify-center h-full">
+              <Loader2 className="w-8 h-8 animate-spin" />
+            </div>
           )}
         </SheetContent>
       </Sheet>
