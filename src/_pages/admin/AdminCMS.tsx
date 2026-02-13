@@ -267,57 +267,59 @@ export default function AdminCMS() {
                   </TabsList>
                 </Tabs>
 
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  {categoryMap[pageSubTab as keyof typeof categoryMap]
-                    .filter(page =>
-                      page.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                      page.path.toLowerCase().includes(searchQuery.toLowerCase())
-                    )
-                    .map((page) => {
-                      const blocks = getPageBlocks(page.key);
-                      return (
-                        <div
-                          key={page.key}
-                          className="p-4 rounded-xl border bg-card hover:bg-muted/50 transition-colors"
-                        >
-                          <div className="flex items-start justify-between mb-2">
-                            <h4 className="font-medium">{page.name}</h4>
-                            <Badge variant="outline" className="text-[10px]">
-                              {blocks.length} blocks
-                            </Badge>
+                <ScrollArea className="max-h-[60vh]">
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 pr-4">
+                    {categoryMap[pageSubTab as keyof typeof categoryMap]
+                      .filter(page =>
+                        page.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        page.path.toLowerCase().includes(searchQuery.toLowerCase())
+                      )
+                      .map((page) => {
+                        const blocks = getPageBlocks(page.key);
+                        return (
+                          <div
+                            key={page.key}
+                            className="p-4 rounded-xl border bg-card hover:bg-muted/50 transition-colors"
+                          >
+                            <div className="flex items-start justify-between mb-2">
+                              <h4 className="font-medium">{page.name}</h4>
+                              <Badge variant="outline" className="text-[10px]">
+                                {blocks.length} blocks
+                              </Badge>
+                            </div>
+                            <p className="text-xs text-muted-foreground font-mono mb-3">{page.path}</p>
+                            <div className="flex gap-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="flex-1 rounded-lg text-xs"
+                                onClick={() => setEditingPage(page.key)}
+                              >
+                                <Pencil className="w-3 h-3 mr-1" />
+                                Edit
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="rounded-lg"
+                                asChild
+                              >
+                                <a href={page.path} target="_blank" rel="noopener noreferrer">
+                                  <ExternalLink className="w-3 h-3" />
+                                </a>
+                              </Button>
+                            </div>
                           </div>
-                          <p className="text-xs text-muted-foreground font-mono mb-3">{page.path}</p>
-                          <div className="flex gap-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="flex-1 rounded-lg text-xs"
-                              onClick={() => setEditingPage(page.key)}
-                            >
-                              <Pencil className="w-3 h-3 mr-1" />
-                              Edit
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="rounded-lg"
-                              asChild
-                            >
-                              <a href={page.path} target="_blank" rel="noopener noreferrer">
-                                <ExternalLink className="w-3 h-3" />
-                              </a>
-                            </Button>
-                          </div>
-                        </div>
-                      );
-                    })}
-                </div>
-
-                {categoryMap[pageSubTab as keyof typeof categoryMap].length === 0 && (
-                  <div className="text-center py-12 text-muted-foreground">
-                    No pages found in this category.
+                        );
+                      })}
                   </div>
-                )}
+
+                  {categoryMap[pageSubTab as keyof typeof categoryMap].length === 0 && (
+                    <div className="text-center py-12 text-muted-foreground">
+                      No pages found in this category.
+                    </div>
+                  )}
+                </ScrollArea>
               </CardContent>
             </Card>
           </TabsContent>

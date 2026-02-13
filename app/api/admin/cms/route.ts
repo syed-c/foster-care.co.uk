@@ -32,46 +32,60 @@ export async function GET(request: NextRequest) {
 
         if (action === 'blocks') {
             const pageKey = searchParams.get('page_key');
-            let query = db
-                .from('page_content_blocks')
-                .select('*')
-                .order('page_key')
-                .order('display_order');
+            try {
+                let query = db
+                    .from('page_content_blocks')
+                    .select('*')
+                    .order('page_key')
+                    .order('display_order');
 
-            if (pageKey) {
-                query = query.eq('page_key', pageKey);
+                if (pageKey) {
+                    query = query.eq('page_key', pageKey);
+                }
+
+                const { data, error } = await query;
+                if (error) throw error;
+                return NextResponse.json({ data });
+            } catch {
+                // Table may not exist yet
+                return NextResponse.json({ data: [] });
             }
-
-            const { data, error } = await query;
-            if (error) throw error;
-            return NextResponse.json({ data });
         }
 
         if (action === 'faqs') {
             const pageKey = searchParams.get('page_key');
-            let query = db
-                .from('faqs')
-                .select('*')
-                .order('display_order');
+            try {
+                let query = db
+                    .from('faqs')
+                    .select('*')
+                    .order('display_order');
 
-            if (pageKey) {
-                query = query.eq('page_key', pageKey);
+                if (pageKey) {
+                    query = query.eq('page_key', pageKey);
+                }
+
+                const { data, error } = await query;
+                if (error) throw error;
+                return NextResponse.json({ data });
+            } catch {
+                return NextResponse.json({ data: [] });
             }
-
-            const { data, error } = await query;
-            if (error) throw error;
-            return NextResponse.json({ data });
         }
 
         // Default: return all data
-        const [locationsRes, blocksRes] = await Promise.all([
-            db.from('locations').select('id, name, slug, type, parent_id').order('type').order('name'),
-            db.from('page_content_blocks').select('*').order('page_key').order('display_order'),
-        ]);
+        const locationsRes = await db.from('locations').select('id, name, slug, type, parent_id').order('type').order('name');
+
+        let blocksData: AnyDB[] = [];
+        try {
+            const blocksRes = await db.from('page_content_blocks').select('*').order('page_key').order('display_order');
+            blocksData = blocksRes.data || [];
+        } catch {
+            // Table may not exist yet — that's OK
+        }
 
         return NextResponse.json({
             locations: locationsRes.data || [],
-            blocks: blocksRes.data || [],
+            blocks: blocksData,
         });
     } catch (error: AnyDB) {
         return NextResponse.json({ error: error.message }, { status: 500 });
