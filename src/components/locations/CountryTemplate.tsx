@@ -248,203 +248,7 @@ export function CountryTemplate({
                 </div>
             </section>
 
-            {/* 3. Featured Agencies in England / Country */}
-            <section id="agencies" className="py-20 md:py-32 bg-white scroll-mt-20">
-                <div className="container-main px-4">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-                        <div className="max-w-2xl">
-                            <div className="inline-flex items-center gap-2 text-primary font-black text-xs uppercase tracking-widest mb-4">
-                                <Building2 className="w-4 h-4" />
-                                Local Expertise
-                            </div>
-                            <h2 className="text-3xl md:text-5xl font-black mb-4 tracking-tighter text-slate-950">
-                                Featured Agencies in <span className="text-primary italic">{locationName}</span>
-                            </h2>
-                            <p className="text-lg text-slate-600 font-medium">
-                                Showing top-rated agencies in {locationName} ready to support your journey.
-                            </p>
-                        </div>
-                        {agencies.length > 12 && (
-                            <Button variant="outline" className="rounded-full border-slate-200 text-slate-950 font-bold hover:bg-slate-50 h-12 px-8" asChild>
-                                <Link href={`/find-agencies?filter=${location.slug}`}>
-                                    View All Agencies
-                                    <ArrowRight className="w-4 h-4 ml-2" />
-                                </Link>
-                            </Button>
-                        )}
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {agencies
-                            .slice(0, 3)
-                            .map((agency) => (
-                            <motion.div
-                                key={agency.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                className="group h-full"
-                            >
-                                <Link href={`/agencies/${agency.slug}`} className="block h-full bg-white rounded-3xl p-6 border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-500 relative overflow-hidden">
-                                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                                    <div className="relative z-10 flex flex-col h-full">
-                                        <div className="flex items-start justify-between mb-4">
-                                            <div className="w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100 group-hover:scale-110 transition-transform duration-500 overflow-hidden">
-                                                {agency.logo_url ? (
-                                                    <img src={agency.logo_url} alt={agency.name} className="w-full h-full object-contain p-2" />
-                                                ) : (
-                                                    <Building2 className="w-7 h-7 text-slate-300" />
-                                                )}
-                                            </div>
-                                            {agency.is_verified && (
-                                                <BadgeCheck className="w-6 h-6 text-primary" />
-                                            )}
-                                        </div>
-
-                                        <h3 className="text-xl font-bold text-slate-950 mb-2 group-hover:text-primary transition-colors line-clamp-1">
-                                            {agency.name}
-                                        </h3>
-
-                                        <div className="flex items-center gap-1.5 text-sm text-slate-500 mb-2">
-                                            <MapPin className="w-4 h-4 text-primary" />
-                                            {agency.city || locationName}
-                                        </div>
-                                        {agency.ofsted_rating && (
-                                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 mb-3">
-                                                <BadgeCheck className="w-4 h-4 text-emerald-600" />
-                                                <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest">
-                                                    Ofsted: {agency.ofsted_rating}
-                                                </span>
-                                            </div>
-                                        )}
-
-                                        <p className="text-slate-600 text-sm mb-6 line-clamp-2 leading-relaxed">
-                                            {agency.description || `Providing expert foster care support, training and matching for families across ${locationName}.`}
-                                        </p>
-
-                                        <div className="mt-auto pt-6 border-t border-slate-50 flex items-center justify-between">
-                                            <div className="flex items-center gap-1.5 bg-primary/5 px-3 py-1 rounded-full">
-                                                <Star className="w-3.5 h-3.5 text-primary fill-primary" />
-                                                <span className="font-bold text-xs text-primary">{agency.rating?.toFixed(1) || "4.9"}</span>
-                                            </div>
-                                            <div className="text-primary font-black text-xs uppercase tracking-widest flex items-center gap-2 group-hover:gap-3 transition-all">
-                                                View Profile <ArrowRight className="w-3 h-3" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Link>
-                            </motion.div>
-                        ))}
-                    </div>
-
-                    {agencies.length > 12 && (
-                        <div className="mt-12 text-center md:hidden">
-                            <Button className="w-full rounded-full h-14 font-black" asChild>
-                                <Link href={`/find-agencies?filter=${location.slug}`}>
-                                    View All {agencies.length} Agencies
-                                </Link>
-                            </Button>
-                        </div>
-                    )}
-                </div>
-            </section>
-
-            {/* 4. Independent and Local Authority Agencies */}
-            <section className="py-20 md:py-28 bg-background-sand">
-                <div className="container-main px-4">
-                    <div className="max-w-3xl mb-10 md:mb-12">
-                        <div className="inline-flex items-center gap-2 text-primary font-black text-xs uppercase tracking-widest mb-4">
-                            <Building2 className="w-4 h-4" />
-                            Agency Types
-                        </div>
-                        <h2 className="text-3xl md:text-4xl font-black text-slate-950 mb-4 tracking-tighter">
-                            Independent agencies and local authorities
-                        </h2>
-                        <p className="text-lg text-slate-600 leading-relaxed">
-                            In {locationName}, you can foster through an Independent Fostering Agency (IFA) or directly with
-                            your Local Authority (LA). Both are Ofsted-regulated, but the way they support you can feel
-                            different.
-                        </p>
-                    </div>
-                    <div className="grid md:grid-cols-2 gap-6 md:gap-8">
-                        <div className="rounded-3xl bg-white border border-slate-200 p-6 md:p-8 shadow-sm">
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center">
-                                    <Building2 className="w-5 h-5 text-primary" />
-                                </div>
-                                <h3 className="text-xl md:text-2xl font-black text-slate-950">
-                                    Independent Fostering Agencies (IFAs)
-                                </h3>
-                            </div>
-                            <p className="text-sm md:text-base text-slate-600 mb-4 leading-relaxed">
-                                IFAs are specialist organisations that focus solely on recruiting, training and supporting carers.
-                            </p>
-                            <ul className="space-y-2 text-sm md:text-base text-slate-700">
-                                <li>• Often provide very close, relationship-based support for your whole household.</li>
-                                <li>• May offer enhanced training, therapeutic input and peer groups.</li>
-                                <li>• Work with multiple local authorities to find the right matches for you.</li>
-                            </ul>
-                        </div>
-                        <div className="rounded-3xl bg-white border border-slate-200 p-6 md:p-8 shadow-sm">
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className="w-10 h-10 rounded-2xl bg-slate-900/5 flex items-center justify-center">
-                                    <ShieldCheck className="w-5 h-5 text-slate-900" />
-                                </div>
-                                <h3 className="text-xl md:text-2xl font-black text-slate-950">
-                                    Local Authority (Council) Fostering
-                                </h3>
-                            </div>
-                            <p className="text-sm md:text-base text-slate-600 mb-4 leading-relaxed">
-                                Fostering directly with your local council means being part of the team that holds legal
-                                responsibility for children in care.
-                            </p>
-                            <ul className="space-y-2 text-sm md:text-base text-slate-700">
-                                <li>• You work closely with social workers based in your local area.</li>
-                                <li>• Placements are usually within your region to keep children connected to their communities.</li>
-                                <li>• Support, allowances and training are set by the council’s fostering service.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* 5. Types of Fostering in England */}
-            <section className="py-20 md:py-32 bg-slate-950 text-white overflow-hidden">
-                <div className="container-main px-4">
-                    <div className="text-center mb-16">
-                        <Badge className="bg-primary/20 text-primary border-primary/40 mb-4 rounded-full px-4 py-1.5 font-bold uppercase tracking-widest text-[10px]">
-                            <Sparkles className="w-3.5 h-3.5 mr-1.5 inline" />
-                            Specialisms
-                        </Badge>
-                        <h2 className="text-3xl md:text-5xl lg:text-6xl font-black mb-6 tracking-tighter text-white">
-                            Types of Fostering Offered in <span className="text-primary italic">{locationName}</span>
-                        </h2>
-                    </div>
-
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {typesOfFostering.map((type, i) => (
-                            <motion.div
-                                key={i}
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: i * 0.05 }}
-                                viewport={{ once: true }}
-                            >
-                                <Link href={`/specialisms/${type.slug}`} className={`group block h-full bg-gradient-to-br ${type.color} bg-slate-900/50 rounded-[2rem] md:rounded-[2.5rem] p-8 border border-white/5 hover:border-white/20 transition-all duration-300`}>
-                                    <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                                        <type.icon className="w-7 h-7 text-primary" />
-                                    </div>
-                                    <h3 className="text-xl md:text-2xl font-black mb-3 text-white">{type.title}</h3>
-                                    <p className="text-white/70 font-medium leading-relaxed">{type.desc}</p>
-                                </Link>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* 4. Is Fostering Right for Me? (Search Intent Targeting) */}
+            {/* 3. Is Fostering Right for Me? (Search Intent Targeting) */}
             <section className="py-20 md:py-32 bg-white relative overflow-hidden">
                 <div className="container-main px-4 relative z-10">
                     <div className="max-w-4xl mx-auto">
@@ -490,7 +294,65 @@ export function CountryTemplate({
             {/* 7. The Process of Becoming a Foster Carer */}
             <ProcessSection locationName={locationName} />
 
-            {/* 8. Ofsted-Rated Agencies in England / Country */}
+            {/* 8. Support for Foster Carers */}
+            <section className="py-20 md:py-32 bg-slate-900 text-white">
+                <div className="container-main px-4">
+                    <div className="text-center max-w-3xl mx-auto mb-16 md:mb-20">
+                        <h2 className="text-3xl md:text-5xl font-black mb-6 tracking-tighter text-white">
+                            Support for Foster Carers in {locationName}
+                        </h2>
+                        <p className="text-lg md:text-xl text-white/60 font-medium leading-relaxed">
+                            From finances to emotional backup, you’ll never be expected to do this alone.
+                        </p>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+                        {[
+                            {
+                                title: "Financial Support",
+                                desc: "Weekly fostering allowances, tax relief and additional payments that recognise the time, energy and care you give.",
+                                icon: ShieldCheck
+                            },
+                            {
+                                title: "Emotional Support",
+                                desc: "24/7 advice, reflective supervision and peer support so you have someone to talk to when things feel tough.",
+                                icon: MessageCircle
+                            },
+                            {
+                                title: "Training & Development",
+                                desc: "Ongoing training on attachment, trauma, education and everyday situations, helping you grow in confidence over time.",
+                                icon: GraduationCap
+                            }
+                        ].map((item, i) => (
+                            <motion.div
+                                key={i}
+                                whileHover={{ y: -10 }}
+                                className="p-8 md:p-10 rounded-[2.5rem] md:rounded-[3rem] bg-slate-800/50 border border-white/5 hover:bg-slate-800 transition-all duration-300 group"
+                            >
+                                <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center mb-8 border border-slate-50 group-hover:scale-110 transition-transform">
+                                    <item.icon className="w-7 h-7 md:w-8 md:h-8 text-primary" />
+                                </div>
+                                <h3 className="text-xl md:text-2xl font-black mb-4 text-white">{item.title}</h3>
+                                <p className="text-white/70 font-medium leading-relaxed mb-6 text-sm md:text-base">{item.desc}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+
+                    {isEngland && (
+                        <div className="mt-16 max-w-2xl mx-auto text-center border border-white/10 rounded-3xl p-6 md:p-8 bg-white/5">
+                            <p className="text-sm md:text-base text-white/80 italic leading-relaxed">
+                                “The difference for us was the support. Someone picked up the phone at 2am when we were
+                                scared we’d got it wrong. We were reminded we weren’t doing this on our own.”
+                            </p>
+                            <p className="mt-4 text-xs md:text-sm text-white/60 font-medium">
+                                Foster carer in England
+                            </p>
+                        </div>
+                    )}
+                </div>
+            </section>
+
+            {/* 9. Ofsted-Rated Agencies in England / Country */}
             {isEngland && (
                 <section className="py-20 md:py-28 bg-background-sand">
                     <div className="container-main px-4 max-w-4xl mx-auto">
@@ -537,64 +399,6 @@ export function CountryTemplate({
                     </div>
                 </section>
             )}
-
-            {/* 9. Support for Foster Carers */}
-            <section className="py-20 md:py-32 bg-slate-900 text-white">
-                <div className="container-main px-4">
-                    <div className="text-center max-w-3xl mx-auto mb-16 md:mb-20">
-                        <h2 className="text-3xl md:text-5xl font-black mb-6 tracking-tighter text-white">
-                            Support for Foster Carers in {locationName}
-                        </h2>
-                        <p className="text-lg md:text-xl text-white/60 font-medium leading-relaxed">
-                            From finances to emotional backup, you’ll never be expected to do this alone.
-                        </p>
-                    </div>
-
-                    <div className="grid md:grid-cols-3 gap-6 md:gap-8">
-                        {[
-                            {
-                                title: "Financial Support",
-                                desc: "Weekly allowances, tax relief and additional payments to recognise the time and care you provide.",
-                                icon: ShieldCheck
-                            },
-                            {
-                                title: "Training",
-                                desc: "Ongoing training on attachment, trauma, education and everyday situations so you feel confident and equipped.",
-                                icon: GraduationCap
-                            },
-                            {
-                                title: "24/7 Help & Community",
-                                desc: "Round-the-clock advice plus peer support groups, events and access to professionals when things feel tough.",
-                                icon: MessageCircle
-                            }
-                        ].map((item, i) => (
-                            <motion.div
-                                key={i}
-                                whileHover={{ y: -10 }}
-                                className="p-8 md:p-10 rounded-[2.5rem] md:rounded-[3rem] bg-slate-800/50 border border-white/5 hover:bg-slate-800 transition-all duration-300 group"
-                            >
-                                <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center mb-8 border border-slate-50 group-hover:scale-110 transition-transform">
-                                    <item.icon className="w-7 h-7 md:w-8 md:h-8 text-primary" />
-                                </div>
-                                <h3 className="text-xl md:text-2xl font-black mb-4 text-white">{item.title}</h3>
-                                <p className="text-white/70 font-medium leading-relaxed mb-6 text-sm md:text-base">{item.desc}</p>
-                            </motion.div>
-                        ))}
-                    </div>
-
-                    {isEngland && (
-                        <div className="mt-16 max-w-2xl mx-auto text-center border border-white/10 rounded-3xl p-6 md:p-8 bg-white/5">
-                            <p className="text-sm md:text-base text-white/80 italic leading-relaxed">
-                                “The difference for us was the support. Someone picked up the phone at 2am when we were
-                                scared we’d got it wrong. We were reminded we weren’t doing this on our own.”
-                            </p>
-                            <p className="mt-4 text-xs md:text-sm text-white/60 font-medium">
-                                Foster carer in England
-                            </p>
-                        </div>
-                    )}
-                </div>
-            </section>
 
             {/* 10. Fostering by the Numbers */}
             <section className="py-20 md:py-32 bg-white relative overflow-hidden">
@@ -781,7 +585,203 @@ export function CountryTemplate({
                 </div>
             </section>
 
-            {/* 15. Glossary Section */}
+            {/* 4. Types of Fostering in England */}
+            <section className="py-20 md:py-32 bg-slate-950 text-white overflow-hidden">
+                <div className="container-main px-4">
+                    <div className="text-center mb-16">
+                        <Badge className="bg-primary/20 text-primary border-primary/40 mb-4 rounded-full px-4 py-1.5 font-bold uppercase tracking-widest text-[10px]">
+                            <Sparkles className="w-3.5 h-3.5 mr-1.5 inline" />
+                            Specialisms
+                        </Badge>
+                        <h2 className="text-3xl md:text-5xl lg:text-6xl font-black mb-6 tracking-tighter text-white">
+                            Types of Fostering Offered in <span className="text-primary italic">{locationName}</span>
+                        </h2>
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {typesOfFostering.map((type, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: i * 0.05 }}
+                                viewport={{ once: true }}
+                            >
+                                <Link href={`/specialisms/${type.slug}`} className={`group block h-full bg-gradient-to-br ${type.color} bg-slate-900/50 rounded-[2rem] md:rounded-[2.5rem] p-8 border border-white/5 hover:border-white/20 transition-all duration-300`}>
+                                    <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                                        <type.icon className="w-7 h-7 text-primary" />
+                                    </div>
+                                    <h3 className="text-xl md:text-2xl font-black mb-3 text-white">{type.title}</h3>
+                                    <p className="text-white/70 font-medium leading-relaxed">{type.desc}</p>
+                                </Link>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* 5. Independent and Local Authority Agencies */}
+            <section className="py-20 md:py-28 bg-background-sand">
+                <div className="container-main px-4">
+                    <div className="max-w-3xl mb-10 md:mb-12">
+                        <div className="inline-flex items-center gap-2 text-primary font-black text-xs uppercase tracking-widest mb-4">
+                            <Building2 className="w-4 h-4" />
+                            Agency Types
+                        </div>
+                        <h2 className="text-3xl md:text-4xl font-black text-slate-950 mb-4 tracking-tighter">
+                            Independent agencies and local authorities
+                        </h2>
+                        <p className="text-lg text-slate-600 leading-relaxed">
+                            In {locationName}, you can foster through an Independent Fostering Agency (IFA) or directly with
+                            your Local Authority (LA). Both are Ofsted-regulated, but the way they support you can feel
+                            different.
+                        </p>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+                        <div className="rounded-3xl bg-white border border-slate-200 p-6 md:p-8 shadow-sm">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center">
+                                    <Building2 className="w-5 h-5 text-primary" />
+                                </div>
+                                <h3 className="text-xl md:text-2xl font-black text-slate-950">
+                                    Independent Fostering Agencies (IFAs)
+                                </h3>
+                            </div>
+                            <p className="text-sm md:text-base text-slate-600 mb-4 leading-relaxed">
+                                IFAs are specialist organisations that focus solely on recruiting, training and supporting carers.
+                            </p>
+                            <ul className="space-y-2 text-sm md:text-base text-slate-700">
+                                <li>• Often provide very close, relationship-based support for your whole household.</li>
+                                <li>• May offer enhanced training, therapeutic input and peer groups.</li>
+                                <li>• Work with multiple local authorities to find the right matches for you.</li>
+                            </ul>
+                        </div>
+                        <div className="rounded-3xl bg-white border border-slate-200 p-6 md:p-8 shadow-sm">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="w-10 h-10 rounded-2xl bg-slate-900/5 flex items-center justify-center">
+                                    <ShieldCheck className="w-5 h-5 text-slate-900" />
+                                </div>
+                                <h3 className="text-xl md:text-2xl font-black text-slate-950">
+                                    Local Authority (Council) Fostering
+                                </h3>
+                            </div>
+                            <p className="text-sm md:text-base text-slate-600 mb-4 leading-relaxed">
+                                Fostering directly with your local council means being part of the team that holds legal
+                                responsibility for children in care.
+                            </p>
+                            <ul className="space-y-2 text-sm md:text-base text-slate-700">
+                                <li>• You work closely with social workers based in your local area.</li>
+                                <li>• Placements are usually within your region to keep children connected to their communities.</li>
+                                <li>• Support, allowances and training are set by the council’s fostering service.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 6. Featured Agencies in England / Country */}
+            <section id="agencies" className="py-20 md:py-32 bg-white scroll-mt-20">
+                <div className="container-main px-4">
+                    <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                        <div className="max-w-2xl">
+                            <div className="inline-flex items-center gap-2 text-primary font-black text-xs uppercase tracking-widest mb-4">
+                                <Building2 className="w-4 h-4" />
+                                Local Expertise
+                            </div>
+                            <h2 className="text-3xl md:text-5xl font-black mb-4 tracking-tighter text-slate-950">
+                                Featured Agencies in <span className="text-primary italic">{locationName}</span>
+                            </h2>
+                            <p className="text-lg text-slate-600 font-medium">
+                                Showing top-rated agencies in {locationName} ready to support your journey.
+                            </p>
+                        </div>
+                        {agencies.length > 12 && (
+                            <Button variant="outline" className="rounded-full border-slate-200 text-slate-950 font-bold hover:bg-slate-50 h-12 px-8" asChild>
+                                <Link href={`/find-agencies?filter=${location.slug}`}>
+                                    View All Agencies
+                                    <ArrowRight className="w-4 h-4 ml-2" />
+                                </Link>
+                            </Button>
+                        )}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {agencies
+                            .slice(0, 3)
+                            .map((agency) => (
+                            <motion.div
+                                key={agency.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                className="group h-full"
+                            >
+                                <Link href={`/agencies/${agency.slug}`} className="block h-full bg-white rounded-3xl p-6 border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-500 relative overflow-hidden">
+                                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                                    <div className="relative z-10 flex flex-col h-full">
+                                        <div className="flex items-start justify-between mb-4">
+                                            <div className="w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100 group-hover:scale-110 transition-transform duration-500 overflow-hidden">
+                                                {agency.logo_url ? (
+                                                    <img src={agency.logo_url} alt={agency.name} className="w-full h-full object-contain p-2" />
+                                                ) : (
+                                                    <Building2 className="w-7 h-7 text-slate-300" />
+                                                )}
+                                            </div>
+                                            {agency.is_verified && (
+                                                <BadgeCheck className="w-6 h-6 text-primary" />
+                                            )}
+                                        </div>
+
+                                        <h3 className="text-xl font-bold text-slate-950 mb-2 group-hover:text-primary transition-colors line-clamp-1">
+                                            {agency.name}
+                                        </h3>
+
+                                        <div className="flex items-center gap-1.5 text-sm text-slate-500 mb-2">
+                                            <MapPin className="w-4 h-4 text-primary" />
+                                            {agency.city || locationName}
+                                        </div>
+                                        {agency.ofsted_rating && (
+                                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 mb-3">
+                                                <BadgeCheck className="w-4 h-4 text-emerald-600" />
+                                                <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest">
+                                                    Ofsted: {agency.ofsted_rating}
+                                                </span>
+                                            </div>
+                                        )}
+
+                                        <p className="text-slate-600 text-sm mb-6 line-clamp-2 leading-relaxed">
+                                            {agency.description || `Providing expert foster care support, training and matching for families across ${locationName}.`}
+                                        </p>
+
+                                        <div className="mt-auto pt-6 border-t border-slate-50 flex items-center justify-between">
+                                            <div className="flex items-center gap-1.5 bg-primary/5 px-3 py-1 rounded-full">
+                                                <Star className="w-3.5 h-3.5 text-primary fill-primary" />
+                                                <span className="font-bold text-xs text-primary">{agency.rating?.toFixed(1) || "4.9"}</span>
+                                            </div>
+                                            <div className="text-primary font-black text-xs uppercase tracking-widest flex items-center gap-2 group-hover:gap-3 transition-all">
+                                                View Profile <ArrowRight className="w-3 h-3" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Link>
+                            </motion.div>
+                        ))}
+                    </div>
+
+                    {agencies.length > 12 && (
+                        <div className="mt-12 text-center md:hidden">
+                            <Button className="w-full rounded-full h-14 font-black" asChild>
+                                <Link href={`/find-agencies?filter=${location.slug}`}>
+                                    View All {agencies.length} Agencies
+                                </Link>
+                            </Button>
+                        </div>
+                    )}
+                </div>
+            </section>
+
+            {/* 14. Glossary Section (Optional) */}
             <section className="py-20 md:py-28 bg-background-sand">
                 <div className="container-main px-4 max-w-5xl mx-auto">
                     <h2 className="text-3xl md:text-4xl font-black text-slate-950 mb-8 tracking-tighter">
@@ -831,19 +831,19 @@ export function CountryTemplate({
                 </div>
             </section>
 
-            {/* 16. Safeguarding & Responsibility Notice */}
+            {/* 15. Safety & Disclaimer Section */}
             <section className="py-16 md:py-20 bg-white">
                 <div className="container-main px-4 max-w-4xl mx-auto">
                     <div className="rounded-3xl border border-slate-200 bg-slate-50/60 px-6 md:px-10 py-8 md:py-10">
                         <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-3">
-                            Safeguarding & responsibility
+                            Safety, safeguarding & disclaimer
                         </h3>
                         <p className="text-sm md:text-base text-slate-700 leading-relaxed">
                             Foster-care.co.uk is an independent information and comparison platform. We are not a fostering
                             agency and we do not make placement decisions. Our role is to help you understand your options,
-                            connect with trusted, Ofsted-regulated agencies, and make informed choices about your fostering
-                            journey. Always speak directly to your chosen agency or local authority for personalised advice
-                            and safeguarding guidance.
+                            connect with trusted, Ofsted-regulated fostering agencies and local authorities, and make informed
+                            choices about your fostering journey. Always speak directly to your chosen agency or local authority
+                            for personalised advice and safeguarding guidance.
                         </p>
                     </div>
                 </div>

@@ -88,7 +88,7 @@ export function CTASection({ locationName, className, theme = "light" }: CTASect
                                 <div className="w-px h-10 bg-slate-100/10" />
                                 <div className="text-center">
                                     <div className={cn("text-2xl font-black", isDark ? "text-white" : "text-slate-950")}>Local</div>
-                                    <div className="text-xs font-bold uppercase tracking-widest text-primary">Benefits</div>
+                                    <div className="text-xs font-bold uppercase tracking-widest text-primary">Matching</div>
                                 </div>
                             </div>
                         </motion.div>
