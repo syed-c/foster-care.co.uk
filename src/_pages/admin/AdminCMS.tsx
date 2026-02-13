@@ -15,6 +15,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import {
   Select,
@@ -267,8 +268,8 @@ export default function AdminCMS() {
                   </TabsList>
                 </Tabs>
 
-                <ScrollArea className="max-h-[60vh]">
-                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 pr-4">
+                <div className="overflow-y-auto max-h-[60vh]">
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     {categoryMap[pageSubTab as keyof typeof categoryMap]
                       .filter(page =>
                         page.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -319,7 +320,7 @@ export default function AdminCMS() {
                       No pages found in this category.
                     </div>
                   )}
-                </ScrollArea>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -406,12 +407,15 @@ export default function AdminCMS() {
         </Tabs>
 
         {/* ── Page Editor Dialog ───────────────────────────────── */}
-        <Dialog open={!!editingPage} onOpenChange={(open) => !open && setEditingPage(null)}>
-          <DialogContent className="max-w-4xl max-h-[90vh]">
+        <Dialog open={!!editingPage} onOpenChange={(open) => { if (!open) setEditingPage(null); }}>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 Edit Page: {allPages.find(p => p.key === editingPage)?.name}
               </DialogTitle>
+              <DialogDescription>
+                Manage content blocks and FAQs for this page.
+              </DialogDescription>
             </DialogHeader>
             {editingPage && (
               <PageManagementDialog
@@ -433,6 +437,9 @@ export default function AdminCMS() {
           <DialogContent className="max-w-lg">
             <DialogHeader>
               <DialogTitle>{editingBlock ? "Edit Block" : "Add New Block"}</DialogTitle>
+              <DialogDescription>
+                Configure the content block details below.
+              </DialogDescription>
             </DialogHeader>
             <BlockEditor
               block={editingBlock}
@@ -684,7 +691,10 @@ function PageManagementDialog({
       {/* Block Editor sub-dialog */}
       <Dialog open={!!editingBlock} onOpenChange={(open) => !open && setEditingBlock(null)}>
         <DialogContent className="max-w-lg">
-          <DialogHeader><DialogTitle>{editingBlock?.id ? "Edit Block" : "Add Block"}</DialogTitle></DialogHeader>
+          <DialogHeader>
+            <DialogTitle>{editingBlock?.id ? "Edit Block" : "Add Block"}</DialogTitle>
+            <DialogDescription>Content block details</DialogDescription>
+          </DialogHeader>
           {editingBlock && (
             <BlockEditor
               block={editingBlock}
@@ -698,7 +708,10 @@ function PageManagementDialog({
       {/* FAQ Editor sub-dialog */}
       <Dialog open={!!editingFaq} onOpenChange={(open) => !open && setEditingFaq(null)}>
         <DialogContent className="max-w-lg">
-          <DialogHeader><DialogTitle>{editingFaq?.id ? "Edit FAQ" : "Add FAQ"}</DialogTitle></DialogHeader>
+          <DialogHeader>
+            <DialogTitle>{editingFaq?.id ? "Edit FAQ" : "Add FAQ"}</DialogTitle>
+            <DialogDescription>FAQ details</DialogDescription>
+          </DialogHeader>
           {editingFaq && (
             <FaqEditor
               faq={editingFaq}
@@ -708,7 +721,8 @@ function PageManagementDialog({
           )}
         </DialogContent>
       </Dialog>
-    </Tabs>
+
+    </Tabs >
   );
 }
 
