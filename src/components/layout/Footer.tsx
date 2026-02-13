@@ -19,6 +19,15 @@ const footerLinks = {
     { href: "/how-listings-work", label: "How Listings Work" },
     { href: "/register-agency", label: "Register Agency" },
   ],
+  policies: [
+    { href: "/policy", label: "All Policies" },
+    { href: "/policy/safeguarding", label: "Safeguarding" },
+    { href: "/policy/funding", label: "Funding & Allowances" },
+    { href: "/policy/training", label: "Training" },
+    { href: "/policy/placement", label: "Placement Process" },
+    { href: "/policy/support", label: "Support Network" },
+    { href: "/become-a-foster", label: "Become a Foster Carer" },
+  ],
   legal: [
     { href: "/editorial-policy", label: "Editorial Policy" },
     { href: "/privacy", label: "Privacy Policy" },
@@ -31,7 +40,7 @@ export function Footer() {
     <footer className="bg-secondary text-secondary-foreground pt-16 pb-8">
       <div className="container-main">
         {/* Main Footer Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 pb-12 border-b border-background/10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12 pb-12 border-b border-background/10">
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-3 mb-6">
@@ -97,6 +106,22 @@ export function Footer() {
             <h4 className="font-semibold mb-4 text-secondary-foreground">For Agencies</h4>
             <ul className="space-y-3">
               {footerLinks.forAgencies.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-secondary-foreground/60 hover:text-secondary-foreground transition-colors text-sm"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-semibold mb-4 text-secondary-foreground">Policies</h4>
+            <ul className="space-y-3">
+              {footerLinks.policies.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
