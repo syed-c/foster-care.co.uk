@@ -1,60 +1,112 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
     ShieldCheck,
-    ArrowRight,
     Lock,
     Eye,
-    UserCheck,
+    Search,
+    ShieldAlert,
+    PhoneCall,
     FileCheck,
     AlertCircle,
-    PhoneCall,
-    Search,
-    ShieldAlert
+    UserCheck
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import Link from "next/link";
 import { SEOHead, getBreadcrumbSchema } from "@/components/seo/SEOHead";
-import { CTASection } from "@/components/locations/shared/CTASection";
+import {
+    ContentHubHeader,
+    IconGrid,
+    ImageWithText,
+    ProcessTimeline,
+    MetricCounter,
+    SupportCTAStrip
+} from "@/components/content-hub";
 
 export default function SafeguardingPage() {
     const safeguardingPillars = [
         {
             icon: Search,
             title: "Rigorous Vetting",
-            desc: "Enhanced DBS checks, local authority audits, and comprehensive personal references are standard for all carers.",
+            description: "Enhanced DBS checks, local authority audits, and comprehensive personal references are standard for all carers.",
         },
         {
             icon: ShieldAlert,
             title: "Safe Home Audits",
-            desc: "Regular health and safety inspections ensures your home remains a secure environment for vulnerable children.",
+            description: "Regular health and safety inspections ensure your home remains a secure environment for vulnerable children.",
         },
         {
             icon: Eye,
             title: "Active Monitoring",
-            desc: "Supervising social workers provide ongoing oversight, ensuring standards of care never falter.",
+            description: "Supervising social workers provide ongoing oversight, ensuring standards of care never falter.",
         }
     ];
 
     const vettingSteps = [
         {
+            icon: FileCheck,
             title: "Enhanced DBS Check",
-            desc: "A thorough criminal record check for everyone in the household over the age of 18."
+            description: "A thorough criminal record check for everyone in the household over the age of 18."
         },
         {
+            icon: ShieldCheck,
             title: "Home Safety Review",
-            desc: "An audit of fire safety, security, and environmental hazards in your property."
+            description: "An audit of fire safety, security, and environmental hazards in your property."
         },
         {
+            icon: UserCheck,
             title: "Health Assessment",
-            desc: "A medical report from your GP to ensure you have the physical and mental health to foster."
+            description: "A medical report from your GP to ensure you have the physical and mental health to foster."
         },
         {
+            icon: Search,
             title: "Personal References",
-            desc: "Interviews with people who have known you for years, including past partners and employers."
+            description: "Interviews with people who have known you for years, including past partners and employers."
+        }
+    ];
+
+    const metrics = [
+        {
+            value: 100,
+            suffix: "%",
+            label: "DBS Checked",
+            icon: ShieldCheck
+        },
+        {
+            value: 24,
+            suffix: "/7",
+            label: "Incident Reporting",
+            icon: PhoneCall
+        },
+        {
+            value: 4,
+            label: "Annual Inspections",
+            icon: Eye
+        },
+        {
+            value: 99,
+            suffix: "%",
+            label: "Safety Compliance",
+            icon: Lock
+        }
+    ];
+
+    const faqs = [
+        {
+            question: "How long does the vetting process take?",
+            answer: "The complete vetting process typically takes 4-6 months, including DBS checks, home safety reviews, health assessments, and reference interviews. We'll keep you informed at every stage."
+        },
+        {
+            question: "What happens if something goes wrong during a placement?",
+            answer: "We have 24/7 incident reporting channels and immediate support protocols. Your supervising social worker will work with you to address any concerns, and therapeutic support is available for both you and the child."
+        },
+        {
+            question: "Are foster carers insured?",
+            answer: "Yes, all approved foster carers are covered by comprehensive insurance including public liability, personal accident, and legal protection. This is provided by the fostering agency at no cost to you."
+        },
+        {
+            question: "How often are home safety inspections conducted?",
+            answer: "Initial home safety assessments are conducted during the approval process. After approval, annual inspections ensure your home continues to meet safety standards. Additional inspections may occur if circumstances change."
         }
     ];
 
@@ -64,6 +116,7 @@ export default function SafeguardingPage() {
                 title="Safeguarding & Vetting Policy | Foster Care UK"
                 description="Learn about our rigorous safeguarding and vetting processes for foster carers, including DBS checks, home safety audits, and continuous monitoring."
                 canonicalUrl="https://www.foster-care.co.uk/policy/safeguarding"
+                faqData={faqs}
                 structuredData={getBreadcrumbSchema([
                     { name: "Home", url: "https://www.foster-care.co.uk" },
                     { name: "Policies", url: "#" },
@@ -72,143 +125,86 @@ export default function SafeguardingPage() {
             />
 
             <main className="flex-1">
-                {/* Hero Section */}
-                <section className="relative pt-32 pb-20 md:pt-48 md:pb-36 overflow-hidden bg-slate-950 text-white">
-                    <div className="absolute inset-0 z-0">
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.1),transparent)]" />
-                        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-slate-950 to-transparent" />
-                    </div>
+                {/* Header */}
+                <ContentHubHeader
+                    badge={{
+                        icon: Lock,
+                        text: "Safety is Our Priority"
+                    }}
+                    title="Our"
+                    titleHighlight="Safeguarding"
+                    subtitle="Protecting children and supporting carers. Our rigorous standards create a foundation of trust and safety for everyone involved."
+                    ctas={[
+                        {
+                            text: "Speak to a Safety Officer",
+                            href: "/contact"
+                        },
+                        {
+                            text: "Start Your Journey",
+                            href: "/become-a-foster",
+                            variant: "outline"
+                        }
+                    ]}
+                    backgroundGradient="from-emerald-50/80 via-white to-green-50/50"
+                />
 
-                    <div className="container-main relative z-10">
-                        <div className="max-w-4xl mx-auto text-center">
-                            <motion.div
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.6 }}
-                            >
-                                <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 mb-6 md:mb-8 px-5 py-2 rounded-full font-bold tracking-widest uppercase text-[10px] md:text-[11px]">
-                                    <Lock className="w-3.5 h-3.5 mr-2 inline" />
-                                    Safety is Our Priority
-                                </Badge>
+                {/* Safeguarding Pillars */}
+                <IconGrid
+                    title="Our Safeguarding Framework"
+                    subtitle="A comprehensive approach to ensuring the safety and wellbeing of children and foster families."
+                    items={safeguardingPillars}
+                    columns={3}
+                />
 
-                                <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-6 md:mb-8 tracking-tighter leading-[0.95] text-white">
-                                    Our <span className="text-emerald-400 italic">Safeguarding</span> Policy
-                                </h1>
+                {/* Vetting Process */}
+                <ImageWithText
+                    eyebrow="Transparency"
+                    title="Our Rigorous"
+                    titleHighlight="Vetting Process"
+                    description="We believe that comprehensive checks aren't just about security—they're about building a safe, trusting foundation for foster carers and children alike. Every step of our vetting process is designed to ensure the highest standards of care."
+                    image={{
+                        src: "/images/safeguarding-hero.jpg",
+                        alt: "Child holding hands with adult",
+                        fallback: "https://images.unsplash.com/photo-1484981138212-dc199320e897?q=80&w=1000&auto=format&fit=crop"
+                    }}
+                    imagePosition="right"
+                />
 
-                                <p className="text-lg md:text-2xl text-white/80 mb-10 md:mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
-                                    Protecting children and supporting carers. Our rigorous standards create a foundation of trust and safety for everyone involved.
-                                </p>
+                {/* Vetting Steps Timeline */}
+                <ProcessTimeline
+                    title="The Vetting Journey"
+                    subtitle="A step-by-step look at our thorough assessment process to ensure child safety."
+                    steps={vettingSteps}
+                />
 
-                                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                                    <Button size="lg" className="w-full sm:w-auto rounded-full group bg-emerald-500 hover:bg-emerald-600 text-white font-black h-14 md:h-16 px-8 md:px-10 text-lg shadow-2xl shadow-emerald-500/20 border-none" asChild>
-                                        <Link href="/contact">
-                                            Speak to a Safety Officer
-                                            <ArrowRight className="w-6 h-6 ml-2 group-hover:translate-x-1 transition-transform" />
-                                        </Link>
-                                    </Button>
-                                    <Button size="lg" variant="outline" className="w-full sm:w-auto rounded-full border-white/20 text-white hover:bg-white/10 h-14 md:h-16 px-8 md:px-10 text-lg font-bold" asChild>
-                                        <Link href="/become-a-foster">
-                                            Start Your Journey
-                                        </Link>
-                                    </Button>
-                                </div>
-                                <div className="mt-8 flex justify-center gap-6">
-                                    <Link href="/policy/support" className="text-emerald-400/60 hover:text-emerald-400 font-bold text-sm transition-colors">Support Policies</Link>
-                                    <Link href="/policy/training" className="text-emerald-400/60 hover:text-emerald-400 font-bold text-sm transition-colors">Training Standards</Link>
-                                </div>
-                            </motion.div>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Pillars Section */}
-                <section className="py-20 md:py-32 bg-white">
-                    <div className="container-main px-4">
-                        <div className="grid md:grid-cols-3 gap-8">
-                            {safeguardingPillars.map((pillar, i) => (
-                                <motion.div
-                                    key={i}
-                                    whileHover={{ y: -10 }}
-                                    className="p-8 md:p-10 rounded-[2.5rem] bg-slate-50 border border-slate-100 shadow-sm transition-all duration-300 group"
-                                >
-                                    <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-                                        <pillar.icon className="w-8 h-8 text-emerald-600" />
-                                    </div>
-                                    <h3 className="text-xl md:text-2xl font-black mb-4 text-slate-950">{pillar.title}</h3>
-                                    <p className="text-slate-600 font-medium leading-relaxed">{pillar.desc}</p>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-
-                {/* Vetting Detail */}
-                <section className="py-20 md:py-32 bg-background-sand overflow-hidden">
-                    <div className="container-main px-4">
-                        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-                            <motion.div
-                                initial={{ opacity: 0, x: -40 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true }}
-                            >
-                                <div className="inline-flex items-center gap-2 text-emerald-600 font-black text-xs uppercase tracking-widest mb-6">
-                                    <div className="w-10 h-px bg-emerald-500" />
-                                    Transparency
-                                </div>
-                                <h2 className="text-3xl md:text-5xl font-black mb-8 tracking-tighter text-slate-950 leading-[1.1]">
-                                    Our Rigorous <span className="text-emerald-500 italic">Vetting Process</span>
-                                </h2>
-                                <p className="text-lg text-slate-600 mb-10 font-medium leading-relaxed">
-                                    We believe that comprehensive checks aren't just about security—they're about building a safe, trusting foundation for foster carers and children alike.
-                                </p>
-
-                                <div className="grid sm:grid-cols-2 gap-6">
-                                    {vettingSteps.map((step, i) => (
-                                        <div key={i} className="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm">
-                                            <div className="flex items-center gap-2 mb-3">
-                                                <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-black text-xs">
-                                                    {i + 1}
-                                                </div>
-                                                <h3 className="font-black text-slate-900 leading-tight">{step.title}</h3>
-                                            </div>
-                                            <p className="text-slate-500 text-sm font-medium leading-relaxed">{step.desc}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </motion.div>
-
-                            <div className="relative">
-                                <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl relative z-10 border-8 border-white group">
-                                    <div className="absolute inset-0 bg-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity z-20 pointer-events-none" />
-                                    <img
-                                        src="/images/safeguarding-hero.jpg"
-                                        alt="Child holding hands with adult"
-                                        className="w-full h-full object-cover"
-                                        onError={(e) => (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1484981138212-dc199320e897?q=80&w=1000&auto=format&fit=crop'}
-                                    />
-                                </div>
-                                <div className="absolute -top-10 -right-10 w-40 h-40 bg-emerald-100 rounded-full blur-3xl" />
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                {/* Metrics */}
+                <MetricCounter metrics={metrics} />
 
                 {/* Reporting & Support */}
-                <section className="py-20 md:py-32 bg-slate-950 text-white">
+                <section className="py-20 md:py-28 bg-gradient-to-br from-emerald-50 via-green-50 to-emerald-50">
                     <div className="container-main px-4">
                         <div className="max-w-4xl mx-auto">
                             <div className="flex flex-col md:flex-row gap-12 items-center">
-                                <div className="w-32 h-32 md:w-48 md:h-48 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
-                                    <PhoneCall className="w-16 h-16 md:w-24 md:h-24 text-emerald-500" />
+                                <div className="w-32 h-32 md:w-48 md:h-48 rounded-full bg-white shadow-lg border-4 border-primary/10 flex items-center justify-center shrink-0">
+                                    <PhoneCall className="w-16 h-16 md:w-24 md:h-24 text-primary" />
                                 </div>
                                 <div className="text-center md:text-left">
-                                    <h2 className="text-3xl md:text-5xl font-black mb-6 tracking-tighter text-white">Reporting & Support</h2>
-                                    <p className="text-lg md:text-xl text-white/70 font-medium leading-relaxed mb-8">
+                                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black mb-6 tracking-tight text-slate-950">
+                                        Reporting & Support
+                                    </h2>
+                                    <p className="text-lg md:text-xl text-slate-600 font-medium leading-relaxed mb-8">
                                         Safeguarding isn't just about prevention; it's about responsive action. We provide 24/7 incident reporting channels and immediate therapeutic support for both carers and children.
                                     </p>
                                     <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-                                        <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-emerald-400 font-bold text-sm">24/7 Support Line</div>
-                                        <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-emerald-400 font-bold text-sm">Crisis Intervention</div>
+                                        <div className="px-6 py-3 rounded-full bg-white border border-slate-200 text-primary font-bold text-sm shadow-sm">
+                                            24/7 Support Line
+                                        </div>
+                                        <div className="px-6 py-3 rounded-full bg-white border border-slate-200 text-primary font-bold text-sm shadow-sm">
+                                            Crisis Intervention
+                                        </div>
+                                        <div className="px-6 py-3 rounded-full bg-white border border-slate-200 text-primary font-bold text-sm shadow-sm">
+                                            Legal Protection
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -216,6 +212,60 @@ export default function SafeguardingPage() {
                     </div>
                 </section>
 
+                {/* FAQ Section */}
+                <section className="py-20 md:py-28 bg-white">
+                    <div className="container-main px-4 max-w-4xl mx-auto">
+                        <div className="text-center mb-12 md:mb-16">
+                            <div className="inline-flex items-center gap-2 text-primary font-black text-xs uppercase tracking-widest mb-6">
+                                <AlertCircle className="w-4 h-4" />
+                                Safeguarding FAQs
+                            </div>
+                            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black mb-6 text-slate-950 tracking-tight">
+                                Your Safety Questions
+                            </h2>
+                            <p className="text-lg md:text-xl text-slate-600 font-medium leading-relaxed">
+                                Clear answers about our safeguarding procedures and what to expect.
+                            </p>
+                        </div>
+
+                        <Accordion type="single" collapsible className="space-y-4">
+                            {faqs.map((faq, i) => (
+                                <AccordionItem
+                                    key={i}
+                                    value={`item-${i}`}
+                                    className="border-none rounded-3xl bg-slate-50 px-6 md:px-8 py-2 shadow-sm hover:shadow-md transition-shadow"
+                                >
+                                    <AccordionTrigger className="text-lg md:text-xl font-bold hover:no-underline text-slate-950 py-5 md:py-6 text-left leading-tight group">
+                                        <span className="group-hover:text-primary transition-colors">
+                                            {faq.question}
+                                        </span>
+                                    </AccordionTrigger>
+                                    <AccordionContent className="text-slate-600 text-base md:text-lg leading-relaxed pb-8 font-medium">
+                                        {faq.answer}
+                                    </AccordionContent>
+                                </AccordionItem>
+                            ))}
+                        </Accordion>
+                    </div>
+                </section>
+
+                {/* Support CTA */}
+                <SupportCTAStrip
+                    icon={ShieldCheck}
+                    title="Questions About Our Safety Standards?"
+                    description="Our safeguarding team is available to discuss our vetting process, safety protocols, and ongoing monitoring procedures."
+                    ctas={[
+                        {
+                            text: "Speak to Safety Team",
+                            href: "/contact"
+                        },
+                        {
+                            text: "View Training Standards",
+                            href: "/policy/training",
+                            variant: "outline"
+                        }
+                    ]}
+                />
             </main>
         </>
     );
