@@ -177,7 +177,19 @@ export async function POST(request: NextRequest) {
 
         if (action === 'seed_blocks') {
             const { page_key, page_type } = body;
-            const defaultBlocks = getDefaultBlocks(page_key, page_type);
+
+            // Try to find location name if page_key starts with loc_
+            let locationName = "Your Location";
+            if (page_key.startsWith('loc_')) {
+                const slug = page_key.replace('loc_', '');
+                const { data: loc } = await db.from('locations').select('name').eq('slug', slug).single();
+                if (loc) locationName = loc.name;
+            } else {
+                // Formatting "become-a-foster" -> "Become A Foster"
+                locationName = page_key.split('-').map((s: string) => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+            }
+
+            const defaultBlocks = getDefaultBlocks(page_key, page_type, locationName);
 
             const { data: existing } = await db
                 .from('page_content_blocks')
@@ -205,58 +217,44 @@ export async function POST(request: NextRequest) {
     }
 }
 
-function getDefaultBlocks(pageKey: string, pageType: string) {
+function getDefaultBlocks(pageKey: string, pageType: string, name: string) {
     const base = [
-        { page_key: pageKey, block_key: 'hero_title', block_type: 'hero', title: 'Hero Title', content: '', metadata: {}, display_order: 1, is_active: true },
-        { page_key: pageKey, block_key: 'hero_subtitle', block_type: 'hero', title: 'Hero Subtitle', content: '', metadata: {}, display_order: 2, is_active: true },
-        { page_key: pageKey, block_key: 'hero_cta', block_type: 'cta', title: 'Hero CTA Button', content: '', metadata: { cta_text: '', cta_url: '/become-a-foster' }, display_order: 3, is_active: true },
+        { page_key: pageKey, block_key: 'hero_badge', block_type: 'hero', title: 'Hero Badge', content: 'National Fostering Excellence', metadata: {}, display_order: 1, is_active: true },
+        { page_key: pageKey, block_key: 'hero_title', block_type: 'hero', title: 'Hero Title', content: `Fostering in ${name}`, metadata: {}, display_order: 2, is_active: true },
+        { page_key: pageKey, block_key: 'hero_subtitle', block_type: 'hero', title: 'Hero Subtitle', content: `Help us transform lives. Discover the rewards of fostering and join ${name}'s largest network of approved agencies.`, metadata: {}, display_order: 3, is_active: true },
+        { page_key: pageKey, block_key: 'hero_cta', block_type: 'cta', title: 'Hero Primary CTA', content: 'Start Your Journey', metadata: { cta_text: 'Start Your Journey', cta_url: '/become-a-foster' }, display_order: 4, is_active: true },
+        { page_key: pageKey, block_key: 'hero_secondary_cta', block_type: 'cta', title: 'Hero Secondary CTA', content: 'View Local Agencies', metadata: { cta_text: 'View Local Agencies', cta_url: '#agencies' }, display_order: 5, is_active: true },
     ];
 
     if (pageType === 'country') {
         return [
             ...base,
-            { page_key: pageKey, block_key: 'why_foster_content', block_type: 'text', title: 'Why Foster Content', content: '', metadata: {}, display_order: 10, is_active: true },
-            { page_key: pageKey, block_key: 'why_foster_image', block_type: 'image', title: 'Why Foster Image', content: '', metadata: { url: '/images/locations/england-hero.png', alt: 'Fostering' }, display_order: 11, is_active: true },
-            { page_key: pageKey, block_key: 'is_fostering_right_title', block_type: 'text', title: 'Is Fostering Right Title', content: '', metadata: {}, display_order: 20, is_active: true },
-            { page_key: pageKey, block_key: 'is_fostering_right_content', block_type: 'text', title: 'Is Fostering Right Content', content: '', metadata: {}, display_order: 21, is_active: true },
-            { page_key: pageKey, block_key: 'process_title', block_type: 'text', title: 'Process Section Title', content: '', metadata: {}, display_order: 30, is_active: true },
-            { page_key: pageKey, block_key: 'process_subtitle', block_type: 'text', title: 'Process Section Subtitle', content: '', metadata: {}, display_order: 31, is_active: true },
-            { page_key: pageKey, block_key: 'cta_title', block_type: 'cta', title: 'CTA Section Title', content: '', metadata: {}, display_order: 40, is_active: true },
-            { page_key: pageKey, block_key: 'cta_subtitle', block_type: 'cta', title: 'CTA Section Subtitle', content: '', metadata: {}, display_order: 41, is_active: true },
-            { page_key: pageKey, block_key: 'cta_button', block_type: 'cta', title: 'CTA Button', content: '', metadata: { cta_text: '', cta_url: '/become-a-foster' }, display_order: 42, is_active: true },
+            { page_key: pageKey, block_key: 'why_foster_content', block_type: 'text', title: 'Why Foster Content', content: `<p>Fostering in ${name} is more than just providing a bed; it's about offering stability, safety, and a future to children who need it most.</p><p>By choosing to foster here, you are joining a world-class network of support.</p>`, metadata: {}, display_order: 10, is_active: true },
+            { page_key: pageKey, block_key: 'why_foster_image', block_type: 'image', title: 'Why Foster Image', content: '', metadata: { url: '/images/locations/england-hero.png', alt: `Fostering in ${name}` }, display_order: 11, is_active: true },
+            { page_key: pageKey, block_key: 'is_right_content', block_type: 'text', title: 'Is Fostering Right Content', content: `<p>Becoming a foster carer is a significant lifestyle change. It's natural to have questions about how it will affect your family, your work, and your daily routine.</p>`, metadata: {}, display_order: 20, is_active: true },
+            { page_key: pageKey, block_key: 'process_title', block_type: 'text', title: 'Process Section Title', content: 'The Process', metadata: {}, display_order: 30, is_active: true },
         ];
     }
 
     if (pageType === 'region') {
         return [
             ...base,
-            { page_key: pageKey, block_key: 'region_unique_image', block_type: 'image', title: 'Region Image', content: '', metadata: { url: '/images/locations/generic-hero.png', alt: 'Fostering' }, display_order: 10, is_active: true },
-            { page_key: pageKey, block_key: 'process_title', block_type: 'text', title: 'Process Section Title', content: '', metadata: {}, display_order: 20, is_active: true },
-            { page_key: pageKey, block_key: 'process_subtitle', block_type: 'text', title: 'Process Section Subtitle', content: '', metadata: {}, display_order: 21, is_active: true },
-            { page_key: pageKey, block_key: 'cta_title', block_type: 'cta', title: 'CTA Section Title', content: '', metadata: {}, display_order: 30, is_active: true },
-            { page_key: pageKey, block_key: 'cta_subtitle', block_type: 'cta', title: 'CTA Section Subtitle', content: '', metadata: {}, display_order: 31, is_active: true },
-            { page_key: pageKey, block_key: 'cta_button', block_type: 'cta', title: 'CTA Button', content: '', metadata: { cta_text: '', cta_url: '/become-a-foster' }, display_order: 32, is_active: true },
+            { page_key: pageKey, block_key: 'region_unique_image', block_type: 'image', title: 'Region Image', content: '', metadata: { url: '/images/locations/generic-hero.png', alt: `Fostering in ${name}` }, display_order: 10, is_active: true },
+            { page_key: pageKey, block_key: 'process_title', block_type: 'text', title: 'Process Section Title', content: 'The Process', metadata: {}, display_order: 20, is_active: true },
         ];
     }
 
     if (pageType === 'county' || pageType === 'city') {
         return [
             ...base,
-            { page_key: pageKey, block_key: 'local_priority_content', block_type: 'text', title: 'Local Priority Content', content: '', metadata: {}, display_order: 10, is_active: true },
-            { page_key: pageKey, block_key: 'local_benefit_content', block_type: 'text', title: 'Local Benefit Content', content: '', metadata: {}, display_order: 11, is_active: true },
-            { page_key: pageKey, block_key: 'process_title', block_type: 'text', title: 'Process Section Title', content: '', metadata: {}, display_order: 20, is_active: true },
-            { page_key: pageKey, block_key: 'process_subtitle', block_type: 'text', title: 'Process Section Subtitle', content: '', metadata: {}, display_order: 21, is_active: true },
-            { page_key: pageKey, block_key: 'cta_title', block_type: 'cta', title: 'CTA Section Title', content: '', metadata: {}, display_order: 30, is_active: true },
-            { page_key: pageKey, block_key: 'cta_subtitle', block_type: 'cta', title: 'CTA Section Subtitle', content: '', metadata: {}, display_order: 31, is_active: true },
-            { page_key: pageKey, block_key: 'cta_button', block_type: 'cta', title: 'CTA Button', content: '', metadata: { cta_text: '', cta_url: '/become-a-foster' }, display_order: 32, is_active: true },
+            { page_key: pageKey, block_key: 'local_priority_content', block_type: 'text', title: 'Local Priority Content', content: `Fostering in ${name} is critical right now.`, metadata: {}, display_order: 10, is_active: true },
+            { page_key: pageKey, block_key: 'local_benefit_content', block_type: 'text', title: 'Local Benefit Content', content: 'You receive local support and training.', metadata: {}, display_order: 11, is_active: true },
         ];
     }
 
     // Static pages
     return [
         ...base,
-        { page_key: pageKey, block_key: 'main_content', block_type: 'text', title: 'Main Content', content: '', metadata: {}, display_order: 10, is_active: true },
-        { page_key: pageKey, block_key: 'cta_title', block_type: 'cta', title: 'CTA Section Title', content: '', metadata: {}, display_order: 20, is_active: true },
-        { page_key: pageKey, block_key: 'cta_button', block_type: 'cta', title: 'CTA Button', content: '', metadata: { cta_text: '', cta_url: '/become-a-foster' }, display_order: 21, is_active: true },
+        { page_key: pageKey, block_key: 'main_content', block_type: 'text', title: 'Main Content', content: 'Edit this content via CMS.', metadata: {}, display_order: 10, is_active: true },
     ];
 }
