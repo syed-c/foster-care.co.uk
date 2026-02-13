@@ -782,52 +782,101 @@ export function CountryTemplate({
             </section>
 
             {/* 14. Glossary Section (Optional) */}
-            <section className="py-20 md:py-28 bg-background-sand">
-                <div className="container-main px-4 max-w-5xl mx-auto">
-                    <h2 className="text-3xl md:text-4xl font-black text-slate-950 mb-8 tracking-tighter">
-                        Quick glossary for England fostering
-                    </h2>
-                    <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+            <section
+                className="py-20 md:py-28 bg-background-sand"
+                aria-labelledby="england-glossary-heading"
+            >
+                <div className="container-main px-4 max-w-6xl mx-auto">
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 md:mb-12">
+                        <div>
+                            <div className="inline-flex items-center gap-2 text-primary font-black text-xs uppercase tracking-widest mb-3">
+                                <Info className="w-4 h-4" aria-hidden="true" />
+                                Glossary
+                            </div>
+                            <h2
+                                id="england-glossary-heading"
+                                className="text-3xl md:text-4xl font-black text-slate-950 tracking-tighter mb-3"
+                            >
+                                Quick glossary for England fostering
+                            </h2>
+                            <p className="text-sm md:text-base text-slate-600 max-w-2xl">
+                                A short guide to key fostering terms you&apos;ll see on this page. Each card links to a
+                                deeper explanation if you want to read more.
+                            </p>
+                        </div>
+                    </div>
+
+                    <dl className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7">
                         {[
                             {
                                 term: "Carer",
-                                def: "A foster carer is the person or family providing day-to-day care for a child in their home."
+                                def: "A person or family who provides a safe, stable and loving foster home for a child.",
+                                href: "/glossary/carer",
+                                icon: Heart
                             },
                             {
                                 term: "IFA (Independent Fostering Agency)",
-                                def: "A regulated organisation that recruits, trains and supports foster carers, separate from the local council."
+                                def: "A regulated organisation that recruits, trains and supports foster carers, separate from the local council.",
+                                href: "/glossary/independent-fostering-agency",
+                                icon: Building2
                             },
                             {
                                 term: "LA (Local Authority)",
-                                def: "Your local council, which holds legal responsibility for children in care and sometimes runs its own fostering service."
+                                def: "Your local council service responsible for children in care and fostering in your area.",
+                                href: "/glossary/local-authority",
+                                icon: MapPin
                             },
                             {
                                 term: "Ofsted",
-                                def: "The independent regulator that inspects and rates fostering agencies and local authorities in England."
+                                def: "The government body that inspects and rates fostering agencies and local authorities in England.",
+                                href: "/glossary/ofsted",
+                                icon: ShieldCheck
                             },
                             {
                                 term: "Allowance",
-                                def: "The weekly payment you receive to cover the costs of caring for a child, plus a reward element for your time."
+                                def: "The weekly financial support paid to foster carers to cover the day-to-day costs of caring for a child.",
+                                href: "/glossary/allowance",
+                                icon: BadgeCheck
                             }
                         ].map((item) => (
-                            <details
+                            <div
                                 key={item.term}
-                                className="group rounded-2xl bg-white border border-slate-100 px-5 py-4 open:shadow-md transition-all"
+                                className="group relative rounded-3xl bg-white/80 backdrop-blur-sm border border-slate-200 px-5 py-6 md:px-6 md:py-7 shadow-sm hover:shadow-xl hover:border-primary/40 hover:-translate-y-1 transition-all duration-300 focus-within:ring-2 focus-within:ring-primary/40"
+                                role="group"
+                                aria-label={item.term}
                             >
-                                <summary className="flex items-center justify-between gap-4 cursor-pointer list-none">
-                                    <span className="font-bold text-slate-900 text-sm md:text-base">
-                                        {item.term}
-                                    </span>
-                                    <span className="text-xs font-bold uppercase tracking-widest text-primary">
-                                        {`Learn more`}
-                                    </span>
-                                </summary>
-                                <p className="mt-3 text-sm md:text-base text-slate-600 leading-relaxed">
+                                <div className="flex items-start gap-3 mb-4">
+                                    <div className="w-9 h-9 rounded-2xl bg-primary/5 border border-primary/20 flex items-center justify-center flex-shrink-0">
+                                        <item.icon
+                                            className="w-5 h-5 text-primary"
+                                            aria-hidden="true"
+                                        />
+                                    </div>
+                                    <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-0.5">
+                                        <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden="true" />
+                                        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                                            Term
+                                        </span>
+                                    </div>
+                                </div>
+                                <dt className="font-black text-slate-950 text-base md:text-lg mb-2">
+                                    {item.term}
+                                </dt>
+                                <dd className="text-sm md:text-base text-slate-600 leading-relaxed mb-4">
                                     {item.def}
-                                </p>
-                            </details>
+                                </dd>
+                                <div className="flex items-center justify-between">
+                                    <Link
+                                        href={item.href}
+                                        className="inline-flex items-center gap-1.5 text-xs md:text-sm font-bold text-primary hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 rounded-full px-1.5 py-0.5"
+                                    >
+                                        <span>Learn more</span>
+                                        <ChevronRight className="w-3 h-3" aria-hidden="true" />
+                                    </Link>
+                                </div>
+                            </div>
                         ))}
-                    </div>
+                    </dl>
                 </div>
             </section>
 
