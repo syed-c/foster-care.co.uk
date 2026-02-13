@@ -1,7 +1,5 @@
 "use client";
-import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect, useCallback } from "react";
 import { SuperAdminSidebar } from "@/components/admin/SuperAdminSidebar";
 import { StatCard } from "@/components/admin/StatCard";
 import { Button } from "@/components/ui/button";
@@ -30,21 +28,21 @@ import {
   FileText,
   Search,
   Plus,
-  Eye,
   Pencil,
   Trash2,
-  MapPin,
   Globe,
   LayoutGrid,
   Loader2,
   Save,
   ExternalLink,
   GripVertical,
-  CheckCircle
+  CheckCircle,
+  Sparkles,
+  AlertCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 
-// Page definitions
+// ─── Page definitions ────────────────────────────────────────────────
 const STATIC_PAGES = [
   { key: "home", name: "Home", path: "/", category: "General" },
   { key: "become-a-foster", name: "Become a Foster", path: "/become-a-foster", category: "Core" },
@@ -56,7 +54,6 @@ const STATIC_PAGES = [
   { key: "guides", name: "Guides Index", path: "/guides", category: "Resources" },
   { key: "blog", name: "Blog Index", path: "/blog", category: "Resources" },
   { key: "pricing", name: "Pricing", path: "/pricing", category: "General" },
-  // Policy Pages
   { key: "policy-funding", name: "Funding Policy", path: "/policy/funding", category: "Policy" },
   { key: "policy-training", name: "Training Policy", path: "/policy/training", category: "Policy" },
   { key: "policy-support", name: "Support Policy", path: "/policy/support", category: "Policy" },
@@ -64,7 +61,6 @@ const STATIC_PAGES = [
   { key: "policy-requirements", name: "Requirements Policy", path: "/policy/requirements", category: "Policy" },
 ];
 
-// Block types
 const BLOCK_TYPES = [
   { value: "hero", label: "Hero Section" },
   { value: "text", label: "Text Block" },
@@ -76,126 +72,81 @@ const BLOCK_TYPES = [
   { value: "image", label: "Image Block" },
 ];
 
+// ─── API helpers ─────────────────────────────────────────────────────
+async function apiGet(params: Record<string, string>) {
+  const url = new URL("/api/admin/cms", window.location.origin);
+  Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+  const res = await fetch(url.toString());
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: "Request failed" }));
+    throw new Error(err.error || "Request failed");
+  }
+  return res.json();
+}
+
+async function apiPost(body: Record<string, any>) {
+  const res = await fetch("/api/admin/cms", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: "Request failed" }));
+    throw new Error(err.error || "Request failed");
+  }
+  return res.json();
+}
+
+// ─── Main AdminCMS component ────────────────────────────────────────
 export default function AdminCMS() {
-  const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("pages");
   const [editingPage, setEditingPage] = useState<string | null>(null);
   const [editingBlock, setEditingBlock] = useState<any>(null);
   const [isAddingBlock, setIsAddingBlock] = useState(false);
+  const [pageSubTab, setPageSubTab] = useState("Static");
 
-  // Fetch content blocks
-  const { data: contentBlocks, isLoading: blocksLoading } = useQuery({
-    queryKey: ["admin-content-blocks"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("page_content_blocks")
-        .select("*")
-        .order("page_key")
-        .order("display_order");
-      if (error) throw error;
-      return data;
-    },
-  });
+  // Data state
+  const [locations, setLocations] = useState<any[]>([]);
+  const [contentBlocks, setContentBlocks] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Fetch locations for location pages
-  const { data: locations } = useQuery({
-    queryKey: ["admin-locations-cms"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("locations")
-        .select("id, name, slug, type")
-        .eq("is_active", true)
-        .order("type")
-        .order("name");
-      if (error) throw error;
-      return data;
-    },
-  });
+  // Fetch all data from server API
+  const fetchData = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const result = await apiGet({});
+      setLocations(result.locations || []);
+      setContentBlocks(result.blocks || []);
+    } catch (err: any) {
+      setError(err.message);
+      console.error("CMS data fetch error:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
-  // Save block mutation
-  const saveBlockMutation = useMutation({
-    mutationFn: async (block: any) => {
-      if (block.id) {
-        const { error } = await supabase
-          .from("page_content_blocks")
-          .update({
-            title: block.title,
-            content: block.content,
-            block_type: block.block_type,
-            metadata: block.metadata,
-            is_active: block.is_active,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", block.id);
-        if (error) throw error;
-      } else {
-        const { error } = await supabase
-          .from("page_content_blocks")
-          .insert({
-            page_key: block.page_key,
-            block_key: block.block_key,
-            block_type: block.block_type,
-            title: block.title,
-            content: block.content,
-            metadata: block.metadata,
-            display_order: block.display_order || 0,
-            is_active: true,
-          });
-        if (error) throw error;
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-content-blocks"] });
-      setEditingBlock(null);
-      setIsAddingBlock(false);
-      toast.success("Content block saved");
-    },
-    onError: (error: Error) => {
-      toast.error(error.message);
-    },
-  });
-
-  // Delete block mutation
-  const deleteBlockMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase
-        .from("page_content_blocks")
-        .delete()
-        .eq("id", id);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-content-blocks"] });
-      toast.success("Content block deleted");
-    },
-    onError: (error: Error) => {
-      toast.error(error.message);
-    },
-  });
+  useEffect(() => { fetchData(); }, [fetchData]);
 
   // Build location pages list
-  const locationPages = (locations || []).map(loc => ({
+  const locationPages = locations.map((loc: any) => ({
     key: `loc_${loc.slug}`,
     name: loc.name,
     path: `/locations/${loc.slug}`,
     category: loc.type === "country" ? "Countries" : loc.type === "region" ? "Regions" : loc.type === "county" ? "Counties" : "Cities",
     type: "location",
+    locationType: loc.type,
   }));
 
   // All pages combined
   const allPages = [
-    ...STATIC_PAGES.map(p => ({ ...p, type: "static" })),
+    ...STATIC_PAGES.map(p => ({ ...p, type: "static", locationType: "static" })),
     ...locationPages,
   ];
 
-  // Filter pages
-  const filteredPages = allPages.filter(page =>
-    page.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    page.path.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  // Group pages by category explicitly
+  // Group pages by category
   const categoryMap = {
     "Static": allPages.filter(p => p.type === "static"),
     "Countries": allPages.filter(p => p.category === "Countries"),
@@ -204,48 +155,81 @@ export default function AdminCMS() {
     "Cities": allPages.filter(p => p.category === "Cities"),
   };
 
-  const [pageSubTab, setPageSubTab] = useState("Static");
-
   // Get blocks for a page
   const getPageBlocks = (pageKey: string) => {
-    return contentBlocks?.filter(b => b.page_key === pageKey) || [];
+    return contentBlocks.filter((b: any) => b.page_key === pageKey);
   };
 
   // Stats
   const totalPages = allPages.length;
-  const totalBlocks = contentBlocks?.length || 0;
-  const activeBlocks = contentBlocks?.filter(b => b.is_active).length || 0;
+  const totalBlocks = contentBlocks.length;
+  const activeBlocks = contentBlocks.filter((b: any) => b.is_active).length;
+
+  // Save block handler
+  const handleSaveBlock = async (block: any) => {
+    try {
+      await apiPost({ action: "save_block", block });
+      toast.success("Content block saved!");
+      await fetchData();
+      setEditingBlock(null);
+      setIsAddingBlock(false);
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
+
+  // Delete block handler
+  const handleDeleteBlock = async (id: string) => {
+    try {
+      await apiPost({ action: "delete_block", id });
+      toast.success("Block deleted");
+      await fetchData();
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <SuperAdminSidebar title="Content Management" description="Manage website pages and content blocks">
+        <div className="flex items-center justify-center py-24">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          <span className="ml-3 text-muted-foreground">Loading CMS data...</span>
+        </div>
+      </SuperAdminSidebar>
+    );
+  }
+
+  if (error) {
+    return (
+      <SuperAdminSidebar title="Content Management" description="Manage website pages and content blocks">
+        <div className="flex flex-col items-center justify-center py-24 gap-4">
+          <AlertCircle className="h-12 w-12 text-destructive" />
+          <p className="text-destructive font-medium">{error}</p>
+          <Button onClick={fetchData} variant="outline">Retry</Button>
+        </div>
+      </SuperAdminSidebar>
+    );
+  }
 
   return (
     <SuperAdminSidebar title="Content Management" description="Manage website pages and content blocks">
       <div className="space-y-6 pb-20 relative min-h-full">
         {/* Stats */}
         <div className="grid gap-4 sm:grid-cols-3">
-          <StatCard
-            title="Total Pages"
-            value={totalPages}
-            icon={Globe}
-          />
-          <StatCard
-            title="Content Blocks"
-            value={totalBlocks}
-            icon={LayoutGrid}
-          />
-          <StatCard
-            title="Active Blocks"
-            value={activeBlocks}
-            icon={CheckCircle}
-          />
+          <StatCard title="Total Pages" value={totalPages} icon={Globe} />
+          <StatCard title="Content Blocks" value={totalBlocks} icon={LayoutGrid} />
+          <StatCard title="Active Blocks" value={activeBlocks} icon={CheckCircle} />
         </div>
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="bg-muted/50 rounded-xl p-1">
             <TabsTrigger value="pages" className="rounded-lg">Pages</TabsTrigger>
-            <TabsTrigger value="blocks" className="rounded-lg">Content Blocks</TabsTrigger>
+            <TabsTrigger value="blocks" className="rounded-lg">All Content Blocks</TabsTrigger>
           </TabsList>
 
-          {/* Pages Tab */}
+          {/* ── Pages Tab ────────────────────────────────────────── */}
           <TabsContent value="pages" className="mt-6">
             <Card className="rounded-2xl border-border shadow-soft">
               <CardHeader>
@@ -255,7 +239,7 @@ export default function AdminCMS() {
                       <FileText className="w-5 h-5" />
                       Website Pages
                     </CardTitle>
-                    <CardDescription>Manage content for all pages</CardDescription>
+                    <CardDescription>Click Edit to manage content blocks for any page</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -283,58 +267,62 @@ export default function AdminCMS() {
                   </TabsList>
                 </Tabs>
 
-                <div className="space-y-6">
-                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                    {categoryMap[pageSubTab as keyof typeof categoryMap]
-                      .filter(page =>
-                        page.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        page.path.toLowerCase().includes(searchQuery.toLowerCase())
-                      )
-                      .map((page) => {
-                        const blocks = getPageBlocks(page.key);
-                        return (
-                          <div
-                            key={page.key}
-                            className="p-4 rounded-xl border bg-card hover:bg-muted/50 transition-colors"
-                          >
-                            <div className="flex items-start justify-between mb-2">
-                              <h4 className="font-medium">{page.name}</h4>
-                              <Badge variant="outline" className="text-[10px]">
-                                {blocks.length} blocks
-                              </Badge>
-                            </div>
-                            <p className="text-xs text-muted-foreground font-mono mb-3">{page.path}</p>
-                            <div className="flex gap-2">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="flex-1 rounded-lg text-xs"
-                                onClick={() => setEditingPage(page.key)}
-                              >
-                                <Pencil className="w-3 h-3 mr-1" />
-                                Edit
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="rounded-lg"
-                                asChild
-                              >
-                                <a href={page.path} target="_blank" rel="noopener noreferrer">
-                                  <ExternalLink className="w-3 h-3" />
-                                </a>
-                              </Button>
-                            </div>
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {categoryMap[pageSubTab as keyof typeof categoryMap]
+                    .filter(page =>
+                      page.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                      page.path.toLowerCase().includes(searchQuery.toLowerCase())
+                    )
+                    .map((page) => {
+                      const blocks = getPageBlocks(page.key);
+                      return (
+                        <div
+                          key={page.key}
+                          className="p-4 rounded-xl border bg-card hover:bg-muted/50 transition-colors"
+                        >
+                          <div className="flex items-start justify-between mb-2">
+                            <h4 className="font-medium">{page.name}</h4>
+                            <Badge variant="outline" className="text-[10px]">
+                              {blocks.length} blocks
+                            </Badge>
                           </div>
-                        );
-                      })}
-                  </div>
+                          <p className="text-xs text-muted-foreground font-mono mb-3">{page.path}</p>
+                          <div className="flex gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="flex-1 rounded-lg text-xs"
+                              onClick={() => setEditingPage(page.key)}
+                            >
+                              <Pencil className="w-3 h-3 mr-1" />
+                              Edit
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="rounded-lg"
+                              asChild
+                            >
+                              <a href={page.path} target="_blank" rel="noopener noreferrer">
+                                <ExternalLink className="w-3 h-3" />
+                              </a>
+                            </Button>
+                          </div>
+                        </div>
+                      );
+                    })}
                 </div>
+
+                {categoryMap[pageSubTab as keyof typeof categoryMap].length === 0 && (
+                  <div className="text-center py-12 text-muted-foreground">
+                    No pages found in this category.
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
 
-          {/* Blocks Tab */}
+          {/* ── All Blocks Tab ───────────────────────────────────── */}
           <TabsContent value="blocks" className="mt-6">
             <Card className="rounded-2xl border-border shadow-soft">
               <CardHeader>
@@ -342,9 +330,9 @@ export default function AdminCMS() {
                   <div>
                     <CardTitle className="flex items-center gap-2">
                       <LayoutGrid className="w-5 h-5" />
-                      Content Blocks
+                      All Content Blocks
                     </CardTitle>
-                    <CardDescription>Reusable content components</CardDescription>
+                    <CardDescription>View and manage all content blocks across all pages</CardDescription>
                   </div>
                   <Button className="rounded-xl" onClick={() => setIsAddingBlock(true)}>
                     <Plus className="w-4 h-4 mr-2" />
@@ -353,13 +341,15 @@ export default function AdminCMS() {
                 </div>
               </CardHeader>
               <CardContent>
-                {blocksLoading ? (
-                  <div className="flex items-center justify-center py-12">
-                    <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+                {contentBlocks.length === 0 ? (
+                  <div className="text-center py-12 text-muted-foreground">
+                    <LayoutGrid className="w-12 h-12 mx-auto mb-4 opacity-30" />
+                    <p className="font-medium">No content blocks yet</p>
+                    <p className="text-sm mt-1">Open any page and click Edit to auto-create blocks, or add one manually.</p>
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {contentBlocks?.map((block) => (
+                    {contentBlocks.map((block: any) => (
                       <div
                         key={block.id}
                         className="flex items-center gap-4 p-4 rounded-xl border bg-card hover:bg-muted/30 transition-colors"
@@ -376,8 +366,11 @@ export default function AdminCMS() {
                             )}
                           </div>
                           <p className="text-xs text-muted-foreground">
-                            Page: {block.page_key} · Order: {block.display_order}
+                            Page: {block.page_key} · Key: {block.block_key} · Order: {block.display_order}
                           </p>
+                          {block.content && (
+                            <p className="text-xs text-muted-foreground line-clamp-1 mt-1">{block.content}</p>
+                          )}
                         </div>
                         <div className="flex items-center gap-2">
                           <Button
@@ -394,7 +387,7 @@ export default function AdminCMS() {
                             className="h-8 w-8 rounded-lg text-destructive"
                             onClick={() => {
                               if (confirm("Delete this block?")) {
-                                deleteBlockMutation.mutate(block.id);
+                                handleDeleteBlock(block.id);
                               }
                             }}
                           >
@@ -403,11 +396,6 @@ export default function AdminCMS() {
                         </div>
                       </div>
                     ))}
-                    {(!contentBlocks || contentBlocks.length === 0) && (
-                      <div className="text-center py-12 text-muted-foreground">
-                        No content blocks yet. Create your first block!
-                      </div>
-                    )}
                   </div>
                 )}
               </CardContent>
@@ -415,7 +403,7 @@ export default function AdminCMS() {
           </TabsContent>
         </Tabs>
 
-        {/* Page Editor Dialog */}
+        {/* ── Page Editor Dialog ───────────────────────────────── */}
         <Dialog open={!!editingPage} onOpenChange={(open) => !open && setEditingPage(null)}>
           <DialogContent className="max-w-4xl max-h-[90vh]">
             <DialogHeader>
@@ -425,14 +413,15 @@ export default function AdminCMS() {
             </DialogHeader>
             {editingPage && (
               <PageManagementDialog
-                page={allPages.find(p => p.key === editingPage) || { key: editingPage, name: "Unknown Page" }}
+                page={allPages.find(p => p.key === editingPage) || { key: editingPage, name: "Unknown Page", locationType: "static" }}
                 onClose={() => setEditingPage(null)}
+                onDataChanged={fetchData}
               />
             )}
           </DialogContent>
         </Dialog>
 
-        {/* Block Editor Dialog */}
+        {/* ── Block Editor Dialog (from All Blocks tab) ────────── */}
         <Dialog open={!!editingBlock || isAddingBlock} onOpenChange={(open) => {
           if (!open) {
             setEditingBlock(null);
@@ -446,7 +435,7 @@ export default function AdminCMS() {
             <BlockEditor
               block={editingBlock}
               pages={allPages}
-              onSave={(block) => saveBlockMutation.mutate(block)}
+              onSave={handleSaveBlock}
               onCancel={() => {
                 setEditingBlock(null);
                 setIsAddingBlock(false);
@@ -459,93 +448,106 @@ export default function AdminCMS() {
   );
 }
 
-// Comprehensive Page Management Component
+// ─── Page Management Dialog ──────────────────────────────────────────
 function PageManagementDialog({
   page,
-  onClose
+  onClose,
+  onDataChanged,
 }: {
   page: any;
   onClose: () => void;
+  onDataChanged: () => Promise<void>;
 }) {
-  const queryClient = useQueryClient();
-  const { data: blocks, isLoading: blocksLoading } = useQuery({
-    queryKey: ["admin-page-blocks", page.key],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("page_content_blocks")
-        .select("*")
-        .eq("page_key", page.key)
-        .order("display_order");
-      if (error) throw error;
-      return data;
-    },
-  });
-
-  const { data: faqs, isLoading: faqsLoading } = useQuery({
-    queryKey: ["admin-page-faqs", page.key],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("faqs")
-        .select("*")
-        .eq("page_key", page.key)
-        .order("display_order");
-      if (error) throw error;
-      return data;
-    },
-  });
-
-  const saveBlockMutation = useMutation({
-    mutationFn: async (block: any) => {
-      const { id, ...payload } = block;
-      if (id) {
-        const { error } = await supabase.from("page_content_blocks").update(payload).eq("id", id);
-        if (error) throw error;
-      } else {
-        const { error } = await supabase.from("page_content_blocks").insert(payload);
-        if (error) throw error;
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-page-blocks", page.key] });
-      queryClient.invalidateQueries({ queryKey: ["page-blocks", page.key] });
-      toast.success("Block saved successfully");
-    },
-    onError: (error: any) => toast.error(error.message),
-  });
-
-  const deleteBlockMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase.from("page_content_blocks").delete().eq("id", id);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-page-blocks", page.key] });
-      queryClient.invalidateQueries({ queryKey: ["page-blocks", page.key] });
-      toast.success("Block deleted");
-    },
-  });
-
-  const saveFaqMutation = useMutation({
-    mutationFn: async (faq: any) => {
-      const { id, ...payload } = faq;
-      if (id) {
-        const { error } = await supabase.from("faqs").update(payload).eq("id", id);
-        if (error) throw error;
-      } else {
-        const { error } = await supabase.from("faqs").insert(payload);
-        if (error) throw error;
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-page-faqs", page.key] });
-      queryClient.invalidateQueries({ queryKey: ["faqs"] });
-      toast.success("FAQ saved successfully");
-    },
-    onError: (error: any) => toast.error(error.message),
-  });
-
+  const [blocks, setBlocks] = useState<any[]>([]);
+  const [faqs, setFaqs] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSeeding, setIsSeeding] = useState(false);
   const [editingBlock, setEditingBlock] = useState<any>(null);
   const [editingFaq, setEditingFaq] = useState<any>(null);
+
+  const fetchPageData = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const [blocksRes, faqsRes] = await Promise.all([
+        apiGet({ action: "blocks", page_key: page.key }),
+        apiGet({ action: "faqs", page_key: page.key }),
+      ]);
+      setBlocks(blocksRes.data || []);
+      setFaqs(faqsRes.data || []);
+    } catch (err: any) {
+      toast.error("Failed to load page data: " + err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [page.key]);
+
+  useEffect(() => { fetchPageData(); }, [fetchPageData]);
+
+  const handleSeedBlocks = async () => {
+    setIsSeeding(true);
+    try {
+      const result = await apiPost({
+        action: "seed_blocks",
+        page_key: page.key,
+        page_type: page.locationType || "static",
+      });
+      if (result.seeded > 0) {
+        toast.success(`Created ${result.seeded} default content blocks`);
+        await fetchPageData();
+        await onDataChanged();
+      } else {
+        toast.info("All default blocks already exist for this page");
+      }
+    } catch (err: any) {
+      toast.error(err.message);
+    } finally {
+      setIsSeeding(false);
+    }
+  };
+
+  const handleSaveBlock = async (block: any) => {
+    try {
+      await apiPost({ action: "save_block", block });
+      toast.success("Block saved!");
+      await fetchPageData();
+      await onDataChanged();
+      setEditingBlock(null);
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
+
+  const handleDeleteBlock = async (id: string) => {
+    try {
+      await apiPost({ action: "delete_block", id });
+      toast.success("Block deleted");
+      await fetchPageData();
+      await onDataChanged();
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
+
+  const handleSaveFaq = async (faq: any) => {
+    try {
+      await apiPost({ action: "save_faq", faq });
+      toast.success("FAQ saved!");
+      await fetchPageData();
+      setEditingFaq(null);
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
+
+  const handleDeleteFaq = async (id: string) => {
+    try {
+      await apiPost({ action: "delete_faq", id });
+      toast.success("FAQ deleted");
+      await fetchPageData();
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
 
   return (
     <Tabs defaultValue="content" className="w-full">
@@ -556,21 +558,39 @@ function PageManagementDialog({
 
       <TabsContent value="content">
         <div className="space-y-4">
+          {/* Seed default blocks button */}
+          {blocks.length === 0 && !isLoading && (
+            <div className="p-6 rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 text-center">
+              <Sparkles className="w-10 h-10 mx-auto mb-3 text-primary" />
+              <h4 className="font-bold text-lg mb-1">No content blocks yet</h4>
+              <p className="text-sm text-muted-foreground mb-4">
+                Auto-create default content blocks for this page to start editing
+              </p>
+              <Button onClick={handleSeedBlocks} disabled={isSeeding} className="rounded-xl">
+                {isSeeding ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Sparkles className="w-4 h-4 mr-2" />}
+                Generate Default Blocks
+              </Button>
+            </div>
+          )}
+
           <ScrollArea className="h-[50vh]">
             <div className="space-y-3 pr-4">
-              {blocksLoading ? (
+              {isLoading ? (
                 <div className="flex justify-center py-12"><Loader2 className="animate-spin" /></div>
-              ) : blocks?.length ? (
-                blocks.map((block) => (
+              ) : blocks.length > 0 ? (
+                blocks.map((block: any) => (
                   <div key={block.id} className="p-4 rounded-xl border bg-card flex justify-between items-start">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <Badge variant="outline">{block.block_type}</Badge>
+                    <div className="space-y-1 flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <Badge variant="outline" className="text-[10px]">{block.block_type}</Badge>
                         <span className="font-medium">{block.title || block.block_key}</span>
+                        {!block.is_active && <Badge variant="secondary" className="text-[10px]">Inactive</Badge>}
                       </div>
-                      {block.content && <p className="text-sm text-muted-foreground line-clamp-1">{block.content}</p>}
+                      <p className="text-xs text-muted-foreground font-mono">{block.block_key}</p>
+                      {block.content && <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{block.content}</p>}
+                      {!block.content && <p className="text-sm text-amber-500 italic mt-1">Empty — click edit to add content</p>}
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-1 ml-2 flex-shrink-0">
                       <Button variant="ghost" size="sm" onClick={() => setEditingBlock(block)}>
                         <Pencil className="w-4 h-4" />
                       </Button>
@@ -578,25 +598,35 @@ function PageManagementDialog({
                         variant="ghost"
                         size="sm"
                         className="text-destructive"
-                        onClick={() => confirm("Delete?") && deleteBlockMutation.mutate(block.id)}
+                        onClick={() => confirm("Delete this block?") && handleDeleteBlock(block.id)}
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
                   </div>
                 ))
-              ) : (
-                <div className="text-center py-12 text-muted-foreground">No blocks yet.</div>
-              )}
+              ) : null}
             </div>
           </ScrollArea>
+
           <div className="flex gap-3 pt-4 border-t">
             <Button variant="outline" className="flex-1 rounded-xl" onClick={onClose}>Close</Button>
+            {blocks.length > 0 && (
+              <Button
+                variant="outline"
+                className="rounded-xl"
+                onClick={handleSeedBlocks}
+                disabled={isSeeding}
+              >
+                {isSeeding ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Sparkles className="w-4 h-4 mr-2" />}
+                Add Missing Blocks
+              </Button>
+            )}
             <Button
               className="flex-1 rounded-xl"
-              onClick={() => setEditingBlock({ page_key: page.key, block_type: "text", block_key: "", title: "", content: "" })}
+              onClick={() => setEditingBlock({ page_key: page.key, block_type: "text", block_key: "", title: "", content: "", metadata: {}, is_active: true, display_order: (blocks.length + 1) * 10 })}
             >
-              <Plus className="w-4 h-4 mr-2" /> Add Block
+              <Plus className="w-4 h-4 mr-2" /> Add Custom Block
             </Button>
           </div>
         </div>
@@ -606,16 +636,16 @@ function PageManagementDialog({
         <div className="space-y-4">
           <ScrollArea className="h-[50vh]">
             <div className="space-y-3 pr-4">
-              {faqsLoading ? (
+              {isLoading ? (
                 <div className="flex justify-center py-12"><Loader2 className="animate-spin" /></div>
-              ) : faqs?.length ? (
-                faqs.map((faq) => (
+              ) : faqs.length > 0 ? (
+                faqs.map((faq: any) => (
                   <div key={faq.id} className="p-4 rounded-xl border bg-card flex justify-between items-start">
-                    <div className="space-y-1">
+                    <div className="space-y-1 flex-1 min-w-0">
                       <p className="font-medium line-clamp-1">{faq.question}</p>
-                      <p className="text-sm text-muted-foreground line-clamp-1">{faq.answer}</p>
+                      <p className="text-sm text-muted-foreground line-clamp-2">{faq.answer}</p>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-1 ml-2 flex-shrink-0">
                       <Button variant="ghost" size="sm" onClick={() => setEditingFaq(faq)}>
                         <Pencil className="w-4 h-4" />
                       </Button>
@@ -623,7 +653,7 @@ function PageManagementDialog({
                         variant="ghost"
                         size="sm"
                         className="text-destructive"
-                        onClick={() => confirm("Delete?") && supabase.from("faqs").delete().eq("id", faq.id).then(() => queryClient.invalidateQueries({ queryKey: ["admin-page-faqs", page.key] }))}
+                        onClick={() => confirm("Delete this FAQ?") && handleDeleteFaq(faq.id)}
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
@@ -631,7 +661,9 @@ function PageManagementDialog({
                   </div>
                 ))
               ) : (
-                <div className="text-center py-12 text-muted-foreground">No FAQs yet.</div>
+                <div className="text-center py-12 text-muted-foreground">
+                  <p>No FAQs yet for this page.</p>
+                </div>
               )}
             </div>
           </ScrollArea>
@@ -639,7 +671,7 @@ function PageManagementDialog({
             <Button variant="outline" className="flex-1 rounded-xl" onClick={onClose}>Close</Button>
             <Button
               className="flex-1 rounded-xl"
-              onClick={() => setEditingFaq({ page_key: page.key, question: "", answer: "", is_active: true, display_order: 0 })}
+              onClick={() => setEditingFaq({ page_key: page.key, question: "", answer: "", is_active: true, display_order: (faqs.length + 1) * 10 })}
             >
               <Plus className="w-4 h-4 mr-2" /> Add FAQ
             </Button>
@@ -647,29 +679,116 @@ function PageManagementDialog({
         </div>
       </TabsContent>
 
-      {/* Editors */}
+      {/* Block Editor sub-dialog */}
       <Dialog open={!!editingBlock} onOpenChange={(open) => !open && setEditingBlock(null)}>
         <DialogContent className="max-w-lg">
           <DialogHeader><DialogTitle>{editingBlock?.id ? "Edit Block" : "Add Block"}</DialogTitle></DialogHeader>
-          {editingBlock && <BlockEditor block={editingBlock} onSave={(b) => { saveBlockMutation.mutate(b); setEditingBlock(null); }} onCancel={() => setEditingBlock(null)} />}
+          {editingBlock && (
+            <BlockEditor
+              block={editingBlock}
+              onSave={handleSaveBlock}
+              onCancel={() => setEditingBlock(null)}
+            />
+          )}
         </DialogContent>
       </Dialog>
 
+      {/* FAQ Editor sub-dialog */}
       <Dialog open={!!editingFaq} onOpenChange={(open) => !open && setEditingFaq(null)}>
         <DialogContent className="max-w-lg">
           <DialogHeader><DialogTitle>{editingFaq?.id ? "Edit FAQ" : "Add FAQ"}</DialogTitle></DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2"><Label>Question</Label><Input value={editingFaq?.question} onChange={(e) => setEditingFaq({ ...editingFaq, question: e.target.value })} /></div>
-            <div className="space-y-2"><Label>Answer</Label><Textarea value={editingFaq?.answer} onChange={(e) => setEditingFaq({ ...editingFaq, answer: e.target.value })} rows={4} /></div>
-            <div className="flex justify-end gap-3"><Button variant="outline" onClick={() => setEditingFaq(null)}>Cancel</Button><Button onClick={() => saveFaqMutation.mutate(editingFaq)}>Save FAQ</Button></div>
-          </div>
+          {editingFaq && (
+            <FaqEditor
+              faq={editingFaq}
+              onSave={handleSaveFaq}
+              onCancel={() => setEditingFaq(null)}
+            />
+          )}
         </DialogContent>
       </Dialog>
     </Tabs>
   );
 }
 
-// Block Editor Component
+// ─── FAQ Editor ──────────────────────────────────────────────────────
+function FaqEditor({
+  faq,
+  onSave,
+  onCancel,
+}: {
+  faq: any;
+  onSave: (faq: any) => void;
+  onCancel: () => void;
+}) {
+  const [formData, setFormData] = useState({
+    question: faq?.question || "",
+    answer: faq?.answer || "",
+    is_active: faq?.is_active ?? true,
+    display_order: faq?.display_order || 0,
+  });
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleSave = () => {
+    if (!formData.question || !formData.answer) {
+      toast.error("Question and answer are required");
+      return;
+    }
+    setIsSaving(true);
+    onSave({ ...faq, ...formData });
+  };
+
+  return (
+    <div className="space-y-4 py-2">
+      <div className="space-y-2">
+        <Label>Question</Label>
+        <Input
+          value={formData.question}
+          onChange={(e) => setFormData({ ...formData, question: e.target.value })}
+          placeholder="Enter the FAQ question..."
+          className="rounded-xl"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label>Answer</Label>
+        <Textarea
+          value={formData.answer}
+          onChange={(e) => setFormData({ ...formData, answer: e.target.value })}
+          placeholder="Enter the FAQ answer..."
+          rows={5}
+          className="rounded-xl"
+        />
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label>Display Order</Label>
+          <Input
+            type="number"
+            value={formData.display_order}
+            onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) || 0 })}
+            className="rounded-xl"
+          />
+        </div>
+        <div className="flex items-center gap-2 pt-6">
+          <Switch
+            id="faq-active"
+            checked={formData.is_active}
+            onCheckedChange={(v) => setFormData({ ...formData, is_active: v })}
+          />
+          <Label htmlFor="faq-active">Active</Label>
+        </div>
+      </div>
+      <div className="flex gap-3 pt-4">
+        <Button variant="outline" className="flex-1 rounded-xl" onClick={onCancel}>Cancel</Button>
+        <Button className="flex-1 rounded-xl" onClick={handleSave} disabled={isSaving}>
+          {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+          {faq?.id ? "Update FAQ" : "Create FAQ"}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Block Editor ────────────────────────────────────────────────────
 function BlockEditor({
   block,
   pages,
@@ -693,9 +812,9 @@ function BlockEditor({
   });
   const [isSaving, setIsSaving] = useState(false);
 
-  const handleSave = async () => {
+  const handleSave = () => {
     if (!formData.page_key || !formData.block_key) {
-      toast.error("Page and block key are required");
+      toast.error("Page key and block key are required");
       return;
     }
     setIsSaving(true);
@@ -707,8 +826,8 @@ function BlockEditor({
       ...formData,
       metadata: {
         ...(formData.metadata as Record<string, any>),
-        [key]: value
-      }
+        [key]: value,
+      },
     });
   };
 
@@ -722,8 +841,8 @@ function BlockEditor({
               <SelectValue placeholder="Select page" />
             </SelectTrigger>
             <SelectContent className="bg-card max-h-60">
-              {pages.map((page) => (
-                <SelectItem key={page.key} value={page.key}>{page.name}</SelectItem>
+              {pages.map((p) => (
+                <SelectItem key={p.key} value={p.key}>{p.name}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -736,7 +855,7 @@ function BlockEditor({
           <Input
             value={formData.block_key}
             onChange={(e) => setFormData({ ...formData, block_key: e.target.value })}
-            placeholder="e.g., hero_main"
+            placeholder="e.g., hero_title"
             className="rounded-xl"
           />
         </div>
@@ -760,7 +879,7 @@ function BlockEditor({
         <Input
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-          placeholder="Block title"
+          placeholder="Display title for this block"
           className="rounded-xl"
         />
       </div>
@@ -770,12 +889,16 @@ function BlockEditor({
         <Textarea
           value={formData.content}
           onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-          placeholder="Block content (supports HTML)"
+          placeholder="Block content — this text will appear on the live page (supports HTML)"
           rows={5}
           className="rounded-xl"
         />
+        <p className="text-xs text-muted-foreground">
+          Leave empty to use the page&apos;s default/hardcoded content.
+        </p>
       </div>
 
+      {/* Image metadata */}
       {(formData.block_type === "image" || formData.block_key.includes("image")) && (
         <div className="space-y-4 p-4 rounded-xl border bg-muted/30">
           <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Image Metadata</Label>
@@ -800,6 +923,7 @@ function BlockEditor({
         </div>
       )}
 
+      {/* CTA metadata */}
       {(formData.block_type === "cta" || formData.block_key.includes("button") || formData.block_key.includes("cta")) && (
         <div className="space-y-4 p-4 rounded-xl border bg-muted/30">
           <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">CTA / Button Metadata</Label>
@@ -824,6 +948,7 @@ function BlockEditor({
         </div>
       )}
 
+      {/* Hero metadata */}
       {formData.block_type === "hero" && (
         <div className="space-y-4 p-4 rounded-xl border bg-muted/30">
           <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Hero Metadata</Label>
@@ -848,23 +973,24 @@ function BlockEditor({
         </div>
       )}
 
-      <div className="space-y-2">
-        <Label>Display Order</Label>
-        <Input
-          type="number"
-          value={formData.display_order}
-          onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) || 0 })}
-          className="rounded-xl"
-        />
-      </div>
-
-      <div className="flex items-center gap-2 pt-4">
-        <Switch
-          id="block-active"
-          checked={formData.is_active}
-          onCheckedChange={(v) => setFormData({ ...formData, is_active: v })}
-        />
-        <Label htmlFor="block-active">Active</Label>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label>Display Order</Label>
+          <Input
+            type="number"
+            value={formData.display_order}
+            onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) || 0 })}
+            className="rounded-xl"
+          />
+        </div>
+        <div className="flex items-center gap-2 pt-6">
+          <Switch
+            id="block-active"
+            checked={formData.is_active}
+            onCheckedChange={(v) => setFormData({ ...formData, is_active: v })}
+          />
+          <Label htmlFor="block-active">Active</Label>
+        </div>
       </div>
 
       <div className="flex gap-3 pt-6">
