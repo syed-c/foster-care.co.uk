@@ -159,8 +159,9 @@ export default function AdminCMS() {
     "Static": allPages.filter(p => p.type === "static"),
     "Countries": allPages.filter(p => p.category === "Countries"),
     "Regions": allPages.filter(p => p.category === "Regions"),
-    "Counties": allPages.filter(p => p.category === "Counties"),
-    "Cities": allPages.filter(p => p.category === "Cities"),
+    // Hidden as per user request
+    // "Counties": allPages.filter(p => p.category === "Counties"),
+    // "Cities": allPages.filter(p => p.category === "Cities"),
   };
 
   const filteredPages = categoryMap[pageSubTab as keyof typeof categoryMap]?.filter(p =>

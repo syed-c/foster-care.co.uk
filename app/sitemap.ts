@@ -105,7 +105,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     locations.forEach((loc: any) => {
       // Only include specific types in sitemap as per user request
       // "Only include routes under: /locations/:country..."
-      if (!['country', 'region', 'city', 'county', 'borough'].includes(loc.type)) return;
+      if (!['country', 'region'].includes(loc.type)) return;
 
       const pathSlug = getPathSlug(loc);
       if (!pathSlug) return;
