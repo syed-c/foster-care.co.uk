@@ -31,16 +31,36 @@ export function DynamicContent({
         return <>{fallback}</>;
     }
 
+    // Handle HTML content
     if (asHtml) {
+        // Convert newlines to <br> for HTML content if they aren't already valid HTML breaks
+        // This helps when users type in the textarea and expect line breaks
+        const processedContent = block.content.replace(/\n/g, "<br />");
+
         return (
-            <div
+            <span
                 className={className}
-                dangerouslySetInnerHTML={{ __html: block.content }}
+                dangerouslySetInnerHTML={{ __html: processedContent }}
             />
         );
     }
 
-    return <span className={className}>{block.content}</span>;
+    // Handle plain text content
+    // We want to preserve newlines as <br /> tags
+    const contentWithBreaks = block.content.split('\n').map((text, i, arr) => (
+        <span key={i}>
+            {text}
+            {i < arr.length - 1 && <br />}
+        </span>
+    ));
+
+    // If a className is provided, we need a wrapper (span).
+    // Otherwise, we return a fragment to avoid invalid nesting (like span inside h1).
+    if (className) {
+        return <span className={className}>{contentWithBreaks}</span>;
+    }
+
+    return <>{contentWithBreaks}</>;
 }
 
 /**
