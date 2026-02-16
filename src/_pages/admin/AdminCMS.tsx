@@ -398,10 +398,10 @@ function PageEditorSheet({ page, onClose, onDataChanged }: { page: any, onClose:
           <SheetDescription className="line-clamp-1 font-mono text-xs">{page.path}</SheetDescription>
         </div>
         <div className="flex gap-2 pt-2">
-          {!loading && blocks.length === 0 && (
+          {!loading && (
             <Button size="sm" onClick={handleSeed} disabled={seeding} variant="outline" className="h-8">
               {seeding ? <Loader2 className="w-3 h-3 animate-spin mr-2" /> : <Sparkles className="w-3 h-3 mr-2 text-primary" />}
-              Auto-generate Content
+              {blocks.length === 0 ? "Auto-generate Content" : "Sync Defaults"}
             </Button>
           )}
           <Button size="sm" variant="ghost" onClick={onClose} className="ml-auto h-8">Close</Button>
