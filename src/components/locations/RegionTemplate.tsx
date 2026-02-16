@@ -277,13 +277,15 @@ export function RegionTemplate({
                         <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
                             <ScrollReveal effect="slideLeft">
                                 <SectionIntro
-                                    heading={<>Why {locationName} Needs More <span className="text-primary italic">Foster Carers</span></>}
+                                    heading={<DynamicContent block={getBlock(blocks, "intro_title")} fallback={
+                                        <>Why {locationName} Continues to Need More <span className="text-primary italic">Foster Carers</span></>
+                                    } />}
                                     subheading="The difference you can make is profound."
                                 />
 
                                 <div className="space-y-6 text-base md:text-lg text-slate-600 leading-relaxed font-medium">
                                     <DynamicContent
-                                        block={getBlock(blocks, "why_foster_content")}
+                                        block={getBlock(blocks, "intro_content")}
                                         asHtml={true}
                                         fallback={whyFosterParagraphs.map((p, i) => (
                                             <p key={i}>{p}</p>
@@ -462,8 +464,8 @@ export function RegionTemplate({
                         <ScrollReveal effect="slideLeft">
                             <SectionIntro
                                 eyebrow="Agency Types"
-                                heading="Independent agencies or local authorities?"
-                                subheading={`In ${locationName}, you can foster through an Independent Fostering Agency (IFA) or directly with your Local Authority.`}
+                                heading={<DynamicContent block={getBlock(blocks, "agency_types_title")} fallback="Independent or Local Authority Fostering: What Should You Choose?" />}
+                                subheading={<DynamicContent block={getBlock(blocks, "agency_types_intro")} fallback={`Carers in ${locationName} choose between Independent Fostering Agencies (IFAs) and Local Authority services.`} />}
                             />
                         </ScrollReveal>
 
@@ -476,24 +478,32 @@ export function RegionTemplate({
                                                 <Building2 className="w-7 h-7 text-primary" />
                                             </div>
                                             <h3 className="text-2xl font-black text-slate-950 leading-tight">
-                                                Independent Agencies (IFAs)
+                                                <DynamicContent block={getBlock(blocks, "ifa_title")} fallback="Independent Fostering Agencies (IFAs)" />
                                             </h3>
                                         </div>
-                                        <p className="text-slate-600 mb-8 font-medium leading-relaxed">
-                                            IFAs provide structured support, specialist training, and regular supervision. They often offer 24/7 support lines, therapeutic guidance, and higher allowances.
-                                        </p>
-                                        <ul className="space-y-4">
-                                            {[
-                                                "Often provide very close, relationship-based support for your whole household.",
-                                                "May offer enhanced training, therapeutic input and peer groups.",
-                                                "Work with multiple local authorities to find the right matches for you."
-                                            ].map((li, idx) => (
-                                                <li key={idx} className="flex items-start gap-3 text-slate-700 font-medium">
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                                                    {li}
-                                                </li>
-                                            ))}
-                                        </ul>
+                                        <div className="text-slate-600 mb-8 font-medium leading-relaxed">
+                                            <DynamicContent
+                                                block={getBlock(blocks, "ifa_content")}
+                                                asHtml={true}
+                                                fallback={
+                                                    <>
+                                                        <p className="mb-4">IFAs provide structured support, specialist training, and regular supervision. They often offer 24/7 support lines, therapeutic guidance, and higher allowances depending on placements.</p>
+                                                        <ul className="space-y-4">
+                                                            {[
+                                                                "Often provide very close, relationship-based support for your whole household.",
+                                                                "May offer enhanced training, therapeutic input and peer groups.",
+                                                                "Work with multiple local authorities to find the right matches for you."
+                                                            ].map((li, idx) => (
+                                                                <li key={idx} className="flex items-start gap-3 text-slate-700 font-medium">
+                                                                    <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                                                                    {li}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </>
+                                                }
+                                            />
+                                        </div>
                                     </InteractiveCard>
                                 </ScrollRevealItem>
 
@@ -504,24 +514,32 @@ export function RegionTemplate({
                                                 <ShieldCheck className="w-7 h-7 text-slate-900" />
                                             </div>
                                             <h3 className="text-2xl font-black text-slate-950 leading-tight">
-                                                Local Authority (Council)
+                                                <DynamicContent block={getBlock(blocks, "la_title")} fallback="Local Authority Fostering" />
                                             </h3>
                                         </div>
-                                        <p className="text-slate-600 mb-8 font-medium leading-relaxed">
-                                            Each local area runs its own fostering service. Local authorities focus on keeping placements local, making it easier for children to stay connected to their community.
-                                        </p>
-                                        <ul className="space-y-4">
-                                            {[
-                                                "You work closely with social workers based in your local area.",
-                                                "Placements are usually within your region to keep children connected.",
-                                                "Support, allowances and training are set by the council's service."
-                                            ].map((li, idx) => (
-                                                <li key={idx} className="flex items-start gap-3 text-slate-700 font-medium">
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 flex-shrink-0" />
-                                                    {li}
-                                                </li>
-                                            ))}
-                                        </ul>
+                                        <div className="text-slate-600 mb-8 font-medium leading-relaxed">
+                                            <DynamicContent
+                                                block={getBlock(blocks, "la_content")}
+                                                asHtml={true}
+                                                fallback={
+                                                    <>
+                                                        <p className="mb-4">Each local area runs its own fostering service. Local authorities focus on keeping placements local, making it easier for children to stay connected to their community.</p>
+                                                        <ul className="space-y-4">
+                                                            {[
+                                                                "You work closely with social workers based in your local area.",
+                                                                "Placements are usually within your region to keep children connected.",
+                                                                "Support, allowances and training are set by the council's service."
+                                                            ].map((li, idx) => (
+                                                                <li key={idx} className="flex items-start gap-3 text-slate-700 font-medium">
+                                                                    <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 flex-shrink-0" />
+                                                                    {li}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </>
+                                                }
+                                            />
+                                        </div>
                                     </InteractiveCard>
                                 </ScrollRevealItem>
                             </div>
@@ -538,8 +556,8 @@ export function RegionTemplate({
                         <ScrollReveal effect="slideUp">
                             <SectionIntro
                                 eyebrow="Quality Assurance"
-                                heading="Why Ofsted Ratings Matter"
-                                subheading={`${locationName} has many fostering agencies, so Ofsted ratings provide important clarity. Our directory helps you compare safeguarding quality, leadership strength, and outcomes for children.`}
+                                heading={<DynamicContent block={getBlock(blocks, "ofsted_title")} fallback="Why Ofsted Ratings Matter" />}
+                                subheading={<DynamicContent block={getBlock(blocks, "ofsted_intro")} fallback={`${locationName} has many fostering agencies, so Ofsted ratings provide important clarity. Our directory helps you compare safeguarding quality, leadership strength, and outcomes for children.`} />}
                                 inverted={true}
                             />
                         </ScrollReveal>
@@ -730,8 +748,8 @@ export function RegionTemplate({
                 <div className="absolute inset-0 bg-primary/5 blur-[120px] rounded-full translate-x-1/2" />
                 <div className="container-main px-4 relative z-10">
                     <SectionIntro
-                        heading={<>Support for Foster Carers in <span className="text-primary italic">{locationName}</span></>}
-                        subheading="From finances to emotional backup, you'll never be expected to do this alone."
+                        heading={<DynamicContent block={getBlock(blocks, "support_title")} fallback={<>Support for Foster Carers in <span className="text-primary italic">{locationName}</span></>} />}
+                        subheading={<DynamicContent block={getBlock(blocks, "support_intro")} fallback="From finances to emotional backup, you'll never be expected to do this alone." />}
                         center={true}
                         inverted={true}
                         className="mb-12 md:mb-16"
@@ -778,14 +796,17 @@ export function RegionTemplate({
                         <ScrollReveal effect="slideLeft">
                             <SectionIntro
                                 eyebrow="Our Commitment"
-                                heading="A calm space to reflect and decide"
+                                heading={<DynamicContent block={getBlock(blocks, "guide_title")} fallback="A calm space to reflect and decide" />}
                                 microCopy="Information without pressure."
                                 className="mb-6 md:mb-8"
                             />
-                            <p className="text-base text-slate-600 leading-relaxed font-medium">
-                                We do not approve foster carers or manage placements. We list agencies that follow Ofsted standards
-                                and UK safeguarding rules. Our goal is to help families make informed decisions with clear, trustworthy information.
-                            </p>
+                            <div className="text-base text-slate-600 leading-relaxed font-medium">
+                                <DynamicContent
+                                    block={getBlock(blocks, "guide_intro")}
+                                    asHtml={true}
+                                    fallback="We do not approve foster carers or manage placements. We list agencies that follow Ofsted standards and UK safeguarding rules. Our goal is to help families make informed decisions with clear, trustworthy information."
+                                />
+                            </div>
                         </ScrollReveal>
 
                         <div className="grid sm:grid-cols-1 gap-3">

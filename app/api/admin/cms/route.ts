@@ -307,9 +307,40 @@ function getDefaultBlocks(pageKey: string, pageType: string, name: string) {
 
     if (pageType === 'region') {
         return [
-            ...base,
-            { page_key: pageKey, block_key: 'region_unique_image', block_type: 'image', title: 'Region Image', content: '', metadata: { url: '/images/locations/generic-hero.png', alt: `Fostering in ${name}` }, display_order: 10, is_active: true },
-            { page_key: pageKey, block_key: 'process_title', block_type: 'text', title: 'Process Section Title', content: 'The Process', metadata: {}, display_order: 20, is_active: true },
+            // Hero
+            { page_key: pageKey, block_key: 'hero_badge', block_type: 'text', title: 'Hero Badge', content: 'Regional Fostering Hub', metadata: {}, display_order: 1, is_active: true },
+            { page_key: pageKey, block_key: 'hero_title', block_type: 'h1', title: 'Hero Title', content: `Fostering in ${name}`, metadata: {}, display_order: 2, is_active: true },
+            { page_key: pageKey, block_key: 'hero_subtitle', block_type: 'text', title: 'Hero Subtitle', content: `Explore fostering agencies across ${name}, compare support packages, and start your fostering journey with confidence.`, metadata: {}, display_order: 3, is_active: true },
+            { page_key: pageKey, block_key: 'hero_cta', block_type: 'cta', title: 'Hero CTA', content: 'Start Your Journey', metadata: { cta_url: '/become-a-foster' }, display_order: 4, is_active: true },
+
+            // Intro / Why Foster
+            { page_key: pageKey, block_key: 'intro_title', block_type: 'h2', title: 'Intro Title', content: `Why ${name} Continues to Need More Foster Carers`, metadata: {}, display_order: 10, is_active: true },
+            { page_key: pageKey, block_key: 'intro_content', block_type: 'text', title: 'Intro Content', content: `<p>${name}’s population changes quickly. Families move, schools change, and life can shift suddenly for many children. As a result, the demand for foster carers remains consistently high across the region.</p><p>Many children benefit from staying close to their borough, near their school, friends, and familiar surroundings, which is why ${name} urgently needs local foster carers in every area.</p>`, metadata: { is_rich_text: true }, display_order: 11, is_active: true },
+
+            // Agency Types
+            { page_key: pageKey, block_key: 'agency_types_title', block_type: 'h2', title: 'Agency Types Title', content: 'Independent agencies or local authorities?', metadata: {}, display_order: 20, is_active: true },
+            { page_key: pageKey, block_key: 'agency_types_intro', block_type: 'text', title: 'Agency Types Intro', content: `In ${name}, you can foster through an Independent Fostering Agency (IFA) or directly with your Local Authority.`, metadata: {}, display_order: 21, is_active: true },
+
+            { page_key: pageKey, block_key: 'ifa_title', block_type: 'h3', title: 'IFA Title', content: 'Independent Fostering Agencies (IFAs)', metadata: {}, display_order: 22, is_active: true },
+            { page_key: pageKey, block_key: 'ifa_content', block_type: 'text', title: 'IFA Content', content: `<p class="mb-4">IFAs provide structured support, specialist training, and regular supervision. They often offer 24/7 support lines, therapeutic guidance, and higher allowances depending on placements.</p><ul class="space-y-4"><li>Often provide very close, relationship-based support for your whole household.</li><li>May offer enhanced training, therapeutic input and peer groups.</li><li>Work with multiple local authorities to find the right matches for you.</li></ul>`, metadata: { is_rich_text: true }, display_order: 23, is_active: true },
+
+            { page_key: pageKey, block_key: 'la_title', block_type: 'h3', title: 'LA Title', content: 'Local Authority (Council)', metadata: {}, display_order: 24, is_active: true },
+            { page_key: pageKey, block_key: 'la_content', block_type: 'text', title: 'LA Content', content: `<p class="mb-4">Each ${name} area runs its own fostering service. Local authorities focus on keeping placements local, making it easier for children to stay connected to their community.</p><ul class="space-y-4"><li>You work closely with social workers based in your local area.</li><li>Placements are usually within your region to keep children connected.</li><li>Support, allowances and training are set by the council's service.</li></ul>`, metadata: { is_rich_text: true }, display_order: 25, is_active: true },
+
+            // Ofsted
+            { page_key: pageKey, block_key: 'ofsted_title', block_type: 'h2', title: 'Ofsted Title', content: 'Why Ofsted Ratings Matter', metadata: {}, display_order: 30, is_active: true },
+            { page_key: pageKey, block_key: 'ofsted_intro', block_type: 'text', title: 'Ofsted Intro', content: `${name} has many fostering agencies, so Ofsted ratings provide important clarity. Our directory helps you compare safeguarding quality, leadership strength, and outcomes for children.`, metadata: {}, display_order: 31, is_active: true },
+
+            // Support
+            { page_key: pageKey, block_key: 'support_title', block_type: 'h2', title: 'Support Title', content: `Support for Foster Carers in ${name}`, metadata: {}, display_order: 40, is_active: true },
+            { page_key: pageKey, block_key: 'support_intro', block_type: 'text', title: 'Support Intro', content: `From finances to emotional backup, you'll never be expected to do this alone. Agencies in ${name} offer strong, structured support.`, metadata: {}, display_order: 41, is_active: true },
+
+            // Guide
+            { page_key: pageKey, block_key: 'guide_title', block_type: 'h2', title: 'Guide Title', content: 'A calm space to reflect and decide', metadata: {}, display_order: 50, is_active: true },
+            { page_key: pageKey, block_key: 'guide_intro', block_type: 'text', title: 'Guide Intro', content: `<p>We do not approve foster carers or manage placements. We list agencies that follow Ofsted standards and UK safeguarding rules. Our goal is to help families make informed decisions with clear, trustworthy information.</p>`, metadata: { is_rich_text: true }, display_order: 51, is_active: true },
+
+            // Is Right For Me (Common)
+            { page_key: pageKey, block_key: 'is_right_content', block_type: 'text', title: 'Is Fostering Right Content', content: `<p>Becoming a foster carer is a significant lifestyle change. It's natural to have questions.</p><p>We believe that anyone with a spare room and a big heart can potentially foster.</p>`, metadata: { is_rich_text: true }, display_order: 60, is_active: true },
         ];
     }
 
@@ -379,7 +410,10 @@ function getDefaultFaqs(pageKey: string, pageType: string, name: string) {
 
     if (pageType === 'region') {
         return [
-            { page_key: pageKey, question: `How many children need fostering in ${name}?`, answer: `There is a significant need for foster homes in ${name}. Local authorities are always looking for safe, loving homes.`, display_order: 1, is_active: true },
+            { page_key: pageKey, question: `Is there a high need for foster carers in ${name}?`, answer: `Yes. Demand remains high across all boroughs and local areas in ${name} due to population changes and varied social needs.`, display_order: 1, is_active: true },
+            { page_key: pageKey, question: `Do foster carers get paid?`, answer: `Yes. Allowances cover child-related expenses and vary by agency and placement type.`, display_order: 2, is_active: true },
+            { page_key: pageKey, question: `Can I foster if I rent?`, answer: `Yes. Renting is not a barrier if your home is stable and you have a suitable room.`, display_order: 3, is_active: true },
+            { page_key: pageKey, question: `How long does approval take?`, answer: `Most assessments take four to six months. This includes training, background checks, and a comprehensive assessment.`, display_order: 4, is_active: true },
         ];
     }
 
