@@ -2,6 +2,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { SuperAdminSidebar } from "@/components/admin/SuperAdminSidebar";
 import { StatCard } from "@/components/admin/StatCard";
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
+import { ImageUpload } from "@/components/admin/ImageUpload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -73,13 +75,17 @@ const STATIC_PAGES = [
 
 const BLOCK_TYPES = [
   { value: "hero", label: "Hero Section" },
-  { value: "text", label: "Text Block" },
+  { value: "text", label: "Text Block (Rich)" },
+  { value: "h1", label: "Heading 1" },
+  { value: "h2", label: "Heading 2" },
+  { value: "h3", label: "Heading 3" },
+  { value: "p", label: "Paragraph" },
   { value: "cta", label: "Call to Action" },
+  { value: "image", label: "Image Block" },
   { value: "features", label: "Features Grid" },
   { value: "testimonials", label: "Testimonials" },
   { value: "faq", label: "FAQ Section" },
   { value: "stats", label: "Stats Section" },
-  { value: "image", label: "Image Block" },
 ];
 
 // ─── API Helpers ─────────────────────────────────────────────────────
@@ -536,7 +542,14 @@ function PageEditorSheet({ page, onClose, onDataChanged }: { page: any, onClose:
 // ─── Simple Editor Forms ─────────────────────────────────────────────
 
 function BlockEditorForm({ block, onSave, onCancel }: { block: any, onSave: (b: any) => void, onCancel: () => void }) {
-  const [data, setData] = useState({ ...block, metadata: block.metadata || {} });
+  const [data, setData] = useState({
+    ...block,
+    metadata: block.metadata || {},
+    block_type: block.block_type || 'text'
+  });
+
+  const isImageBlock = data.block_type === 'image';
+  const isRichText = ['text', 'h1', 'h2', 'h3', 'p', 'hero'].includes(data.block_type);
 
   return (
     <div className="space-y-4 py-2">
@@ -563,12 +576,45 @@ function BlockEditorForm({ block, onSave, onCancel }: { block: any, onSave: (b: 
 
       <div className="space-y-2">
         <Label>Content</Label>
-        <Textarea
-          value={data.content || ''}
-          onChange={e => setData({ ...data, content: e.target.value })}
-          placeholder="Enter content..."
-          className="min-h-[150px] font-mono text-sm"
-        />
+        {isImageBlock ? (
+          <div className="space-y-4">
+            <ImageUpload
+              value={data.metadata?.url || data.content}
+              onChange={(url) => {
+                setData({
+                  ...data,
+                  content: url || '',
+                  metadata: { ...data.metadata, url: url }
+                });
+              }}
+              label="Upload Image"
+            />
+            <div className="space-y-2">
+              <Label>Alt Text</Label>
+              <Input
+                value={data.metadata?.alt || ''}
+                onChange={(e) => setData({
+                  ...data,
+                  metadata: { ...data.metadata, alt: e.target.value }
+                })}
+                placeholder="Image description"
+              />
+            </div>
+          </div>
+        ) : isRichText ? (
+          <RichTextEditor
+            content={data.content || ''}
+            onChange={(html) => setData({ ...data, content: html })}
+            placeholder="Enter rich text content..."
+          />
+        ) : (
+          <Textarea
+            value={data.content || ''}
+            onChange={e => setData({ ...data, content: e.target.value })}
+            placeholder="Enter content..."
+            className="min-h-[150px] font-mono text-sm"
+          />
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-4 pt-2">

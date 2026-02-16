@@ -31,23 +31,57 @@ export function DynamicContent({
         return <>{fallback}</>;
     }
 
-    // Handle HTML content
-    if (asHtml) {
-        // Convert newlines to <br> for HTML content if they aren't already valid HTML breaks
-        // This helps when users type in the textarea and expect line breaks
-        const processedContent = block.content.replace(/\n/g, "<br />");
-
+    // Handle Image Blocks
+    if (block.block_type === 'image') {
+        const metadata = block.metadata as Record<string, any>;
         return (
-            <span
+            <img
+                src={metadata?.url || block.content}
+                alt={metadata?.alt || block.title || 'Image'}
                 className={className}
-                dangerouslySetInnerHTML={{ __html: processedContent }}
             />
         );
     }
 
-    // Handle plain text content
-    // We want to preserve newlines as <br /> tags
-    // We use Fragment to avoid adding unnecessary DOM nodes
+    // Handle Semantic Headings & Paragraphs
+    // If the content itself is plain text, we wrap it.
+    // If it's HTML (from rich text editor), we typically render it directly, 
+    // but if the user explicitly chose "Heading 1" type, they might expect the tag wrapper 
+    // tailored to the content. However, usually the rich text editor inside a "Heading 1" block 
+    // might just be text. Let's assume for semantic types the content is text-ish 
+    // unless it looks like HTML.
+
+    // Check if content looks like HTML
+    const isRichContent = /<[a-z][\s\S]*>/i.test(block.content);
+
+    // If it's a semantic type but NOT rich text (plain text entered), wrap it:
+    if (!isRichContent) {
+        switch (block.block_type) {
+            case 'h1': return <h1 className={className}>{block.content}</h1>;
+            case 'h2': return <h2 className={className}>{block.content}</h2>;
+            case 'h3': return <h3 className={className}>{block.content}</h3>;
+            case 'h4': return <h4 className={className}>{block.content}</h4>;
+            case 'p': return <p className={className}>{block.content}</p>;
+        }
+    }
+
+    // Handle HTML content (explicit prop OR detected rich content OR block type 'text' which is now rich)
+    if (asHtml || isRichContent || block.block_type === 'text') {
+        // Convert newlines to <br> ONLY if it's NOT rich content (to preserve legacy textarea behavior)
+        // If it detected HTML tags, assume pre-formatted.
+        const finalContent = isRichContent
+            ? block.content
+            : block.content.replace(/\n/g, "<br />");
+
+        return (
+            <span
+                className={className}
+                dangerouslySetInnerHTML={{ __html: finalContent }}
+            />
+        );
+    }
+
+    // Handle plain text content (legacy fallback)
     const lines = block.content.split('\n');
     const contentWithBreaks = lines.map((text, i) => (
         <Fragment key={i}>
@@ -56,13 +90,10 @@ export function DynamicContent({
         </Fragment>
     ));
 
-    // If a className is provided, we need a wrapper (span).
     if (className) {
         return <span className={className}>{contentWithBreaks}</span>;
     }
 
-    // Otherwise, we return a fragment to avoid invalid nesting (like span inside h1).
-    // Note: We use a fragment approach here to return the array of elements directly
     return <>{contentWithBreaks}</>;
 }
 
