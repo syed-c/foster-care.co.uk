@@ -200,15 +200,39 @@ export async function POST(request: NextRequest) {
             const newBlocks = defaultBlocks.filter((b: AnyDB) => !existingKeys.has(b.block_key));
 
             if (newBlocks.length > 0) {
-                const { data, error } = await db
+                const { error } = await db
                     .from('page_content_blocks')
-                    .insert(newBlocks)
-                    .select();
+                    .insert(newBlocks);
                 if (error) throw error;
-                return NextResponse.json({ data, seeded: newBlocks.length });
             }
 
-            return NextResponse.json({ data: [], seeded: 0 });
+            // Seed FAQs
+            const defaultFaqs = getDefaultFaqs(page_key, page_type, locationName);
+            let seededFaqsCount = 0;
+
+            if (defaultFaqs.length > 0) {
+                const { data: existingFaqs } = await db
+                    .from('faqs')
+                    .select('question')
+                    .eq('page_key', page_key);
+
+                const existingQuestions = new Set((existingFaqs || []).map((f: AnyDB) => f.question));
+                const newFaqs = defaultFaqs.filter((f: AnyDB) => !existingQuestions.has(f.question));
+
+                if (newFaqs.length > 0) {
+                    const { error } = await db
+                        .from('faqs')
+                        .insert(newFaqs);
+                    if (error) throw error;
+                    seededFaqsCount = newFaqs.length;
+                }
+            }
+
+            return NextResponse.json({
+                seeded_blocks: newBlocks.length,
+                seeded_faqs: seededFaqsCount,
+                message: `Generated ${newBlocks.length} blocks and ${seededFaqsCount} FAQs`
+            });
         }
 
         return NextResponse.json({ error: 'Unknown action' }, { status: 400 });
@@ -302,4 +326,23 @@ function getDefaultBlocks(pageKey: string, pageType: string, name: string) {
         ...base,
         { page_key: pageKey, block_key: 'main_content', block_type: 'text', title: 'Main Content', content: 'Edit this content via CMS.', metadata: {}, display_order: 10, is_active: true },
     ];
+}
+
+function getDefaultFaqs(pageKey: string, pageType: string, name: string) {
+    if (pageType === 'country') {
+        return [
+            { page_key: pageKey, question: `How much do foster carers get paid in ${name}?`, answer: `Allowances vary by agency and region, but typically range from £400 to £650 per week per child, depending on age and needs. This covers the child's care and provides a professional fee for you.`, display_order: 1, is_active: true },
+            { page_key: pageKey, question: `Can I foster in ${name} if I work full-time?`, answer: `Yes, many people work and foster. However, for certain types of foster care (like therapeutic or placements for younger children), you may need to be available more often. Agencies will discuss this with you.`, display_order: 2, is_active: true },
+            { page_key: pageKey, question: `Do I need a spare bedroom?`, answer: `Yes, usually a spare bedroom is required to ensure the child has their own private space and safety.`, display_order: 3, is_active: true },
+            { page_key: pageKey, question: `How long does the process take?`, answer: `The assessment process usually takes between 4 to 6 months. It is thorough to ensure the safety and suitability of all carers.`, display_order: 4, is_active: true },
+        ];
+    }
+
+    if (pageType === 'region') {
+        return [
+            { page_key: pageKey, question: `How many children need fostering in ${name}?`, answer: `There is a significant need for foster homes in ${name}. Local authorities are always looking for safe, loving homes.`, display_order: 1, is_active: true },
+        ];
+    }
+
+    return [];
 }
