@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode } from "react";
+import { ReactNode, Fragment } from "react";
 import { ContentBlock } from "@/hooks/usePageBlocks";
 
 interface DynamicContentProps {
@@ -47,19 +47,22 @@ export function DynamicContent({
 
     // Handle plain text content
     // We want to preserve newlines as <br /> tags
-    const contentWithBreaks = block.content.split('\n').map((text, i, arr) => (
-        <span key={i}>
+    // We use Fragment to avoid adding unnecessary DOM nodes
+    const lines = block.content.split('\n');
+    const contentWithBreaks = lines.map((text, i) => (
+        <Fragment key={i}>
             {text}
-            {i < arr.length - 1 && <br />}
-        </span>
+            {i < lines.length - 1 && <br />}
+        </Fragment>
     ));
 
     // If a className is provided, we need a wrapper (span).
-    // Otherwise, we return a fragment to avoid invalid nesting (like span inside h1).
     if (className) {
         return <span className={className}>{contentWithBreaks}</span>;
     }
 
+    // Otherwise, we return a fragment to avoid invalid nesting (like span inside h1).
+    // Note: We use a fragment approach here to return the array of elements directly
     return <>{contentWithBreaks}</>;
 }
 
