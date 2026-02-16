@@ -133,7 +133,7 @@ export function CountryTemplate({
         }
     ];
 
-    const displayFaqs = (faqs && faqs.length > 5) ? faqs : expandedFaqs;
+    const displayFaqs = (faqs && faqs.length > 0) ? faqs : expandedFaqs;
 
     const testimonials = [
         {
