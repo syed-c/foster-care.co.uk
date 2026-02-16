@@ -330,11 +330,50 @@ function getDefaultBlocks(pageKey: string, pageType: string, name: string) {
 
 function getDefaultFaqs(pageKey: string, pageType: string, name: string) {
     if (pageType === 'country') {
+        const weeklyAllowance = "£400"; // Fallback value, typically handled dynamically in frontend but good for default content
         return [
-            { page_key: pageKey, question: `How much do foster carers get paid in ${name}?`, answer: `Allowances vary by agency and region, but typically range from £400 to £650 per week per child, depending on age and needs. This covers the child's care and provides a professional fee for you.`, display_order: 1, is_active: true },
-            { page_key: pageKey, question: `Can I foster in ${name} if I work full-time?`, answer: `Yes, many people work and foster. However, for certain types of foster care (like therapeutic or placements for younger children), you may need to be available more often. Agencies will discuss this with you.`, display_order: 2, is_active: true },
-            { page_key: pageKey, question: `Do I need a spare bedroom?`, answer: `Yes, usually a spare bedroom is required to ensure the child has their own private space and safety.`, display_order: 3, is_active: true },
-            { page_key: pageKey, question: `How long does the process take?`, answer: `The assessment process usually takes between 4 to 6 months. It is thorough to ensure the safety and suitability of all carers.`, display_order: 4, is_active: true },
+            {
+                page_key: pageKey,
+                question: `What are the basic eligibility requirements to foster in ${name}?`,
+                answer: `To foster in ${name}, you typically need to be over 21, have a spare bedroom, and be a full-time UK resident. Your marital status, gender, or sexual orientation does not affect your eligibility. What matters most is your ability to provide a safe, nurturing environment. For more details, visit our <a href="/become-a-foster" class="text-primary font-bold hover:underline">eligibility page</a>.`,
+                display_order: 1,
+                is_active: true
+            },
+            {
+                page_key: pageKey,
+                question: "How long does the fostering application process take?",
+                answer: "On average, the process from initial enquiry to approval takes between 4 and 6 months. This includes training, background checks, and a comprehensive assessment (Form F) to ensure you're fully prepared for the role.",
+                display_order: 2,
+                is_active: true
+            },
+            {
+                page_key: pageKey,
+                question: `What financial support will I receive as a foster carer in ${name}?`,
+                answer: `All foster carers receive a weekly allowance to cover the costs of caring for a child. In ${name}, this typically ranges start from around ${weeklyAllowance} per child, per week. This allowance is often tax-free. More details can be found on our <a href="/policy/funding" class="text-primary font-bold hover:underline">financial support page</a>.`,
+                display_order: 3,
+                is_active: true
+            },
+            {
+                page_key: pageKey,
+                question: "Can I foster if I work full-time?",
+                answer: "Yes, many foster carers work. However, you must have the flexibility to attend meetings, training, and support your foster child's needs (like school runs). Some types of fostering, such as respite or short-term, may be more compatible with full-time work.",
+                display_order: 4,
+                is_active: true
+            },
+            {
+                page_key: pageKey,
+                question: "What support is available if I'm struggling?",
+                answer: "You will have a dedicated supervising social worker and access to a 24/7 support hotline. Many agencies also offer peer support groups and ongoing therapeutic training to help you navigate challenges.",
+                display_order: 5,
+                is_active: true
+            },
+            {
+                page_key: pageKey,
+                question: "Do I need to own my own home to foster?",
+                answer: "No. Whether you own or rent, as long as your home is stable and has a spare bedroom, you can apply to foster.",
+                display_order: 6,
+                is_active: true
+            }
         ];
     }
 
