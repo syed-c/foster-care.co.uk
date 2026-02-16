@@ -452,68 +452,19 @@ export function CountryTemplate({
                     </div>
                 </div>
 
-                {/* The Process Steps */}
-                <div className="mt-32">
-                    <ScrollReveal effect="slideUp" duration={1}>
-                        <ProcessSection locationName={locationName} inverted={true} />
-                    </ScrollReveal>
-                </div>
-            </section>
 
-
-            {/* 15. Types of Fostering & Agency Types (LIGHT RHYTHM) */}
-            <section id="types" className="scroll-mt-20 bg-white">
-                {/* Types of Fostering Section */}
-                <div className="py-20 md:py-32 overflow-hidden relative border-y border-slate-100">
-                    {/* Background Glow */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
-
-                    <div className="container-main px-4 relative z-10">
-                        <ScrollReveal effect="slideUp">
-                            <SectionIntro
-                                eyebrow="Specialisms"
-                                heading={<>Types of Fostering Offered in <span className="text-primary italic">{locationName}</span></>}
-                                center={true}
-                                inverted={false}
-                            />
-                        </ScrollReveal>
-
-                        <SwipeableCards
-                            className="max-w-7xl mx-auto"
-                        >
-                            {typesOfFostering.map((type, i) => (
-                                <Link
-                                    href={`/specialisms/${type.slug}`}
-                                    key={i}
-                                    className="block h-full"
-                                >
-                                    <InteractiveCard
-                                        className="p-8 bg-slate-50 border-slate-200 h-full group hover:border-primary/30 transition-all duration-500"
-                                        hoverLift={true}
-                                    >
-                                        <div className="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center mb-8 border border-slate-100 group-hover:scale-110 transition-transform duration-500">
-                                            <type.icon className="w-8 h-8 text-primary" />
-                                        </div>
-                                        <h3 className="text-2xl font-black mb-4 text-slate-950 group-hover:text-primary transition-colors">{type.title}</h3>
-                                        <p className="text-slate-600 font-medium leading-relaxed mb-6">{type.desc}</p>
-                                        <div className="mt-auto flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
-                                            Learn More <ArrowRight className="w-3 h-3" />
-                                        </div>
-                                    </InteractiveCard>
-                                </Link>
-                            ))}
-                        </SwipeableCards>
-                    </div>
-                </div>
-
-                {/* Agency Types Section */}
-                <div className="py-24 md:py-32 bg-white border-b border-slate-200/60 overflow-hidden">
+                <section id="agency-types" className="py-24 md:py-32 bg-white border-b border-slate-200/60 overflow-hidden scroll-mt-20">
                     <div className="container-main px-4">
                         <ScrollReveal effect="slideLeft">
                             <SectionIntro
                                 eyebrow="Agency Types"
-                                heading="Independent agencies and local authorities"
-                                subheading={`In ${locationName}, you can foster through an Independent Fostering Agency (IFA) or directly with your Local Authority (LA).`}
+                                heading={<DynamicContent block={getBlock(blocks, "agency_types_title")} fallback="Independent and Local Authority Fostering Agencies" />}
+                                subheading={
+                                    <DynamicContent
+                                        block={getBlock(blocks, "agency_types_intro")}
+                                        fallback={`When exploring your options, you’ll notice that fostering support in ${locationName} comes from two main paths. Each one offers something unique, and the goal is simply to find the path that feels right for you.`}
+                                    />
+                                }
                             />
                         </ScrollReveal>
 
@@ -526,24 +477,34 @@ export function CountryTemplate({
                                                 <Building2 className="w-7 h-7 text-primary" />
                                             </div>
                                             <h3 className="text-2xl font-black text-slate-950 leading-tight">
-                                                Independent Agencies (IFAs)
+                                                <DynamicContent block={getBlock(blocks, "ifa_card_title")} fallback="Independent Fostering Agencies" />
                                             </h3>
                                         </div>
-                                        <p className="text-slate-600 mb-8 font-medium leading-relaxed">
-                                            IFAs are specialist organisations that focus solely on recruiting, training and supporting carers.
-                                        </p>
-                                        <ul className="space-y-4">
-                                            {[
-                                                "Often provide very close, relationship-based support for your whole household.",
-                                                "May offer enhanced training, therapeutic input and peer groups.",
-                                                "Work with multiple local authorities to find the right matches for you."
-                                            ].map((li, idx) => (
-                                                <li key={idx} className="flex items-start gap-3 text-slate-700 font-medium">
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                                                    {li}
-                                                </li>
-                                            ))}
-                                        </ul>
+                                        <div className="text-slate-600 mb-8 font-medium leading-relaxed">
+                                            <DynamicContent
+                                                block={getBlock(blocks, "ifa_card_content")}
+                                                asHtml={true}
+                                                fallback={
+                                                    <>
+                                                        <p className="mb-4">Independent agencies (often called IFAs) operate separately from local councils. Many IFAs offer:</p>
+                                                        <ul className="space-y-4">
+                                                            {[
+                                                                "Stronger day-to-day support",
+                                                                "Specialist placements",
+                                                                "Therapeutic training",
+                                                                "24/7 help",
+                                                                "A close-knit carer community"
+                                                            ].map((li, idx) => (
+                                                                <li key={idx} className="flex items-start gap-3">
+                                                                    <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                                                                    {li}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </>
+                                                }
+                                            />
+                                        </div>
                                     </InteractiveCard>
                                 </ScrollRevealItem>
 
@@ -554,398 +515,370 @@ export function CountryTemplate({
                                                 <ShieldCheck className="w-7 h-7 text-slate-900" />
                                             </div>
                                             <h3 className="text-2xl font-black text-slate-950 leading-tight">
-                                                Local Authority (Council)
+                                                <DynamicContent block={getBlock(blocks, "la_card_title")} fallback="Local Authority Fostering" />
                                             </h3>
                                         </div>
-                                        <p className="text-slate-600 mb-8 font-medium leading-relaxed">
-                                            Fostering directly with your local council means being part of the team that holds legal responsibility for children.
-                                        </p>
-                                        <ul className="space-y-4">
-                                            {[
-                                                "You work closely with social workers based in your local area.",
-                                                "Placements are usually within your region to keep children connected.",
-                                                "Support, allowances and training are set by the council’s service."
-                                            ].map((li, idx) => (
-                                                <li key={idx} className="flex items-start gap-3 text-slate-700 font-medium">
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 flex-shrink-0" />
-                                                    {li}
-                                                </li>
-                                            ))}
-                                        </ul>
+                                        <div className="text-slate-600 mb-8 font-medium leading-relaxed">
+                                            <DynamicContent
+                                                block={getBlock(blocks, "la_card_content")}
+                                                asHtml={true}
+                                                fallback={
+                                                    <>
+                                                        <p className="mb-4">Local authorities recruit and support carers directly. Some people choose councils because:</p>
+                                                        <ul className="space-y-4">
+                                                            {[
+                                                                "Placements may be closer to children’s home areas",
+                                                                "They want direct involvement with children’s services",
+                                                                "They prefer council-led support systems"
+                                                            ].map((li, idx) => (
+                                                                <li key={idx} className="flex items-start gap-3">
+                                                                    <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 flex-shrink-0" />
+                                                                    {li}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </>
+                                                }
+                                            />
+                                        </div>
                                     </InteractiveCard>
                                 </ScrollRevealItem>
                             </div>
+                            <div className="mt-8 text-center max-w-2xl mx-auto">
+                                <p className="text-slate-500 font-medium italic">
+                                    <DynamicContent
+                                        block={getBlock(blocks, "agency_types_closing")}
+                                        fallback="Both independent agencies and local authorities play important roles. What matters is choosing the one that feels comfortable and supportive for your home."
+                                    />
+                                </p>
+                            </div>
                         </ScrollReveal>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            {/* 17. Agencies Section (DARK RHYTHM) */}
-            <section id="agencies" className="scroll-mt-20 bg-slate-950 text-white">
-                {/* Ofsted-Rated Agencies */}
-                {isEngland && (
-                    <div className="py-24 md:py-32 relative border-b border-white/5">
+                {/* 4. Types of Fostering Section */}
+                <section id="types" className="scroll-mt-20 bg-white">
+                    <div className="py-20 md:py-32 overflow-hidden relative border-b border-slate-100">
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
+                        <div className="container-main px-4 relative z-10">
+                            <ScrollReveal effect="slideUp">
+                                <SectionIntro
+                                    eyebrow="Specialisms"
+                                    heading={<DynamicContent block={getBlock(blocks, "types_title")} fallback={`Types of Fostering in ${locationName}`} />}
+                                    subheading={
+                                        <DynamicContent
+                                            block={getBlock(blocks, "types_intro")}
+                                            fallback="Fostering needs vary across the country. Different children require different types of care, and each type lets you use your strengths in a meaningful way."
+                                        />
+                                    }
+                                    center={true}
+                                    inverted={false}
+                                />
+                            </ScrollReveal>
+
+                            <SwipeableCards className="max-w-7xl mx-auto">
+                                {typesOfFostering.map((type, i) => (
+                                    <Link href={`/specialisms/${type.slug}`} key={i} className="block h-full">
+                                        <InteractiveCard className="p-8 bg-slate-50 border-slate-200 h-full group hover:border-primary/30 transition-all duration-500" hoverLift={true}>
+                                            <div className="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center mb-8 border border-slate-100 group-hover:scale-110 transition-transform duration-500">
+                                                <type.icon className="w-8 h-8 text-primary" />
+                                            </div>
+                                            <h3 className="text-2xl font-black mb-4 text-slate-950 group-hover:text-primary transition-colors">{type.title}</h3>
+                                            <p className="text-slate-600 font-medium leading-relaxed mb-6">{type.desc}</p>
+                                            <div className="mt-auto flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                                                Learn More <ArrowRight className="w-3 h-3" />
+                                            </div>
+                                        </InteractiveCard>
+                                    </Link>
+                                ))}
+                            </SwipeableCards>
+                        </div>
+                    </div>
+                </section>
+
+                {/* 5. The Process Section (Moved Down) */}
+                <section id="process" className="scroll-mt-20 bg-slate-900 text-white py-24 md:py-32 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2" />
+                    <div className="container-main px-4 relative z-10">
+                        <div className="max-w-4xl mx-auto mb-16">
+                            <SectionIntro
+                                eyebrow="Your Journey"
+                                heading={<DynamicContent block={getBlock(blocks, "process_title")} fallback={`How to Become a Foster Carer in ${locationName}`} />}
+                                subheading={
+                                    <DynamicContent
+                                        block={getBlock(blocks, "process_intro")}
+                                        fallback="Becoming a foster carer is not about qualifications, it’s about compassion, stability, and the willingness to learn. Agencies guide you through a respectful and clear approval journey."
+                                    />
+                                }
+                                center={true}
+                                inverted={true}
+                            />
+                        </div>
+
+                        <ScrollReveal effect="slideUp" duration={1}>
+                            <ProcessSection locationName={locationName} inverted={true} />
+                        </ScrollReveal>
+
+                        <div className="mt-12 text-center">
+                            <p className="text-slate-400 font-medium italic">
+                                <DynamicContent
+                                    block={getBlock(blocks, "process_closing")}
+                                    fallback="You’re supported through every step. No one expects you to figure things out alone."
+                                />
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                {/* 6. Ofsted Section (Modified Agencies Section) */}
+                <section id="ofsted" className="scroll-mt-20 bg-white border-b border-slate-200/60">
+                    <div className="py-24 md:py-32 relative">
                         <div className="container-main px-4 max-w-5xl mx-auto relative z-10">
                             <ScrollReveal effect="slideUp">
                                 <SectionIntro
                                     eyebrow="Quality Assurance"
-                                    heading="Choosing a Safe, Well-Led Fostering Agency"
-                                    subheading="Every agency you see on this page is regulated by Ofsted. Their rating gives you a clear signal about how seriously they take quality, safety, and outcomes for children."
-                                    inverted={true}
-                                />
-                            </ScrollReveal>
-
-                            <ScrollReveal effect="none" staggerChildren staggerDelay={0.08}>
-                                <div className="grid md:grid-cols-3 gap-8">
-                                    {[
-                                        {
-                                            title: "Safeguarding",
-                                            desc: "How well agencies protect children, listen to concerns, and respond quickly when something isn’t right."
-                                        },
-                                        {
-                                            title: "Leadership",
-                                            desc: "Whether leaders create a safe, stable culture for carers, staff, and children."
-                                        },
-                                        {
-                                            title: "Outcomes",
-                                            desc: "The difference agencies actually make to children’s lives, education, stability, and wellbeing."
-                                        }
-                                    ].map((item) => (
-                                        <ScrollRevealItem key={item.title}>
-                                            <div className="p-8 rounded-2xl bg-white/5 border border-white/10 shadow-sm h-full hover:bg-white/10 hover:border-primary/20 transition-all duration-300">
-                                                <h3 className="text-lg md:text-xl font-black text-white mb-4">{item.title}</h3>
-                                                <p className="text-sm md:text-base text-slate-400 leading-relaxed font-medium">
-                                                    {item.desc}
-                                                </p>
-                                            </div>
-                                        </ScrollRevealItem>
-                                    ))}
-                                </div>
-                            </ScrollReveal>
-
-                            <ScrollReveal effect="slideUp" delay={0.2}>
-                                <div className="mt-12 p-6 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center gap-4 max-w-3xl mx-auto">
-                                    <BadgeCheck className="w-5 h-5 text-primary flex-shrink-0" />
-                                    <p className="text-sm md:text-base text-slate-300 font-medium">
-                                        Look for agencies in the <span className="font-bold text-primary">Featured Agencies</span> section
-                                        below that clearly display their Ofsted rating.
-                                    </p>
-                                </div>
-                            </ScrollReveal>
-                        </div>
-                    </div>
-                )}
-
-                {/* Featured Agencies Section */}
-                <div className="py-24 md:py-32 overflow-hidden bg-slate-900/50">
-                    <div className="container-main px-4">
-                        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-8">
-                            <ScrollReveal effect="slideLeft" className="max-w-2xl">
-                                <SectionIntro
-                                    eyebrow="Local Expertise"
-                                    heading={<>Featured Agencies in <span className="text-primary italic">{locationName}</span></>}
-                                    subheading={`Showing top-rated agencies in ${locationName} ready to support your journey.`}
-                                    inverted={true}
-                                />
-                            </ScrollReveal>
-
-                            {agencies.length > 3 && (
-                                <ScrollReveal effect="slideRight" className="hidden md:block">
-                                    <Button variant="outline" className="rounded-full border-slate-200 text-slate-900 font-bold hover:bg-slate-50 h-14 px-8 mb-4 shadow-sm" asChild>
-                                        <Link href={`/find-agencies?filter=${location.slug}`}>
-                                            View All Agencies
-                                            <ArrowRight className="w-4 h-4 ml-2" />
-                                        </Link>
-                                    </Button>
-                                </ScrollReveal>
-                            )}
-                        </div>
-
-                        <ScrollReveal effect="slideUp" delay={0.1}>
-                            <CarouselSection
-                                className="max-w-7xl mx-auto"
-                                showDots={true}
-                            >
-                                {agencies.slice(0, 6).map((agency) => (
-                                    <div key={agency.id} className="px-3 h-full pb-10">
-                                        <Link href={`/agencies/${agency.slug}`} className="block h-full group">
-                                            <div className="p-8 bg-white border border-slate-200/60 rounded-2xl h-full relative flex flex-col shadow-sm hover:shadow-lg hover:shadow-slate-200/30 transition-all duration-300">
-                                                <div className="flex items-start justify-between mb-8">
-                                                    <div className="w-16 h-16 rounded-xl bg-slate-50 flex items-center justify-center border border-slate-100 group-hover:scale-105 transition-transform duration-500 overflow-hidden">
-                                                        {agency.logo_url ? (
-                                                            <img src={agency.logo_url} alt={agency.name} className="w-full h-full object-contain p-2" />
-                                                        ) : (
-                                                            <Building2 className="w-8 h-8 text-slate-300" />
-                                                        )}
-                                                    </div>
-                                                    {agency.is_verified && (
-                                                        <BadgeCheck className="w-6 h-6 text-primary" />
-                                                    )}
-                                                </div>
-
-                                                <h3 className="text-xl md:text-2xl font-black text-slate-950 mb-4 group-hover:text-primary transition-colors line-clamp-1">
-                                                    {agency.name}
-                                                </h3>
-
-                                                <div className="flex items-center gap-2 text-sm text-slate-500 mb-6 font-bold">
-                                                    <MapPin className="w-4 h-4 text-primary" />
-                                                    {agency.city || locationName}
-                                                </div>
-
-                                                {agency.ofsted_rating && (
-                                                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-100/50 mb-8 w-fit">
-                                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                                                        <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-widest">
-                                                            Ofsted: {agency.ofsted_rating}
-                                                        </span>
-                                                    </div>
-                                                )}
-
-                                                <p className="text-slate-500 text-sm mb-8 line-clamp-2 leading-relaxed font-medium">
-                                                    {agency.description || `Providing expert foster care support, training and matching for families across ${locationName}.`}
-                                                </p>
-
-                                                <div className="mt-auto pt-8 border-t border-slate-50 flex items-center justify-between">
-                                                    <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-100 px-3 py-1.5 rounded-full">
-                                                        <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                                                        <span className="font-bold text-xs text-slate-700">{agency.rating?.toFixed(1) || "4.9"}</span>
-                                                    </div>
-                                                    <div className="text-primary font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-all">
-                                                        View Profile <ArrowRight className="w-3.5 h-3.5" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </Link>
-                                    </div>
-                                ))}
-                            </CarouselSection>
-                        </ScrollReveal>
-
-                        {agencies.length > 3 && (
-                            <ScrollReveal effect="slideUp" className="mt-8 text-center md:hidden">
-                                <Button className="w-full rounded-full h-14 font-bold text-lg bg-primary shadow-lg shadow-primary/20" asChild>
-                                    <Link href={`/find-agencies?filter=${location.slug}`}>
-                                        View All Agencies
-                                    </Link>
-                                </Button>
-                            </ScrollReveal>
-                        )}
-                    </div>
-                </div>
-            </section>
-
-            {/* 12. Explore Regions Section */}
-            <section id="regions" className="py-24 md:py-32 bg-slate-50 scroll-mt-20 relative border-t border-slate-200/60">
-                <div className="container-main px-4">
-                    <ScrollReveal effect="slideUp">
-                        <SectionIntro
-                            heading={<>Explore Regions in <span className="text-primary italic">{locationName}</span></>}
-                            subheading={`Start your local journey by exploring the unique foster care landscapes across ${locationName}'s key regions.`}
-                        />
-                    </ScrollReveal>
-
-                    <ScrollReveal effect="none" staggerChildren staggerDelay={0.05}>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-                            {childLocations.map((region) => (
-                                <ScrollRevealItem key={region.id}>
-                                    <Link href={`/locations/${location.slug}/${region.slug}`} className="group block relative overflow-hidden rounded-2xl aspect-[4/3] bg-slate-100 border border-slate-200 shadow-sm">
-                                        <div className="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/20 transition-colors z-10" />
-                                        <img
-                                            src="/images/locations/generic-hero.png"
-                                            alt={region.name}
-                                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                    heading={<DynamicContent block={getBlock(blocks, "ofsted_title")} fallback={`Ofsted-Rated Fostering Agencies in ${locationName}`} />}
+                                    subheading={
+                                        <DynamicContent
+                                            block={getBlock(blocks, "ofsted_intro")}
+                                            fallback={`Ofsted inspects and rates fostering agencies across ${locationName}. These ratings help you understand quality of support, safeguarding standards, leadership, and outcomes for children.`}
                                         />
-                                        <div className="absolute top-6 right-6 z-20">
-                                            <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 group-hover:bg-primary group-hover:border-primary transition-all">
-                                                <ArrowRight className="w-5 h-5 text-white" />
-                                            </div>
-                                        </div>
-                                        <div className="absolute bottom-6 left-6 right-6 z-20">
-                                            <div className="text-[10px] uppercase tracking-widest text-white/80 font-bold mb-1">Regional Hub</div>
-                                            <h3 className="text-xl md:text-2xl font-black text-white leading-tight">{region.name}</h3>
-                                        </div>
-                                    </Link>
-                                </ScrollRevealItem>
-                            ))}
-                        </div>
-                    </ScrollReveal>
-                </div>
-            </section>
+                                    }
+                                />
+                            </ScrollReveal>
 
-            {/* 8. Support for Foster Carers (DARK RHYTHM - Compact) */}
-            <section id="support" className="py-16 md:py-24 bg-slate-950 text-white scroll-mt-20 relative overflow-hidden">
-                <div className="absolute inset-0 bg-primary/5 blur-[120px] rounded-full translate-x-1/2" />
-                <div className="container-main px-4 relative z-10">
-                    <SectionIntro
-                        heading={<>Support for Foster Carers in <span className="text-primary italic">{locationName}</span></>}
-                        subheading="From finances to emotional backup, you’ll never be expected to do this alone."
-                        center={true}
-                        inverted={true}
-                        className="mb-12 md:mb-16"
-                    />
-
-                    <ScrollReveal effect="none" staggerChildren staggerDelay={0.08}>
-                        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
-                            {[
-                                {
-                                    title: "Financial Support",
-                                    desc: "Weekly fostering allowances, tax relief and payments that recognise the care you give.",
-                                    icon: ShieldCheck
-                                },
-                                {
-                                    title: "Emotional Support",
-                                    desc: "24/7 advice, reflective supervision and peer support so you have someone to talk to.",
-                                    icon: MessageCircle
-                                },
-                                {
-                                    title: "Training & Development",
-                                    desc: "Ongoing training on attachment, trauma, and education, helping you grow in confidence.",
-                                    icon: GraduationCap
-                                }
-                            ].map((item, i) => (
-                                <ScrollRevealItem key={i}>
-                                    <div className="p-6 md:p-8 rounded-2xl bg-white/5 border border-white/10 h-full flex flex-col items-start hover:bg-white/[0.08] transition-colors group">
-                                        <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-6 border border-primary/20 group-hover:scale-105 transition-transform">
-                                            <item.icon className="w-6 h-6 text-primary" />
-                                        </div>
-                                        <h3 className="text-xl font-black mb-3 text-white">{item.title}</h3>
-                                        <p className="text-white/60 font-medium leading-relaxed mb-4 text-sm">{item.desc}</p>
-                                    </div>
-                                </ScrollRevealItem>
-                            ))}
-                        </div>
-                    </ScrollReveal>
-
-                    {isEngland && (
-                        <ScrollReveal effect="slideUp" delay={0.3}>
-                            <div className="mt-12 max-w-2xl mx-auto text-center border-t border-white/10 pt-8">
-                                <p className="text-sm md:text-base text-white/70 italic leading-relaxed">
-                                    “The difference for us was the support. Someone picked up the phone at 2am when we were
-                                    scared we’d got it wrong. We were reminded we weren’t doing this on our own.”
-                                </p>
-                                <p className="mt-4 text-[10px] text-primary font-bold uppercase tracking-widest">
-                                    Foster carer in England
+                            <div className="mt-12 p-6 rounded-xl bg-primary/5 border border-primary/20 flex items-center justify-center gap-4 max-w-3xl mx-auto">
+                                <BadgeCheck className="w-5 h-5 text-primary flex-shrink-0" />
+                                <p className="text-sm md:text-base text-slate-600 font-medium">
+                                    <DynamicContent
+                                        block={getBlock(blocks, "ofsted_note")}
+                                        fallback="Every agency listed on our platform includes clear information about their most recent Ofsted rating so you can make confident, informed decisions."
+                                    />
                                 </p>
                             </div>
-                        </ScrollReveal>
-                    )}
-                </div>
-            </section>
-
-            {/* 14. Who This Guide Is For Section (LIGHT RHYTHM - Compact) */}
-            <section id="who-its-for" className="py-16 md:py-24 bg-white scroll-mt-20 overflow-hidden">
-                <div className="container-main px-4 max-w-5xl mx-auto">
-                    <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
-                        <ScrollReveal effect="slideLeft">
-                            <SectionIntro
-                                eyebrow="Target Audience"
-                                heading="A calm space to reflect and decide"
-                                microCopy="Information without pressure."
-                                className="mb-6 md:mb-8"
-                            />
-                            <p className="text-base text-slate-600 leading-relaxed font-medium">
-                                This page is designed to give you clear, pressure-free information. You can take your time,
-                                explore different options, and come back whenever you’re ready to move forward.
-                            </p>
-                        </ScrollReveal>
-
-                        <div className="grid sm:grid-cols-1 gap-3">
-                            {[
-                                "People exploring fostering for the first time.",
-                                "Existing carers considering switching agencies.",
-                                "Families comparing IFAs with local authorities.",
-                                "Anyone seeking a simple explanation of how it works."
-                            ].map((item, i) => (
-                                <ScrollReveal effect="slideRight" delay={i * 0.1} key={i}>
-                                    <InteractiveCard className="p-3 border-slate-100" hoverLift={false} gradientReveal={true}>
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                                                <CheckCircle className="w-3 h-3 text-primary" />
-                                            </div>
-                                            <p className="text-xs md:text-sm text-slate-700 font-bold">
-                                                {item}
-                                            </p>
-                                        </div>
-                                    </InteractiveCard>
-                                </ScrollReveal>
-                            ))}
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            {/* 18. Glossary Section (NEUTRAL RHYTHM - Compact) */}
-            <section id="glossary" className="py-16 md:py-24 bg-slate-50 border-y border-slate-200/60 scroll-mt-20 overflow-hidden">
-                <div className="container-main px-4 max-w-6xl mx-auto">
-                    <ScrollReveal effect="slideUp">
+                {/* 7. Support Section (Moved) */}
+                <section id="support" className="py-16 md:py-24 bg-slate-950 text-white scroll-mt-20 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-primary/5 blur-[120px] rounded-full translate-x-1/2" />
+                    <div className="container-main px-4 relative z-10">
                         <SectionIntro
-                            eyebrow="Jargon Buster"
-                            heading={<>Quick glossary for <span className="text-primary italic">{locationName}</span></>}
-                            subheading="A short guide to key fostering terms you'll see on this page."
-                            className="mb-10 md:mb-12"
-                        />
-                    </ScrollReveal>
-
-                    <InteractiveGlossary
-                        className="max-w-4xl mx-auto"
-                        terms={[
-                            { term: "Carer", definition: "A person or family who provides a safe, stable and loving foster home.", icon: Heart },
-                            { term: "IFA", definition: "A regulated organisation that recruits and supports carers, separate from the council.", icon: Building2 },
-                            { term: "LA (Council)", definition: "Your local council service responsible for children in care in your area.", icon: MapPin },
-                            { term: "Ofsted", definition: "The government body that inspects and rates fostering agencies in England.", icon: ShieldCheck },
-                            { term: "Allowance", definition: "The weekly financial support paid to foster carers to cover the costs of care.", icon: BadgeCheck }
-                        ]}
-                    />
-                </div>
-            </section>
-
-            {/* 13. FAQ Section (DARK RHYTHM) */}
-            <section id="faq" className="py-24 md:py-32 bg-slate-900 text-white scroll-mt-20 relative overflow-hidden">
-                <div className="absolute inset-0 bg-primary/5 blur-[120px] rounded-full -translate-x-1/2 translate-y-1/2" />
-
-                <div className="container-main px-4 max-w-4xl mx-auto relative z-10">
-                    <ScrollReveal effect="slideUp">
-                        <SectionIntro
-                            heading={isEngland ? "England Foster Care FAQ" : "Frequently Asked Questions"}
-                            microCopy={`Clear, honest answers for prospective carers in ${locationName}.`}
+                            heading={<DynamicContent block={getBlock(blocks, "support_title")} fallback={`Support for Foster Carers in ${locationName}`} />}
+                            subheading={
+                                <DynamicContent
+                                    block={getBlock(blocks, "support_intro")}
+                                    fallback="Strong support makes fostering sustainable and rewarding. Agencies usually provide a mix of emotional, practical, and financial help."
+                                />
+                            }
                             center={true}
                             inverted={true}
+                            className="mb-12 md:mb-16"
                         />
-                    </ScrollReveal>
 
-                    <ScrollReveal effect="slideUp" delay={0.2}>
-                        <CollapsibleFAQ
-                            items={displayFaqs.map(f => ({
-                                question: f.question,
-                                answer: f.answer,
-                                emoji: "💡"
-                            }))}
-                            inverted={true}
-                        />
-                    </ScrollReveal>
-                </div>
-            </section>
-
-            {/* 19. Safety & Disclaimer Section */}
-            <section className="py-16 bg-slate-50 border-t border-slate-200/60">
-                <div className="container-main px-4 max-w-3xl mx-auto text-center">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 border border-amber-100 rounded-full mb-6">
-                        <ShieldAlert className="w-4 h-4 text-amber-600" />
-                        <span className="text-[10px] font-black text-amber-700 uppercase tracking-widest">Important Information</span>
+                        <ScrollReveal effect="none" staggerChildren staggerDelay={0.08}>
+                            <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+                                {[
+                                    {
+                                        title: "Financial Support",
+                                        desc: "Carers receive fostering allowances to cover the cost of caring for a child, plus additional support for specialist placements.",
+                                        icon: ShieldCheck
+                                    },
+                                    {
+                                        title: "Training",
+                                        desc: "Ongoing training helps you feel prepared, confident, and supported through your fostering journey.",
+                                        icon: GraduationCap
+                                    },
+                                    {
+                                        title: "Emotional Support",
+                                        desc: "Regular supervision, support groups, and 24/7 emergency support ensure you never feel alone.",
+                                        icon: MessageCircle
+                                    }
+                                ].map((item, i) => (
+                                    <ScrollRevealItem key={i}>
+                                        <div className="p-6 md:p-8 rounded-2xl bg-white/5 border border-white/10 h-full flex flex-col items-start hover:bg-white/[0.08] transition-colors group">
+                                            <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-6 border border-primary/20 group-hover:scale-105 transition-transform">
+                                                <item.icon className="w-6 h-6 text-primary" />
+                                            </div>
+                                            <h3 className="text-xl font-black mb-3 text-white">{item.title}</h3>
+                                            <p className="text-white/60 font-medium leading-relaxed mb-4 text-sm">{item.desc}</p>
+                                        </div>
+                                    </ScrollRevealItem>
+                                ))}
+                            </div>
+                        </ScrollReveal>
                     </div>
-                    <p className="text-xs md:text-sm text-slate-500 leading-relaxed font-medium">
-                        FosterCare.co.uk is a free informational resource. While we work with regulated agencies,
-                        your specific fostering journey will depend on individual assessments and regional requirements.
-                        Always verify details directly with your chosen agency or local authority.
-                    </p>
-                </div>
-            </section>
+                </section>
 
-            {/* 20. CTA Section */}
-            <CTASection
-                locationName={locationName}
-                blocks={blocks}
-            />
+                {/* 8. Regions Section (Moved) */}
+                <section id="regions" className="py-24 md:py-32 bg-slate-50 scroll-mt-20 relative border-t border-slate-200/60">
+                    <div className="container-main px-4">
+                        <ScrollReveal effect="slideUp">
+                            <SectionIntro
+                                heading={<DynamicContent block={getBlock(blocks, "regions_title")} fallback={`Fostering Across Regions in ${locationName}`} />}
+                                subheading={
+                                    <DynamicContent
+                                        block={getBlock(blocks, "regions_intro")}
+                                        fallback={`Each region has its own fostering needs and agency networks. You can explore fostering opportunities in:`}
+                                    />
+                                }
+                            />
+                        </ScrollReveal>
+
+                        <ScrollReveal effect="none" staggerChildren staggerDelay={0.05}>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+                                {childLocations.map((region) => (
+                                    <ScrollRevealItem key={region.id}>
+                                        <Link href={`/locations/${location.slug}/${region.slug}`} className="group block relative overflow-hidden rounded-2xl aspect-[4/3] bg-slate-100 border border-slate-200 shadow-sm">
+                                            <div className="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/20 transition-colors z-10" />
+                                            <img
+                                                src="/images/locations/generic-hero.png"
+                                                alt={region.name}
+                                                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                            />
+                                            <div className="absolute top-6 right-6 z-20">
+                                                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 group-hover:bg-primary group-hover:border-primary transition-all">
+                                                    <ArrowRight className="w-5 h-5 text-white" />
+                                                </div>
+                                            </div>
+                                            <div className="absolute bottom-6 left-6 right-6 z-20">
+                                                <div className="text-[10px] uppercase tracking-widest text-white/80 font-bold mb-1">Regional Hub</div>
+                                                <h3 className="text-xl md:text-2xl font-black text-white leading-tight">{region.name}</h3>
+                                            </div>
+                                        </Link>
+                                    </ScrollRevealItem>
+                                ))}
+                            </div>
+                        </ScrollReveal>
+                    </div>
+                </section>
+
+                {/* 9. Guide Section */}
+                <section id="who-its-for" className="py-16 md:py-24 bg-white scroll-mt-20 overflow-hidden">
+                    <div className="container-main px-4 max-w-5xl mx-auto">
+                        <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
+                            <ScrollReveal effect="slideLeft">
+                                <SectionIntro
+                                    eyebrow="Target Audience"
+                                    heading={<DynamicContent block={getBlock(blocks, "guide_title")} fallback={`Who This ${locationName} Fostering Guide Is For`} />}
+                                    microCopy="Information without pressure."
+                                    className="mb-6 md:mb-8"
+                                />
+                                <div className="text-base text-slate-600 leading-relaxed font-medium">
+                                    <DynamicContent
+                                        block={getBlock(blocks, "guide_intro")}
+                                        fallback="This guide supports anyone exploring foster care, from first-time carers to families comparing agencies. No pressure. No rushing. Just helpful, grounded information."
+                                    />
+                                </div>
+                            </ScrollReveal>
+
+                            <div className="grid sm:grid-cols-1 gap-3">
+                                {[
+                                    "First-time foster carers",
+                                    "Families comparing agencies",
+                                    "Carers switching from one agency to another",
+                                    "People learning about fostering types",
+                                    "Anyone beginning their research"
+                                ].map((item, i) => (
+                                    <ScrollReveal effect="slideRight" delay={i * 0.1} key={i}>
+                                        <InteractiveCard className="p-3 border-slate-100" hoverLift={false} gradientReveal={true}>
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                                                    <CheckCircle className="w-3 h-3 text-primary" />
+                                                </div>
+                                                <p className="text-xs md:text-sm text-slate-700 font-bold">
+                                                    {item}
+                                                </p>
+                                            </div>
+                                        </InteractiveCard>
+                                    </ScrollReveal>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* 10. Glossary Section */}
+                <section id="glossary" className="py-16 md:py-24 bg-slate-50 border-y border-slate-200/60 scroll-mt-20 overflow-hidden">
+                    <div className="container-main px-4 max-w-6xl mx-auto">
+                        <ScrollReveal effect="slideUp">
+                            <SectionIntro
+                                eyebrow="Jargon Buster"
+                                heading={<DynamicContent block={getBlock(blocks, "glossary_title")} fallback={`${locationName} Foster Care Glossary`} />}
+                                subheading={
+                                    <DynamicContent
+                                        block={getBlock(blocks, "glossary_intro")}
+                                        fallback="A few simple terms to keep things clear:"
+                                    />
+                                }
+                                className="mb-10 md:mb-12"
+                            />
+                        </ScrollReveal>
+
+                        <InteractiveGlossary
+                            className="max-w-4xl mx-auto"
+                            terms={[
+                                { term: "Foster Carer", definition: "Someone who provides a safe, stable home for a child in care.", icon: Heart },
+                                { term: "IFA", definition: "Independent Fostering Agency that supports foster carers outside the council.", icon: Building2 },
+                                { term: "Local Authority", definition: "The council responsible for children’s services in your area.", icon: MapPin },
+                                { term: "Fostering Allowance", definition: "Financial support for caring for a child.", icon: BadgeCheck },
+                                { term: "Ofsted", definition: "The regulator that inspects fostering agencies in England.", icon: ShieldCheck }
+                            ]}
+                        />
+                    </div>
+                </section>
+
+                {/* 11. FAQ Section (DARK RHYTHM) */}
+                <section id="faq" className="py-24 md:py-32 bg-slate-900 text-white scroll-mt-20 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-primary/5 blur-[120px] rounded-full -translate-x-1/2 translate-y-1/2" />
+
+                    <div className="container-main px-4 max-w-4xl mx-auto relative z-10">
+                        <ScrollReveal effect="slideUp">
+                            <SectionIntro
+                                heading={<DynamicContent block={getBlock(blocks, "faq_title")} fallback={isEngland ? "England Foster Care FAQ" : "Frequently Asked Questions"} />}
+                                microCopy={`Clear, honest answers for prospective carers in ${locationName}.`}
+                                center={true}
+                                inverted={true}
+                            />
+                        </ScrollReveal>
+
+                        <ScrollReveal effect="slideUp" delay={0.2}>
+                            <CollapsibleFAQ
+                                items={displayFaqs.map(f => ({
+                                    question: f.question,
+                                    answer: f.answer,
+                                    emoji: "💡"
+                                }))}
+                                inverted={true}
+                            />
+                        </ScrollReveal>
+                    </div>
+                </section>
+
+                {/* 12. Safety & Disclaimer Section */}
+                <section className="py-16 bg-slate-50 border-t border-slate-200/60">
+                    <div className="container-main px-4 max-w-3xl mx-auto text-center">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 border border-amber-100 rounded-full mb-6">
+                            <ShieldAlert className="w-4 h-4 text-amber-600" />
+                            <span className="text-[10px] font-black text-amber-700 uppercase tracking-widest">
+                                <DynamicContent block={getBlock(blocks, "safeguarding_title")} fallback="Safeguarding and Responsibility" />
+                            </span>
+                        </div>
+                        <div className="text-xs md:text-sm text-slate-500 leading-relaxed font-medium">
+                            <DynamicContent
+                                block={getBlock(blocks, "safeguarding_content")}
+                                fallback="We are an independent information platform that helps families explore fostering options. We do not approve carers or place children. All agencies listed must meet current Ofsted standards and follow UK fostering regulations. Your safety, and each child’s safety, always comes first."
+                            />
+                        </div>
+                    </div>
+                </section>
+
+                {/* 20. CTA Section */}
+                <CTASection
+                    locationName={locationName}
+                    blocks={blocks}
+                />
         </div>
     );
 }

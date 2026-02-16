@@ -231,8 +231,53 @@ function getDefaultBlocks(pageKey: string, pageType: string, name: string) {
             ...base,
             { page_key: pageKey, block_key: 'why_foster_content', block_type: 'text', title: 'Why Foster Content', content: `<p>Fostering in ${name} is more than just providing a bed; it's about offering stability, safety, and a future to children who need it most.</p><p>By choosing to foster here, you are joining a world-class network of support.</p>`, metadata: {}, display_order: 10, is_active: true },
             { page_key: pageKey, block_key: 'why_foster_image', block_type: 'image', title: 'Why Foster Image', content: '', metadata: { url: '/images/locations/england-hero.png', alt: `Fostering in ${name}` }, display_order: 11, is_active: true },
-            { page_key: pageKey, block_key: 'is_right_content', block_type: 'text', title: 'Is Fostering Right Content', content: `<p>Becoming a foster carer is a significant lifestyle change. It's natural to have questions about how it will affect your family, your work, and your daily routine.</p>`, metadata: {}, display_order: 20, is_active: true },
-            { page_key: pageKey, block_key: 'process_title', block_type: 'text', title: 'Process Section Title', content: 'The Process', metadata: {}, display_order: 30, is_active: true },
+
+            // Agency Types
+            { page_key: pageKey, block_key: 'agency_types_title', block_type: 'text', title: 'Agency Types Title', content: 'Independent and Local Authority Fostering Agencies', metadata: {}, display_order: 12, is_active: true },
+            { page_key: pageKey, block_key: 'agency_types_intro', block_type: 'text', title: 'Agency Types Intro', content: `When exploring your options, you’ll notice that fostering support in ${name} comes from two main paths. Each one offers something unique, and the goal is simply to find the path that feels right for you.`, metadata: {}, display_order: 13, is_active: true },
+            { page_key: pageKey, block_key: 'ifa_card_title', block_type: 'text', title: 'IFA Card Title', content: 'Independent Fostering Agencies', metadata: {}, display_order: 14, is_active: true },
+            { page_key: pageKey, block_key: 'ifa_card_content', block_type: 'text', title: 'IFA Card Content', content: `<p class="mb-4">Independent agencies (often called IFAs) operate separately from local councils. Many IFAs offer:</p><ul class="space-y-4"><li>Stronger day-to-day support</li><li>Specialist placements</li><li>Therapeutic training</li><li>24/7 help</li><li>A close-knit carer community</li></ul>`, metadata: {}, display_order: 15, is_active: true },
+            { page_key: pageKey, block_key: 'la_card_title', block_type: 'text', title: 'LA Card Title', content: 'Local Authority Fostering', metadata: {}, display_order: 16, is_active: true },
+            { page_key: pageKey, block_key: 'la_card_content', block_type: 'text', title: 'LA Card Content', content: `<p class="mb-4">Local authorities recruit and support carers directly. Some people choose councils because:</p><ul class="space-y-4"><li>Placements may be closer to children’s home areas</li><li>They want direct involvement with children’s services</li><li>They prefer council-led support systems</li></ul>`, metadata: {}, display_order: 17, is_active: true },
+            { page_key: pageKey, block_key: 'agency_types_closing', block_type: 'text', title: 'Agency Types Closing', content: 'Both independent agencies and local authorities play important roles. What matters is choosing the one that feels comfortable and supportive for your home.', metadata: {}, display_order: 18, is_active: true },
+
+            // Types of Fostering
+            { page_key: pageKey, block_key: 'types_title', block_type: 'text', title: 'Types Title', content: `Types of Fostering in ${name}`, metadata: {}, display_order: 19, is_active: true },
+            { page_key: pageKey, block_key: 'types_intro', block_type: 'text', title: 'Types Intro', content: 'Fostering needs vary across the country. Different children require different types of care, and each type lets you use your strengths in a meaningful way.', metadata: {}, display_order: 20, is_active: true },
+
+            // Process (Updated)
+            { page_key: pageKey, block_key: 'process_title', block_type: 'text', title: 'Process Section Title', content: `How to Become a Foster Carer in ${name}`, metadata: {}, display_order: 30, is_active: true },
+            { page_key: pageKey, block_key: 'process_intro', block_type: 'text', title: 'Process Intro', content: 'Becoming a foster carer is not about qualifications, it’s about compassion, stability, and the willingness to learn. Agencies guide you through a respectful and clear approval journey.', metadata: {}, display_order: 31, is_active: true },
+            { page_key: pageKey, block_key: 'process_closing', block_type: 'text', title: 'Process Closing', content: 'You’re supported through every step. No one expects you to figure things out alone.', metadata: {}, display_order: 32, is_active: true },
+            { page_key: pageKey, block_key: 'is_right_content', block_type: 'text', title: 'Is Fostering Right Content', content: `<p>Becoming a foster carer is a significant lifestyle change. It's natural to have questions about how it will affect your family, your work, and your daily routine.</p>`, metadata: {}, display_order: 33, is_active: true },
+
+            // Ofsted
+            { page_key: pageKey, block_key: 'ofsted_title', block_type: 'text', title: 'Ofsted Title', content: `Ofsted-Rated Fostering Agencies in ${name}`, metadata: {}, display_order: 40, is_active: true },
+            { page_key: pageKey, block_key: 'ofsted_intro', block_type: 'text', title: 'Ofsted Intro', content: `Ofsted inspects and rates fostering agencies across ${name}. These ratings help you understand quality of support, safeguarding standards, leadership, and outcomes for children.`, metadata: {}, display_order: 41, is_active: true },
+            { page_key: pageKey, block_key: 'ofsted_note', block_type: 'text', title: 'Ofsted Note', content: 'Every agency listed on our platform includes clear information about their most recent Ofsted rating so you can make confident, informed decisions.', metadata: {}, display_order: 42, is_active: true },
+
+            // Support
+            { page_key: pageKey, block_key: 'support_title', block_type: 'text', title: 'Support Title', content: `Support for Foster Carers in ${name}`, metadata: {}, display_order: 50, is_active: true },
+            { page_key: pageKey, block_key: 'support_intro', block_type: 'text', title: 'Support Intro', content: 'Strong support makes fostering sustainable and rewarding. Agencies usually provide a mix of emotional, practical, and financial help.', metadata: {}, display_order: 51, is_active: true },
+
+            // Regions
+            { page_key: pageKey, block_key: 'regions_title', block_type: 'text', title: 'Regions Title', content: `Fostering Across Regions in ${name}`, metadata: {}, display_order: 60, is_active: true },
+            { page_key: pageKey, block_key: 'regions_intro', block_type: 'text', title: 'Regions Intro', content: 'Each region has its own fostering needs and agency networks. You can explore fostering opportunities in:', metadata: {}, display_order: 61, is_active: true },
+
+            // Guide
+            { page_key: pageKey, block_key: 'guide_title', block_type: 'text', title: 'Guide Title', content: `Who This ${name} Fostering Guide Is For`, metadata: {}, display_order: 70, is_active: true },
+            { page_key: pageKey, block_key: 'guide_intro', block_type: 'text', title: 'Guide Intro', content: 'This guide supports anyone exploring foster care, from first-time carers to families comparing agencies. No pressure. No rushing. Just helpful, grounded information.', metadata: {}, display_order: 71, is_active: true },
+
+            // Glossary
+            { page_key: pageKey, block_key: 'glossary_title', block_type: 'text', title: 'Glossary Title', content: `${name} Foster Care Glossary`, metadata: {}, display_order: 80, is_active: true },
+            { page_key: pageKey, block_key: 'glossary_intro', block_type: 'text', title: 'Glossary Intro', content: 'A few simple terms to keep things clear:', metadata: {}, display_order: 81, is_active: true },
+
+            // FAQ
+            { page_key: pageKey, block_key: 'faq_title', block_type: 'text', title: 'FAQ Title', content: `${name} Foster Care FAQ`, metadata: {}, display_order: 90, is_active: true },
+
+            // Safeguarding
+            { page_key: pageKey, block_key: 'safeguarding_title', block_type: 'text', title: 'Safeguarding Title', content: 'Safeguarding and Responsibility', metadata: {}, display_order: 100, is_active: true },
+            { page_key: pageKey, block_key: 'safeguarding_content', block_type: 'text', title: 'Safeguarding Content', content: 'We are an independent information platform that helps families explore fostering options. We do not approve carers or place children. All agencies listed must meet current Ofsted standards and follow UK fostering regulations. Your safety, and each child’s safety, always comes first.', metadata: {}, display_order: 101, is_active: true },
         ];
     }
 
