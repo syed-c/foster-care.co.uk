@@ -337,12 +337,17 @@ function PageEditorSheet({ page, onClose, onDataChanged }: { page: any, onClose:
     setSeeding(true);
     try {
       const res = await apiPost({ action: "seed_blocks", page_key: page.key, page_type: page.locationType || "static" });
-      if (res.seeded > 0) {
-        toast.success(`Generated ${res.seeded} blocks`);
+
+      const seededTotal = (res.seeded || 0) + (res.seeded_blocks || 0) + (res.seeded_faqs || 0);
+
+      if (seededTotal > 0) {
+        toast.success(res.message || `Generated content`);
         await loadData();
         await onDataChanged();
       } else {
-        toast.info("Blocks already exist");
+        toast.info("Content already exists");
+        // Force reload anyway just in case
+        await loadData();
       }
     } catch (err: any) {
       toast.error("Failed to seed blocks: " + err.message);
