@@ -78,10 +78,9 @@ const navSections = [
   {
     label: "Content & SEO",
     items: [
-      { name: "CMS Pages", href: "/admin/cms", icon: Globe },
+      { name: "Region CMS", href: "/admin/content", icon: Globe },
       { name: "Blog", href: "/admin/blog", icon: FileText },
       { name: "FAQs", href: "/admin/faqs", icon: HelpCircle },
-      { name: "Content Blocks", href: "/admin/content", icon: FileEdit },
     ],
   },
   {

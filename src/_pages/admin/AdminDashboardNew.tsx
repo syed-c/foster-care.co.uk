@@ -132,7 +132,7 @@ export default function AdminDashboard() {
     { label: "Add Location", href: "/admin/locations", icon: MapPin, color: "bg-green-500/10 text-green-600" },
     { label: "New Post", href: "/admin/blog", icon: FileText, color: "bg-purple-500/10 text-purple-600" },
     { label: "Manage Plans", href: "/admin/subscriptions", icon: CreditCard, color: "bg-amber-500/10 text-amber-600" },
-    { label: "CMS Pages", href: "/admin/cms", icon: Globe, color: "bg-rose-500/10 text-rose-600" },
+    { label: "Region CMS", href: "/admin/content", icon: Globe, color: "bg-rose-500/10 text-rose-600" },
     { label: "Settings", href: "/admin/settings", icon: Settings, color: "bg-slate-500/10 text-slate-600" },
   ];
 

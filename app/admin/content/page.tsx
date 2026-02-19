@@ -1,6 +1,6 @@
 "use client";
-import AdminContent from "@/_pages/admin/AdminContent";
+import AdminRegionCMS from "@/_pages/admin/AdminRegionCMS";
 
 export default function Page() {
-  return <AdminContent />;
+  return <AdminRegionCMS />;
 }
