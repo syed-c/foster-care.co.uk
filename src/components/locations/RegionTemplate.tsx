@@ -67,6 +67,11 @@ export function RegionTemplate({
         : location.slug;
     const { data: blocks } = usePageBlocks(`loc_${pathSlug}`);
     const locationName = location.name;
+    
+    const getBlockValue = (blockKey: string, fallback: string): string => {
+        const block = getBlock(blocks, blockKey);
+        return block?.content || fallback;
+    };
     const heroRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll();
 
@@ -93,12 +98,12 @@ export function RegionTemplate({
     ];
 
     const typesOfFostering = [
-        { icon: Clock, title: "Short-Term", desc: "Temporary care while long-term plans are being made.", slug: "short-term-fostering", color: "from-blue-500/20 to-blue-600/10 border-blue-500/30" },
-        { icon: Home, title: "Long-Term", desc: "Stable homes for children who need consistent care until adulthood.", slug: "long-term-fostering", color: "from-rose-500/20 to-rose-600/10 border-rose-500/30" },
-        { icon: ShieldCheck, title: "Emergency", desc: "Same-day placements for children in urgent situations.", slug: "emergency-fostering", color: "from-amber-500/20 to-amber-600/10 border-amber-500/30" },
-        { icon: Users, title: "Respite", desc: "Short stays that support families and carers.", slug: "respite-fostering", color: "from-teal-500/20 to-teal-600/10 border-teal-500/30" },
-        { icon: GraduationCap, title: "Parent & Child", desc: "Supporting a parent and their baby together.", slug: "parent-child-fostering", color: "from-violet-500/20 to-violet-600/10 border-violet-500/30" },
-        { icon: Award, title: "Therapeutic", desc: "Enhanced support for children with emotional or behavioural needs.", slug: "therapeutic-fostering", color: "from-emerald-500/20 to-emerald-600/10 border-emerald-500/30" },
+        { icon: Clock, titleKey: "type_short_term_title", descKey: "type_short_term_desc", defaultTitle: "Short-Term", defaultDesc: "Temporary care while long-term plans are being made.", slug: "short-term-fostering", color: "from-blue-500/20 to-blue-600/10 border-blue-500/30" },
+        { icon: Home, titleKey: "type_long_term_title", descKey: "type_long_term_desc", defaultTitle: "Long-Term", defaultDesc: "Stable homes for children who need consistent care until adulthood.", slug: "long-term-fostering", color: "from-rose-500/20 to-rose-600/10 border-rose-500/30" },
+        { icon: ShieldCheck, titleKey: "type_emergency_title", descKey: "type_emergency_desc", defaultTitle: "Emergency", defaultDesc: "Same-day placements for children in urgent situations.", slug: "emergency-fostering", color: "from-amber-500/20 to-amber-600/10 border-amber-500/30" },
+        { icon: Users, titleKey: "type_respite_title", descKey: "type_respite_desc", defaultTitle: "Respite", defaultDesc: "Short stays that support families and carers.", slug: "respite-fostering", color: "from-teal-500/20 to-teal-600/10 border-teal-500/30" },
+        { icon: GraduationCap, titleKey: "type_parent_child_title", descKey: "type_parent_child_desc", defaultTitle: "Parent & Child", defaultDesc: "Supporting a parent and their baby together.", slug: "parent-child-fostering", color: "from-violet-500/20 to-violet-600/10 border-violet-500/30" },
+        { icon: Award, titleKey: "type_therapeutic_title", descKey: "type_therapeutic_desc", defaultTitle: "Therapeutic", defaultDesc: "Enhanced support for children with emotional or behavioural needs.", slug: "therapeutic-fostering", color: "from-emerald-500/20 to-emerald-600/10 border-emerald-500/30" },
     ];
 
     const expandedFaqs = [
@@ -187,17 +192,17 @@ export function RegionTemplate({
                                 {[
                                     {
                                         value: `${stats.childrenInCare.toLocaleString()}+`,
-                                        label: "Children in Care",
+                                        label: getBlockValue("stat_children_label", "Children in Care"),
                                         icon: Users
                                     },
                                     {
                                         value: `${stats.boroughs || childLocations.length}`,
-                                        label: "Local Areas",
+                                        label: getBlockValue("stat_local_areas_label", "Local Areas"),
                                         icon: Building2
                                     },
                                     {
                                         value: `${stats.agenciesCount}+`,
-                                        label: "Verified Agencies",
+                                        label: getBlockValue("stat_agencies_label", "Verified Agencies"),
                                         icon: Heart
                                     }
                                 ].map((stat, idx) => (
@@ -325,7 +330,7 @@ export function RegionTemplate({
                     <div className="container-main px-4">
                         <ScrollReveal effect="slideUp">
                             <SectionIntro
-                                heading={<>Fostering <span className="text-primary italic">by the Numbers</span></>}
+                                heading={<DynamicContent block={getBlock(blocks, "stats_title")} fallback={<>Fostering <span className="text-primary italic">by the Numbers</span></>} />}
                                 subheading={`Impact across ${locationName}, one child at a time.`}
                                 center={true}
                             />
@@ -334,10 +339,10 @@ export function RegionTemplate({
                         <ScrollReveal effect="none" staggerChildren staggerDelay={0.1}>
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
                                 {[
-                                    { value: `${stats.childrenInCare.toLocaleString()}+`, label: `Children in Care` },
-                                    { value: `${stats.boroughs || childLocations.length}`, label: "Local Areas Covered" },
-                                    { value: "98%", label: "Carer Satisfaction" },
-                                    { value: "24/7", label: "Support Availability" }
+                                    { value: `${stats.childrenInCare.toLocaleString()}+`, label: getBlockValue("stats_01_label", "Children in Care") },
+                                    { value: `${stats.boroughs || childLocations.length}`, label: getBlockValue("stats_02_label", "Local Areas Covered") },
+                                    { value: "98%", label: getBlockValue("stats_03_label", "Carer Satisfaction") },
+                                    { value: "24/7", label: getBlockValue("stats_04_label", "Support Availability") }
                                 ].map((stat, i) => (
                                     <ScrollRevealItem key={i}>
                                         <div className="text-center p-10 rounded-2xl bg-white border border-slate-200/60 shadow-sm hover:shadow-md transition-all">
@@ -383,11 +388,11 @@ export function RegionTemplate({
                             <ScrollReveal effect="slideRight" staggerChildren staggerDelay={0.08}>
                                 <div className="space-y-4">
                                     {[
-                                        "Do you have a spare bedroom?",
-                                        "Are you over the age of 21?",
-                                        "Do you have a genuine desire to help children?",
-                                        "Are you emotionally resilient and patient?",
-                                        "Can you provide a stable and safe environment?"
+                                        getBlockValue("checklist_01", "Do you have a spare bedroom?"),
+                                        getBlockValue("checklist_02", "Are you over the age of 21?"),
+                                        getBlockValue("checklist_03", "Do you have a genuine desire to help children?"),
+                                        getBlockValue("checklist_04", "Are you emotionally resilient and patient?"),
+                                        getBlockValue("checklist_05", "Can you provide a stable and safe environment?")
                                     ].map((item, i) => (
                                         <ScrollRevealItem key={i}>
                                             <div className="p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm shadow-sm flex items-start gap-4 hover:bg-white/10 transition-colors">
@@ -401,7 +406,7 @@ export function RegionTemplate({
                                     <div className="mt-8 pt-4">
                                         <Button className="w-full rounded-full h-16 font-black text-xl shadow-2xl shadow-primary/20 transition-all bg-primary hover:bg-primary/90" asChild>
                                             <Link href="/become-a-foster">
-                                                Talk to Someone First
+                                                {getBlockValue("checklist_cta", "Talk to Someone First")}
                                             </Link>
                                         </Button>
                                     </div>
@@ -449,8 +454,8 @@ export function RegionTemplate({
                                         <div className="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center mb-8 border border-slate-100 group-hover:scale-110 transition-transform duration-500">
                                             <type.icon className="w-8 h-8 text-primary" />
                                         </div>
-                                        <h3 className="text-2xl font-black mb-4 text-slate-950 group-hover:text-primary transition-colors">{type.title}</h3>
-                                        <p className="text-slate-600 font-medium leading-relaxed mb-6">{type.desc}</p>
+                                        <h3 className="text-2xl font-black mb-4 text-slate-950 group-hover:text-primary transition-colors">{getBlockValue(type.titleKey, type.defaultTitle)}</h3>
+                                        <p className="text-slate-600 font-medium leading-relaxed mb-6">{getBlockValue(type.descKey, type.defaultDesc)}</p>
                                         <div className="mt-auto flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
                                             Learn More <ArrowRight className="w-3 h-3" />
                                         </div>
@@ -493,9 +498,9 @@ export function RegionTemplate({
                                                         <p className="mb-4">IFAs provide structured support, specialist training, and regular supervision. They often offer 24/7 support lines, therapeutic guidance, and higher allowances depending on placements.</p>
                                                         <ul className="space-y-4">
                                                             {[
-                                                                "Often provide very close, relationship-based support for your whole household.",
-                                                                "May offer enhanced training, therapeutic input and peer groups.",
-                                                                "Work with multiple local authorities to find the right matches for you."
+                                                                getBlockValue("ifa_bullet_01", "Often provide very close, relationship-based support for your whole household."),
+                                                                getBlockValue("ifa_bullet_02", "May offer enhanced training, therapeutic input and peer groups."),
+                                                                getBlockValue("ifa_bullet_03", "Work with multiple local authorities to find the right matches for you.")
                                                             ].map((li, idx) => (
                                                                 <li key={idx} className="flex items-start gap-3 text-slate-700 font-medium">
                                                                     <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
@@ -529,9 +534,9 @@ export function RegionTemplate({
                                                         <p className="mb-4">Each local area runs its own fostering service. Local authorities focus on keeping placements local, making it easier for children to stay connected to their community.</p>
                                                         <ul className="space-y-4">
                                                             {[
-                                                                "You work closely with social workers based in your local area.",
-                                                                "Placements are usually within your region to keep children connected.",
-                                                                "Support, allowances and training are set by the council's service."
+                                                                getBlockValue("la_bullet_01", "You work closely with social workers based in your local area."),
+                                                                getBlockValue("la_bullet_02", "Placements are usually within your region to keep children connected."),
+                                                                getBlockValue("la_bullet_03", "Support, allowances and training are set by the council's service.")
                                                             ].map((li, idx) => (
                                                                 <li key={idx} className="flex items-start gap-3 text-slate-700 font-medium">
                                                                     <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 flex-shrink-0" />
@@ -569,23 +574,29 @@ export function RegionTemplate({
                             <div className="grid md:grid-cols-3 gap-8">
                                 {[
                                     {
-                                        title: "Safeguarding",
-                                        desc: "How well agencies protect children, listen to concerns, and respond quickly when something isn't right."
+                                        titleKey: "ofsted_safeguarding_title",
+                                        descKey: "ofsted_safeguarding_desc",
+                                        defaultTitle: "Safeguarding",
+                                        defaultDesc: "How well agencies protect children, listen to concerns, and respond quickly when something isn't right."
                                     },
                                     {
-                                        title: "Leadership",
-                                        desc: "Whether leaders create a safe, stable culture for carers, staff, and children."
+                                        titleKey: "ofsted_leadership_title",
+                                        descKey: "ofsted_leadership_desc",
+                                        defaultTitle: "Leadership",
+                                        defaultDesc: "Whether leaders create a safe, stable culture for carers, staff, and children."
                                     },
                                     {
-                                        title: "Outcomes",
-                                        desc: "The difference agencies actually make to children's lives, education, stability, and wellbeing."
+                                        titleKey: "ofsted_outcomes_title",
+                                        descKey: "ofsted_outcomes_desc",
+                                        defaultTitle: "Outcomes",
+                                        defaultDesc: "The difference agencies actually make to children's lives, education, stability, and wellbeing."
                                     }
                                 ].map((item) => (
-                                    <ScrollRevealItem key={item.title}>
+                                    <ScrollRevealItem key={item.titleKey}>
                                         <div className="p-8 rounded-2xl bg-white/5 border border-white/10 shadow-sm h-full hover:bg-white/10 hover:border-primary/20 transition-all duration-300">
-                                            <h3 className="text-lg md:text-xl font-black text-white mb-4">{item.title}</h3>
+                                            <h3 className="text-lg md:text-xl font-black text-white mb-4">{getBlockValue(item.titleKey, item.defaultTitle)}</h3>
                                             <p className="text-sm md:text-base text-slate-400 leading-relaxed font-medium">
-                                                {item.desc}
+                                                {getBlockValue(item.descKey, item.defaultDesc)}
                                             </p>
                                         </div>
                                     </ScrollRevealItem>
@@ -612,8 +623,8 @@ export function RegionTemplate({
                             <ScrollReveal effect="slideLeft" className="max-w-2xl">
                                 <SectionIntro
                                     eyebrow="Local Expertise"
-                                    heading={<>Featured Agencies in <span className="text-primary italic">{locationName}</span></>}
-                                    subheading={`Showing top-rated agencies in ${locationName} ready to support your journey.`}
+                                    heading={<DynamicContent block={getBlock(blocks, "featured_agencies_title")} fallback={<>Featured Agencies in <span className="text-primary italic">{locationName}</span></>} />}
+                                    subheading={<DynamicContent block={getBlock(blocks, "featured_agencies_subtitle")} fallback={`Showing top-rated agencies in ${locationName} ready to support your journey.`} />}
                                     inverted={true}
                                 />
                             </ScrollReveal>
@@ -762,18 +773,24 @@ export function RegionTemplate({
                         <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
                             {[
                                 {
-                                    title: "Carer Allowances",
-                                    desc: "Financial allowances help cover the cost of caring for a child, with additional support for specialist placements.",
+                                    titleKey: "support_allowances_title",
+                                    descKey: "support_allowances_desc",
+                                    defaultTitle: "Carer Allowances",
+                                    defaultDesc: "Financial allowances help cover the cost of caring for a child, with additional support for specialist placements.",
                                     icon: ShieldCheck
                                 },
                                 {
-                                    title: "Training & Development",
-                                    desc: "Regular in-person and online training courses help carers build confidence and skills.",
+                                    titleKey: "support_training_title",
+                                    descKey: "support_training_desc",
+                                    defaultTitle: "Training & Development",
+                                    defaultDesc: "Regular in-person and online training courses help carers build confidence and skills.",
                                     icon: GraduationCap
                                 },
                                 {
-                                    title: "24/7 Support & Supervision",
-                                    desc: "Supervising social workers maintain regular contact and offer round-the-clock guidance.",
+                                    titleKey: "support_supervision_title",
+                                    descKey: "support_supervision_desc",
+                                    defaultTitle: "24/7 Support & Supervision",
+                                    defaultDesc: "Supervising social workers maintain regular contact and offer round-the-clock guidance.",
                                     icon: MessageCircle
                                 }
                             ].map((item, i) => (
@@ -782,8 +799,8 @@ export function RegionTemplate({
                                         <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-6 border border-primary/20 group-hover:scale-105 transition-transform">
                                             <item.icon className="w-6 h-6 text-primary" />
                                         </div>
-                                        <h3 className="text-xl font-black mb-3 text-white">{item.title}</h3>
-                                        <p className="text-white/60 font-medium leading-relaxed mb-4 text-sm">{item.desc}</p>
+                                        <h3 className="text-xl font-black mb-3 text-white">{getBlockValue(item.titleKey, item.defaultTitle)}</h3>
+                                        <p className="text-white/60 font-medium leading-relaxed mb-4 text-sm">{getBlockValue(item.descKey, item.defaultDesc)}</p>
                                     </div>
                                 </ScrollRevealItem>
                             ))}
@@ -814,10 +831,10 @@ export function RegionTemplate({
 
                         <div className="grid sm:grid-cols-1 gap-3">
                             {[
-                                "People exploring fostering for the first time.",
-                                "Existing carers considering switching agencies.",
-                                "Families comparing IFAs with local authorities.",
-                                "Anyone seeking a simple explanation of how it works."
+                                getBlockValue("guide_card_01", "People exploring fostering for the first time."),
+                                getBlockValue("guide_card_02", "Existing carers considering switching agencies."),
+                                getBlockValue("guide_card_03", "Families comparing IFAs with local authorities."),
+                                getBlockValue("guide_card_04", "Anyone seeking a simple explanation of how it works.")
                             ].map((item, i) => (
                                 <ScrollReveal effect="slideRight" delay={i * 0.1} key={i}>
                                     <InteractiveCard className="p-3 border-slate-100" hoverLift={false} gradientReveal={true}>
@@ -852,11 +869,11 @@ export function RegionTemplate({
                     <InteractiveGlossary
                         className="max-w-4xl mx-auto"
                         terms={[
-                            { term: "Carer", definition: "A person or family who provides a safe, stable and loving foster home.", icon: Heart },
-                            { term: "IFA", definition: "A regulated organisation that recruits and supports carers, separate from the council.", icon: Building2 },
-                            { term: "LA (Council)", definition: "Your local council service responsible for children in care in your area.", icon: MapPin },
-                            { term: "Ofsted", definition: "The government body that inspects and rates fostering agencies in England.", icon: ShieldCheck },
-                            { term: "Allowance", definition: "The weekly financial support paid to foster carers to cover the costs of care.", icon: BadgeCheck }
+                            { term: getBlockValue("glossary_term_01", "Carer"), definition: getBlockValue("glossary_def_01", "A person or family who provides a safe, stable and loving foster home."), icon: Heart },
+                            { term: getBlockValue("glossary_term_02", "IFA"), definition: getBlockValue("glossary_def_02", "A regulated organisation that recruits and supports carers, separate from the council."), icon: Building2 },
+                            { term: getBlockValue("glossary_term_03", "LA (Council)"), definition: getBlockValue("glossary_def_03", "Your local council service responsible for children in care in your area."), icon: MapPin },
+                            { term: getBlockValue("glossary_term_04", "Ofsted"), definition: getBlockValue("glossary_def_04", "The government body that inspects and rates fostering agencies in England."), icon: ShieldCheck },
+                            { term: getBlockValue("glossary_term_05", "Allowance"), definition: getBlockValue("glossary_def_05", "The weekly financial support paid to foster carers to cover the costs of care."), icon: BadgeCheck }
                         ]}
                     />
                 </div>

@@ -69,37 +69,128 @@ export interface Location {
 }
 
 const REGION_BLOCKS = [
+  // Hero Section
   { key: "hero_badge", label: "Hero Badge", type: "text", placeholder: "e.g., Regional Fostering Hub" },
   { key: "hero_title", label: "Hero Title", type: "rich", placeholder: "The main title displayed in the hero section" },
   { key: "hero_subtitle", label: "Hero Subtitle", type: "rich", placeholder: "The subtitle shown below the title" },
   { key: "hero_cta", label: "Hero CTA Button", type: "cta", placeholder: "Button text" },
   
+  // Hero Stats
+  { key: "stat_children_label", label: "Children in Care - Label", type: "text", placeholder: "Children in Care" },
+  { key: "stat_local_areas_label", label: "Local Areas - Label", type: "text", placeholder: "Local Areas" },
+  { key: "stat_agencies_label", label: "Agencies - Label", type: "text", placeholder: "Verified Agencies" },
+
+  // Intro Section
   { key: "intro_title", label: "Intro Section Title", type: "rich", placeholder: "Title for the introduction section" },
   { key: "intro_content", label: "Intro Section Content", type: "rich", placeholder: "Main content for the introduction section" },
+  { key: "why_foster_image", label: "Intro Image", type: "image", placeholder: "Image URL for intro section" },
   
+  // Stats Section (Fostering by the Numbers)
+  { key: "stats_title", label: "Stats Section Title", type: "rich", placeholder: "Fostering by the Numbers" },
+  { key: "stats_01_label", label: "Stat 1 Label", type: "text", placeholder: "Children in Care" },
+  { key: "stats_02_label", label: "Stat 2 Label", type: "text", placeholder: "Local Areas Covered" },
+  { key: "stats_03_label", label: "Stat 3 Label", type: "text", placeholder: "Carer Satisfaction" },
+  { key: "stats_04_label", label: "Stat 4 Label", type: "text", placeholder: "Support Availability" },
+
+  // Is Fostering Right Section
   { key: "is_right_title", label: "Is Fostering Right - Title", type: "rich", placeholder: "Title for the 'Is Fostering Right' section" },
   { key: "is_right_content", label: "Is Fostering Right - Content", type: "rich", placeholder: "Content explaining who should consider fostering" },
-  
+  { key: "checklist_01", label: "Checklist Item 1", type: "text", placeholder: "Do you have a spare bedroom?" },
+  { key: "checklist_02", label: "Checklist Item 2", type: "text", placeholder: "Are you over the age of 21?" },
+  { key: "checklist_03", label: "Checklist Item 3", type: "text", placeholder: "Do you have a genuine desire to help children?" },
+  { key: "checklist_04", label: "Checklist Item 4", type: "text", placeholder: "Are you emotionally resilient and patient?" },
+  { key: "checklist_05", label: "Checklist Item 5", type: "text", placeholder: "Can you provide a stable and safe environment?" },
+  { key: "checklist_cta", label: "Checklist CTA Button", type: "text", placeholder: "Talk to Someone First" },
+
+  // Types of Fostering Section
+  { key: "types_title", label: "Types of Fostering Title", type: "rich", placeholder: "Types of Fostering in {location}" },
+  { key: "types_intro", label: "Types of Fostering Intro", type: "rich", placeholder: "Introduction to types of fostering" },
+  { key: "type_short_term_title", label: "Short-Term Card Title", type: "text", placeholder: "Short-Term" },
+  { key: "type_short_term_desc", label: "Short-Term Card Description", type: "text", placeholder: "Temporary care while long-term plans are being made." },
+  { key: "type_long_term_title", label: "Long-Term Card Title", type: "text", placeholder: "Long-Term" },
+  { key: "type_long_term_desc", label: "Long-Term Card Description", type: "text", placeholder: "Stable homes for children who need consistent care until adulthood." },
+  { key: "type_emergency_title", label: "Emergency Card Title", type: "text", placeholder: "Emergency" },
+  { key: "type_emergency_desc", label: "Emergency Card Description", type: "text", placeholder: "Same-day placements for children in urgent situations." },
+  { key: "type_respite_title", label: "Respite Card Title", type: "text", placeholder: "Respite" },
+  { key: "type_respite_desc", label: "Respite Card Description", type: "text", placeholder: "Short stays that support families and carers." },
+  { key: "type_parent_child_title", label: "Parent & Child Card Title", type: "text", placeholder: "Parent & Child" },
+  { key: "type_parent_child_desc", label: "Parent & Child Card Description", type: "text", placeholder: "Supporting a parent and their baby together." },
+  { key: "type_therapeutic_title", label: "Therapeutic Card Title", type: "text", placeholder: "Therapeutic" },
+  { key: "type_therapeutic_desc", label: "Therapeutic Card Description", type: "text", placeholder: "Enhanced support for children with emotional or behavioural needs." },
+
+  // Agency Types Section
   { key: "agency_types_title", label: "Agency Types Section Title", type: "rich", placeholder: "Title for agency types comparison" },
   { key: "agency_types_intro", label: "Agency Types Intro", type: "rich", placeholder: "Introduction to agency types section" },
   { key: "ifa_title", label: "IFA Card Title", type: "rich", placeholder: "Independent Fostering Agencies title" },
   { key: "ifa_content", label: "IFA Card Content", type: "rich", placeholder: "Content about IFAs" },
+  { key: "ifa_bullet_01", label: "IFA Bullet 1", type: "text", placeholder: "Often provide very close, relationship-based support" },
+  { key: "ifa_bullet_02", label: "IFA Bullet 2", type: "text", placeholder: "May offer enhanced training, therapeutic input" },
+  { key: "ifa_bullet_03", label: "IFA Bullet 3", type: "text", placeholder: "Work with multiple local authorities" },
   { key: "la_title", label: "Local Authority Title", type: "rich", placeholder: "Local Authority card title" },
   { key: "la_content", label: "Local Authority Content", type: "rich", placeholder: "Content about Local Authorities" },
-  
+  { key: "la_bullet_01", label: "LA Bullet 1", type: "text", placeholder: "Work closely with social workers in your area" },
+  { key: "la_bullet_02", label: "LA Bullet 2", type: "text", placeholder: "Placements usually within your region" },
+  { key: "la_bullet_03", label: "LA Bullet 3", type: "text", placeholder: "Support set by the council" },
+
+  // Ofsted Section
   { key: "ofsted_title", label: "Ofsted Section Title", type: "rich", placeholder: "Title for Ofsted section" },
   { key: "ofsted_intro", label: "Ofsted Section Intro", type: "rich", placeholder: "Introduction about Ofsted ratings" },
-  
+  { key: "ofsted_safeguarding_title", label: "Ofsted Safeguarding Card Title", type: "text", placeholder: "Safeguarding" },
+  { key: "ofsted_safeguarding_desc", label: "Ofsted Safeguarding Card Description", type: "text", placeholder: "How well agencies protect children..." },
+  { key: "ofsted_leadership_title", label: "Ofsted Leadership Card Title", type: "text", placeholder: "Leadership" },
+  { key: "ofsted_leadership_desc", label: "Ofsted Leadership Card Description", type: "text", placeholder: "Whether leaders create a safe culture..." },
+  { key: "ofsted_outcomes_title", label: "Ofsted Outcomes Card Title", type: "text", placeholder: "Outcomes" },
+  { key: "ofsted_outcomes_desc", label: "Ofsted Outcomes Card Description", type: "text", placeholder: "The difference agencies actually make..." },
+
+  // Featured Agencies Section
+  { key: "featured_agencies_title", label: "Featured Agencies Title", type: "rich", placeholder: "Featured Agencies in {location}" },
+  { key: "featured_agencies_subtitle", label: "Featured Agencies Subtitle", type: "rich", placeholder: "Showing top-rated agencies..." },
+  { key: "featured_agencies_cta", label: "Featured Agencies CTA", type: "text", placeholder: "View All Agencies" },
+
+  // Support Section
   { key: "support_title", label: "Support Section Title", type: "rich", placeholder: "Title for support section" },
   { key: "support_intro", label: "Support Section Intro", type: "rich", placeholder: "Introduction about support available" },
-  
+  { key: "support_allowances_title", label: "Support Allowances Card Title", type: "text", placeholder: "Carer Allowances" },
+  { key: "support_allowances_desc", label: "Support Allowances Card Description", type: "text", placeholder: "Financial allowances help cover the cost..." },
+  { key: "support_training_title", label: "Support Training Card Title", type: "text", placeholder: "Training & Development" },
+  { key: "support_training_desc", label: "Support Training Card Description", type: "text", placeholder: "Regular in-person and online training..." },
+  { key: "support_supervision_title", label: "Support Supervision Card Title", type: "text", placeholder: "24/7 Support & Supervision" },
+  { key: "support_supervision_desc", label: "Support Supervision Card Description", type: "text", placeholder: "Supervising social workers maintain contact..." },
+
+  // Guide Section (Who This Guide Is For)
   { key: "guide_title", label: "Guide Section Title", type: "rich", placeholder: "Title for who this guide is for" },
   { key: "guide_intro", label: "Guide Section Content", type: "rich", placeholder: "Content about the guide" },
-  
+  { key: "guide_card_01", label: "Guide Card 1", type: "text", placeholder: "People exploring fostering for the first time" },
+  { key: "guide_card_02", label: "Guide Card 2", type: "text", placeholder: "Existing carers considering switching agencies" },
+  { key: "guide_card_03", label: "Guide Card 3", type: "text", placeholder: "Families comparing IFAs with local authorities" },
+  { key: "guide_card_04", label: "Guide Card 4", type: "text", placeholder: "Anyone seeking a simple explanation" },
+
+  // CTA Section
+  { key: "cta_title", label: "CTA Section Title", type: "rich", placeholder: "Ready to Start Your Journey?" },
+  { key: "cta_subtitle", label: "CTA Section Subtitle", type: "rich", placeholder: "Take the first step..." },
+  { key: "cta_button", label: "CTA Button Text", type: "text", placeholder: "Get Started" },
+
+  // Glossary Section
   { key: "glossary_title", label: "Glossary Section Title", type: "rich", placeholder: "Title for glossary section" },
   { key: "glossary_intro", label: "Glossary Section Intro", type: "rich", placeholder: "Introduction to glossary" },
-  
+  { key: "glossary_term_01", label: "Glossary Term 1", type: "text", placeholder: "Carer" },
+  { key: "glossary_def_01", label: "Glossary Definition 1", type: "text", placeholder: "A person or family who provides a safe home" },
+  { key: "glossary_term_02", label: "Glossary Term 2", type: "text", placeholder: "IFA" },
+  { key: "glossary_def_02", label: "Glossary Definition 2", type: "text", placeholder: "A regulated organisation separate from council" },
+  { key: "glossary_term_03", label: "Glossary Term 3", type: "text", placeholder: "LA (Council)" },
+  { key: "glossary_def_03", label: "Glossary Definition 3", type: "text", placeholder: "Your local council service for children in care" },
+  { key: "glossary_term_04", label: "Glossary Term 4", type: "text", placeholder: "Ofsted" },
+  { key: "glossary_def_04", label: "Glossary Definition 4", type: "text", placeholder: "Government body that inspects agencies" },
+  { key: "glossary_term_05", label: "Glossary Term 5", type: "text", placeholder: "Allowance" },
+  { key: "glossary_def_05", label: "Glossary Definition 5", type: "text", placeholder: "Weekly financial support for foster carers" },
+
+  // FAQ Section
   { key: "faq_title", label: "FAQ Section Title", type: "rich", placeholder: "Title for FAQ section" },
+  { key: "faq_subtitle", label: "FAQ Section Subtitle", type: "rich", placeholder: "Clear, honest answers..." },
+
+  // Disclaimer
+  { key: "disclaimer_title", label: "Disclaimer Title", type: "text", placeholder: "Important Information" },
+  { key: "disclaimer_content", label: "Disclaimer Content", type: "rich", placeholder: "FosterCare.co.uk is a free informational resource..." },
 ];
 
 export default function AdminRegionCMS() {
@@ -568,15 +659,20 @@ function RegionBlockEditor({
   };
 
   const groupedBlocks = {
-    "Hero Section": ["hero_badge", "hero_title", "hero_subtitle", "hero_cta"],
-    "Introduction": ["intro_title", "intro_content"],
-    "Is Fostering Right": ["is_right_title", "is_right_content"],
-    "Agency Types": ["agency_types_title", "agency_types_intro", "ifa_title", "ifa_content", "la_title", "la_content"],
-    "Ofsted Section": ["ofsted_title", "ofsted_intro"],
-    "Support Section": ["support_title", "support_intro"],
-    "Guide Section": ["guide_title", "guide_intro"],
-    "Glossary": ["glossary_title", "glossary_intro"],
-    "FAQ": ["faq_title"],
+    "Hero Section": ["hero_badge", "hero_title", "hero_subtitle", "hero_cta", "stat_children_label", "stat_local_areas_label", "stat_agencies_label"],
+    "Introduction": ["intro_title", "intro_content", "why_foster_image"],
+    "Stats Section": ["stats_title", "stats_01_label", "stats_02_label", "stats_03_label", "stats_04_label"],
+    "Is Fostering Right": ["is_right_title", "is_right_content", "checklist_01", "checklist_02", "checklist_03", "checklist_04", "checklist_05", "checklist_cta"],
+    "Types of Fostering": ["types_title", "types_intro", "type_short_term_title", "type_short_term_desc", "type_long_term_title", "type_long_term_desc", "type_emergency_title", "type_emergency_desc", "type_respite_title", "type_respite_desc", "type_parent_child_title", "type_parent_child_desc", "type_therapeutic_title", "type_therapeutic_desc"],
+    "Agency Types": ["agency_types_title", "agency_types_intro", "ifa_title", "ifa_content", "ifa_bullet_01", "ifa_bullet_02", "ifa_bullet_03", "la_title", "la_content", "la_bullet_01", "la_bullet_02", "la_bullet_03"],
+    "Ofsted Section": ["ofsted_title", "ofsted_intro", "ofsted_safeguarding_title", "ofsted_safeguarding_desc", "ofsted_leadership_title", "ofsted_leadership_desc", "ofsted_outcomes_title", "ofsted_outcomes_desc"],
+    "Featured Agencies": ["featured_agencies_title", "featured_agencies_subtitle", "featured_agencies_cta"],
+    "Support Section": ["support_title", "support_intro", "support_allowances_title", "support_allowances_desc", "support_training_title", "support_training_desc", "support_supervision_title", "support_supervision_desc"],
+    "Guide Section": ["guide_title", "guide_intro", "guide_card_01", "guide_card_02", "guide_card_03", "guide_card_04"],
+    "CTA Section": ["cta_title", "cta_subtitle", "cta_button"],
+    "Glossary": ["glossary_title", "glossary_intro", "glossary_term_01", "glossary_def_01", "glossary_term_02", "glossary_def_02", "glossary_term_03", "glossary_def_03", "glossary_term_04", "glossary_def_04", "glossary_term_05", "glossary_def_05"],
+    "FAQ Section": ["faq_title", "faq_subtitle"],
+    "Disclaimer": ["disclaimer_title", "disclaimer_content"],
   };
 
   return (
