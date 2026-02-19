@@ -62,7 +62,10 @@ export function RegionTemplate({
     stats,
     path
 }: LocationPageProps) {
-    const { data: blocks } = usePageBlocks(`loc_${location.slug}`);
+    const pathSlug = path && path.length > 0 
+        ? path.map(p => p.slug).join('/')
+        : location.slug;
+    const { data: blocks } = usePageBlocks(`loc_${pathSlug}`);
     const locationName = location.name;
     const heroRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll();

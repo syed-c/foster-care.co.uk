@@ -65,6 +65,7 @@ export interface Location {
   slug: string;
   type: string;
   parent_id: string | null;
+  parent?: Location | null;
 }
 
 const REGION_BLOCKS = [
@@ -110,11 +111,19 @@ export default function AdminRegionCMS() {
   const { data: locations, isLoading: locationsLoading } = useQuery<Location[]>({
     queryKey: ["admin-locations-for-cms"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data: locs, error } = await supabase
         .from("locations")
         .select("id, name, slug, type, parent_id")
+        .order("type")
+        .order("name");
       if (error) throw error;
-      return data;
+      
+      const locationsWithParents = locs?.map(loc => {
+        const parent = locs.find(l => l.id === loc.parent_id);
+        return { ...loc, parent };
+      }) || [];
+      
+      return locationsWithParents;
     },
   });
 
@@ -140,8 +149,9 @@ export default function AdminRegionCMS() {
     return matchesSearch && matchesType;
   }) || [];
 
-  const getBlocksCountForRegion = (slug: string) => {
-    const pageKey = `loc_${slug}`;
+  const getBlocksCountForRegion = (loc: Location) => {
+    const path = buildLocationPath(loc).replace('/locations/', '');
+    const pageKey = `loc_${path}`;
     return blocks?.filter(b => b.page_key === pageKey).length || 0;
   };
 
@@ -153,7 +163,7 @@ export default function AdminRegionCMS() {
 
   return (
     <SuperAdminSidebar title="Region Content CMS" description="Edit content for region, county and city pages">
-      <div className="flex flex-col h-[calc(100vh-8rem)] gap-6">
+      <div className="flex flex-col h-[calc(100vh-8rem)] gap-6 overflow-hidden">
         <div className="grid gap-4 sm:grid-cols-3 shrink-0">
           <Card className="bg-gradient-to-br from-primary/10 to-primary/5">
             <CardContent className="pt-6">
@@ -196,8 +206,8 @@ export default function AdminRegionCMS() {
           </Card>
         </div>
 
-        <Card className="flex-1 flex flex-col overflow-hidden shadow-sm">
-          <CardHeader className="py-4 px-6 border-b">
+        <Card className="flex-1 flex flex-col overflow-hidden shadow-sm min-h-0">
+          <CardHeader className="py-4 px-6 border-b shrink-0">
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="flex items-center gap-2 text-lg">
@@ -249,7 +259,7 @@ export default function AdminRegionCMS() {
             </div>
           </CardHeader>
 
-          <CardContent className="flex-1 overflow-y-auto p-0 bg-muted/5">
+          <CardContent className="flex-1 overflow-y-auto p-0 bg-muted/5 min-h-0">
             {locationsLoading || blocksLoading ? (
               <div className="flex flex-col items-center justify-center h-full gap-2">
                 <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -273,7 +283,7 @@ export default function AdminRegionCMS() {
                           <LocationCard 
                             key={loc.id} 
                             location={loc} 
-                            blocksCount={getBlocksCountForRegion(loc.slug)}
+                            blocksCount={getBlocksCountForRegion(loc)}
                             onEdit={() => setEditingRegion(loc)}
                           />
                         ))}
@@ -293,7 +303,7 @@ export default function AdminRegionCMS() {
                           <LocationCard 
                             key={loc.id} 
                             location={loc} 
-                            blocksCount={getBlocksCountForRegion(loc.slug)}
+                            blocksCount={getBlocksCountForRegion(loc)}
                             onEdit={() => setEditingRegion(loc)}
                           />
                         ))}
@@ -313,7 +323,7 @@ export default function AdminRegionCMS() {
                           <LocationCard 
                             key={loc.id} 
                             location={loc} 
-                            blocksCount={getBlocksCountForRegion(loc.slug)}
+                            blocksCount={getBlocksCountForRegion(loc)}
                             onEdit={() => setEditingRegion(loc)}
                           />
                         ))}
@@ -332,6 +342,7 @@ export default function AdminRegionCMS() {
           {editingRegion ? (
             <RegionBlockEditor
               location={editingRegion}
+              locationPath={buildLocationPath(editingRegion)}
               onClose={() => {
                 setEditingRegion(null);
                 queryClient.invalidateQueries({ queryKey: ["admin-region-blocks"] });
@@ -352,6 +363,18 @@ export default function AdminRegionCMS() {
   );
 }
 
+function buildLocationPath(loc: Location): string {
+  const parts: string[] = [];
+  let current: Location | null = loc;
+  
+  while (current) {
+    parts.unshift(current.slug);
+    current = current.parent || null;
+  }
+  
+  return `/locations/${parts.join('/')}`;
+}
+
 function LocationCard({ 
   location, 
   blocksCount, 
@@ -367,6 +390,8 @@ function LocationCard({
     county: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
     city: "bg-amber-500/10 text-amber-600 border-amber-500/20",
   };
+
+  const locationPath = buildLocationPath(location);
 
   return (
     <div className="group flex flex-col p-4 bg-white rounded-xl border hover:border-primary/50 hover:shadow-md transition-all cursor-pointer" onClick={onEdit}>
@@ -384,7 +409,7 @@ function LocationCard({
         {location.name}
       </h4>
       <p className="text-xs text-muted-foreground font-mono mb-4 line-clamp-1 opacity-70">
-        /locations/{location.slug}
+        {locationPath}
       </p>
       <Button variant="secondary" size="sm" className="w-full mt-auto h-8 text-xs font-medium">
         <Pencil className="w-3 h-3 mr-2" />
@@ -396,15 +421,18 @@ function LocationCard({
 
 function RegionBlockEditor({
   location,
+  locationPath,
   onClose,
   onSave,
 }: {
   location: Location;
+  locationPath: string;
   onClose: () => void;
   onSave: () => void;
 }) {
   const queryClient = useQueryClient();
-  const pageKey = `loc_${location.slug}`;
+  const pathSlug = locationPath.replace('/locations/', '');
+  const pageKey = `loc_${pathSlug}`;
   const [activeTab, setActiveTab] = useState("content");
   const [saving, setSaving] = useState(false);
   const [editBlock, setEditBlock] = useState<ContentBlock | null>(null);
@@ -560,7 +588,7 @@ function RegionBlockEditor({
             {location.name}
           </SheetTitle>
           <SheetDescription className="font-mono text-xs">
-            /locations/{location.slug}
+            {locationPath}
           </SheetDescription>
         </div>
         <div className="flex gap-2 pt-2">
@@ -584,16 +612,16 @@ function RegionBlockEditor({
         </div>
       </SheetHeader>
 
-      <div className="flex-1 overflow-hidden flex flex-col">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-          <div className="px-6 pt-4 sticky top-0 bg-background/95 backdrop-blur z-10 pb-2 border-b">
+      <div className="flex-1 overflow-hidden flex flex-col min-h-0">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full min-h-0">
+          <div className="px-6 pt-4 shrink-0 bg-background/95 backdrop-blur z-10 pb-2 border-b">
             <TabsList className="w-full grid grid-cols-2">
               <TabsTrigger value="content">Content Blocks ({blocks?.length || 0})</TabsTrigger>
               <TabsTrigger value="preview">Live Preview</TabsTrigger>
             </TabsList>
           </div>
 
-          <TabsContent value="content" className="flex-1 overflow-y-auto p-6 data-[state=inactive]:hidden">
+          <TabsContent value="content" className="flex-1 overflow-y-auto p-6 data-[state=inactive]:hidden min-h-0">
             {isLoading ? (
               <div className="py-12 flex justify-center">
                 <Loader2 className="animate-spin text-muted-foreground" />
@@ -684,14 +712,14 @@ function RegionBlockEditor({
             )}
           </TabsContent>
 
-          <TabsContent value="preview" className="flex-1 overflow-y-auto p-6 data-[state=inactive]:hidden">
+          <TabsContent value="preview" className="flex-1 overflow-y-auto p-6 data-[state=inactive]:hidden min-h-0">
             <div className="max-w-4xl mx-auto space-y-8">
               <div className="bg-slate-100 p-4 rounded-lg">
                 <h3 className="font-semibold mb-2">Live Page Preview</h3>
                 <p className="text-sm text-muted-foreground">
                   This shows how your content will appear on the live page. 
                   <a 
-                    href={`/locations/${location.slug}`} 
+                    href={locationPath} 
                     target="_blank" 
                     className="text-primary hover:underline ml-1"
                   >
@@ -705,7 +733,7 @@ function RegionBlockEditor({
                   <div className="w-3 h-3 rounded-full bg-red-500" />
                   <div className="w-3 h-3 rounded-full bg-yellow-500" />
                   <div className="w-3 h-3 rounded-full bg-green-500" />
-                  <span className="ml-2 text-xs text-slate-400">/locations/{location.slug}</span>
+                  <span className="ml-2 text-xs text-slate-400">{locationPath}</span>
                 </div>
                 <div className="p-8 bg-white">
                   <div className="space-y-6">

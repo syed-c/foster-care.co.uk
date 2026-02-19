@@ -32,9 +32,13 @@ export function LocalTemplate({
     location,
     agencies,
     faqs,
-    stats
+    stats,
+    path
 }: LocationPageProps) {
-    const { data: blocks } = usePageBlocks(`loc_${location.slug}`);
+    const pathSlug = path && path.length > 0 
+        ? path.map(p => p.slug).join('/')
+        : location.slug;
+    const { data: blocks } = usePageBlocks(`loc_${pathSlug}`);
     const locationName = location.name;
 
     const defaultFaqs = [
