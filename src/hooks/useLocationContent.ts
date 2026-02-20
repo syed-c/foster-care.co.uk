@@ -125,10 +125,28 @@ export function useLocationContent(slug: string | undefined) {
         return null;
       }
       
+      console.log("Raw data from DB:", JSON.stringify(data, null, 2));
+      
+      // Handle content parsing
+      let parsedContent = null;
       if (data.content) {
+        if (typeof data.content === 'string') {
+          try {
+            parsedContent = JSON.parse(data.content);
+          } catch (e) {
+            console.error("Failed to parse content:", e);
+          }
+        } else if (typeof data.content === 'object') {
+          parsedContent = data.content;
+        }
+      }
+      
+      console.log("Parsed content:", parsedContent);
+      
+      if (parsedContent) {
         return {
           ...data,
-          content: typeof data.content === 'string' ? JSON.parse(data.content) : data.content
+          content: parsedContent
         } as LocationContent;
       }
       

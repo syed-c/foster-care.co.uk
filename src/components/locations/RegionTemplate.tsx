@@ -195,14 +195,14 @@ export function RegionTemplate({
                             <div className="max-w-4xl mx-auto">
                                 <ScrollReveal effect="slideUp">
                                     <SectionIntro
-                                        heading={c.why_fostering_matters.heading}
+                                        heading={c?.why_fostering_matters?.heading}
                                         center={true}
                                     />
                                 </ScrollReveal>
 
                                 <ScrollReveal effect="slideUp" delay={0.1}>
                                     <div className="space-y-6 text-lg text-slate-600 leading-relaxed font-medium mt-12">
-                                        {c.why_fostering_matters.paragraphs.map((paragraph, i) => (
+                                        {(c?.why_fostering_matters?.paragraphs || []).map((paragraph, i) => (
                                             <p key={i}>{paragraph}</p>
                                         ))}
                                     </div>
@@ -219,8 +219,8 @@ export function RegionTemplate({
                     <div className="container-main px-4">
                         <ScrollReveal effect="slideUp">
                             <SectionIntro
-                                heading={c.agency_types.heading}
-                                subheading={c.agency_types.intro}
+                                heading={c?.agency_types?.heading}
+                                subheading={c?.agency_types?.intro}
                                 center={true}
                             />
                         </ScrollReveal>
@@ -229,9 +229,9 @@ export function RegionTemplate({
                             <ScrollReveal effect="slideUp" delay={0.1}>
                                 <div className="grid md:grid-cols-2 gap-6">
                                     <div className="p-6 bg-white rounded-xl border border-slate-200">
-                                        <h3 className="font-bold text-lg mb-4">{c.agency_types.independent.title}</h3>
+                                        <h3 className="font-bold text-lg mb-4">{c?.agency_types?.independent?.title}</h3>
                                         <ul className="space-y-3">
-                                            {c.agency_types.independent.benefits.map((benefit, i) => (
+{(c?.agency_types?.independent?.benefits || []).map((benefit, i) => (
                                                 <li key={i} className="flex items-center gap-3 text-sm text-slate-600">
                                                     <CheckCircle className="w-4 h-4 text-primary flex-shrink-0" />
                                                     {benefit}
@@ -240,9 +240,9 @@ export function RegionTemplate({
                                         </ul>
                                     </div>
                                     <div className="p-6 bg-white rounded-xl border border-slate-200">
-                                        <h3 className="font-bold text-lg mb-4">{c.agency_types.local_authority.title}</h3>
+                                        <h3 className="font-bold text-lg mb-4">{c?.agency_types?.local_authority?.title}</h3>
                                         <ul className="space-y-3">
-                                            {c.agency_types.local_authority.benefits.map((benefit, i) => (
+{(c?.agency_types?.local_authority?.benefits || []).map((benefit, i) => (
                                                 <li key={i} className="flex items-center gap-3 text-sm text-slate-600">
                                                     <CheckCircle className="w-4 h-4 text-slate-400 flex-shrink-0" />
                                                     {benefit}
@@ -257,7 +257,7 @@ export function RegionTemplate({
                                 <div className="mt-8 p-6 bg-white rounded-xl border border-slate-200">
                                     <h3 className="font-bold text-lg mb-4">Compare:</h3>
                                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                        {c.agency_types.comparison_points.map((point, i) => (
+                                        {(c?.agency_types?.comparison_points || []).map((point, i) => (
                                             <div key={i} className="flex items-center gap-2 text-sm text-slate-600">
                                                 <ChevronRight className="w-4 h-4 text-primary" />
                                                 {point}
@@ -277,7 +277,7 @@ export function RegionTemplate({
                     <div className="container-main px-4">
                         <ScrollReveal effect="slideUp">
                             <SectionIntro
-                                heading={c.how_fostering_works.heading}
+                                heading={c?.how_fostering_works?.heading}
                                 center={true}
                             />
                         </ScrollReveal>
@@ -285,7 +285,7 @@ export function RegionTemplate({
                         <div className="max-w-4xl mx-auto mt-12">
                             <ScrollReveal effect="slideUp">
                                 <div className="space-y-6 text-lg text-slate-600 leading-relaxed mb-8">
-                                    {c.how_fostering_works.paragraphs.map((paragraph, i) => (
+                                    {(c?.how_fostering_works?.paragraphs || []).map((paragraph, i) => (
                                         <p key={i}>{paragraph}</p>
                                     ))}
                                 </div>
@@ -294,7 +294,7 @@ export function RegionTemplate({
                             <ScrollReveal effect="slideUp" delay={0.1}>
                                 <h3 className="text-xl font-bold mb-6">Carers are valued for offering:</h3>
                                 <div className="grid md:grid-cols-2 gap-4">
-                                    {c.how_fostering_works.qualities.map((quality, i) => (
+                                    {(c?.how_fostering_works?.qualities || []).map((quality, i) => (
                                         <ScrollRevealItem key={i}>
                                             <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-xl">
                                                 <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
@@ -317,14 +317,14 @@ export function RegionTemplate({
                     <div className="container-main px-4">
                         <ScrollReveal effect="slideUp">
                             <SectionIntro
-                                heading={c.types_of_fostering.heading}
-                                subheading={c.types_of_fostering.intro}
+                                heading={c?.types_of_fostering?.heading}
+                                subheading={c?.types_of_fostering?.intro}
                                 center={true}
                             />
                         </ScrollReveal>
 
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12 max-w-6xl mx-auto">
-                            {c.types_of_fostering.categories.map((category, i) => (
+                            {(c?.types_of_fostering?.categories || []).map((category, i) => (
                                 <ScrollRevealItem key={i}>
                                     <InteractiveCard className="p-6 bg-white border-slate-200 h-full">
                                         <h3 className="text-lg font-black mb-3 text-slate-950">{category.name}</h3>
@@ -352,10 +352,10 @@ export function RegionTemplate({
                             <ScrollReveal effect="slideLeft">
                                 <div className="p-8 bg-white border-2 border-primary/20 rounded-2xl">
                                     <h3 className="text-2xl font-black mb-4 text-slate-950">
-                                        {c.agency_types.independent.title}
+                                        {c?.agency_types?.independent?.title}
                                     </h3>
                                     <ul className="space-y-3">
-                                        {c.agency_types.independent.benefits.map((benefit, i) => (
+                                        {(c?.agency_types?.independent?.benefits || []).map((benefit, i) => (
                                             <li key={i} className="flex items-center gap-3 text-slate-700 font-medium">
                                                 <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
                                                 {benefit}
@@ -368,10 +368,10 @@ export function RegionTemplate({
                             <ScrollReveal effect="slideRight">
                                 <div className="p-8 bg-slate-50 border border-slate-200 rounded-2xl">
                                     <h3 className="text-2xl font-black mb-4 text-slate-950">
-                                        {c.agency_types.local_authority.title}
+                                        {c?.agency_types?.local_authority?.title}
                                     </h3>
                                     <ul className="space-y-3">
-                                        {c.agency_types.local_authority.benefits.map((benefit, i) => (
+                                        {(c?.agency_types?.local_authority?.benefits || []).map((benefit, i) => (
                                             <li key={i} className="flex items-center gap-3 text-slate-700 font-medium">
                                                 <div className="w-2 h-2 rounded-full bg-slate-400 flex-shrink-0" />
                                                 {benefit}
@@ -391,7 +391,7 @@ export function RegionTemplate({
                     <div className="container-main px-4">
                         <ScrollReveal effect="slideUp">
                             <SectionIntro
-                                heading={c.how_to_become.heading}
+                                heading={c?.how_to_become?.heading}
                                 subheading="If fostering feels right for you, the next step is understanding the process."
                                 center={true}
                                 inverted={true}
@@ -399,7 +399,7 @@ export function RegionTemplate({
                         </ScrollReveal>
 
                         <div className="grid md:grid-cols-2 gap-8 mt-12 max-w-4xl mx-auto">
-                            {c.how_to_become.steps.map((step, i) => (
+                            {(c?.how_to_become?.steps || []).map((step, i) => (
                                 <ScrollRevealItem key={i}>
                                     <div className="flex gap-4">
                                         <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 font-black text-primary">
@@ -416,7 +416,7 @@ export function RegionTemplate({
 
                         <ScrollReveal effect="slideUp" delay={0.2}>
                             <p className="mt-12 text-center text-slate-300 max-w-2xl mx-auto">
-                                {c.how_to_become.note}
+                                {c?.how_to_become?.note}
                             </p>
                         </ScrollReveal>
                     </div>
@@ -429,8 +429,8 @@ export function RegionTemplate({
                     <div className="container-main px-4">
                         <ScrollReveal effect="slideUp">
                             <SectionIntro
-                                heading={c.ofsted.heading}
-                                subheading={c.ofsted.description}
+                                heading={c?.ofsted?.heading}
+                                subheading={c?.ofsted?.description}
                                 center={true}
                             />
                         </ScrollReveal>
@@ -444,13 +444,13 @@ export function RegionTemplate({
                     <div className="container-main px-4">
                         <ScrollReveal effect="slideUp">
                             <SectionIntro
-                                heading={c.support.heading}
+                                heading={c?.support?.heading}
                                 center={true}
                             />
                         </ScrollReveal>
 
                         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12 max-w-5xl mx-auto">
-                            {c.support.categories.map((category, i) => (
+                            {(c?.support?.categories || []).map((category, i) => (
                                 <ScrollRevealItem key={i}>
                                     <div className="p-6 bg-white border border-slate-200 rounded-xl">
                                         <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
@@ -472,7 +472,7 @@ export function RegionTemplate({
                     <div className="container-main px-4">
                         <ScrollReveal effect="slideUp">
                             <SectionIntro
-                                heading={c.regions.heading}
+                                heading={c?.regions?.heading}
                                 center={true}
                             />
                         </ScrollReveal>
@@ -480,7 +480,7 @@ export function RegionTemplate({
                         <div className="max-w-3xl mx-auto mt-12">
                             <ScrollReveal effect="slideUp" delay={0.1}>
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                    {c.regions.list.map((area, i) => (
+                                    {(c?.regions?.list || []).map((area, i) => (
                                         <ScrollRevealItem key={i}>
                                             <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-xl">
                                                 <MapPin className="w-5 h-5 text-primary" />
@@ -501,7 +501,7 @@ export function RegionTemplate({
                     <div className="container-main px-4 max-w-4xl mx-auto">
                         <ScrollReveal effect="slideUp">
                             <SectionIntro
-                                heading={c.faq.heading}
+                                heading={c?.faq?.heading}
                                 subheading="Clear, honest answers for prospective carers."
                                 center={true}
                                 inverted={true}
@@ -510,7 +510,7 @@ export function RegionTemplate({
 
                         <ScrollReveal effect="slideUp" delay={0.1}>
                             <div className="mt-12 space-y-4">
-                                {c.faq.questions.map((faq, i) => (
+                                {(c?.faq?.questions || []).map((faq, i) => (
                                     <CollapsibleFAQ
                                         key={i}
                                         items={[{ question: faq.question, answer: faq.answer, emoji: "💡" }]}
@@ -529,13 +529,13 @@ export function RegionTemplate({
                     <div className="container-main px-4 max-w-4xl mx-auto text-center">
                         <ScrollReveal effect="slideUp">
                             <h2 className="text-3xl md:text-4xl font-black mb-8">
-                                {c.responsibility.heading}
+                                {c?.responsibility?.heading}
                             </h2>
                         </ScrollReveal>
 
                         <ScrollReveal effect="slideUp" delay={0.1}>
                             <p className="text-lg text-slate-600">
-                                {c.responsibility.paragraph}
+                                {c?.responsibility?.paragraph}
                             </p>
                         </ScrollReveal>
                     </div>
@@ -548,13 +548,13 @@ export function RegionTemplate({
                     <div className="container-main px-4 max-w-4xl mx-auto text-center">
                         <ScrollReveal effect="slideUp">
                             <h2 className="text-3xl md:text-5xl font-black mb-6">
-                                {c.cta.heading}
+                                {c?.cta?.heading}
                             </h2>
                         </ScrollReveal>
 
                         <ScrollReveal effect="slideUp" delay={0.1}>
                             <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
-                                {c.cta.paragraph}
+                                {c?.cta?.paragraph}
                             </p>
                         </ScrollReveal>
 
@@ -565,7 +565,7 @@ export function RegionTemplate({
                                 asChild
                             >
                                 <Link href="/become-a-foster">
-                                    {c.cta.button_text}
+                                    {c?.cta?.button_text}
                                     <ArrowRight className="w-6 h-6 ml-3" />
                                 </Link>
                             </Button>
