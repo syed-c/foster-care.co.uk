@@ -9,7 +9,6 @@ import {
     HelpCircle,
     BookOpen,
     Scale,
-    Star,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -83,6 +82,8 @@ export function RegionTemplate({
                     <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-900/20 rounded-full blur-3xl"></div>
                     <div className="absolute bottom-0 left-0 w-80 h-80 bg-slate-700/20 rounded-full blur-3xl"></div>
                 </div>
+                
+                {/* Hero Content Container */}
                 <div className="relative container-main px-4 max-w-4xl mx-auto">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -116,13 +117,24 @@ export function RegionTemplate({
                         </div>
                     </motion.div>
                 </div>
+
+                {/* Hero Termination - Clean curved edge */}
+                <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-slate-900 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0">
+                    <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-16 text-slate-900">
+                        <path d="M0 80C240 80 480 80 720 40C960 0 1200 0 1440 40L1440 80H0Z" fill="currentColor"/>
+                    </svg>
+                </div>
             </section>
 
-            {/* 2. WHY FOSTERING MATTERS - DARK → LIGHT TRANSITION */}
+            {/* HERO TERMINATION BLOCK - Visual decompression */}
+            <div className="bg-slate-900 h-8"></div>
+
+            {/* 2. WHY FOSTERING MATTERS - Solid dark with clear entry */}
             {c?.why_fostering_matters && (
-                <section className="py-20 md:py-28 bg-gradient-to-b from-slate-800 to-stone-50">
-                    <div className="container-main px-4 max-w-3xl mx-auto">
-                        <div className="border-t border-stone-600/30 pt-8">
+                <section className="bg-slate-900">
+                    <div className="container-main px-4 max-w-3xl mx-auto pt-12 pb-20 md:pt-16 md:pb-28">
+                        <div className="border-t border-stone-600/40 pt-8">
                             <h2 className="text-2xl md:text-3xl font-semibold text-white mb-6">
                                 {c.why_fostering_matters.heading}
                             </h2>
