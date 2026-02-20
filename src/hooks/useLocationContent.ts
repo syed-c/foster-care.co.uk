@@ -91,43 +91,41 @@ export function useLocationContent(slug: string | undefined) {
     queryFn: async () => {
       if (!slug) return null;
       
-      // Try exact match first
-      let { data, error } = await supabase
-        .from("location_content")
-        .select("*")
-        .eq("slug", slug.toLowerCase())
-        .single();
+      const cleanSlug = slug.toLowerCase().trim();
       
-      // If not found, try case-insensitive match
-      if (error || !data) {
-        const { data: data2 } = await supabase
-          .from("location_content")
-          .select("*")
-          .ilike("slug", slug.toLowerCase())
-          .single();
-        
-        data = data2;
+      // Try different matching strategies
+      const strategies = [
+        // Exact match
+        () => supabase.from("location_content").select("*").eq("slug", cleanSlug).maybeSingle(),
+        // With prefix "loc_"
+        () => supabase.from("location_content").select("*").eq("slug", `loc_${cleanSlug}`).maybeSingle(),
+        // Case insensitive
+        () => supabase.from("location_content").select("*").ilike("slug", cleanSlug).maybeSingle(),
+      ];
+      
+      let data = null;
+      let lastError = null;
+      
+      for (const strategy of strategies) {
+        const result = await strategy();
+        if (result.data) {
+          data = result.data;
+          break;
+        }
+        if (result.error) {
+          lastError = result.error;
+        }
       }
       
-      // If still not found, try matching just the last segment of the slug
-      if (!data) {
-        const slugParts = slug.split('/');
-        const lastPart = slugParts[slugParts.length - 1].toLowerCase();
-        const { data: data3 } = await supabase
-          .from("location_content")
-          .select("*")
-          .eq("slug", lastPart)
-          .single();
-        
-        data = data3;
+      if (!data && lastError) {
+        console.error("Supabase query error:", lastError);
       }
       
       if (!data) {
-        console.log("No location content found for slug:", slug);
         return null;
       }
       
-      if (data && data.content) {
+      if (data.content) {
         return {
           ...data,
           content: typeof data.content === 'string' ? JSON.parse(data.content) : data.content
