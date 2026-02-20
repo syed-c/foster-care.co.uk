@@ -109,7 +109,7 @@ export function RegionTemplate({
                             </h1>
 
                             <p className="text-xl md:text-2xl text-slate-300 mb-16 max-w-4xl mx-auto leading-relaxed font-medium">
-                                Explore fostering agencies across {locationName}, compare support packages, and start your fostering journey with confidence.
+                                {c?.cta?.paragraph || `Explore fostering agencies across ${locationName}, compare support packages, and start your fostering journey with confidence.`}
                             </p>
 
                             {/* Stats Grid */}
@@ -142,14 +142,14 @@ export function RegionTemplate({
                                 ))}
                             </div>
 
-                            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+                                <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
                                 <Button
                                     size="lg"
                                     className="w-full sm:w-auto rounded-full bg-primary hover:bg-primary/90 text-white font-black h-16 px-12 text-xl shadow-2xl shadow-primary/40 transition-all hover:scale-105 active:scale-95 group"
                                     asChild
                                 >
                                     <Link href="/become-a-foster">
-                                        Start Your Journey
+                                        {c?.cta?.button_text || "Start Your Journey"}
                                         <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform" />
                                     </Link>
                                 </Button>

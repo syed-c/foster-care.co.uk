@@ -91,13 +91,38 @@ export function useLocationContent(slug: string | undefined) {
     queryFn: async () => {
       if (!slug) return null;
       
-      const { data, error } = await supabase
+      // Try exact match first
+      let { data, error } = await supabase
         .from("location_content")
         .select("*")
-        .eq("slug", slug)
+        .eq("slug", slug.toLowerCase())
         .single();
       
-      if (error) {
+      // If not found, try case-insensitive match
+      if (error || !data) {
+        const { data: data2 } = await supabase
+          .from("location_content")
+          .select("*")
+          .ilike("slug", slug.toLowerCase())
+          .single();
+        
+        data = data2;
+      }
+      
+      // If still not found, try matching just the last segment of the slug
+      if (!data) {
+        const slugParts = slug.split('/');
+        const lastPart = slugParts[slugParts.length - 1].toLowerCase();
+        const { data: data3 } = await supabase
+          .from("location_content")
+          .select("*")
+          .eq("slug", lastPart)
+          .single();
+        
+        data = data3;
+      }
+      
+      if (!data) {
         console.log("No location content found for slug:", slug);
         return null;
       }
