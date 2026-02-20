@@ -311,12 +311,17 @@ export function RegionTemplate({
                             <SectionIntro heading={c.regions.heading} subheading={c.regions.intro} center />
                         </ScrollReveal>
 
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-12">
-                            {(c.regions.list || []).map((area: string, i: number) => (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-12">
+                            {(c.regions.list || []).map((area, i: number) => (
                                 <ScrollRevealItem key={i}>
-                                    <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-xl">
-                                        <MapPin className="w-5 h-5 text-primary" />
-                                        <span className="font-medium">{area}</span>
+                                    <div className="p-4 bg-slate-50 rounded-xl">
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <MapPin className="w-4 h-4 text-primary" />
+                                            <span className="font-bold">{typeof area === 'object' ? (area as { county: string }).county : area}</span>
+                                        </div>
+                                        {typeof area === 'object' && (area as { description: string }).description && (
+                                            <p className="text-sm text-slate-500">{(area as { description: string }).description}</p>
+                                        )}
                                     </div>
                                 </ScrollRevealItem>
                             ))}

@@ -69,7 +69,7 @@ export interface LocationContentData {
   regions?: {
     heading: string;
     intro: string;
-    list: string[];
+    list: Array<{ county: string; description: string } | string>;
   };
   who_guide_is_for?: {
     heading: string;
