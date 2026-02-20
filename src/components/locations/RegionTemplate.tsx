@@ -1,30 +1,24 @@
 "use client";
 
-import { motion, useScroll } from "framer-motion";
+import { motion } from "framer-motion";
 import {
     MapPin,
     ArrowRight,
     CheckCircle,
-    ChevronRight,
-    Activity,
-    Users,
     ShieldCheck,
-    GraduationCap,
     Heart,
+    Users,
     Building2,
-    BadgeCheck,
     HelpCircle,
+    BookOpen,
+    Scale,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { useRef } from "react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { useRef, useState } from "react";
 import { Location, Agency, FAQ } from "@/services/dataService";
-import { StickyNav } from "./shared/StickyNav";
-import { ScrollReveal, ScrollRevealItem } from "./shared/ScrollReveal";
-import { SectionIntro } from "./shared/SectionIntro";
-import { CollapsibleFAQ } from "./shared/CollapsibleFAQ";
-import { InteractiveCard } from "./shared/InteractiveCard";
-import { useLocationContent, LocationContentData } from "@/hooks/useLocationContent";
+import { useLocationContent } from "@/hooks/useLocationContent";
 
 export interface LocationPageProps {
     location: Location;
@@ -49,258 +43,272 @@ export function RegionTemplate({
     
     const locationName = location.name;
     const heroRef = useRef<HTMLDivElement>(null);
+    const howItWorksRef = useRef<HTMLDivElement>(null);
 
     const c = locationContent?.content;
 
-    // Show loading state
+    // Loading state
     if (isLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-slate-950">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+            <div className="min-h-screen flex items-center justify-center bg-slate-50">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-slate-900"></div>
             </div>
         );
     }
 
-    // Show 404 if no content exists in database
+    // 404 if no content
     if (!locationContent || !c) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 px-4">
                 <div className="text-center max-w-md">
-                    <h1 className="text-6xl font-black text-slate-300 mb-4">404</h1>
-                    <h2 className="text-2xl font-bold text-slate-800 mb-4">Page Not Found</h2>
-                    <p className="text-slate-600 mb-8">
-                        Sorry, we couldn't find content for this region. 
-                        This page may not exist or content may not have been added yet.
+                    <h1 className="text-5xl font-bold text-slate-200 mb-4">404</h1>
+                    <h2 className="text-xl font-semibold text-slate-800 mb-3">Page not found</h2>
+                    <p className="text-slate-600 mb-6">
+                        We couldn't find content for this region yet.
                     </p>
                     <Link href="/locations">
-                        <Button>Browse All Locations</Button>
+                        <Button variant="outline">Browse all locations</Button>
                     </Link>
                 </div>
             </div>
         );
     }
 
-    const navSections = [
-        { id: "intro", label: "Intro" },
-        { id: "why-foster", label: "Why Foster" },
-        { id: "agency-types", label: "Agencies" },
-        { id: "types", label: "Types" },
-        { id: "process", label: "Process" },
-        { id: "ofsted", label: "Ofsted" },
-        { id: "support", label: "Support" },
-        { id: "regions", label: "Areas" },
-        { id: "glossary", label: "Glossary" },
-        { id: "faq", label: "FAQ" },
-    ];
+    const scrollToHowItWorks = () => {
+        howItWorksRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
 
     return (
-        <div className="flex flex-col min-h-screen font-sans selection:bg-primary/20 selection:text-primary bg-white">
-            <StickyNav sections={navSections} />
+        <div className="min-h-screen bg-slate-50 font-sans">
+            {/* 1. HERO SECTION */}
+            <section ref={heroRef} className="relative py-24 md:py-32 lg:py-40 bg-white">
+                <div className="container-main px-4 max-w-4xl mx-auto">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                    >
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 leading-tight mb-6">
+                            {c?.title || locationContent?.title || `Fostering in ${locationName}`}
+                        </h1>
+                        
+                        {(c?.intro?.paragraphs || []).map((paragraph, i) => (
+                            <p key={i} className="text-lg text-slate-600 leading-relaxed mb-4 max-w-2xl">
+                                {paragraph}
+                            </p>
+                        ))}
 
-            {/* Hero Section */}
-            <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-950 text-white">
-                <div className="absolute inset-0 z-0 overflow-hidden">
-                    <div className="absolute -top-[10%] -right-[10%] w-[800px] h-[800px] bg-primary/20 blur-[150px] rounded-full" />
-                    <div className="absolute top-[30%] -left-[20%] w-[600px] h-[600px] bg-primary/10 blur-[120px] rounded-full" />
+                        <div className="flex flex-wrap gap-4 mt-8">
+                            <Button size="lg" className="bg-slate-900 hover:bg-slate-800 rounded-full px-8" asChild>
+                                <Link href="/become-a-foster">
+                                    Browse Agencies
+                                    <ArrowRight className="w-4 h-4 ml-2" />
+                                </Link>
+                            </Button>
+                            <Button 
+                                variant="ghost" 
+                                className="text-slate-600 hover:text-slate-900"
+                                onClick={scrollToHowItWorks}
+                            >
+                                How fostering works in {locationName}
+                            </Button>
+                        </div>
+                    </motion.div>
                 </div>
-
-                <div className="container-main relative z-10 px-4 py-20">
-                    <div className="max-w-5xl mx-auto text-center">
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, ease: "easeOut" }}
-                        >
-                            <div className="inline-flex items-center gap-2 mb-10 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-slate-300">
-                                <Activity className="w-3.5 h-3.5 text-primary" />
-                                <span className="text-[10px] font-bold uppercase tracking-[0.2em]">
-                                    Foster Care Directory
-                                </span>
-                            </div>
-
-                            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-10 tracking-tight leading-[1]">
-                                {c?.title || locationContent?.title || `Fostering in ${locationName}`}
-                            </h1>
-
-                            {/* Stats */}
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-16 max-w-4xl mx-auto">
-                                {[
-                                    { value: `${stats.childrenInCare.toLocaleString()}+`, label: "Children in Care", icon: Users },
-                                    { value: `${childLocations.length || stats.boroughs}`, label: "Local Areas", icon: Building2 },
-                                    { value: `${stats.agenciesCount}+`, label: "Agencies", icon: Heart }
-                                ].map((stat, idx) => (
-                                    <motion.div
-                                        key={idx}
-                                        initial={{ opacity: 0, scale: 0.9 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        transition={{ duration: 0.5, delay: 0.2 + idx * 0.1 }}
-                                        className="px-8 py-10 rounded-3xl bg-white/5 border border-white/10"
-                                    >
-                                        <div className="text-4xl md:text-5xl font-black mb-2">{stat.value}</div>
-                                        <div className="text-[11px] uppercase tracking-[0.2em] text-slate-400 font-bold">{stat.label}</div>
-                                    </motion.div>
-                                ))}
-                            </div>
-
-                            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                                <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90 font-black h-14 px-10 text-lg" asChild>
-                                    <Link href="/become-a-foster">
-                                        {c?.cta?.button_text || "Get Started"}
-                                        <ArrowRight className="w-5 h-5 ml-2" />
-                                    </Link>
-                                </Button>
-                                <Button size="lg" variant="outline" className="rounded-full border-white/20 text-white hover:bg-white/10 h-14 px-10 text-lg" asChild>
-                                    <Link href="#agencies">View Agencies</Link>
-                                </Button>
-                            </div>
-                        </motion.div>
-                    </div>
-                </div>
-
-                <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-slate-950 to-transparent" />
             </section>
 
-            {/* Intro Section */}
-            {c?.intro && (
-                <section id="intro" className="py-24 md:py-32 bg-white">
-                    <div className="container-main px-4 max-w-4xl mx-auto">
-                        <ScrollReveal effect="slideUp">
-                            <div className="space-y-6 text-lg text-slate-600 leading-relaxed">
-                                {(c.intro.paragraphs || []).map((p, i) => (
-                                    <p key={i}>{p}</p>
-                                ))}
-                            </div>
-                        </ScrollReveal>
-                    </div>
-                </section>
-            )}
-
-            {/* Why Fostering Matters */}
+            {/* 2. WHY FOSTERING MATTERS */}
             {c?.why_fostering_matters && (
-                <section id="why-foster" className="py-24 md:py-32 bg-slate-50">
-                    <div className="container-main px-4 max-w-4xl mx-auto">
-                        <ScrollReveal effect="slideUp">
-                            <SectionIntro heading={c.why_fostering_matters.heading} center />
-                        </ScrollReveal>
-                        <ScrollReveal effect="slideUp" delay={0.1}>
-                            <div className="space-y-6 text-lg text-slate-600 leading-relaxed mt-12">
-                                {(c.why_fostering_matters.paragraphs || []).map((p, i) => (
-                                    <p key={i}>{p}</p>
+                <section className="py-20 md:py-24 bg-white">
+                    <div className="container-main px-4 max-w-3xl mx-auto">
+                        <div className="border-t-2 border-slate-200 pt-8">
+                            <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-6">
+                                {c.why_fostering_matters.heading}
+                            </h2>
+                            <div className="space-y-4">
+                                {(c.why_fostering_matters.paragraphs || []).map((paragraph, i) => (
+                                    <p key={i} className="text-base text-slate-600 leading-relaxed">
+                                        {paragraph}
+                                    </p>
                                 ))}
                             </div>
-                        </ScrollReveal>
-                    </div>
-                </section>
-            )}
-
-            {/* Agency Types */}
-            {c?.agency_types && (
-                <section id="agency-types" className="py-24 md:py-32 bg-white">
-                    <div className="container-main px-4 max-w-5xl mx-auto">
-                        <ScrollReveal effect="slideUp">
-                            <SectionIntro heading={c.agency_types.heading} subheading={c.agency_types.intro} center />
-                        </ScrollReveal>
-
-                        <div className="grid md:grid-cols-2 gap-8 mt-12">
-                            <ScrollReveal effect="slideLeft">
-                                <div className="p-8 bg-white border-2 border-primary/20 rounded-2xl">
-                                    <h3 className="text-2xl font-black mb-4">{c.agency_types.independent.title}</h3>
-                                    <p className="text-slate-600 mb-6">{c.agency_types.independent.description}</p>
-                                    <ul className="space-y-3">
-                                        {(c.agency_types.independent.benefits || []).map((b, i) => (
-                                            <li key={i} className="flex items-center gap-3">
-                                                <div className="w-2 h-2 rounded-full bg-primary" />
-                                                {b}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </ScrollReveal>
-
-                            <ScrollReveal effect="slideRight">
-                                <div className="p-8 bg-slate-50 border rounded-2xl">
-                                    <h3 className="text-2xl font-black mb-4">{c.agency_types.local_authority.title}</h3>
-                                    <p className="text-slate-600 mb-6">{c.agency_types.local_authority.description}</p>
-                                    <ul className="space-y-3">
-                                        {(c.agency_types.local_authority.benefits || []).map((b, i) => (
-                                            <li key={i} className="flex items-center gap-3">
-                                                <div className="w-2 h-2 rounded-full bg-slate-400" />
-                                                {b}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </ScrollReveal>
                         </div>
                     </div>
                 </section>
             )}
 
-            {/* Types of Fostering */}
-            {c?.types_of_fostering && (
-                <section id="types" className="py-24 md:py-32 bg-slate-50">
-                    <div className="container-main px-4 max-w-5xl mx-auto">
-                        <ScrollReveal effect="slideUp">
-                            <SectionIntro heading={c.types_of_fostering.heading} subheading={c.types_of_fostering.intro} center />
-                        </ScrollReveal>
+            {/* 3. UNDERSTANDING FOSTERING NEEDS */}
+            {c?.fostering_needs && (
+                <section className="py-20 md:py-24 bg-slate-50">
+                    <div className="container-main px-4 max-w-4xl mx-auto">
+                        <div className="grid md:grid-cols-2 gap-12">
+                            <div>
+                                <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-4">
+                                    {c.fostering_needs.heading}
+                                </h2>
+                            </div>
+                            <div className="space-y-4">
+                                {(c.fostering_needs.paragraphs || []).map((paragraph, i) => (
+                                    <p key={i} className="text-base text-slate-600 leading-relaxed">
+                                        {paragraph}
+                                    </p>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            )}
 
-                        <div className="grid md:grid-cols-2 gap-6 mt-12">
-                            {(c.types_of_fostering.categories || []).map((cat, i) => (
-                                <ScrollRevealItem key={i}>
-                                    <InteractiveCard className="p-6 bg-white border h-full">
-                                        <h3 className="text-xl font-bold mb-3">{cat.name}</h3>
-                                        <p className="text-slate-600">{cat.description}</p>
-                                    </InteractiveCard>
-                                </ScrollRevealItem>
+            {/* 4. AGENCY TYPES COMPARISON */}
+            {c?.agency_types && (
+                <section className="py-20 md:py-24 bg-white">
+                    <div className="container-main px-4 max-w-4xl mx-auto">
+                        <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-3 text-center">
+                            {c.agency_types.heading}
+                        </h2>
+                        <p className="text-slate-600 text-center mb-12 max-w-xl mx-auto">
+                            {c.agency_types.intro}
+                        </p>
+
+                        <div className="grid md:grid-cols-2 gap-8">
+                            {/* Independent Agencies */}
+                            <div className="p-8 bg-slate-50 rounded-2xl">
+                                <h3 className="text-lg font-semibold text-slate-900 mb-4">
+                                    {c.agency_types.independent.title}
+                                </h3>
+                                <p className="text-slate-600 mb-6 text-sm leading-relaxed">
+                                    {c.agency_types.independent.description}
+                                </p>
+                                <ul className="space-y-3">
+                                    {(c.agency_types.independent.benefits || []).map((benefit, i) => (
+                                        <li key={i} className="flex items-start gap-3 text-sm text-slate-700">
+                                            <CheckCircle className="w-4 h-4 text-slate-400 mt-0.5 flex-shrink-0" />
+                                            {benefit}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+
+                            {/* Local Authority */}
+                            <div className="p-8 bg-slate-50 rounded-2xl">
+                                <h3 className="text-lg font-semibold text-slate-900 mb-4">
+                                    {c.agency_types.local_authority.title}
+                                </h3>
+                                <p className="text-slate-600 mb-6 text-sm leading-relaxed">
+                                    {c.agency_types.local_authority.description}
+                                </p>
+                                <ul className="space-y-3">
+                                    {(c.agency_types.local_authority.benefits || []).map((benefit, i) => (
+                                        <li key={i} className="flex items-start gap-3 text-sm text-slate-700">
+                                            <CheckCircle className="w-4 h-4 text-slate-400 mt-0.5 flex-shrink-0" />
+                                            {benefit}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* 5. TYPES OF FOSTERING */}
+            {c?.types_of_fostering && (
+                <section className="py-20 md:py-24 bg-slate-50">
+                    <div className="container-main px-4 max-w-4xl mx-auto">
+                        <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-3 text-center">
+                            {c.types_of_fostering.heading}
+                        </h2>
+                        <p className="text-slate-600 text-center mb-12 max-w-xl mx-auto">
+                            {c.types_of_fostering.intro}
+                        </p>
+
+                        <div className="grid md:grid-cols-2 gap-6">
+                            {(c.types_of_fostering.categories || []).map((category, i) => (
+                                <div key={i} className="p-6 bg-white rounded-xl">
+                                    <h3 className="font-semibold text-slate-900 mb-2">{category.name}</h3>
+                                    <p className="text-sm text-slate-600 leading-relaxed">{category.description}</p>
+                                </div>
                             ))}
                         </div>
                     </div>
                 </section>
             )}
 
-            {/* How to Become */}
+            {/* 6. HOW TO BECOME A FOSTER CARER */}
             {c?.how_to_become && (
-                <section id="process" className="py-24 md:py-32 bg-slate-900 text-white">
-                    <div className="container-main px-4 max-w-4xl mx-auto">
-                        <ScrollReveal effect="slideUp">
-                            <SectionIntro heading={c.how_to_become.heading} subheading={c.how_to_become.intro} center inverted />
-                        </ScrollReveal>
+                <section ref={howItWorksRef} className="py-20 md:py-24 bg-white">
+                    <div className="container-main px-4 max-w-3xl mx-auto">
+                        <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-3">
+                            {c.how_to_become.heading}
+                        </h2>
+                        <p className="text-slate-600 mb-10">
+                            {c.how_to_become.intro}
+                        </p>
 
-                        <div className="grid md:grid-cols-2 gap-8 mt-12">
+                        <div className="space-y-8">
                             {(c.how_to_become.steps || []).map((step, i) => (
-                                <ScrollRevealItem key={i}>
-                                    <div className="flex gap-4">
-                                        <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center font-bold text-primary shrink-0">
-                                            {i + 1}
-                                        </div>
-                                        <div>
-                                            <h3 className="font-bold mb-2">{step.name}</h3>
-                                            <p className="text-slate-400 text-sm">{step.description}</p>
-                                        </div>
+                                <div key={i} className="flex gap-6">
+                                    <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center font-semibold text-slate-900 shrink-0">
+                                        {i + 1}
                                     </div>
-                                </ScrollRevealItem>
+                                    <div className="pt-2">
+                                        <h3 className="font-semibold text-slate-900 mb-1">{step.name}</h3>
+                                        <p className="text-sm text-slate-600">{step.description}</p>
+                                    </div>
+                                </div>
                             ))}
                         </div>
 
                         {c.how_to_become.note && (
-                            <p className="text-center text-slate-400 mt-12">{c.how_to_become.note}</p>
+                            <p className="mt-8 text-sm text-slate-500 italic border-l-2 border-slate-200 pl-4">
+                                {c.how_to_become.note}
+                            </p>
                         )}
                     </div>
                 </section>
             )}
 
-            {/* Ofsted */}
+            {/* 7. OFSTED & QUALITY */}
             {c?.ofsted && (
-                <section id="ofsted" className="py-24 md:py-32 bg-white">
-                    <div className="container-main px-4 max-w-4xl mx-auto">
-                        <ScrollReveal effect="slideUp">
-                            <SectionIntro heading={c.ofsted.heading} subheading={c.ofsted.description} center />
-                        </ScrollReveal>
+                <section className="py-20 md:py-24 bg-slate-50">
+                    <div className="container-main px-4 max-w-3xl mx-auto">
+                        <div className="flex items-center gap-3 mb-6">
+                            <Scale className="w-6 h-6 text-slate-700" />
+                            <h2 className="text-2xl font-semibold text-slate-900">
+                                {c.ofsted.heading}
+                            </h2>
+                        </div>
+                        <p className="text-slate-600 mb-8 leading-relaxed">
+                            {c.ofsted.description}
+                        </p>
 
-                        <div className="flex flex-wrap justify-center gap-3 mt-8">
-                            {(c.ofsted.criteria || []).map((crit, i) => (
-                                <div key={i} className="px-4 py-2 bg-slate-100 rounded-full text-sm font-medium">
-                                    {crit}
+                        <div className="flex flex-wrap gap-3">
+                            {(c.ofsted.criteria || []).map((criteria, i) => (
+                                <span key={i} className="px-4 py-2 bg-white rounded-full text-sm text-slate-700">
+                                    {criteria}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* 8. SUPPORT FOR CARERS */}
+            {c?.support && (
+                <section className="py-20 md:py-24 bg-white">
+                    <div className="container-main px-4 max-w-4xl mx-auto">
+                        <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-3 text-center">
+                            {c.support.heading}
+                        </h2>
+                        <p className="text-slate-600 text-center mb-12 max-w-xl mx-auto">
+                            {c.support.intro}
+                        </p>
+
+                        <div className="grid md:grid-cols-3 gap-6">
+                            {(c.support.categories || []).map((category, i) => (
+                                <div key={i} className="p-6 bg-slate-50 rounded-xl">
+                                    <h3 className="font-semibold text-slate-900 mb-2">{category.name}</h3>
+                                    <p className="text-sm text-slate-600 leading-relaxed">{category.description}</p>
                                 </div>
                             ))}
                         </div>
@@ -308,119 +316,139 @@ export function RegionTemplate({
                 </section>
             )}
 
-            {/* Support */}
-            {c?.support && (
-                <section id="support" className="py-24 md:py-32 bg-slate-50">
-                    <div className="container-main px-4 max-w-5xl mx-auto">
-                        <ScrollReveal effect="slideUp">
-                            <SectionIntro heading={c.support.heading} subheading={c.support.intro} center />
-                        </ScrollReveal>
-
-                        <div className="grid md:grid-cols-3 gap-6 mt-12">
-                            {(c.support.categories || []).map((cat, i) => (
-                                <ScrollRevealItem key={i}>
-                                    <div className="p-6 bg-white border rounded-xl">
-                                        <ShieldCheck className="w-8 h-8 text-primary mb-4" />
-                                        <h3 className="font-bold mb-2">{cat.name}</h3>
-                                        <p className="text-slate-600 text-sm">{cat.description}</p>
-                                    </div>
-                                </ScrollRevealItem>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-            )}
-
-            {/* Regions */}
+            {/* 9. AREAS COVERED */}
             {c?.regions && (
-                <section id="regions" className="py-24 md:py-32 bg-white">
-                    <div className="container-main px-4 max-w-4xl mx-auto">
-                        <ScrollReveal effect="slideUp">
-                            <SectionIntro heading={c.regions.heading} subheading={c.regions.intro} center />
-                        </ScrollReveal>
+                <section className="py-20 md:py-24 bg-slate-50">
+                    <div className="container-main px-4 max-w-3xl mx-auto">
+                        <h2 className="text-xl font-semibold text-slate-900 mb-2 text-center">
+                            {c.regions.heading}
+                        </h2>
+                        <p className="text-slate-600 text-center mb-8">
+                            {c.regions.intro}
+                        </p>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-12">
-                            {(c.regions.list || []).map((area, i: number) => (
-                                <ScrollRevealItem key={i}>
-                                    <div className="p-4 bg-slate-50 rounded-xl">
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <MapPin className="w-4 h-4 text-primary" />
-                                            <span className="font-bold">{typeof area === 'object' ? (area as { county: string }).county : area}</span>
-                                        </div>
-                                        {typeof area === 'object' && (area as { description: string }).description && (
-                                            <p className="text-sm text-slate-500">{(area as { description: string }).description}</p>
-                                        )}
-                                    </div>
-                                </ScrollRevealItem>
-                            ))}
+                        <div className="flex flex-wrap justify-center gap-2">
+                            {(c.regions.list || []).map((area, i) => {
+                                const areaName = typeof area === 'object' ? area.county : area;
+                                return (
+                                    <span key={i} className="px-4 py-2 bg-white rounded-full text-sm text-slate-700">
+                                        {areaName}
+                                    </span>
+                                );
+                            })}
                         </div>
                     </div>
                 </section>
             )}
 
-            {/* Glossary */}
+            {/* 10. WHO THIS GUIDE IS FOR */}
+            {c?.who_guide_is_for && (
+                <section className="py-20 md:py-24 bg-white">
+                    <div className="container-main px-4 max-w-2xl mx-auto">
+                        <h2 className="text-xl font-semibold text-slate-900 mb-4 text-center">
+                            {c.who_guide_is_for.heading}
+                        </h2>
+                        <p className="text-slate-600 text-center mb-8">
+                            {c.who_guide_is_for.intro}
+                        </p>
+
+                        <ul className="space-y-3">
+                            {(c.who_guide_is_for.audience || []).map((item, i) => (
+                                <li key={i} className="flex items-center gap-3 text-slate-700">
+                                    <Heart className="w-4 h-4 text-slate-400" />
+                                    {item}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </section>
+            )}
+
+            {/* 11. GLOSSARY (Accordion) */}
             {c?.glossary && (
-                <section id="glossary" className="py-24 md:py-32 bg-slate-50">
-                    <div className="container-main px-4 max-w-4xl mx-auto">
-                        <ScrollReveal effect="slideUp">
-                            <SectionIntro heading={c.glossary.heading} center />
-                        </ScrollReveal>
+                <section className="py-20 md:py-24 bg-slate-50">
+                    <div className="container-main px-4 max-w-2xl mx-auto">
+                        <div className="flex items-center gap-3 mb-8">
+                            <BookOpen className="w-5 h-5 text-slate-700" />
+                            <h2 className="text-xl font-semibold text-slate-900">
+                                {c.glossary.heading}
+                            </h2>
+                        </div>
 
-                        <div className="grid md:grid-cols-2 gap-4 mt-12">
+                        <Accordion type="single" collapsible className="bg-white rounded-xl overflow-hidden">
                             {(c.glossary.terms || []).map((term, i) => (
-                                <ScrollRevealItem key={i}>
-                                    <div className="p-4 bg-white border rounded-xl">
-                                        <h4 className="font-bold mb-1">{term.term}</h4>
-                                        <p className="text-sm text-slate-600">{term.definition}</p>
-                                    </div>
-                                </ScrollRevealItem>
+                                <AccordionItem key={i} value={`term-${i}`} className="px-6 border-slate-100">
+                                    <AccordionTrigger className="text-left font-medium text-slate-900 hover:no-underline">
+                                        {term.term}
+                                    </AccordionTrigger>
+                                    <AccordionContent className="text-slate-600">
+                                        {term.definition}
+                                    </AccordionContent>
+                                </AccordionItem>
                             ))}
-                        </div>
+                        </Accordion>
                     </div>
                 </section>
             )}
 
-            {/* FAQ */}
+            {/* 12. FAQ (Accordion) */}
             {c?.faq && (
-                <section id="faq" className="py-24 md:py-32 bg-slate-900 text-white">
-                    <div className="container-main px-4 max-w-4xl mx-auto">
-                        <ScrollReveal effect="slideUp">
-                            <SectionIntro heading={c.faq.heading} center inverted />
-                        </ScrollReveal>
-
-                        <div className="space-y-4 mt-12">
-                            {(c.faq.questions || []).map((faq, i) => (
-                                <CollapsibleFAQ
-                                    key={i}
-                                    items={[{ question: faq.question, answer: faq.answer, emoji: "💡" }]}
-                                    inverted
-                                />
-                            ))}
+                <section className="py-20 md:py-24 bg-white">
+                    <div className="container-main px-4 max-w-2xl mx-auto">
+                        <div className="flex items-center gap-3 mb-8">
+                            <HelpCircle className="w-5 h-5 text-slate-700" />
+                            <h2 className="text-xl font-semibold text-slate-900">
+                                {c.faq.heading}
+                            </h2>
                         </div>
+
+                        <Accordion type="single" collapsible className="bg-slate-50 rounded-xl overflow-hidden">
+                            {(c.faq.questions || []).map((faq, i) => (
+                                <AccordionItem key={i} value={`faq-${i}`} className="px-6 border-slate-200">
+                                    <AccordionTrigger className="text-left font-medium text-slate-900 hover:no-underline">
+                                        {faq.question}
+                                    </AccordionTrigger>
+                                    <AccordionContent className="text-slate-600">
+                                        {faq.answer}
+                                    </AccordionContent>
+                                </AccordionItem>
+                            ))}
+                        </Accordion>
                     </div>
                 </section>
             )}
 
-            {/* Responsibility */}
+            {/* 13. SAFEGUARDING & ROLE */}
             {c?.responsibility && (
-                <section className="py-16 bg-white border-t">
-                    <div className="container-main px-4 max-w-3xl mx-auto text-center">
-                        <h3 className="font-bold mb-4">{c.responsibility.heading}</h3>
-                        <p className="text-slate-600">{c.responsibility.paragraph}</p>
+                <section className="py-16 bg-slate-100">
+                    <div className="container-main px-4 max-w-2xl mx-auto text-center">
+                        <div className="flex items-center justify-center gap-2 mb-4">
+                            <ShieldCheck className="w-5 h-5 text-slate-600" />
+                            <h2 className="text-lg font-semibold text-slate-900">
+                                {c.responsibility.heading}
+                            </h2>
+                        </div>
+                        <p className="text-sm text-slate-600 leading-relaxed">
+                            {c.responsibility.paragraph}
+                        </p>
                     </div>
                 </section>
             )}
 
-            {/* CTA */}
+            {/* 14. FINAL CTA */}
             {c?.cta && (
-                <section className="py-24 md:py-32 bg-slate-950 text-white">
-                    <div className="container-main px-4 max-w-3xl mx-auto text-center">
-                        <h2 className="text-3xl md:text-5xl font-black mb-6">{c.cta.heading}</h2>
-                        <p className="text-xl text-slate-300 mb-8">{c.cta.paragraph}</p>
-                        <Button size="lg" className="rounded-full bg-primary font-black h-14 px-10" asChild>
+                <section className="py-20 md:py-24 bg-slate-900 text-white">
+                    <div className="container-main px-4 max-w-2xl mx-auto text-center">
+                        <h2 className="text-2xl md:text-3xl font-semibold mb-4">
+                            {c.cta.heading}
+                        </h2>
+                        <p className="text-slate-300 mb-8 max-w-lg mx-auto">
+                            {c.cta.paragraph}
+                        </p>
+                        <Button size="lg" className="bg-white text-slate-900 hover:bg-slate-100 rounded-full px-8" asChild>
                             <Link href="/become-a-foster">
                                 {c.cta.button_text}
-                                <ArrowRight className="w-5 h-5 ml-2" />
+                                <ArrowRight className="w-4 h-4 ml-2" />
                             </Link>
                         </Button>
                     </div>
