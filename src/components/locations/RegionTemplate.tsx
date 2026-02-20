@@ -450,7 +450,7 @@ export function RegionTemplate({
             {c?.cta && (
                 <section className="py-20 md:py-28 bg-slate-900 text-white">
                     <div className="container-main px-4 max-w-2xl mx-auto text-center">
-                        <h2 className="text-2xl md:text-3xl font-semibold mb-4">
+                        <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-white">
                             {c.cta.heading}
                         </h2>
                         <p className="text-stone-300 mb-8 max-w-lg mx-auto">
