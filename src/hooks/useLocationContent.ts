@@ -11,60 +11,30 @@ export interface LocationContent {
 
 export interface LocationContentData {
   title?: string;
-  cta?: {
-    heading: string;
-    paragraph: string;
-    button_text: string;
-  };
-  faq?: {
-    heading: string;
-    questions: Array<{
-      question: string;
-      answer: string;
-    }>;
-  };
   intro?: {
     paragraphs: string[];
   };
-  ofsted?: {
+  why_fostering_matters?: {
     heading: string;
-    description: string;
+    paragraphs: string[];
   };
-  regions?: {
+  fostering_needs?: {
     heading: string;
-    list: string[];
-  };
-  support?: {
-    heading: string;
-    categories: Array<{
-      name: string;
-      description: string;
-    }>;
+    paragraphs: string[];
   };
   agency_types?: {
     heading: string;
     intro: string;
-    comparison_points: string[];
     independent: {
       title: string;
+      description: string;
       benefits: string[];
     };
     local_authority: {
       title: string;
+      description: string;
       benefits: string[];
     };
-  };
-  how_to_become?: {
-    heading: string;
-    steps: Array<{
-      name: string;
-      description: string;
-    }>;
-    note: string;
-  };
-  responsibility?: {
-    heading: string;
-    paragraph: string;
   };
   types_of_fostering?: {
     heading: string;
@@ -74,14 +44,60 @@ export interface LocationContentData {
       description: string;
     }>;
   };
-  how_fostering_works?: {
+  how_to_become?: {
     heading: string;
-    paragraphs: string[];
-    qualities: string[];
+    intro: string;
+    note?: string;
+    steps: Array<{
+      name: string;
+      description: string;
+    }>;
   };
-  why_fostering_matters?: {
+  ofsted?: {
     heading: string;
-    paragraphs: string[];
+    description: string;
+    criteria: string[];
+  };
+  support?: {
+    heading: string;
+    intro: string;
+    categories: Array<{
+      name: string;
+      description: string;
+    }>;
+  };
+  regions?: {
+    heading: string;
+    intro: string;
+    list: string[];
+  };
+  who_guide_is_for?: {
+    heading: string;
+    intro: string;
+    audience: string[];
+  };
+  glossary?: {
+    heading: string;
+    terms: Array<{
+      term: string;
+      definition: string;
+    }>;
+  };
+  faq?: {
+    heading: string;
+    questions: Array<{
+      question: string;
+      answer: string;
+    }>;
+  };
+  responsibility?: {
+    heading: string;
+    paragraph: string;
+  };
+  cta?: {
+    heading: string;
+    paragraph: string;
+    button_text: string;
   };
 }
 
@@ -93,18 +109,13 @@ export function useLocationContent(slug: string | undefined) {
       
       const cleanSlug = slug.toLowerCase().trim();
       
-      // Try different matching strategies
       const strategies = [
-        // Exact match
         () => supabase.from("location_content").select("*").eq("slug", cleanSlug).maybeSingle(),
-        // With prefix "loc_"
         () => supabase.from("location_content").select("*").eq("slug", `loc_${cleanSlug}`).maybeSingle(),
-        // Case insensitive
         () => supabase.from("location_content").select("*").ilike("slug", cleanSlug).maybeSingle(),
       ];
       
       let data = null;
-      let lastError = null;
       
       for (const strategy of strategies) {
         const result = await strategy();
@@ -112,22 +123,12 @@ export function useLocationContent(slug: string | undefined) {
           data = result.data;
           break;
         }
-        if (result.error) {
-          lastError = result.error;
-        }
-      }
-      
-      if (!data && lastError) {
-        console.error("Supabase query error:", lastError);
       }
       
       if (!data) {
         return null;
       }
       
-      console.log("Raw data from DB:", JSON.stringify(data, null, 2));
-      
-      // Handle content parsing
       let parsedContent = null;
       if (data.content) {
         if (typeof data.content === 'string') {
@@ -141,8 +142,6 @@ export function useLocationContent(slug: string | undefined) {
         }
       }
       
-      console.log("Parsed content:", parsedContent);
-      
       if (parsedContent) {
         return {
           ...data,
@@ -154,21 +153,4 @@ export function useLocationContent(slug: string | undefined) {
     },
     enabled: !!slug,
   });
-}
-
-export function getContentValue(content: LocationContent | null, path: string, fallback: string): string {
-  if (!content?.content) return fallback;
-  
-  const keys = path.split(".");
-  let value: unknown = content.content;
-  
-  for (const key of keys) {
-    if (value && typeof value === "object" && key in value) {
-      value = (value as Record<string, unknown>)[key];
-    } else {
-      return fallback;
-    }
-  }
-  
-  return typeof value === "string" ? value : fallback;
 }
