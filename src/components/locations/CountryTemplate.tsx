@@ -25,6 +25,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Location, Agency, FAQ } from "@/services/dataService";
+import { useAvailableRegions } from "@/hooks/useAvailableRegions";
 
 export interface LocationPageProps {
     location: Location;
@@ -89,6 +90,15 @@ export function CountryTemplate({
 }: LocationPageProps) {
     const locationName = location.name;
     const isEngland = location.slug === "england" || locationName === "England";
+    
+    const { data: availableRegions, isLoading: loadingRegions } = useAvailableRegions("england");
+    
+    const regionsWithContent = childLocations.filter((region) => {
+        if (!availableRegions) return false;
+        return availableRegions.some(
+            (ar) => ar.slug === region.slug || ar.slug === `england/${region.slug}`
+        );
+    });
 
     const regionDescriptors: Record<string, string> = {
         "london": "Capital city with diverse communities",
@@ -421,32 +431,43 @@ export function CountryTemplate({
                 </div>
                 
                 <div className="container-main px-4 max-w-5xl mx-auto relative z-10">
-                    <h2 className="text-2xl md:text-3xl font-semibold mb-3 text-center">
+                    <h2 className="text-2xl md:text-3xl font-semibold mb-3 text-center text-white">
                         Explore Regions in {locationName}
                     </h2>
                     <p className="text-stone-400 text-center mb-12 max-w-xl mx-auto">
                         Each region has its own fostering landscape. Select a region to find local agencies and detailed information.
                     </p>
 
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {childLocations.map((region) => (
-                            <Link 
-                                key={region.id} 
-                                href={`/locations/${location.slug}/${region.slug}`}
-                                className="group block p-6 border border-stone-700 rounded-xl hover:border-emerald-500 hover:bg-slate-800/50 transition-all"
-                            >
-                                <div className="flex items-center justify-between mb-2">
-                                    <h3 className="font-semibold text-white group-hover:text-emerald-400 transition-colors">
-                                        {region.name}
-                                    </h3>
-                                    <ArrowRight className="w-4 h-4 text-stone-500 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all" />
-                                </div>
-                                <p className="text-sm text-stone-400">
-                                    {regionDescriptors[region.slug] || "Regional fostering information"}
-                                </p>
-                            </Link>
-                        ))}
-                    </div>
+                    {loadingRegions ? (
+                        <div className="flex items-center justify-center py-12">
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                        </div>
+                    ) : regionsWithContent.length > 0 ? (
+                        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {regionsWithContent.map((region) => (
+                                <Link 
+                                    key={region.id} 
+                                    href={`/locations/${location.slug}/${region.slug}`}
+                                    className="group block p-6 border border-stone-700 rounded-xl hover:border-emerald-500 hover:bg-slate-800/50 transition-all"
+                                >
+                                    <div className="flex items-center justify-between mb-2">
+                                        <h3 className="font-semibold text-white group-hover:text-emerald-400 transition-colors">
+                                            {region.name}
+                                        </h3>
+                                        <ArrowRight className="w-4 h-4 text-stone-500 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all" />
+                                    </div>
+                                    <p className="text-sm text-stone-400">
+                                        {regionDescriptors[region.slug] || "Regional fostering information"}
+                                    </p>
+                                </Link>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="text-center py-12">
+                            <p className="text-stone-400">No regions with content available yet.</p>
+                            <p className="text-stone-500 text-sm mt-2">Check back soon for regional information.</p>
+                        </div>
+                    )}
                 </div>
             </section>
 
@@ -525,7 +546,7 @@ export function CountryTemplate({
             {/* 10. FINAL CTA */}
             <section className="py-20 md:py-28 bg-slate-900 text-white">
                 <div className="container-main px-4 max-w-2xl mx-auto text-center">
-                    <h2 className="text-2xl md:text-3xl font-semibold mb-4">
+                    <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-white">
                         Ready to Explore Further?
                     </h2>
                     <p className="text-stone-300 mb-8 max-w-lg mx-auto">
@@ -538,7 +559,7 @@ export function CountryTemplate({
                                 <ArrowRight className="w-4 h-4 ml-2" />
                             </Link>
                         </Button>
-                        <Button size="lg" variant="outline" className="border-stone-600 text-white hover:bg-stone-800 rounded-full px-8" asChild>
+                        <Button size="lg" variant="outline" className="border-stone-600 text-slate-900 hover:text-white hover:bg-stone-800 rounded-full px-8" asChild>
                             <Link href="/become-a-foster">
                                 Browse Agencies
                             </Link>
