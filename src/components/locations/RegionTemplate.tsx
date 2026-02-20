@@ -45,12 +45,40 @@ export function RegionTemplate({
     agencies,
     stats,
 }: LocationPageProps) {
-    const { data: locationContent } = useLocationContent(location.slug);
+    const { data: locationContent, isLoading } = useLocationContent(location.slug);
     
     const locationName = location.name;
     const heroRef = useRef<HTMLDivElement>(null);
 
     const c = locationContent?.content;
+
+    // Show loading state
+    if (isLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-slate-950">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+            </div>
+        );
+    }
+
+    // Show 404 if no content exists in database
+    if (!locationContent || !c) {
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 px-4">
+                <div className="text-center max-w-md">
+                    <h1 className="text-6xl font-black text-slate-300 mb-4">404</h1>
+                    <h2 className="text-2xl font-bold text-slate-800 mb-4">Page Not Found</h2>
+                    <p className="text-slate-600 mb-8">
+                        Sorry, we couldn't find content for this region. 
+                        This page may not exist or content may not have been added yet.
+                    </p>
+                    <Link href="/locations">
+                        <Button>Browse All Locations</Button>
+                    </Link>
+                </div>
+            </div>
+        );
+    }
 
     const navSections = [
         { id: "intro", label: "Intro" },
