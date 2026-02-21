@@ -6,14 +6,13 @@ export interface AvailableRegion {
   title: string;
 }
 
-export function useAvailableRegions(countrySlug: string = "england") {
+export function useAvailableRegions(childLocations: { slug: string }[] = []) {
   return useQuery<AvailableRegion[]>({
-    queryKey: ["available-regions", countrySlug],
+    queryKey: ["available-regions", childLocations.map(l => l.slug).join(",")],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("location_content")
-        .select("slug, title")
-        .like("slug", `${countrySlug}/%`);
+        .select("slug, title");
 
       if (error) {
         console.error("Error fetching available regions:", error);
@@ -24,10 +23,30 @@ export function useAvailableRegions(countrySlug: string = "england") {
         return [];
       }
 
-      return data.map((item) => ({
-        slug: item.slug.replace(/^loc_/, "").replace(/^england\//, ""),
-        title: item.title,
-      }));
+      const availableSlugs = new Set(
+        data.map(item => item.slug.replace(/^loc_/, ""))
+      );
+
+      const matchingRegions = childLocations.filter(region => {
+        const regionSlug = region.slug;
+        return availableSlugs.has(regionSlug) || 
+               availableSlugs.has(`loc_${regionSlug}`) ||
+               availableSlugs.has(`england/${regionSlug}`) ||
+               availableSlugs.has(`loc_england/${regionSlug}`);
+      });
+
+      return matchingRegions.map(region => {
+        const dbEntry = data.find(item => {
+          const cleanSlug = item.slug.replace(/^loc_/, "");
+          return cleanSlug === region.slug || 
+                 cleanSlug === `england/${region.slug}`;
+        });
+        return {
+          slug: region.slug,
+          title: dbEntry?.title || region.slug,
+        };
+      });
     },
+    enabled: childLocations.length > 0,
   });
 }

@@ -91,12 +91,12 @@ export function CountryTemplate({
     const locationName = location.name;
     const isEngland = location.slug === "england" || locationName === "England";
     
-    const { data: availableRegions, isLoading: loadingRegions } = useAvailableRegions("england");
+    const { data: availableRegions, isLoading: loadingRegions } = useAvailableRegions(childLocations);
     
     const regionsWithContent = childLocations.filter((region) => {
         if (!availableRegions) return false;
         return availableRegions.some(
-            (ar) => ar.slug === region.slug || ar.slug === `england/${region.slug}`
+            (ar) => ar.slug === region.slug
         );
     });
 
