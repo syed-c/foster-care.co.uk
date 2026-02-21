@@ -44,10 +44,11 @@ export function Footer() {
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-lg">FC</span>
-              </div>
-              <span className="font-semibold text-xl">Foster Care UK</span>
+              <img 
+                src="/logo.png" 
+                alt="Foster Care UK" 
+                className="h-10 w-auto"
+              />
             </Link>
             <p className="text-secondary-foreground/70 mb-6 max-w-sm leading-relaxed">
               Connecting families with trusted foster care agencies across the United Kingdom.

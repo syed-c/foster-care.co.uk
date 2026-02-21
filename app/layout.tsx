@@ -79,6 +79,10 @@ export const metadata: Metadata = {
     alternates: {
         canonical: 'https://www.foster-care.co.uk',
     },
+    icons: {
+        icon: '/logo.png',
+        apple: '/logo.png',
+    },
 };
 
 export default function RootLayout({

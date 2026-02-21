@@ -51,12 +51,11 @@ export function Header() {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3" aria-label="Foster Care UK home">
-            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-soft">
-              <span className="text-primary-foreground font-bold text-lg">FC</span>
-            </div>
-            <span className="font-semibold text-xl text-foreground hidden sm:block">
-              Foster Care UK
-            </span>
+            <img 
+              src="/logo.png" 
+              alt="Foster Care UK" 
+              className="h-12 w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}
