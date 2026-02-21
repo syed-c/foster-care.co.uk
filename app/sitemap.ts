@@ -2,11 +2,9 @@ import { createClient } from '@supabase/supabase-js';
 import { MetadataRoute } from 'next';
 
 export const dynamic = 'force-dynamic';
-export const revalidate = 3600; // 1 hour
+export const revalidate = 3600;
 
 const SITE_URL = 'https://www.foster-care.co.uk';
-
-
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -24,6 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/`, priority: 1.0, changeFrequency: 'daily' },
     { url: `${SITE_URL}/agencies`, priority: 0.9, changeFrequency: 'daily' },
     { url: `${SITE_URL}/locations`, priority: 0.9, changeFrequency: 'daily' },
+    { url: `${SITE_URL}/locations/england`, priority: 0.9, changeFrequency: 'weekly' },
     { url: `${SITE_URL}/specialisms`, priority: 0.8, changeFrequency: 'weekly' },
     { url: `${SITE_URL}/compare`, priority: 0.7, changeFrequency: 'weekly' },
     { url: `${SITE_URL}/guides`, priority: 0.8, changeFrequency: 'weekly' },
@@ -34,104 +33,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/how-listings-work`, priority: 0.7, changeFrequency: 'monthly' },
     { url: `${SITE_URL}/editorial-policy`, priority: 0.5, changeFrequency: 'monthly' },
     { url: `${SITE_URL}/pricing`, priority: 0.7, changeFrequency: 'weekly' },
+    { url: `${SITE_URL}/become-a-foster`, priority: 0.8, changeFrequency: 'weekly' },
   ];
 
-  // Fetch dynamic data
-  console.log('Sitemap: Fetching dynamic data...');
-  const [
-    { data: locations, error: locError },
-    { data: agencies, error: agError },
-    { data: specialisms, error: specError },
-    { data: blogPosts, error: blogError }
-  ] = await Promise.all([
-    supabase.from('locations').select('id, parent_id, slug, type, updated_at'),
-    supabase.from('agencies').select('slug, updated_at'),
-    supabase.from('specialisms').select('slug, updated_at').eq('is_active', true),
-    supabase.from('blog_posts').select('slug, updated_at').eq('status', 'published')
-  ]);
-
-  if (locError) console.error('Sitemap: Error fetching locations:', locError);
-  if (agError) console.error('Sitemap: Error fetching agencies:', agError);
-  if (specError) console.error('Sitemap: Error fetching specialisms:', specError);
-  if (blogError) console.error('Sitemap: Error fetching blog posts:', blogError);
-
-  console.log('Sitemap Counts:', {
-    locations: locations?.length || 0,
-    agencies: agencies?.length || 0,
-    specialisms: specialisms?.length || 0,
-    blogPosts: blogPosts?.length || 0
-  });
-
-  // Create specialism combo slugs from DB data
-  const specialismSlugsFromDb = (specialisms || []).map((s: any) => s.slug);
-
-  /* 
-   * NEW HIERARCHICAL SITEMAP LOGIC 
-   * We need to build paths like: /locations/england/london/barnet
-   * Fetch all locations and build a tree/map to traverse parents.
-   */
-  const locationPages: MetadataRoute.Sitemap = [];
-
-  if (locations) {
-    // 1. Build a map of id -> location for O(1) lookup
-    const locMap = new Map<string, any>();
-    locations.forEach((loc: any) => {
-      locMap.set(loc.id, loc);
-    });
-
-    // 2. Helper to resolve full path slug
-    const getPathSlug = (loc: any): string | null => {
-      const parts = [loc.slug];
-      let current = loc;
-
-      // Safety break to prevent infinite loops
-      let depth = 0;
-      while (current.parent_id && depth < 5) {
-        const parent = locMap.get(current.parent_id);
-        if (!parent) break; // Orphaned relationship
-        parts.unshift(parent.slug);
-        current = parent;
-        depth++;
-      }
-
-      // Optional: If top level is not a country, strict hierarchy validation?
-      // User requested: /locations/:country/:region/:county
-      // So checking type hierarchy:
-      // If original loc is county, parent should be region, grandparent country.
-
-      return parts.join('/');
-    };
-
-    locations.forEach((loc: any) => {
-      // Only include specific types in sitemap as per user request
-      // "Only include routes under: /locations/:country..."
-      if (!['country', 'region', 'county'].includes(loc.type)) return;
-
-      const pathSlug = getPathSlug(loc);
-      if (!pathSlug) return;
-
-      const lastModified = loc.updated_at ? new Date(loc.updated_at) : new Date();
-
-      locationPages.push({
-        url: `${SITE_URL}/locations/${pathSlug}`,
-        lastModified,
-        changeFrequency: 'weekly',
-        priority: loc.type === 'country' ? 0.9 : loc.type === 'region' ? 0.8 : 0.7,
-      });
-    });
-  }
-
-  // Agencies removed as per user request
-  // const agencyPages: MetadataRoute.Sitemap = (agencies || []).map((agency: any) => ({ ... }));
-
-  const blogPages: MetadataRoute.Sitemap = (blogPosts || []).map((post: any) => ({
-    url: `${SITE_URL}/blog/${post.slug}`,
-    lastModified: post.updated_at ? new Date(post.updated_at) : new Date(),
-    changeFrequency: 'monthly',
-    priority: 0.6,
-  }));
-
-  // Guides subdirectory pages (hardcoded as they might not be in DB)
+  // Guides subdirectory pages
   const guidePages: MetadataRoute.Sitemap = [
     'how-to-become-foster-carer',
     'fostering-allowances',
@@ -143,14 +48,107 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  const allPages = [
-    ...staticPages,
-    ...locationPages,
-    // ...agencyPages, // Removed
-    ...blogPages,
-    ...guidePages
+  // Policy pages
+  const policyPages: MetadataRoute.Sitemap = [
+    { url: `${SITE_URL}/policy`, priority: 0.7, changeFrequency: 'monthly' },
+    { url: `${SITE_URL}/policy/safeguarding`, priority: 0.7, changeFrequency: 'monthly' },
+    { url: `${SITE_URL}/policy/funding`, priority: 0.7, changeFrequency: 'monthly' },
+    { url: `${SITE_URL}/policy/training`, priority: 0.7, changeFrequency: 'monthly' },
+    { url: `${SITE_URL}/policy/placement`, priority: 0.7, changeFrequency: 'monthly' },
+    { url: `${SITE_URL}/policy/support`, priority: 0.7, changeFrequency: 'monthly' },
   ];
 
-  console.log(`Sitemap: Generated ${allPages.length} URLs`);
+  // Blog posts
+  const { data: blogPosts } = await supabase
+    .from('blog_posts')
+    .select('slug, updated_at')
+    .eq('status', 'published');
+
+  const blogPages: MetadataRoute.Sitemap = (blogPosts || []).map((post: any) => ({
+    url: `${SITE_URL}/blog/${post.slug}`,
+    lastModified: post.updated_at ? new Date(post.updated_at) : new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }));
+
+  // Fetch locations and location_content to determine which regions have content
+  const [{ data: locations }, { data: locationContent }] = await Promise.all([
+    supabase.from('locations').select('id, parent_id, slug, type, updated_at'),
+    supabase.from('location_content').select('slug, updated_at')
+  ]);
+
+  // Get slugs that have content in location_content table
+  const contentSlugs = new Set(
+    (locationContent || []).map(item => item.slug.replace(/^loc_/, ''))
+  );
+
+  // Build location map for path resolution
+  const locMap = new Map<string, any>();
+  (locations || []).forEach((loc: any) => {
+    locMap.set(loc.id, loc);
+  });
+
+  // Helper to get full path slug
+  const getPathSlug = (loc: any): string | null => {
+    const parts = [loc.slug];
+    let current = loc;
+    let depth = 0;
+    while (current.parent_id && depth < 5) {
+      const parent = locMap.get(current.parent_id);
+      if (!parent) break;
+      parts.unshift(parent.slug);
+      current = parent;
+      depth++;
+    }
+    return parts.join('/');
+  };
+
+  // Build location pages - only include regions with content
+  const locationPages: MetadataRoute.Sitemap = [];
+
+  if (locations) {
+    for (const loc of locations) {
+      // Only include country and region types
+      if (!['country', 'region'].includes(loc.type)) continue;
+
+      const pathSlug = getPathSlug(loc);
+      if (!pathSlug) continue;
+
+      // Check if this location has content in location_content table
+      const fullSlug = pathSlug;
+      const hasContent = contentSlugs.has(fullSlug) || 
+                        contentSlugs.has(`loc_${fullSlug}`) ||
+                        contentSlugs.has(`england/${loc.slug}`) ||
+                        contentSlugs.has(loc.slug);
+
+      // Include country page always, regions only if they have content
+      if (loc.type === 'country') {
+        locationPages.push({
+          url: `${SITE_URL}/locations/${pathSlug}`,
+          lastModified: loc.updated_at ? new Date(loc.updated_at) : new Date(),
+          changeFrequency: 'weekly' as const,
+          priority: 0.9,
+        });
+      } else if (hasContent) {
+        // Only include regions that have content
+        locationPages.push({
+          url: `${SITE_URL}/locations/${pathSlug}`,
+          lastModified: loc.updated_at ? new Date(loc.updated_at) : new Date(),
+          changeFrequency: 'weekly' as const,
+          priority: 0.8,
+        });
+      }
+    }
+  }
+
+  const allPages = [
+    ...staticPages,
+    ...policyPages,
+    ...guidePages,
+    ...locationPages,
+    ...blogPages,
+  ];
+
+  console.log(`Sitemap: Generated ${allPages.length} URLs (${locationPages.length} location pages with content)`);
   return allPages;
 }
