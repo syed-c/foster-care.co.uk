@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Location, Agency, FAQ } from "@/services/dataService";
 import { useAvailableRegions } from "@/hooks/useAvailableRegions";
+import { useLocationContent } from "@/hooks/useLocationContent";
 
 export interface LocationPageProps {
     location: Location;
@@ -89,9 +90,13 @@ export function CountryTemplate({
     stats,
 }: LocationPageProps) {
     const locationName = location.name;
+    const locationSlug = location.slug;
     const isEngland = location.slug === "england" || locationName === "England";
     
+    const { data: locationContent } = useLocationContent(isEngland ? "england" : locationSlug);
     const { data: availableRegions, isLoading: loadingRegions } = useAvailableRegions(childLocations);
+    
+    const typesFromContent = locationContent?.content?.types_of_fostering?.categories || [];
     
     const regionsWithContent = childLocations.filter((region) => {
         if (!availableRegions) return false;
@@ -146,13 +151,16 @@ export function CountryTemplate({
         { title: "Ongoing Support", desc: "24/7 support lines, training, and dedicated social workers.", icon: Users },
     ];
 
-    const typesOfFostering = [
-        { title: "Short-Term", slug: "short-term", desc: "Temporary care while long-term plans are made.", icon: Clock },
-        { title: "Long-Term", slug: "long-term", desc: "Ongoing care until the child reaches adulthood.", icon: Home },
-        { title: "Emergency", slug: "emergency", desc: "Same-day placements for urgent situations.", icon: HeartHandshake },
-        { title: "Respite", slug: "respite", desc: "Short breaks for children and their main carers.", icon: Users },
-        { title: "Parent & Child", slug: "parent-child", desc: "Supporting a parent and their child together.", icon: Baby },
-        { title: "Therapeutic", slug: "therapeutic", desc: "Specialist care for children with complex needs.", icon: Stethoscope },
+    const typesOfFosteringHeading = locationContent?.content?.types_of_fostering?.heading || "Types of Fostering";
+    const typesOfFosteringIntro = locationContent?.content?.types_of_fostering?.intro || "Different children need different types of care.";
+    
+    const typesOfFostering = typesFromContent.length > 0 ? typesFromContent : [
+        { title: "Short-Term", slug: "short-term", description: "Temporary care while long-term plans are made.", url: "/locations/england/short-term" },
+        { title: "Long-Term", slug: "long-term", description: "Ongoing care until the child reaches adulthood.", url: "/locations/england/long-term" },
+        { title: "Emergency", slug: "emergency", description: "Same-day placements for urgent situations.", url: "/locations/england/emergency" },
+        { title: "Respite", slug: "respite", description: "Short breaks for children and their main carers.", url: "/locations/england/respite" },
+        { title: "Parent & Child", slug: "parent-child", description: "Supporting a parent and their child together.", url: "/locations/england/parent-child" },
+        { title: "Therapeutic", slug: "therapeutic", description: "Specialist care for children with complex needs.", url: "/locations/england/therapeutic" },
     ];
 
     const whoItsFor = [
@@ -404,26 +412,38 @@ export function CountryTemplate({
             <section className="py-20 md:py-28 bg-gradient-to-b from-stone-50 to-white">
                 <div className="container-main px-4 max-w-4xl mx-auto">
                     <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-3 text-center">
-                        Types of Fostering
+                        {typesOfFosteringHeading}
                     </h2>
                     <p className="text-stone-600 text-center mb-12 max-w-xl mx-auto">
-                        Different children need different types of care. Here's an overview of the main options available.
+                        {typesOfFosteringIntro}
                     </p>
 
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        {typesOfFostering.map((type, i) => (
-                            <Link 
-                                key={i} 
-                                href={`/locations/england/${type.slug}`}
-                                className="block p-5 bg-white border border-stone-100 rounded-xl hover:border-emerald-200 hover:shadow-sm transition-all text-center"
-                            >
-                                <div className="w-12 h-12 mx-auto mb-3 bg-emerald-50 rounded-xl flex items-center justify-center">
-                                    <type.icon className="w-6 h-6 text-emerald-600" />
+                        {typesOfFostering.map((type, i) => {
+                            const linkUrl = type.url || `/locations/england/${type.slug}`;
+                            const ctaText = type.cta_text || "Learn more";
+                            
+                            return (
+                                <div key={i} className="p-5 bg-white border border-stone-100 rounded-xl hover:border-emerald-200 hover:shadow-sm transition-all">
+                                    <h3 className="font-semibold text-slate-900 mb-1">
+                                        <Link 
+                                            href={linkUrl}
+                                            className="hover:text-emerald-700 transition-colors"
+                                        >
+                                            {type.title}
+                                        </Link>
+                                    </h3>
+                                    <p className="text-xs text-stone-500 mb-3">{type.description}</p>
+                                    <Link 
+                                        href={linkUrl}
+                                        className="text-xs font-medium text-emerald-600 hover:text-emerald-700 transition-colors inline-flex items-center gap-1"
+                                    >
+                                        {ctaText}
+                                        <ArrowRight className="w-3 h-3" />
+                                    </Link>
                                 </div>
-                                <h3 className="font-semibold text-slate-900 mb-1">{type.title}</h3>
-                                <p className="text-xs text-stone-500">{type.desc}</p>
-                            </Link>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </section>

@@ -42,6 +42,8 @@ export interface LocationContentData {
     categories: Array<{
       name: string;
       description: string;
+      url?: string;
+      cta_text?: string;
     }>;
   };
   how_to_become?: {
