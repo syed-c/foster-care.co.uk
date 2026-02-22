@@ -147,12 +147,12 @@ export function CountryTemplate({
     ];
 
     const typesOfFostering = [
-        { title: "Short-Term", desc: "Temporary care while long-term plans are made.", icon: Clock },
-        { title: "Long-Term", desc: "Ongoing care until the child reaches adulthood.", icon: Home },
-        { title: "Emergency", desc: "Same-day placements for urgent situations.", icon: HeartHandshake },
-        { title: "Respite", desc: "Short breaks for children and their main carers.", icon: Users },
-        { title: "Parent & Child", desc: "Supporting a parent and their child together.", icon: Baby },
-        { title: "Therapeutic", desc: "Specialist care for children with complex needs.", icon: Stethoscope },
+        { title: "Short-Term", slug: "short-term", desc: "Temporary care while long-term plans are made.", icon: Clock },
+        { title: "Long-Term", slug: "long-term", desc: "Ongoing care until the child reaches adulthood.", icon: Home },
+        { title: "Emergency", slug: "emergency", desc: "Same-day placements for urgent situations.", icon: HeartHandshake },
+        { title: "Respite", slug: "respite", desc: "Short breaks for children and their main carers.", icon: Users },
+        { title: "Parent & Child", slug: "parent-child", desc: "Supporting a parent and their child together.", icon: Baby },
+        { title: "Therapeutic", slug: "therapeutic", desc: "Specialist care for children with complex needs.", icon: Stethoscope },
     ];
 
     const whoItsFor = [
@@ -412,13 +412,17 @@ export function CountryTemplate({
 
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                         {typesOfFostering.map((type, i) => (
-                            <div key={i} className="p-5 bg-white border border-stone-100 rounded-xl hover:border-emerald-200 hover:shadow-sm transition-all text-center">
+                            <Link 
+                                key={i} 
+                                href={`/locations/england/${type.slug}`}
+                                className="block p-5 bg-white border border-stone-100 rounded-xl hover:border-emerald-200 hover:shadow-sm transition-all text-center"
+                            >
                                 <div className="w-12 h-12 mx-auto mb-3 bg-emerald-50 rounded-xl flex items-center justify-center">
                                     <type.icon className="w-6 h-6 text-emerald-600" />
                                 </div>
                                 <h3 className="font-semibold text-slate-900 mb-1">{type.title}</h3>
                                 <p className="text-xs text-stone-500">{type.desc}</p>
-                            </div>
+                            </Link>
                         ))}
                     </div>
                 </div>
