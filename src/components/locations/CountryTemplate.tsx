@@ -155,13 +155,23 @@ export function CountryTemplate({
     const typesOfFosteringIntro = locationContent?.content?.types_of_fostering?.intro || "Different children need different types of care.";
     
     const typesOfFostering = typesFromContent.length > 0 ? typesFromContent : [
-        { title: "Short-Term", slug: "short-term", description: "Temporary care while long-term plans are made.", url: "/locations/england/short-term" },
-        { title: "Long-Term", slug: "long-term", description: "Ongoing care until the child reaches adulthood.", url: "/locations/england/long-term" },
-        { title: "Emergency", slug: "emergency", description: "Same-day placements for urgent situations.", url: "/locations/england/emergency" },
-        { title: "Respite", slug: "respite", description: "Short breaks for children and their main carers.", url: "/locations/england/respite" },
-        { title: "Parent & Child", slug: "parent-child", description: "Supporting a parent and their child together.", url: "/locations/england/parent-child" },
-        { title: "Therapeutic", slug: "therapeutic", description: "Specialist care for children with complex needs.", url: "/locations/england/therapeutic" },
+        { title: "Short-Term", slug: "short-term", description: "Temporary care while long-term plans are made." },
+        { title: "Long-Term", slug: "long-term", description: "Ongoing care until the child reaches adulthood." },
+        { title: "Emergency", slug: "emergency", description: "Same-day placements for urgent situations." },
+        { title: "Respite", slug: "respite", description: "Short breaks for children and their main carers." },
+        { title: "Parent & Child", slug: "parent-child", description: "Supporting a parent and their child together." },
+        { title: "Therapeutic", slug: "therapeutic", description: "Specialist care for children with complex needs." },
     ];
+
+    const getServiceUrl = (type: { url?: string; slug?: string }) => {
+        if (type.url) {
+            if (type.url.startsWith('/')) {
+                return type.url;
+            }
+            return `/${type.url}`;
+        }
+        return `/locations/england/${type.slug}`;
+    };
 
     const whoItsFor = [
         "Families exploring whether fostering is right for them",
@@ -420,7 +430,7 @@ export function CountryTemplate({
 
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                         {typesOfFostering.map((type, i) => {
-                            const linkUrl = type.url || `/locations/england/${type.slug}`;
+                            const linkUrl = getServiceUrl(type);
                             const ctaText = type.cta_text || "Learn more";
                             
                             return (

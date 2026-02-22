@@ -77,6 +77,7 @@ export function useServiceContent(locationSlug: string | undefined, serviceSlug:
       const strategies = [
         () => supabase.from("location_content").select("*").eq("slug", `${cleanLocation}/${cleanService}`).maybeSingle(),
         () => supabase.from("location_content").select("*").eq("slug", `loc_${cleanLocation}/${cleanService}`).maybeSingle(),
+        () => supabase.from("location_content").select("*").eq("slug", `${cleanService}`).maybeSingle(),
         () => supabase.from("location_content").select("*").ilike("slug", `%/${cleanService}`).maybeSingle(),
       ];
       
