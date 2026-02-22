@@ -1,6 +1,7 @@
 
 import { Metadata } from 'next';
 import UnifiedLocationPage from '@/_pages/UnifiedLocationPage';
+import { ServiceTemplate } from '@/components/locations/ServiceTemplate';
 import {
     getLocationBySlug,
     getChildLocations,
@@ -12,7 +13,21 @@ import {
 } from '@/services/dataService';
 import { notFound } from 'next/navigation';
 
+const SERVICE_SLUGS = ['short-term', 'long-term', 'emergency', 'respite', 'parent-child', 'therapeutic'];
+
 export async function generateMetadata({ params }: { params: { country: string } }): Promise<Metadata> {
+    if (SERVICE_SLUGS.includes(params.country)) {
+        const serviceName = params.country.charAt(0).toUpperCase() + params.country.slice(1);
+        
+        return {
+            title: `${serviceName} Fostering in England | Foster Care UK`,
+            description: `Learn about ${serviceName.toLowerCase()} fostering in England. Find agencies and support available.`,
+            alternates: {
+                canonical: `https://www.foster-care.co.uk/locations/england/${params.country}`,
+            },
+        };
+    }
+
     const location = await getLocationBySlug(params.country);
 
     if (!location) {
@@ -38,10 +53,10 @@ export async function generateMetadata({ params }: { params: { country: string }
 
     return {
         title: `Foster Care in ${name} | Start Your Fostering Journey | Foster Care UK`,
-        description: `Discover how you can make a life-changing difference. Become a foster carer in ${name}. Compare local agencies, access 24/7 support, and start your journey today.`,
+        description: `Discover how you can make a life-changing difference. Become a foster carrier in ${name}. Compare local agencies, access 24/7 support, and start your journey today.`,
         openGraph: {
             title: `Foster Care in ${name} | Start Your Fostering Journey`,
-            description: `Become a foster carer in ${name}. Search verified local agencies and start your journey today.`,
+            description: `Become a foster carrier in ${name}. Search verified local agencies and start your journey today.`,
         },
         alternates: {
             canonical: `https://www.foster-care.co.uk/locations/${params.country}`,
@@ -50,10 +65,15 @@ export async function generateMetadata({ params }: { params: { country: string }
 }
 
 export default async function CountryPage({ params }: { params: { country: string } }) {
-    const serviceSlugs = ['parent-child', 'short-term', 'respite', 'emergency', 'therapeutic', 'long-term', 'sibling-groups', 'teenagers', 'asylum-seekers', 'disabilities', 'short-term-fostering', 'long-term-fostering', 'emergency-fostering', 'respite-fostering', 'therapeutic-fostering', 'parent-child-fostering', 'sibling-groups-fostering', 'teenagers-fostering', 'asylum-seekers-fostering', 'disabilities-fostering'];
-
-    if (serviceSlugs.includes(params.country)) {
-        notFound();
+    // Check if it's a service slug
+    if (SERVICE_SLUGS.includes(params.country)) {
+        return (
+            <ServiceTemplate
+                locationSlug="england"
+                serviceSlug={params.country}
+                locationName="England"
+            />
+        );
     }
 
     const locationData = await getLocationBySlug(params.country);
@@ -63,10 +83,6 @@ export default async function CountryPage({ params }: { params: { country: strin
     }
 
     const location = locationData as Location;
-
-    // Verify strictly that this is a country if you have a type field, 
-    // but for now relying on slug existence and dataService returning it.
-    // Optional: check location.type === 'country'
 
     const [
         childLocations,

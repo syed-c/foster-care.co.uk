@@ -58,6 +58,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/policy/support`, priority: 0.7, changeFrequency: 'monthly' },
   ];
 
+  // Service types
+  const SERVICES = ['short-term', 'long-term', 'emergency', 'respite', 'parent-child', 'therapeutic'];
+
+  // Country-level service pages
+  const countryServicePages: MetadataRoute.Sitemap = SERVICES.map(service => ({
+    url: `${SITE_URL}/locations/england/${service}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  }));
+
   // Blog posts
   const { data: blogPosts } = await supabase
     .from('blog_posts')
@@ -137,6 +148,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           changeFrequency: 'weekly' as const,
           priority: 0.8,
         });
+
+        // Add service pages for regions with content
+        if (loc.type === 'region' && loc.parent_id) {
+          const parent = locMap.get(loc.parent_id);
+          if (parent && parent.slug === 'england') {
+            SERVICES.forEach(service => {
+              locationPages.push({
+                url: `${SITE_URL}/locations/england/${loc.slug}/${service}`,
+                lastModified: loc.updated_at ? new Date(loc.updated_at) : new Date(),
+                changeFrequency: 'weekly' as const,
+                priority: 0.7,
+              });
+            });
+          }
+        }
       }
     }
   }
@@ -145,6 +171,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...staticPages,
     ...policyPages,
     ...guidePages,
+    ...countryServicePages,
     ...locationPages,
     ...blogPages,
   ];
