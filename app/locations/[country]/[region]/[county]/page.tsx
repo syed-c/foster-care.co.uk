@@ -1,6 +1,7 @@
 
 import { Metadata } from 'next';
 import UnifiedLocationPage from '@/_pages/UnifiedLocationPage';
+import { ServiceTemplate } from '@/components/locations/ServiceTemplate';
 import {
     getLocationBySlug,
     getChildLocations,
@@ -12,7 +13,26 @@ import {
 } from '@/services/dataService';
 import { notFound } from 'next/navigation';
 
+const SERVICE_SLUGS = ['short-term', 'long-term', 'emergency', 'respite', 'parent-child', 'therapeutic', 'sibling-groups', 'teenagers', 'asylum-seekers', 'disabilities', 'short-term-fostering', 'long-term-fostering', 'emergency-fostering', 'respite-fostering', 'therapeutic-fostering', 'parent-child-fostering', 'sibling-groups-fostering', 'teenagers-fostering', 'asylum-seekers-fostering', 'disabilities-fostering'];
+
 export async function generateMetadata({ params }: { params: { country: string; region: string; county: string } }): Promise<Metadata> {
+    if (SERVICE_SLUGS.includes(params.county)) {
+        const countryData = await getLocationBySlug(params.country);
+        const regionData = await getLocationBySlug(params.region);
+        
+        const countryName = countryData?.name || params.country;
+        const regionName = regionData?.name || params.region;
+        const serviceName = params.county.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+        
+        return {
+            title: `${serviceName} Fostering in ${regionName}, ${countryName} | Foster Care UK`,
+            description: `Learn about ${serviceName.toLowerCase()} fostering in ${regionName}, ${countryName}. Find agencies and support available.`,
+            alternates: {
+                canonical: `https://www.foster-care.co.uk/locations/${params.country}/${params.region}/${params.county}`,
+            },
+        };
+    }
+
     const locationSlug = params.county;
 
     const location = await getLocationBySlug(locationSlug);
@@ -37,13 +57,25 @@ export async function generateMetadata({ params }: { params: { country: string; 
 }
 
 export default async function CountyPage({ params }: { params: { country: string; region: string; county: string } }) {
-    const serviceSlugs = ['parent-child', 'short-term', 'respite', 'emergency', 'therapeutic', 'long-term', 'sibling-groups', 'teenagers', 'asylum-seekers', 'disabilities', 'short-term-fostering', 'long-term-fostering', 'emergency-fostering', 'respite-fostering', 'therapeutic-fostering', 'parent-child-fostering', 'sibling-groups-fostering', 'teenagers-fostering', 'asylum-seekers-fostering', 'disabilities-fostering'];
+    if (SERVICE_SLUGS.includes(params.county)) {
+        const countryData = await getLocationBySlug(params.country);
+        const regionData = await getLocationBySlug(params.region);
+        
+        const locationName = regionData?.name || params.region;
+        
+        return (
+            <ServiceTemplate
+                locationSlug={`${params.country}/${params.region}`}
+                serviceSlug={params.county}
+                locationName={locationName}
+            />
+        );
+    }
 
     if (
         params.country === params.county ||
         params.region === params.county ||
-        params.country === params.region ||
-        serviceSlugs.includes(params.county)
+        params.country === params.region
     ) {
         notFound();
     }
