@@ -43,6 +43,7 @@ export interface LocationContentData {
       name: string;
       description: string;
       url?: string;
+      slug?: string;
       cta_text?: string;
     }>;
   };

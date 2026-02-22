@@ -165,10 +165,14 @@ export function CountryTemplate({
 
     const getServiceUrl = (type: { url?: string; slug?: string }) => {
         if (type.url) {
-            if (type.url.startsWith('/')) {
-                return type.url;
+            let url = type.url;
+            if (!url.startsWith('/')) {
+                url = '/' + url;
             }
-            return `/${type.url}`;
+            if (!url.startsWith('/locations')) {
+                url = '/locations/england' + url;
+            }
+            return url;
         }
         return `/locations/england/${type.slug}`;
     };

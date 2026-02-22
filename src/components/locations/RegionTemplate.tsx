@@ -234,12 +234,27 @@ export function RegionTemplate({
                         </p>
 
                         <div className="grid md:grid-cols-2 gap-6">
-                            {(c.types_of_fostering.categories || []).map((category, i) => (
-                                <div key={i} className="p-6 bg-white border border-stone-100 rounded-xl hover:border-stone-200 transition-colors">
-                                    <h3 className="font-semibold text-slate-900 mb-2">{category.name}</h3>
-                                    <p className="text-sm text-stone-600 leading-relaxed">{category.description}</p>
-                                </div>
-                            ))}
+                            {(c.types_of_fostering.categories || []).map((category, i) => {
+                                const serviceSlug = category.slug?.replace('-fostering', '') || category.url?.replace('/', '').replace('-fostering', '') || 'short-term';
+                                const linkUrl = category.url 
+                                    ? `/locations/england/${location.slug}/${serviceSlug}`
+                                    : `/locations/england/${location.slug}/${serviceSlug}`;
+                                const ctaText = category.cta_text || "Learn more";
+                                
+                                return (
+                                    <Link 
+                                        key={i} 
+                                        href={linkUrl}
+                                        className="block p-6 bg-white border border-stone-100 rounded-xl hover:border-stone-200 transition-colors"
+                                    >
+                                        <h3 className="font-semibold text-slate-900 mb-2">{category.name}</h3>
+                                        <p className="text-sm text-stone-600 leading-relaxed mb-3">{category.description}</p>
+                                        <span className="text-xs font-medium text-emerald-600 hover:text-emerald-700">
+                                            {ctaText} →
+                                        </span>
+                                    </Link>
+                                );
+                            })}
                         </div>
                     </div>
                 </section>
