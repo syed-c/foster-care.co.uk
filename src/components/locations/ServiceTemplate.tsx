@@ -16,6 +16,13 @@ import {
     HeartHandshake,
     Users,
     Star,
+    Building2,
+    GraduationCap,
+    Headphones,
+    MapPin,
+    UsersRound,
+    MessageCircle,
+    Shield,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -125,8 +132,8 @@ export function ServiceTemplate({ locationSlug, serviceSlug, locationName }: Ser
 
                         <div className="flex flex-wrap gap-4 mt-10">
                             <Button size="lg" className="bg-white text-slate-900 hover:bg-stone-100 rounded-full px-8" asChild>
-                                <Link href="/become-a-foster">
-                                    Find Agencies
+                                <Link href="/agencies">
+                                    Browse Agencies
                                     <ArrowRight className="w-4 h-4 ml-2" />
                                 </Link>
                             </Button>
@@ -143,15 +150,15 @@ export function ServiceTemplate({ locationSlug, serviceSlug, locationName }: Ser
                 </div>
             </section>
 
-            {/* What is it section */}
-            {c?.what_is_it && (
+            {/* What It Is Section */}
+            {c?.what_it_is && (
                 <section className="py-20 md:py-28 bg-white">
                     <div className="container-main px-4 max-w-3xl mx-auto">
                         <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-6">
-                            {c.what_is_it.heading}
+                            {c.what_it_is.heading}
                         </h2>
                         <div className="space-y-4">
-                            {(c.what_is_it.paragraphs || []).map((paragraph, i) => (
+                            {(c.what_it_is.paragraphs || []).map((paragraph, i) => (
                                 <p key={i} className="text-base text-stone-600 leading-relaxed">
                                     {paragraph}
                                 </p>
@@ -161,33 +168,39 @@ export function ServiceTemplate({ locationSlug, serviceSlug, locationName }: Ser
                 </section>
             )}
 
-            {/* Who is it for section */}
-            {c?.who_is_it_for && (
+            {/* Who It Helps Section */}
+            {c?.who_it_helps && (
                 <section className="py-20 md:py-28 bg-stone-50">
                     <div className="container-main px-4 max-w-3xl mx-auto">
-                        <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-6">
-                            {c.who_is_it_for.heading}
+                        <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-4">
+                            {c.who_it_helps.heading}
                         </h2>
-                        <div className="space-y-4">
-                            {(c.who_is_it_for.paragraphs || []).map((paragraph, i) => (
-                                <p key={i} className="text-base text-stone-600 leading-relaxed">
-                                    {paragraph}
-                                </p>
+                        {c.who_it_helps.intro && (
+                            <p className="text-base text-stone-600 leading-relaxed mb-8">
+                                {c.who_it_helps.intro}
+                            </p>
+                        )}
+                        <div className="grid md:grid-cols-1 gap-4">
+                            {(c.who_it_helps.groups || []).map((group, i) => (
+                                <div key={i} className="flex items-start gap-3 p-4 bg-white rounded-lg border border-stone-200">
+                                    <UsersRound className="w-5 h-5 text-emerald-600 mt-0.5 shrink-0" />
+                                    <span className="text-stone-700">{group}</span>
+                                </div>
                             ))}
                         </div>
                     </div>
                 </section>
             )}
 
-            {/* Requirements section */}
-            {c?.requirements && (
+            {/* How It Works Section */}
+            {c?.how_it_works && (
                 <section className="py-20 md:py-28 bg-white">
                     <div className="container-main px-4 max-w-3xl mx-auto">
                         <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-6">
-                            {c.requirements.heading}
+                            {c.how_it_works.heading}
                         </h2>
                         <div className="space-y-4">
-                            {(c.requirements.paragraphs || []).map((paragraph, i) => (
+                            {(c.how_it_works.paragraphs || []).map((paragraph, i) => (
                                 <p key={i} className="text-base text-stone-600 leading-relaxed">
                                     {paragraph}
                                 </p>
@@ -197,36 +210,114 @@ export function ServiceTemplate({ locationSlug, serviceSlug, locationName }: Ser
                 </section>
             )}
 
-            {/* Benefits section */}
-            {c?.benefits && (
+            {/* Carer Requirements Section */}
+            {c?.carer_requirements && (
                 <section className="py-20 md:py-28 bg-emerald-900">
                     <div className="container-main px-4 max-w-3xl mx-auto">
-                        <h2 className="text-2xl md:text-3xl font-semibold text-white mb-6">
-                            {c.benefits.heading}
+                        <h2 className="text-2xl md:text-3xl font-semibold text-white mb-4">
+                            {c.carer_requirements.heading}
                         </h2>
-                        <div className="space-y-4">
-                            {(c.benefits.paragraphs || []).map((paragraph, i) => (
-                                <p key={i} className="text-base text-emerald-100 leading-relaxed">
-                                    {paragraph}
-                                </p>
+                        {c.carer_requirements.intro && (
+                            <p className="text-emerald-100 mb-8">
+                                {c.carer_requirements.intro}
+                            </p>
+                        )}
+                        <div className="space-y-3">
+                            {(c.carer_requirements.requirements || []).map((req, i) => (
+                                <div key={i} className="flex items-center gap-3">
+                                    <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
+                                    <span className="text-emerald-50">{req}</span>
+                                </div>
                             ))}
                         </div>
                     </div>
                 </section>
             )}
 
-            {/* Process section */}
-            {c?.process && (
+            {/* Agency Types Section */}
+            {c?.agency_types && (
                 <section className="py-20 md:py-28 bg-white">
-                    <div className="container-main px-4 max-w-3xl mx-auto">
-                        <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-8">
-                            {c.process.heading}
+                    <div className="container-main px-4 max-w-4xl mx-auto">
+                        <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-4">
+                            {c.agency_types.heading}
                         </h2>
+                        {c.agency_types.intro && (
+                            <p className="text-stone-600 mb-10">
+                                {c.agency_types.intro}
+                            </p>
+                        )}
+                        
+                        <div className="grid md:grid-cols-2 gap-8">
+                            {c.agency_types.independent && (
+                                <div className="p-6 bg-stone-50 rounded-xl border border-stone-200">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <Building2 className="w-6 h-6 text-emerald-600" />
+                                        <h3 className="text-lg font-semibold text-slate-900">
+                                            {c.agency_types.independent.title}
+                                        </h3>
+                                    </div>
+                                    <p className="text-stone-600 mb-4 text-sm">
+                                        {c.agency_types.independent.description}
+                                    </p>
+                                    <div className="space-y-2">
+                                        {(c.agency_types.independent.benefits || []).map((benefit, i) => (
+                                            <div key={i} className="flex items-start gap-2">
+                                                <CheckCircle className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
+                                                <span className="text-stone-700 text-sm">{benefit}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                            
+                            {c.agency_types.local_authority && (
+                                <div className="p-6 bg-stone-50 rounded-xl border border-stone-200">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <ShieldCheck className="w-6 h-6 text-emerald-600" />
+                                        <h3 className="text-lg font-semibold text-slate-900">
+                                            {c.agency_types.local_authority.title}
+                                        </h3>
+                                    </div>
+                                    <p className="text-stone-600 mb-4 text-sm">
+                                        {c.agency_types.local_authority.description}
+                                    </p>
+                                    <div className="space-y-2">
+                                        {(c.agency_types.local_authority.benefits || []).map((benefit, i) => (
+                                            <div key={i} className="flex items-start gap-2">
+                                                <CheckCircle className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
+                                                <span className="text-stone-700 text-sm">{benefit}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </section>
+            )}
 
-                        <div className="space-y-8">
-                            {(c.process.steps || []).map((step, i) => (
-                                <div key={i} className="flex gap-6">
-                                    <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center font-semibold text-slate-800 shrink-0">
+            {/* How To Become Section */}
+            {c?.how_to_become && (
+                <section className="py-20 md:py-28 bg-stone-50">
+                    <div className="container-main px-4 max-w-3xl mx-auto">
+                        <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-4">
+                            {c.how_to_become.heading}
+                        </h2>
+                        {c.how_to_become.intro && (
+                            <p className="text-stone-600 mb-6">
+                                {c.how_to_become.intro}
+                            </p>
+                        )}
+                        {c.how_to_become.note && (
+                            <p className="text-sm text-emerald-700 bg-emerald-50 p-3 rounded-lg mb-8 inline-block">
+                                {c.how_to_become.note}
+                            </p>
+                        )}
+
+                        <div className="space-y-6">
+                            {(c.how_to_become.steps || []).map((step, i) => (
+                                <div key={i} className="flex gap-4">
+                                    <div className="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-semibold shrink-0">
                                         {i + 1}
                                     </div>
                                     <div className="pt-2">
@@ -240,40 +331,132 @@ export function ServiceTemplate({ locationSlug, serviceSlug, locationName }: Ser
                 </section>
             )}
 
-            {/* Support section */}
-            {c?.support && (
-                <section className="py-20 md:py-28 bg-stone-50">
+            {/* Ofsted Section */}
+            {c?.ofsted && (
+                <section className="py-20 md:py-28 bg-white">
                     <div className="container-main px-4 max-w-3xl mx-auto">
-                        <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-6">
-                            {c.support.heading}
+                        <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-4">
+                            {c.ofsted.heading}
                         </h2>
-                        <div className="space-y-4">
-                            {(c.support.paragraphs || []).map((paragraph, i) => (
-                                <p key={i} className="text-base text-stone-600 leading-relaxed">
-                                    {paragraph}
-                                </p>
+                        <p className="text-stone-600 mb-8">
+                            {c.ofsted.description}
+                        </p>
+                        <div className="grid md:grid-cols-2 gap-3">
+                            {(c.ofsted.criteria || []).map((criteria, i) => (
+                                <div key={i} className="flex items-center gap-2 p-3 bg-stone-50 rounded-lg">
+                                    <Shield className="w-4 h-4 text-emerald-600" />
+                                    <span className="text-stone-700 text-sm">{criteria}</span>
+                                </div>
                             ))}
                         </div>
                     </div>
                 </section>
             )}
 
-            {/* Agencies section */}
-            {c?.agencies && (
+            {/* Support Section */}
+            {c?.support && (
+                <section className="py-20 md:py-28 bg-emerald-900">
+                    <div className="container-main px-4 max-w-3xl mx-auto">
+                        <h2 className="text-2xl md:text-3xl font-semibold text-white mb-4">
+                            {c.support.heading}
+                        </h2>
+                        {c.support.intro && (
+                            <p className="text-emerald-100 mb-8">
+                                {c.support.intro}
+                            </p>
+                        )}
+                        <div className="space-y-4">
+                            {(c.support.categories || []).map((category, i) => (
+                                <div key={i} className="p-4 bg-emerald-800/50 rounded-lg">
+                                    <h3 className="font-semibold text-white mb-2">{category.name}</h3>
+                                    <p className="text-emerald-100 text-sm">{category.description}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* Regions Section */}
+            {c?.regions && (
+                <section className="py-20 md:py-28 bg-stone-50">
+                    <div className="container-main px-4 max-w-3xl mx-auto">
+                        <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-4">
+                            {c.regions.heading}
+                        </h2>
+                        {c.regions.intro && (
+                            <p className="text-stone-600 mb-8">
+                                {c.regions.intro}
+                            </p>
+                        )}
+                        <div className="flex flex-wrap gap-2">
+                            {(c.regions.list || []).map((region, i) => (
+                                <span key={i} className="px-4 py-2 bg-white border border-stone-200 rounded-full text-stone-700 text-sm">
+                                    {region}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* Who Guide Is For Section */}
+            {c?.who_guide_is_for && (
                 <section className="py-20 md:py-28 bg-white">
                     <div className="container-main px-4 max-w-3xl mx-auto">
                         <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-4">
-                            {c.agencies.heading}
+                            {c.who_guide_is_for.heading}
                         </h2>
-                        <p className="text-stone-600 mb-8">
-                            {c.agencies.paragraph}
+                        {c.who_guide_is_for.intro && (
+                            <p className="text-stone-600 mb-6">
+                                {c.who_guide_is_for.intro}
+                            </p>
+                        )}
+                        <div className="grid md:grid-cols-2 gap-3">
+                            {(c.who_guide_is_for.audience || []).map((item, i) => (
+                                <div key={i} className="flex items-center gap-2">
+                                    <Users className="w-4 h-4 text-emerald-600" />
+                                    <span className="text-stone-700">{item}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* FAQ Section */}
+            {c?.faq && (
+                <section className="py-20 md:py-28 bg-stone-50">
+                    <div className="container-main px-4 max-w-3xl mx-auto">
+                        <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-8">
+                            {c.faq.heading}
+                        </h2>
+                        <Accordion type="single" collapsible className="bg-white rounded-xl overflow-hidden">
+                            {(c.faq.questions || []).map((faq, i) => (
+                                <AccordionItem key={i} value={`item-${i}`} className="px-6 border-stone-100">
+                                    <AccordionTrigger className="text-left text-slate-900 font-medium hover:no-underline">
+                                        {faq.question}
+                                    </AccordionTrigger>
+                                    <AccordionContent className="text-stone-600">
+                                        {faq.answer}
+                                    </AccordionContent>
+                                </AccordionItem>
+                            ))}
+                        </Accordion>
+                    </div>
+                </section>
+            )}
+
+            {/* Responsibility Section */}
+            {c?.responsibility && (
+                <section className="py-20 md:py-28 bg-white">
+                    <div className="container-main px-4 max-w-3xl mx-auto">
+                        <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-4">
+                            {c.responsibility.heading}
+                        </h2>
+                        <p className="text-stone-600">
+                            {c.responsibility.paragraph}
                         </p>
-                        <Button className="bg-emerald-600 hover:bg-emerald-700 rounded-full px-8" asChild>
-                            <Link href="/agencies">
-                                Browse Agencies
-                                <ArrowRight className="w-4 h-4 ml-2" />
-                            </Link>
-                        </Button>
                     </div>
                 </section>
             )}
@@ -289,7 +472,7 @@ export function ServiceTemplate({ locationSlug, serviceSlug, locationName }: Ser
                             {c.cta.paragraph}
                         </p>
                         <Button size="lg" className="bg-white text-slate-900 hover:bg-stone-100 rounded-full px-8" asChild>
-                            <Link href="/become-a-foster">
+                            <Link href="/agencies">
                                 {c.cta.button_text}
                                 <ArrowRight className="w-4 h-4 ml-2" />
                             </Link>

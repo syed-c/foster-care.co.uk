@@ -14,34 +14,78 @@ export interface ServiceContentData {
   intro?: {
     paragraphs: string[];
   };
-  what_is_it?: {
+  what_it_is?: {
     heading: string;
     paragraphs: string[];
   };
-  who_is_it_for?: {
+  who_it_helps?: {
+    heading: string;
+    intro: string;
+    groups: string[];
+  };
+  how_it_works?: {
     heading: string;
     paragraphs: string[];
   };
-  requirements?: {
+  carer_requirements?: {
     heading: string;
-    paragraphs: string[];
+    intro: string;
+    requirements: string[];
   };
-  benefits?: {
+  agency_types?: {
     heading: string;
-    paragraphs: string[];
+    intro: string;
+    independent: {
+      title: string;
+      description: string;
+      benefits: string[];
+    };
+    local_authority: {
+      title: string;
+      description: string;
+      benefits: string[];
+    };
   };
-  process?: {
+  how_to_become?: {
     heading: string;
+    intro: string;
+    note?: string;
     steps: Array<{
       name: string;
       description: string;
     }>;
   };
+  ofsted?: {
+    heading: string;
+    description: string;
+    criteria: string[];
+  };
   support?: {
     heading: string;
-    paragraphs: string[];
+    intro: string;
+    categories: Array<{
+      name: string;
+      description: string;
+    }>;
   };
-  agencies?: {
+  regions?: {
+    heading: string;
+    intro: string;
+    list: string[];
+  };
+  who_guide_is_for?: {
+    heading: string;
+    intro: string;
+    audience: string[];
+  };
+  faq?: {
+    heading: string;
+    questions: Array<{
+      question: string;
+      answer: string;
+    }>;
+  };
+  responsibility?: {
     heading: string;
     paragraph: string;
   };
