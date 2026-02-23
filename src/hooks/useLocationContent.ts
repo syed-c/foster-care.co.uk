@@ -14,6 +14,16 @@ export interface LocationContentData {
   intro?: {
     paragraphs: string[];
   };
+  local_character?: {
+    heading: string;
+    paragraphs: string[];
+  };
+  agency_network?: {
+    heading: string;
+    intro: string;
+    towns: string[];
+    outro: string;
+  };
   why_fostering_matters?: {
     heading: string;
     paragraphs: string[];
@@ -28,17 +38,18 @@ export interface LocationContentData {
     independent: {
       title: string;
       description: string;
-      benefits: string[];
+      benefits?: string[];
     };
     local_authority: {
       title: string;
       description: string;
-      benefits: string[];
+      benefits?: string[];
     };
   };
   types_of_fostering?: {
     heading: string;
     intro: string;
+    outro?: string;
     categories: Array<{
       name: string;
       description: string;
@@ -68,6 +79,12 @@ export interface LocationContentData {
       name: string;
       description: string;
     }>;
+  };
+  landmarks?: {
+    heading: string;
+    intro: string;
+    paragraph: string;
+    places: string[];
   };
   regions?: {
     heading: string;

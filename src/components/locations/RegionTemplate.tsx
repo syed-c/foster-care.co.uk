@@ -132,6 +132,54 @@ export function RegionTemplate({
             {/* HERO TERMINATION BLOCK - Visual decompression */}
             <div className="bg-slate-900 h-8"></div>
 
+            {/* 1B. LOCAL CHARACTER - LIGHT */}
+            {c?.local_character && (
+                <section className="py-20 md:py-28 bg-stone-50">
+                    <div className="container-main px-4 max-w-4xl mx-auto">
+                        <div className="grid md:grid-cols-2 gap-12">
+                            <div>
+                                <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-4">
+                                    {c.local_character.heading}
+                                </h2>
+                            </div>
+                            <div className="space-y-4">
+                                {(c.local_character.paragraphs || []).map((paragraph, i) => (
+                                    <p key={i} className="text-base text-stone-600 leading-relaxed">
+                                        {paragraph}
+                                    </p>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* 1C. AGENCY NETWORK - LIGHT */}
+            {c?.agency_network && (
+                <section className="py-20 md:py-28 bg-white">
+                    <div className="container-main px-4 max-w-4xl mx-auto">
+                        <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-3 text-center">
+                            {c.agency_network.heading}
+                        </h2>
+                        <p className="text-stone-600 text-center mb-8 max-w-xl mx-auto">
+                            {c.agency_network.intro}
+                        </p>
+
+                        <div className="flex flex-wrap justify-center gap-2 mb-8">
+                            {(c.agency_network.towns || []).map((town, i) => (
+                                <span key={i} className="px-4 py-2 bg-stone-50 rounded-full text-sm text-stone-700">
+                                    {town}
+                                </span>
+                            ))}
+                        </div>
+
+                        <p className="text-stone-600 text-center max-w-2xl mx-auto">
+                            {c.agency_network.outro}
+                        </p>
+                    </div>
+                </section>
+            )}
+
             {/* 2. WHY FOSTERING MATTERS - Solid dark with clear entry */}
             {c?.why_fostering_matters && (
                 <section className="bg-slate-900">
@@ -231,11 +279,11 @@ export function RegionTemplate({
                         <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-3 text-center">
                             {c.types_of_fostering.heading}
                         </h2>
-                        <p className="text-stone-600 text-center mb-12 max-w-xl mx-auto">
+                        <p className="text-stone-600 text-center mb-8 max-w-xl mx-auto">
                             {c.types_of_fostering.intro}
                         </p>
 
-                        <div className="grid md:grid-cols-2 gap-6">
+                        <div className="grid md:grid-cols-2 gap-6 mb-8">
                             {(c.types_of_fostering.categories || []).map((category, i) => {
                                 const serviceSlug = category.slug?.replace('-fostering', '') || category.url?.replace('/', '').replace('-fostering', '') || 'short-term';
                                 const linkUrl = category.url 
@@ -258,6 +306,12 @@ export function RegionTemplate({
                                 );
                             })}
                         </div>
+
+                        {c.types_of_fostering.outro && (
+                            <p className="text-stone-600 text-center max-w-xl mx-auto">
+                                {c.types_of_fostering.outro}
+                            </p>
+                        )}
                     </div>
                 </section>
             )}
@@ -364,6 +418,31 @@ export function RegionTemplate({
                                     </span>
                                 );
                             })}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* 9B. LANDMARKS - LIGHT */}
+            {c?.landmarks && (
+                <section className="py-20 md:py-28 bg-stone-50">
+                    <div className="container-main px-4 max-w-4xl mx-auto">
+                        <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-3 text-center">
+                            {c.landmarks.heading}
+                        </h2>
+                        <p className="text-stone-600 text-center mb-6 max-w-xl mx-auto">
+                            {c.landmarks.intro}
+                        </p>
+                        <p className="text-stone-600 text-center mb-10 max-w-2xl mx-auto">
+                            {c.landmarks.paragraph}
+                        </p>
+
+                        <div className="flex flex-wrap justify-center gap-3">
+                            {(c.landmarks.places || []).map((place, i) => (
+                                <span key={i} className="px-5 py-3 bg-white border border-stone-200 rounded-full text-sm font-medium text-slate-700">
+                                    📍 {place}
+                                </span>
+                            ))}
                         </div>
                     </div>
                 </section>
