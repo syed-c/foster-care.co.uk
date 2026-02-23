@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { BackToTop } from "@/components/shared/BackToTop";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { RegionTemplate } from "@/components/locations/RegionTemplate";
+import { CountyTemplate } from "@/components/locations/CountyTemplate";
 import { Location, Agency, FAQ } from "@/services/dataService";
 
 interface CountyPageContentProps {
@@ -189,11 +190,10 @@ export default function CountyPageContent({
             <Header />
 
             <main className="flex-1">
-                <RegionTemplate
+                <CountyTemplate
                     location={effectiveLocation}
                     childLocations={effectiveChildLocations}
                     path={effectiveLocationPath}
-                    faqs={allFaqs}
                     agencies={effectiveLocationAgencies}
                     stats={richStats}
                     contentSlug={contentSlug}
