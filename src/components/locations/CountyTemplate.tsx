@@ -14,12 +14,11 @@ import {
     Wallet,
     Clock,
     MessageCircle,
-    CheckCircle,
     HelpCircle,
+    ShieldCheck,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Location, Agency } from "@/services/dataService";
 import { useLocationContent } from "@/hooks/useLocationContent";
@@ -36,15 +35,6 @@ export interface CountyTemplateProps {
     };
     contentSlug?: string;
 }
-
-const FOSTERING_SERVICES = [
-    { name: "Short-Term Fostering", slug: "short-term", description: "Temporary placements while assessments are made." },
-    { name: "Long-Term Fostering", slug: "long-term", description: "Stable homes for children who cannot return to birth families." },
-    { name: "Emergency Fostering", slug: "emergency", description: "Same-day placements for children needing immediate care." },
-    { name: "Parent and Child Fostering", slug: "parent-child", description: "Supporting young parents and their children together." },
-    { name: "Respite Fostering", slug: "respite", description: "Short breaks for families during demanding periods." },
-    { name: "Remand / Specialist Fostering", slug: "remand", description: "Specialist care for young people requiring structured support." }
-];
 
 function FadeInSection({ children, className }: { children: React.ReactNode; className?: string }) {
     const ref = useRef<HTMLDivElement>(null);
@@ -92,69 +82,69 @@ export function CountyTemplate({ location, childLocations, agencies, stats, path
 
     return (
         <div className="min-h-screen font-sans" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-            {/* 1. HERO SECTION */}
-            <section ref={heroRef} className="relative py-14 md:py-24 overflow-hidden" style={{ backgroundColor: '#0f1117', paddingTop: '56px', paddingBottom: '56px' }} id="hero">
-                <div className="relative mx-auto px-4" style={{ maxWidth: '1100px' }}>
-                    <FadeInSection>
-                        <nav className="flex items-center gap-2 text-sm mb-6" style={{ color: '#6b7280', fontSize: '13px' }}>
-                            <Link href="/locations" className="hover:text-white transition-colors">England</Link>
-                            <span style={{ color: '#374151' }}>&rsaquo;</span>
-                            {regionName && (<>
-                                <Link href={`/locations/${countrySlug}/${regionSlug}`} className="hover:text-white transition-colors">{regionName}</Link>
+            {/* 1. HERO SECTION - Only render if hero data exists */}
+            {c?.hero && (
+                <section ref={heroRef} className="relative py-14 md:py-24 overflow-hidden" style={{ backgroundColor: '#0f1117', paddingTop: '56px', paddingBottom: '56px' }} id="hero">
+                    <div className="relative mx-auto px-4" style={{ maxWidth: '1100px' }}>
+                        <FadeInSection>
+                            <nav className="flex items-center gap-2 text-sm mb-6" style={{ color: '#6b7280', fontSize: '13px' }}>
+                                <Link href="/locations" className="hover:text-white transition-colors">England</Link>
                                 <span style={{ color: '#374151' }}>&rsaquo;</span>
-                            </>)}
-                            <span style={{ color: '#9ca3af' }}>{locationName}</span>
-                        </nav>
-                        <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-4" style={{ fontSize: '42px', fontWeight: 800, lineHeight: 1.2 }}>
-                            {c?.hero?.heading || `Fostering Agencies in ${locationName}`}
-                        </h1>
-                        <p className="text-lg mb-8" style={{ color: '#9ca3af', maxWidth: '560px', fontSize: '18px', lineHeight: 1.75 }}>
-                            {c?.hero?.subheading || `Find Ofsted-regulated fostering agencies in ${locationName}. Compare local support, training, and allowances.`}
-                        </p>
-                        <div className="flex flex-wrap items-center gap-3 mb-8">
-                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: '#d1d5db' }}>
-                                <Shield className="w-3 h-3 mr-1" style={{ color: '#22c55e' }} />Ofsted-Regulated
-                            </span>
-                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: '#d1d5db' }}>
-                                <MapPin className="w-3 h-3 mr-1" style={{ color: '#22c55e' }} />Local Coverage
-                            </span>
-                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: '#d1d5db' }}>
-                                <Users className="w-3 h-3 mr-1" style={{ color: '#22c55e' }} />24/7 Support
-                            </span>
-                        </div>
-                        <div className="flex flex-wrap gap-4">
-                            <Button size="lg" style={{ backgroundColor: '#22c55e', color: 'white', borderRadius: '8px', padding: '14px 28px', fontWeight: 600 }} className="hover:translate-y-[-2px] transition-transform duration-200" asChild>
-                                <Link href="#agencies">Find a Fostering Agency in {locationName}<ArrowRight className="w-4 h-4 ml-2" /></Link>
-                            </Button>
-                            <Button variant="ghost" style={{ backgroundColor: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: '8px', padding: '14px 28px' }} className="hover:translate-y-[-2px] transition-transform duration-200" onClick={() => ctaRef.current?.scrollIntoView({ behavior: 'smooth' })}>
-                                <Phone className="w-4 h-4 mr-2" />Speak to a Local Fostering Expert
-                            </Button>
-                        </div>
-                    </FadeInSection>
-                </div>
-            </section>
+                                {regionName && (<>
+                                    <Link href={`/locations/${countrySlug}/${regionSlug}`} className="hover:text-white transition-colors">{regionName}</Link>
+                                    <span style={{ color: '#374151' }}>&rsaquo;</span>
+                                </>)}
+                                <span style={{ color: '#9ca3af' }}>{locationName}</span>
+                            </nav>
+                            <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-4" style={{ fontSize: '42px', fontWeight: 800, lineHeight: 1.2 }}>
+                                {c.hero.heading}
+                            </h1>
+                            <p className="text-lg mb-8" style={{ color: '#9ca3af', maxWidth: '560px', fontSize: '18px', lineHeight: 1.75 }}>
+                                {c.hero.subheading}
+                            </p>
+                            <div className="flex flex-wrap items-center gap-3 mb-8">
+                                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: '#d1d5db' }}>
+                                    <Shield className="w-3 h-3 mr-1" style={{ color: '#22c55e' }} />Ofsted-Regulated
+                                </span>
+                                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: '#d1d5db' }}>
+                                    <MapPin className="w-3 h-3 mr-1" style={{ color: '#22c55e' }} />Local Coverage
+                                </span>
+                                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: '#d1d5db' }}>
+                                    <Users className="w-3 h-3 mr-1" style={{ color: '#22c55e' }} />24/7 Support
+                                </span>
+                            </div>
+                            <div className="flex flex-wrap gap-4">
+                                <Button size="lg" style={{ backgroundColor: '#22c55e', color: 'white', borderRadius: '8px', padding: '14px 28px', fontWeight: 600 }} className="hover:translate-y-[-2px] transition-transform duration-200" asChild>
+                                    <Link href="#agencies">Find a Fostering Agency in {locationName}<ArrowRight className="w-4 h-4 ml-2" /></Link>
+                                </Button>
+                                <Button variant="ghost" style={{ backgroundColor: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: '8px', padding: '14px 28px' }} className="hover:translate-y-[-2px] transition-transform duration-200" onClick={() => ctaRef.current?.scrollIntoView({ behavior: 'smooth' })}>
+                                    <Phone className="w-4 h-4 mr-2" />Speak to a Local Fostering Expert
+                                </Button>
+                            </div>
+                        </FadeInSection>
+                    </div>
+                </section>
+            )}
 
-            {/* 2. ABOUT SECTION */}
-            <section className="py-14 md:py-24" style={{ backgroundColor: '#ffffff', paddingTop: '56px', paddingBottom: '56px' }} id="about">
-                <div className="mx-auto px-4" style={{ maxWidth: '1100px' }}>
-                    <FadeInSection>
-                        <h2 className="text-2xl md:text-3xl font-bold mb-6" style={{ color: '#111827', fontWeight: 700 }}>
-                            {c?.about?.heading || `About Fostering in ${locationName}`}
-                        </h2>
-                        <div className="space-y-4">
-                            {(c?.about?.paragraphs || [
-                                `Fostering provides temporary or permanent homes for children who cannot live with their birth families. In ${locationName}, local authorities and independent fostering agencies work together to ensure children receive quality care close to their schools, friends, and communities.`,
-                                `Across England, there is ongoing demand for foster carers in every county, including ${locationName}. Children in care come from diverse backgrounds and have varying needs.`,
-                                `Who can foster in ${locationName}? You don't need specific qualifications. What matters most is your ability to provide a safe, stable, and nurturing home. Most agencies welcome applicants who are over 21, have a spare bedroom, and can pass relevant checks.`
-                            ]).map((paragraph, i) => (
-                                <p key={i} style={{ color: '#374151', fontSize: '16px', lineHeight: 1.75 }}>{paragraph}</p>
-                            ))}
-                        </div>
-                    </FadeInSection>
-                </div>
-            </section>
+            {/* 2. ABOUT SECTION - Only render if about data exists */}
+            {c?.about && (
+                <section className="py-14 md:py-24" style={{ backgroundColor: '#ffffff', paddingTop: '56px', paddingBottom: '56px' }} id="about">
+                    <div className="mx-auto px-4" style={{ maxWidth: '1100px' }}>
+                        <FadeInSection>
+                            <h2 className="text-2xl md:text-3xl font-bold mb-6" style={{ color: '#111827', fontWeight: 700 }}>
+                                {c.about.heading}
+                            </h2>
+                            <div className="space-y-4">
+                                {c.about.paragraphs.map((paragraph, i) => (
+                                    <p key={i} style={{ color: '#374151', fontSize: '16px', lineHeight: 1.75 }}>{paragraph}</p>
+                                ))}
+                            </div>
+                        </FadeInSection>
+                    </div>
+                </section>
+            )}
 
-            {/* 3. AGENCIES SECTION - Dynamic from DB */}
+            {/* 3. AGENCIES SECTION - Dynamic from DB - Always render */}
             <section id="agencies" className="py-14 md:py-24" style={{ backgroundColor: '#f8f9fa', paddingTop: '56px', paddingBottom: '56px' }}>
                 <div className="mx-auto px-4" style={{ maxWidth: '1100px' }}>
                     <FadeInSection>
@@ -175,137 +165,138 @@ export function CountyTemplate({ location, childLocations, agencies, stats, path
                             <div className="text-center py-12 rounded-2xl" style={{ backgroundColor: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '12px' }}>
                                 <Building2 className="w-12 h-12 mx-auto mb-4" style={{ color: '#d1d5db' }} />
                                 <h3 className="text-lg font-semibold mb-2" style={{ color: '#111827' }}>No Agencies Found</h3>
-                                <p className="max-w-md mx-auto" style={{ color: '#6b7280' }}>We don't have agencies specifically listed for {locationName} yet. Browse agencies in neighbouring areas or contact us for assistance.</p>
+                                <p className="max-w-md mx-auto" style={{ color: '#6b7280' }}>We don't have agencies specifically listed for {locationName} yet.</p>
                             </div>
                         </FadeInSection>
                     )}
                 </div>
             </section>
 
-            {/* 4. INDEPENDENT AGENCIES VS LOCAL AUTHORITY */}
-            <section className="py-14 md:py-24" style={{ backgroundColor: '#0f1117', paddingTop: '56px', paddingBottom: '56px' }} id="agency-types">
-                <div className="mx-auto px-4" style={{ maxWidth: '1100px' }}>
-                    <FadeInSection>
-                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-center" style={{ color: '#ffffff', fontWeight: 700 }}>
-                            {c?.agency_types?.heading || `Independent Agencies vs Local Authority in ${locationName}`}
-                        </h2>
-                        <p className="text-center mb-10 max-w-xl mx-auto" style={{ color: '#9ca3af' }}>
-                            {c?.agency_types?.intro || 'Understanding your options helps you choose the right fostering path.'}
-                        </p>
-                        
-                        <div className="grid md:grid-cols-2 gap-6">
-                            <div className="p-8 rounded-xl" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', borderTopWidth: '3px', borderTopColor: '#22c55e' }}>
-                                <h3 className="text-lg font-bold mb-4 flex items-center gap-2" style={{ color: '#ffffff', fontWeight: 700 }}>
-                                    <Building2 className="w-5 h-5" style={{ color: '#22c55e' }} />
-                                    {c?.agency_types?.independent?.title || 'Independent Fostering Agencies'}
-                                </h3>
-                                <div className="space-y-4 text-sm" style={{ color: '#d1d5db' }}>
-                                    <p><strong style={{ color: '#f3f4f6' }}>Support:</strong> {c?.agency_types?.independent?.description?.split('.')[0] || 'Dedicated social worker, 24/7 on-call, smaller caseloads.'}</p>
-                                    {(c?.agency_types?.independent?.benefits || ['Competitive rates, flexible expenses.', 'Comprehensive initial and ongoing training.', 'Best for: New carers wanting intensive support.']).map((benefit, i) => (
-                                        <p key={i}><span style={{ color: '#22c55e', marginRight: '8px' }}>-</span>{benefit}</p>
-                                    ))}
+            {/* 4. AGENCY TYPES SECTION - Only render if agency_types data exists */}
+            {c?.agency_types && (
+                <section className="py-14 md:py-24" style={{ backgroundColor: '#0f1117', paddingTop: '56px', paddingBottom: '56px' }} id="agency-types">
+                    <div className="mx-auto px-4" style={{ maxWidth: '1100px' }}>
+                        <FadeInSection>
+                            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-center" style={{ color: '#ffffff', fontWeight: 700 }}>
+                                {c.agency_types.heading}
+                            </h2>
+                            <p className="text-center mb-10 max-w-xl mx-auto" style={{ color: '#9ca3af' }}>
+                                {c.agency_types.intro}
+                            </p>
+                            
+                            <div className="grid md:grid-cols-2 gap-6">
+                                <div className="p-8 rounded-xl" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', borderTopWidth: '3px', borderTopColor: '#22c55e' }}>
+                                    <h3 className="text-lg font-bold mb-4 flex items-center gap-2" style={{ color: '#ffffff', fontWeight: 700 }}>
+                                        <Building2 className="w-5 h-5" style={{ color: '#22c55e' }} />
+                                        {c.agency_types.independent.title}
+                                    </h3>
+                                    <div className="space-y-4 text-sm" style={{ color: '#d1d5db' }}>
+                                        <p><strong style={{ color: '#f3f4f6' }}>Support:</strong> {c.agency_types.independent.description}</p>
+                                        {c.agency_types.independent.benefits?.map((benefit, i) => (
+                                            <p key={i}><span style={{ color: '#22c55e', marginRight: '8px' }}>-</span>{benefit}</p>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="p-8 rounded-xl" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', borderTopWidth: '3px', borderTopColor: '#6b7280' }}>
+                                    <h3 className="text-lg font-bold mb-4 flex items-center gap-2" style={{ color: '#ffffff', fontWeight: 700 }}>
+                                        <Shield className="w-5 h-5" style={{ color: '#6b7280' }} />
+                                        {c.agency_types.local_authority.title}
+                                    </h3>
+                                    <div className="space-y-4 text-sm" style={{ color: '#d1d5db' }}>
+                                        <p><strong style={{ color: '#f3f4f6' }}>Support:</strong> {c.agency_types.local_authority.description}</p>
+                                        {c.agency_types.local_authority.benefits?.map((benefit, i) => (
+                                            <p key={i}><span style={{ color: '#6b7280', marginRight: '8px' }}>-</span>{benefit}</p>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
-                            <div className="p-8 rounded-xl" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', borderTopWidth: '3px', borderTopColor: '#6b7280' }}>
-                                <h3 className="text-lg font-bold mb-4 flex items-center gap-2" style={{ color: '#ffffff', fontWeight: 700 }}>
-                                    <Shield className="w-5 h-5" style={{ color: '#6b7280' }} />
-                                    {c?.agency_types?.local_authority?.title || 'Local Authority Fostering'}
-                                </h3>
-                                <div className="space-y-4 text-sm" style={{ color: '#d1d5db' }}>
-                                    <p><strong style={{ color: '#f3f4f6' }}>Support:</strong> {c?.agency_types?.local_authority?.description?.split('.')[0] || 'Assigned social worker, regular visits.'}</p>
-                                    {(c?.agency_types?.local_authority?.benefits || ['Standard national rates.', 'Core programmes, in-house training.', 'Best for: Those prioritising keeping children local.']).map((benefit, i) => (
-                                        <p key={i}><span style={{ color: '#6b7280', marginRight: '8px' }}>-</span>{benefit}</p>
-                                    ))}
-                                </div>
-                            </div>
+                            {c.agency_types.outro && (
+                                <p className="text-center mt-8 text-sm" style={{ color: '#9ca3af' }}>
+                                    {c.agency_types.outro}
+                                </p>
+                            )}
+                        </FadeInSection>
+                    </div>
+                </section>
+            )}
+
+            {/* 5. FOSTERING SERVICES SECTION - Only render if fostering_services data exists */}
+            {c?.fostering_services && (
+                <section className="py-14 md:py-24" style={{ backgroundColor: '#ffffff', paddingTop: '56px', paddingBottom: '56px' }} id="services">
+                    <div className="mx-auto px-4" style={{ maxWidth: '1100px' }}>
+                        <FadeInSection>
+                            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-center" style={{ color: '#111827', fontWeight: 700 }}>
+                                {c.fostering_services.heading}
+                            </h2>
+                            <p className="text-center mb-10 max-w-xl mx-auto" style={{ color: '#6b7280' }}>
+                                {c.fostering_services.intro}
+                            </p>
+                        </FadeInSection>
+
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {c.fostering_services.services.map((service, i) => {
+                                const linkUrl = `/locations/${countrySlug}/${regionSlug}/${location.slug}/${service.slug}`;
+                                return (
+                                    <FadeInSection key={i}>
+                                        <Link 
+                                            href={linkUrl}
+                                            className="block p-6 rounded-xl transition-all group"
+                                            style={{ backgroundColor: '#f8f9fa', border: '1px solid #e5e7eb', borderRadius: '12px' }}
+                                        >
+                                            <h3 className="font-semibold mb-2 group-hover:text-green-600" style={{ color: '#111827', fontWeight: 600 }}>{service.name}</h3>
+                                            <p className="text-sm" style={{ color: '#374151' }}>{service.description}</p>
+                                            <span className="text-xs font-medium text-green-600 mt-3 block">Learn more &rarr;</span>
+                                        </Link>
+                                    </FadeInSection>
+                                );
+                            })}
                         </div>
-                        <p className="text-center mt-8 text-sm" style={{ color: '#9ca3af' }}>
-                            {c?.agency_types?.outro || 'Both options provide rewarding fostering experiences. The right choice depends on your circumstances and preferences.'}
-                        </p>
-                    </FadeInSection>
-                </div>
-            </section>
 
-            {/* 5. FOSTERING SERVICES SECTION */}
-            <section className="py-14 md:py-24" style={{ backgroundColor: '#ffffff', paddingTop: '56px', paddingBottom: '56px' }} id="services">
-                <div className="mx-auto px-4" style={{ maxWidth: '1100px' }}>
-                    <FadeInSection>
-                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-center" style={{ color: '#111827', fontWeight: 700 }}>
-                            {c?.fostering_services?.heading || `Fostering Services in ${locationName}`}
-                        </h2>
-                        <p className="text-center mb-10 max-w-xl mx-auto" style={{ color: '#6b7280' }}>
-                            {c?.fostering_services?.intro || 'Different types of fostering placements available through agencies.'}
-                        </p>
-                    </FadeInSection>
+                        {c.fostering_services.outro && (
+                            <p className="text-center mt-8 max-w-xl mx-auto" style={{ color: '#6b7280' }}>{c.fostering_services.outro}</p>
+                        )}
+                    </div>
+                </section>
+            )}
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {(c?.fostering_services?.services || FOSTERING_SERVICES).map((service, i) => {
-                            const linkUrl = `/locations/${countrySlug}/${regionSlug}/${location.slug}/${service.slug}`;
-                            return (
+            {/* 6. WHAT AGENCIES PROVIDE SECTION - Only render if support data exists */}
+            {c?.support && (
+                <section className="py-14 md:py-24" style={{ backgroundColor: '#f8f9fa', paddingTop: '56px', paddingBottom: '56px' }} id="support">
+                    <div className="mx-auto px-4" style={{ maxWidth: '1100px' }}>
+                        <FadeInSection>
+                            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-center" style={{ color: '#111827', fontWeight: 700 }}>
+                                {c.support.heading}
+                            </h2>
+                            <p className="text-center mb-10 max-w-xl mx-auto" style={{ color: '#6b7280' }}>
+                                {c.support.intro}
+                            </p>
+                        </FadeInSection>
+
+                        <div className="grid md:grid-cols-2 gap-6">
+                            {c.support.categories.map((item, i) => (
                                 <FadeInSection key={i}>
-                                    <Link 
-                                        href={linkUrl}
-                                        className="block p-6 rounded-xl transition-all group"
-                                        style={{ backgroundColor: '#f8f9fa', border: '1px solid #e5e7eb', borderRadius: '12px' }}
-                                    >
-                                        <h3 className="font-semibold mb-2 group-hover:text-green-600" style={{ color: '#111827', fontWeight: 600 }}>{service.name}</h3>
-                                        <p className="text-sm" style={{ color: '#374151' }}>{service.description}</p>
-                                        <span className="text-xs font-medium text-green-600 mt-3 block">Learn more &rarr;</span>
-                                    </Link>
+                                    <div className="flex gap-4 p-6 rounded-xl" style={{ backgroundColor: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '12px' }}>
+                                        <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#dcfce7' }}>
+                                            {i === 0 && <GraduationCap className="w-6 h-6" style={{ color: '#16a34a' }} />}
+                                            {i === 1 && <Clock className="w-6 h-6" style={{ color: '#16a34a' }} />}
+                                            {i === 2 && <Wallet className="w-6 h-6" style={{ color: '#16a34a' }} />}
+                                            {i === 3 && <Users className="w-6 h-6" style={{ color: '#16a34a' }} />}
+                                            {i === 4 && <MessageCircle className="w-6 h-6" style={{ color: '#16a34a' }} />}
+                                            {i === 5 && <MapPin className="w-6 h-6" style={{ color: '#16a34a' }} />}
+                                        </div>
+                                        <div>
+                                            <h3 className="font-semibold mb-1" style={{ color: '#111827', fontWeight: 600 }}>{item.name}</h3>
+                                            <p className="text-sm" style={{ color: '#374151' }}>{item.description}</p>
+                                        </div>
+                                    </div>
                                 </FadeInSection>
-                            );
-                        })}
+                            ))}
+                        </div>
                     </div>
+                </section>
+            )}
 
-                    {c?.fostering_services?.outro && (
-                        <p className="text-center mt-8 max-w-xl mx-auto" style={{ color: '#6b7280' }}>{c.fostering_services.outro}</p>
-                    )}
-                </div>
-            </section>
-
-            {/* 6. WHAT AGENCIES PROVIDE SECTION */}
-            <section className="py-14 md:py-24" style={{ backgroundColor: '#f8f9fa', paddingTop: '56px', paddingBottom: '56px' }} id="support">
-                <div className="mx-auto px-4" style={{ maxWidth: '1100px' }}>
-                    <FadeInSection>
-                        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-center" style={{ color: '#111827', fontWeight: 700 }}>
-                            {c?.support?.heading || `What Fostering Agencies in ${locationName} Provide`}
-                        </h2>
-                        <p className="text-center mb-10 max-w-xl mx-auto" style={{ color: '#6b7280' }}>
-                            {c?.support?.intro || 'All registered fostering agencies offer core support services.'}
-                        </p>
-                    </FadeInSection>
-
-                    <div className="grid md:grid-cols-2 gap-6">
-                        {(c?.support?.categories || [
-                            { name: "Training and Development", description: "Preparation training and ongoing skills development." },
-                            { name: "24/7 Support", description: "Round-the-clock access to guidance and emergency support." },
-                            { name: "Financial Allowances", description: "Weekly maintenance to cover child's living costs." },
-                            { name: "Social Worker Support", description: "Dedicated supervising social worker." },
-                            { name: "Peer Support Networks", description: "Access to support groups and peer networks." },
-                            { name: "Local Placement Matching", description: "Keeping children in their local area." }
-                        ]).map((item, i) => (
-                            <FadeInSection key={i}>
-                                <div className="flex gap-4 p-6 rounded-xl" style={{ backgroundColor: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '12px' }}>
-                                    <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#dcfce7' }}>
-                                        {i === 0 && <GraduationCap className="w-6 h-6" style={{ color: '#16a34a' }} />}
-                                        {i === 1 && <Clock className="w-6 h-6" style={{ color: '#16a34a' }} />}
-                                        {i === 2 && <Wallet className="w-6 h-6" style={{ color: '#16a34a' }} />}
-                                        {i === 3 && <Users className="w-6 h-6" style={{ color: '#16a34a' }} />}
-                                        {i === 4 && <MessageCircle className="w-6 h-6" style={{ color: '#16a34a' }} />}
-                                        {i === 5 && <MapPin className="w-6 h-6" style={{ color: '#16a34a' }} />}
-                                    </div>
-                                    <div>
-                                        <h3 className="font-semibold mb-1" style={{ color: '#111827', fontWeight: 600 }}>{item.name}</h3>
-                                        <p className="text-sm" style={{ color: '#374151' }}>{item.description}</p>
-                                    </div>
-                                </div>
-                            </FadeInSection>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* 7. FAQ SECTION */}
+            {/* 7. FAQ SECTION - Only render if faq data exists */}
             {c?.faq && (
                 <section className="py-14 md:py-24" style={{ backgroundColor: '#0f1117', paddingTop: '56px', paddingBottom: '56px' }} id="faq">
                     <div className="mx-auto px-4" style={{ maxWidth: '1100px' }}>
@@ -332,27 +323,27 @@ export function CountyTemplate({ location, childLocations, agencies, stats, path
                 </section>
             )}
 
-            {/* 8. CTA SECTION */}
-            <section ref={ctaRef} className="py-14 md:py-24 text-center" style={{ backgroundColor: '#22c55e', paddingTop: '56px', paddingBottom: '56px' }} id="cta">
-                <div className="mx-auto px-4" style={{ maxWidth: '1100px' }}>
-                    <FadeInSection>
-                        <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: '#ffffff', fontWeight: 700, fontSize: '30px' }}>
-                            {c?.cta?.heading || `Thinking About Fostering in ${locationName}?`}
-                        </h2>
-                        <p className="mb-8 max-w-lg mx-auto" style={{ color: 'rgba(255,255,255,0.85)' }}>
-                            {c?.cta?.paragraph || 'Every child deserves a safe, stable home. We\'re here to help you find the right path.'}
-                        </p>
-                        <div className="flex flex-wrap justify-center gap-4">
+            {/* 8. CTA SECTION - Only render if cta data exists */}
+            {c?.cta && (
+                <section ref={ctaRef} className="py-14 md:py-24 text-center" style={{ backgroundColor: '#22c55e', paddingTop: '56px', paddingBottom: '56px' }} id="cta">
+                    <div className="mx-auto px-4" style={{ maxWidth: '1100px' }}>
+                        <FadeInSection>
+                            <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: '#ffffff', fontWeight: 700, fontSize: '30px' }}>
+                                {c.cta.heading}
+                            </h2>
+                            <p className="mb-8 max-w-lg mx-auto" style={{ color: 'rgba(255,255,255,0.85)' }}>
+                                {c.cta.paragraph}
+                            </p>
                             <Button size="lg" style={{ backgroundColor: '#ffffff', color: '#16a34a', fontWeight: 700, borderRadius: '8px', padding: '14px 32px' }} className="hover:bg-green-50 hover:scale-[1.02] transition-all duration-200" asChild>
-                                <Link href="#agencies">Find a Fostering Agency in {locationName}<ArrowRight className="w-4 h-4 ml-2" /></Link>
+                                <Link href="#agencies">
+                                    {c.cta.button_text}
+                                    <ArrowRight className="w-4 h-4 ml-2" />
+                                </Link>
                             </Button>
-                            <Button size="lg" style={{ backgroundColor: 'transparent', border: '1px solid rgba(255,255,255,0.3)', color: '#ffffff', borderRadius: '8px', padding: '14px 32px' }} className="hover:bg-white/10 transition-colors" asChild>
-                                <Link href="/contact">Get Fostering Advice</Link>
-                            </Button>
-                        </div>
-                    </FadeInSection>
-                </div>
-            </section>
+                        </FadeInSection>
+                    </div>
+                </section>
+            )}
         </div>
     );
 }

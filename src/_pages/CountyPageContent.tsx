@@ -1,15 +1,14 @@
 "use client";
 import { useParams } from "next/navigation";
 import { useLocationFromPath, useChildLocations, useLocationPath, buildLocationUrl } from "@/hooks/useLocations";
-import { useAgenciesByLocation, useFeaturedAgencies } from "@/hooks/useAgencies";
-import { useFaqsByLocation } from "@/hooks/useFaqs";
+import { useAgenciesByLocation } from "@/hooks/useAgencies";
+import { useLocationContent } from "@/hooks/useLocationContent";
 import { Header } from "@/components/layout/Header";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BackToTop } from "@/components/shared/BackToTop";
 import { SEOHead } from "@/components/seo/SEOHead";
-import { RegionTemplate } from "@/components/locations/RegionTemplate";
 import { CountyTemplate } from "@/components/locations/CountyTemplate";
 import { Location, Agency, FAQ } from "@/services/dataService";
 
@@ -26,7 +25,6 @@ export default function CountyPageContent({
     initialLocation,
     initialChildLocations,
     initialLocationPath,
-    initialLocationFaqs,
     initialLocationAgencies,
     contentSlug,
 }: CountyPageContentProps) {
@@ -35,34 +33,27 @@ export default function CountyPageContent({
         ? [params.country as string, params.region as string, params.county as string]
         : [];
 
-    const { data: location } = useLocationFromPath(pathSegments);
+    const { data: location, isLoading: locationLoading } = useLocationFromPath(pathSegments);
     const { data: childLocations } = useChildLocations(location?.id);
     const { data: locationPath } = useLocationPath(location?.id);
-    const { data: locationFaqs } = useFaqsByLocation(location?.id);
     const { data: locationAgencies } = useAgenciesByLocation(location?.id, 50);
-    const { data: fallbackAgencies } = useFeaturedAgencies(12);
+    const { data: locationContent, isLoading: contentLoading } = useLocationContent(contentSlug || location?.slug);
 
     const effectiveLocation = location || initialLocation;
     const effectiveChildLocations = childLocations || initialChildLocations || [];
     const effectiveLocationPath = locationPath || initialLocationPath || [];
-    const effectiveLocationFaqs = locationFaqs || initialLocationFaqs || [];
-
-    const effectiveLocationAgencies = (locationAgencies && locationAgencies.length > 0)
-        ? locationAgencies
-        : (location?.type === 'country' && fallbackAgencies && fallbackAgencies.length > 0)
-            ? fallbackAgencies
-            : initialLocationAgencies || [];
-
+    const effectiveLocationAgencies = locationAgencies || initialLocationAgencies || [];
+    
     const isLoading = !initialLocation && !location;
-    const allFaqs = effectiveLocationFaqs;
+    const isContentLoading = !contentSlug && !locationContent;
 
-    if (isLoading) {
+    if (isLoading || isContentLoading) {
         return (
-            <div className="min-h-screen flex flex-col bg-slate-950">
+            <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#0f1117' }}>
                 <Header />
                 <main className="flex-1 pt-20">
-                    <section className="relative py-20 md:py-28 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-                        <div className="container-main">
+                    <section className="relative py-20 md:py-28" style={{ backgroundColor: '#0f1117' }}>
+                        <div className="mx-auto px-4" style={{ maxWidth: '1100px' }}>
                             <Skeleton className="h-6 w-64 mb-6 bg-white/10" />
                             <Skeleton className="h-16 w-[500px] mb-4 bg-white/10" />
                             <Skeleton className="h-6 w-full max-w-2xl bg-white/10" />
@@ -73,18 +64,18 @@ export default function CountyPageContent({
         );
     }
 
-    if (!effectiveLocation) {
+    if (!effectiveLocation || !locationContent) {
         return (
-            <div className="min-h-screen flex flex-col bg-slate-950">
+            <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#0f1117' }}>
                 <Header />
                 <main className="flex-1 pt-20 flex items-center justify-center">
                     <div className="text-center max-w-md px-6">
-                        <div className="w-20 h-20 rounded-3xl bg-white/10 flex items-center justify-center mx-auto mb-6">
-                            <MapPin className="w-10 h-10 text-white/60" />
+                        <div className="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
+                            <MapPin className="w-10 h-10" style={{ color: 'rgba(255,255,255,0.6)' }} />
                         </div>
-                        <h1 className="text-2xl font-black mb-3 text-white">Location Not Found</h1>
-                        <p className="text-white/60 mb-8">The location you're looking for doesn't exist or may have been moved.</p>
-                        <Button asChild className="rounded-xl">
+                        <h1 className="text-2xl font-extrabold mb-3" style={{ color: '#ffffff' }}>Page Not Found</h1>
+                        <p className="mb-8" style={{ color: 'rgba(255,255,255,0.6)' }}>The page you're looking for doesn't exist or may have been moved.</p>
+                        <Button asChild style={{ backgroundColor: '#22c55e', color: '#fff', borderRadius: '8px', padding: '12px 24px' }}>
                             <a href="/locations">Browse All Locations</a>
                         </Button>
                     </div>
@@ -113,78 +104,46 @@ export default function CountyPageContent({
         });
     }
 
-    const faqsForSchema = allFaqs?.map(f => ({ question: f.question, answer: f.answer })) || [];
     const currentPath = effectiveLocationPath ? buildLocationUrl(effectiveLocationPath) : `/locations/${effectiveLocation.slug}`;
 
     const getSeoTitle = () => {
         if (effectiveLocation.seo_title) return effectiveLocation.seo_title;
-
-        switch (effectiveLocation.type) {
-            case "country":
-                return `Foster Care Agencies in ${effectiveLocation.name} | Find Local Fostering Services`;
-            case "region":
-                return `Fostering Agencies in ${effectiveLocation.name} | Regional Foster Care Directory`;
-            case "county":
-                return `Foster Care in ${effectiveLocation.name} | County Fostering Agencies`;
-            case "city":
-                return `Fostering Agencies in ${effectiveLocation.name} | Local Foster Care Services`;
-            case "area":
-                return `Foster Care Services in ${effectiveLocation.name} | Find Fostering Agencies Near You`;
-            default:
-                return `Foster Care Agencies in ${effectiveLocation.name} | Find Local Fostering Support`;
-        }
+        return `Foster Care in ${effectiveLocation.name} | County Fostering Agencies`;
     };
 
     const getSeoDescription = () => {
         if (effectiveLocation.seo_description) return effectiveLocation.seo_description;
-
         return `Discover trusted foster care agencies in ${effectiveLocation.name}. Compare ${totalAgencies || 'local'}+ verified fostering agencies, read reviews, and start your fostering journey today.`;
     };
 
-    const getRichStats = () => {
-        const baseAgencies = totalAgencies || 25;
-        return {
-            childrenInCare: baseAgencies * 12,
-            boroughs: effectiveChildLocations.length || 1,
-            agenciesCount: baseAgencies,
-            totalCarers: baseAgencies * 45,
-            weeklyAllowance: "£450 - £650",
-        };
+    const richStats = {
+        childrenInCare: (totalAgencies || 25) * 12,
+        boroughs: effectiveChildLocations.length || 1,
+        agenciesCount: totalAgencies || 25,
     };
 
-    const richStats = getRichStats();
     const seoTitle = getSeoTitle();
     const seoDescription = getSeoDescription();
 
     const getPlaceSchema = () => {
-        const schemaType = effectiveLocation.type === 'country' ? 'Country' :
-            effectiveLocation.type === 'city' ? 'City' :
-                'AdministrativeArea';
-
         return {
             "@context": "https://schema.org",
-            "@type": schemaType,
+            "@type": "AdministrativeArea",
             "name": effectiveLocation.name,
             "description": `Foster care services and information for ${effectiveLocation.name}`,
             "url": `https://www.foster-care.co.uk${currentPath}`,
-            "containsPlace": effectiveChildLocations.map(child => ({
-                "@type": "Place",
-                "name": child.name,
-                "url": `https://www.foster-care.co.uk${currentPath}/${child.slug}`
-            }))
         };
     };
 
     const placeSchema = getPlaceSchema();
 
     return (
-        <div className="min-h-screen flex flex-col bg-white">
+        <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#ffffff' }}>
             <SEOHead
                 title={seoTitle}
                 description={seoDescription}
                 canonicalUrl={`https://www.foster-care.co.uk${currentPath}`}
                 breadcrumbs={breadcrumbItems}
-                faqData={faqsForSchema.length > 0 ? faqsForSchema : undefined}
                 structuredData={placeSchema}
             />
             <Header />
