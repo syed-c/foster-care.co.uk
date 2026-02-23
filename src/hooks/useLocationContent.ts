@@ -11,7 +11,15 @@ export interface LocationContent {
 
 export interface LocationContentData {
   title?: string;
+  hero?: {
+    heading: string;
+    subheading: string;
+  };
   intro?: {
+    paragraphs: string[];
+  };
+  about?: {
+    heading: string;
     paragraphs: string[];
   };
   local_character?: {
@@ -35,6 +43,7 @@ export interface LocationContentData {
   agency_types?: {
     heading: string;
     intro: string;
+    outro?: string;
     independent: {
       title: string;
       description: string;
@@ -45,6 +54,16 @@ export interface LocationContentData {
       description: string;
       benefits?: string[];
     };
+  };
+  fostering_services?: {
+    heading: string;
+    intro: string;
+    outro?: string;
+    services: Array<{
+      name: string;
+      description: string;
+      slug: string;
+    }>;
   };
   types_of_fostering?: {
     heading: string;
