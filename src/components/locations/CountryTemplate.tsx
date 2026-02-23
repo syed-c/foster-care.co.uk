@@ -27,6 +27,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Location, Agency, FAQ } from "@/services/dataService";
 import { useAvailableRegions } from "@/hooks/useAvailableRegions";
 import { useLocationContent } from "@/hooks/useLocationContent";
+import { CountryFilters } from "./CountryFilters";
 
 export interface LocationPageProps {
     location: Location;
@@ -237,7 +238,11 @@ export function CountryTemplate({
                             {locationName}'s fostering system brings together independent agencies and local authorities, all regulated by Ofsted. Whether you're exploring for the first time or ready to find an agency, this guide helps you understand your options.
                         </p>
 
-                        <div className="flex flex-wrap gap-4 mt-10">
+                        <div className="flex flex-wrap gap-4 mt-6">
+                            <CountryFilters country={locationSlug} />
+                        </div>
+
+                        <div className="flex flex-wrap gap-4 mt-6">
                             <Button size="lg" className="bg-white text-slate-900 hover:bg-stone-100 rounded-full px-8" asChild>
                                 <Link href="#regions">
                                     Browse Regions

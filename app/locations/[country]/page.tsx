@@ -12,6 +12,7 @@ import {
     Location,
 } from '@/services/dataService';
 import { notFound } from 'next/navigation';
+import { CountryPageClient } from './CountryPageClient';
 
 const SERVICE_SLUGS = ['short-term', 'long-term', 'emergency', 'respite', 'parent-child', 'therapeutic'];
 
@@ -36,7 +37,6 @@ export async function generateMetadata({ params }: { params: { country: string }
 
     const name = location.name;
 
-    // Custom meta for England country page
     if (location.slug === "england") {
         return {
             title: "Fostering Agencies in England | Find Trusted Foster Care",
@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: { params: { country: string }
 
     return {
         title: `Foster Care in ${name} | Start Your Fostering Journey | Foster Care UK`,
-        description: `Discover how you can make a life-changing difference. Become a foster carrier in ${name}. Compare local agencies, access 24/7 support, and start your journey today.`,
+        description: `Discover how you can make a life-changing difference. Become a foster carrier in ${name}. Search verified local agencies and start your journey today.`,
         openGraph: {
             title: `Foster Care in ${name} | Start Your Fostering Journey`,
             description: `Become a foster carrier in ${name}. Search verified local agencies and start your journey today.`,
@@ -64,8 +64,12 @@ export async function generateMetadata({ params }: { params: { country: string }
     };
 }
 
-export default async function CountryPage({ params }: { params: { country: string } }) {
-    // Check if it's a service slug
+interface Props {
+    params: { country: string };
+    searchParams: { [key: string]: string | string[] | undefined };
+}
+
+export default async function CountryPage({ params, searchParams }: Props) {
     if (SERVICE_SLUGS.includes(params.country)) {
         return (
             <ServiceTemplate
@@ -98,14 +102,24 @@ export default async function CountryPage({ params }: { params: { country: strin
         getCmsContentByPage(`location_${params.country}`)
     ]);
 
+    const type = typeof searchParams.type === 'string' ? searchParams.type : undefined;
+    const service = typeof searchParams.service === 'string' ? searchParams.service : undefined;
+    const locationFilter = typeof searchParams.location === 'string' ? searchParams.location : undefined;
+
+    const hasFilters = !!(type && service && locationFilter);
+
     return (
-        <UnifiedLocationPage
-            initialLocation={location}
-            initialChildLocations={childLocations}
-            initialLocationPath={locationPath}
-            initialLocationFaqs={locationFaqs}
-            initialLocationAgencies={locationAgencies}
-            initialCmsContent={cmsContent}
+        <CountryPageClient
+            location={location}
+            childLocations={childLocations}
+            locationPath={locationPath}
+            locationFaqs={locationFaqs}
+            locationAgencies={locationAgencies}
+            cmsContent={cmsContent}
+            filterType={type}
+            filterService={service}
+            filterLocation={locationFilter}
+            showFilteredAgencies={hasFilters}
         />
     );
 }
