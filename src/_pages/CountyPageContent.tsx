@@ -1,6 +1,5 @@
 "use client";
 import { useParams } from "next/navigation";
-import { useCountyContent } from "@/hooks/useCountyContent";
 import { useLocationFromPath, useChildLocations, useLocationPath, buildLocationUrl } from "@/hooks/useLocations";
 import { useAgenciesByLocation, useFeaturedAgencies } from "@/hooks/useAgencies";
 import { useFaqsByLocation } from "@/hooks/useFaqs";
@@ -10,8 +9,7 @@ import { MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BackToTop } from "@/components/shared/BackToTop";
 import { SEOHead } from "@/components/seo/SEOHead";
-import { CountyTemplate } from "@/components/locations/CountyTemplate";
-import UnifiedLocationPage from "@/_pages/UnifiedLocationPage";
+import { RegionTemplate } from "@/components/locations/RegionTemplate";
 import { Location, Agency, FAQ } from "@/services/dataService";
 
 interface CountyPageContentProps {
@@ -20,7 +18,6 @@ interface CountyPageContentProps {
     initialLocationPath?: Location[];
     initialLocationFaqs?: FAQ[];
     initialLocationAgencies?: Agency[];
-    initialCountyContent?: any;
 }
 
 export default function CountyPageContent({
@@ -29,28 +26,23 @@ export default function CountyPageContent({
     initialLocationPath,
     initialLocationFaqs,
     initialLocationAgencies,
-    initialCountyContent,
 }: CountyPageContentProps) {
     const params = useParams();
     const pathSegments = params?.country && params?.region && params?.county
         ? [params.country as string, params.region as string, params.county as string]
         : [];
 
-    const fullSlug = pathSegments.join('/');
-    
     const { data: location } = useLocationFromPath(pathSegments);
     const { data: childLocations } = useChildLocations(location?.id);
     const { data: locationPath } = useLocationPath(location?.id);
     const { data: locationFaqs } = useFaqsByLocation(location?.id);
     const { data: locationAgencies } = useAgenciesByLocation(location?.id, 50);
     const { data: fallbackAgencies } = useFeaturedAgencies(12);
-    const { data: countyContent } = useCountyContent(fullSlug);
 
     const effectiveLocation = location || initialLocation;
     const effectiveChildLocations = childLocations || initialChildLocations || [];
     const effectiveLocationPath = locationPath || initialLocationPath || [];
     const effectiveLocationFaqs = locationFaqs || initialLocationFaqs || [];
-    const effectiveCountyContent = countyContent || initialCountyContent;
 
     const effectiveLocationAgencies = (locationAgencies && locationAgencies.length > 0)
         ? locationAgencies
@@ -60,10 +52,6 @@ export default function CountyPageContent({
 
     const isLoading = !initialLocation && !location;
     const allFaqs = effectiveLocationFaqs;
-
-    const hasValidCountyContent = effectiveCountyContent && 
-        effectiveCountyContent.intro && 
-        effectiveCountyContent.intro.paragraphs;
 
     if (isLoading) {
         return (
@@ -199,25 +187,14 @@ export default function CountyPageContent({
             <Header />
 
             <main className="flex-1">
-                {hasValidCountyContent ? (
-                    <CountyTemplate
-                        location={effectiveLocation}
-                        childLocations={effectiveChildLocations}
-                        path={effectiveLocationPath}
-                        faqs={allFaqs}
-                        agencies={effectiveLocationAgencies}
-                        stats={richStats}
-                        countyContent={effectiveCountyContent}
-                    />
-                ) : (
-                    <UnifiedLocationPage
-                        initialLocation={effectiveLocation}
-                        initialChildLocations={effectiveChildLocations}
-                        initialLocationPath={effectiveLocationPath}
-                        initialLocationFaqs={effectiveLocationFaqs}
-                        initialLocationAgencies={effectiveLocationAgencies}
-                    />
-                )}
+                <RegionTemplate
+                    location={effectiveLocation}
+                    childLocations={effectiveChildLocations}
+                    path={effectiveLocationPath}
+                    faqs={allFaqs}
+                    agencies={effectiveLocationAgencies}
+                    stats={richStats}
+                />
             </main>
 
             <BackToTop />

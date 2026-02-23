@@ -9,11 +9,9 @@ import {
     getLocationPath,
     getFaqsByLocation,
     getAgenciesByLocation,
-    getCmsContentByPage,
     Location,
 } from '@/services/dataService';
 import { notFound } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
 
 const SERVICE_SLUGS = ['short-term', 'long-term', 'emergency', 'respite', 'parent-child', 'therapeutic', 'sibling-groups', 'teenagers', 'asylum-seekers', 'disabilities', 'short-term-fostering', 'long-term-fostering', 'emergency-fostering', 'respite-fostering', 'therapeutic-fostering', 'parent-child-fostering', 'sibling-groups-fostering', 'teenagers-fostering', 'asylum-seekers-fostering', 'disabilities-fostering'];
 
@@ -96,16 +94,12 @@ export default async function CountyPage({ params }: { params: { country: string
         childLocations,
         locationPath,
         locationFaqs,
-        locationAgencies,
-        cmsContent,
-        countyContent
+        locationAgencies
     ] = await Promise.all([
         getChildLocations(location.id),
         getLocationPath(location.id),
         getFaqsByLocation(location.id),
-        getAgenciesByLocation(location.id, 50),
-        getCmsContentByPage(`location_${locationSlug}`),
-        getCountyContent(`${params.country}/${params.region}/${params.county}`)
+        getAgenciesByLocation(location.id, 50)
     ]);
 
     return (
@@ -115,36 +109,6 @@ export default async function CountyPage({ params }: { params: { country: string
             initialLocationPath={locationPath}
             initialLocationFaqs={locationFaqs}
             initialLocationAgencies={locationAgencies}
-            initialCountyContent={countyContent}
         />
     );
-}
-
-async function getCountyContent(slug: string): Promise<any> {
-    const supabase = await createClient();
-    const cleanSlug = slug.toLowerCase().trim();
-    
-    const result = await supabase
-        .from("location_content" as any)
-        .select("*")
-        .eq("slug", cleanSlug)
-        .maybeSingle();
-    
-    const data = result.data as any;
-    
-    if (!data) {
-        const fallbackResult = await supabase
-            .from("location_content" as any)
-            .select("*")
-            .eq("slug", `loc_${cleanSlug}`)
-            .maybeSingle();
-        
-        const fallbackData = fallbackResult.data as any;
-        
-        if (!fallbackData) return null;
-        
-        return fallbackData.content;
-    }
-    
-    return data.content;
 }
