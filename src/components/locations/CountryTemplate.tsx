@@ -469,9 +469,9 @@ export function CountryTemplate({
 
             {/* 6. REGIONS OF ENGLAND - Map visual */}
             <section id="regions" className="py-20 md:py-28 bg-slate-900 text-white overflow-hidden">
-                <div className="absolute inset-0 opacity-10">
+                {/* <div className="absolute inset-0 opacity-10">
                     <RegionMapVisual />
-                </div>
+                </div> */}
                 
                 <div className="container-main px-4 max-w-5xl mx-auto relative z-10">
                     <h2 className="text-2xl md:text-3xl font-semibold mb-3 text-center text-white">
