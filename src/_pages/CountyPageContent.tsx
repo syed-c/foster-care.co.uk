@@ -18,6 +18,7 @@ interface CountyPageContentProps {
     initialLocationPath?: Location[];
     initialLocationFaqs?: FAQ[];
     initialLocationAgencies?: Agency[];
+    contentSlug?: string;
 }
 
 export default function CountyPageContent({
@@ -26,6 +27,7 @@ export default function CountyPageContent({
     initialLocationPath,
     initialLocationFaqs,
     initialLocationAgencies,
+    contentSlug,
 }: CountyPageContentProps) {
     const params = useParams();
     const pathSegments = params?.country && params?.region && params?.county
@@ -194,6 +196,7 @@ export default function CountyPageContent({
                     faqs={allFaqs}
                     agencies={effectiveLocationAgencies}
                     stats={richStats}
+                    contentSlug={contentSlug}
                 />
             </main>
 

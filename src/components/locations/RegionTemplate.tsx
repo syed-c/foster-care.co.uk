@@ -28,6 +28,7 @@ export interface LocationPageProps {
         boroughs: number;
         agenciesCount: number;
     };
+    contentSlug?: string;
 }
 
 export function RegionTemplate({
@@ -35,8 +36,9 @@ export function RegionTemplate({
     childLocations,
     agencies,
     stats,
+    contentSlug,
 }: LocationPageProps) {
-    const { data: locationContent, isLoading } = useLocationContent(location.slug);
+    const { data: locationContent, isLoading } = useLocationContent(contentSlug || location.slug);
     
     const locationName = location.name;
     const heroRef = useRef<HTMLDivElement>(null);

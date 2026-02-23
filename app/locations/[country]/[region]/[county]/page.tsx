@@ -109,6 +109,7 @@ export default async function CountyPage({ params }: { params: { country: string
             initialLocationPath={locationPath}
             initialLocationFaqs={locationFaqs}
             initialLocationAgencies={locationAgencies}
+            contentSlug={`${params.country}/${params.region}/${params.county}`}
         />
     );
 }
