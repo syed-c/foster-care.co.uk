@@ -61,6 +61,10 @@ export default function CountyPageContent({
     const isLoading = !initialLocation && !location;
     const allFaqs = effectiveLocationFaqs;
 
+    const hasValidCountyContent = effectiveCountyContent && 
+        effectiveCountyContent.intro && 
+        effectiveCountyContent.intro.paragraphs;
+
     if (isLoading) {
         return (
             <div className="min-h-screen flex flex-col bg-slate-950">
@@ -195,7 +199,7 @@ export default function CountyPageContent({
             <Header />
 
             <main className="flex-1">
-                {effectiveCountyContent ? (
+                {hasValidCountyContent ? (
                     <CountyTemplate
                         location={effectiveLocation}
                         childLocations={effectiveChildLocations}

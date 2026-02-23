@@ -35,13 +35,14 @@ export function CountyTemplate({
     countyContent
 }: CountyTemplateProps) {
     const locationName = location.name;
-    const content = countyContent;
+    const content = countyContent as any;
 
-    if (!content) {
+    if (!content || !content.intro || !content.intro.paragraphs) {
         return null;
     }
 
     const replaceCountyPlaceholder = (text: string) => {
+        if (!text) return '';
         return text.replace(/\[County\]/g, locationName);
     };
 
