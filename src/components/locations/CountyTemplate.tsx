@@ -87,7 +87,7 @@ export function CountyTemplate({ location, childLocations, agencies, stats, path
                 <section ref={heroRef} className="relative py-14 md:py-24 overflow-hidden" style={{ backgroundColor: '#0f1117', paddingTop: '56px', paddingBottom: '56px' }} id="hero">
                     <div className="relative mx-auto px-4" style={{ maxWidth: '1100px' }}>
                         <FadeInSection>
-                            <nav className="flex items-center gap-2 text-sm mb-6" style={{ color: '#6b7280', fontSize: '13px' }}>
+                            <nav className="flex items-center gap-2 text-sm mb-6 mt-12" style={{ color: '#6b7280', fontSize: '13px' }}>
                                 <Link href="/locations" className="hover:text-white transition-colors">England</Link>
                                 <span style={{ color: '#374151' }}>&rsaquo;</span>
                                 {regionName && (<>
