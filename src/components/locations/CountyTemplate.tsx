@@ -25,15 +25,16 @@ import { useLocationContent } from "@/hooks/useLocationContent";
 
 export interface CountyTemplateProps {
     location: Location;
-    childLocations: Location[];
-    path: Location[];
-    agencies: Agency[];
-    stats: {
+    childLocations?: Location[];
+    path?: Location[];
+    agencies?: Agency[];
+    stats?: {
         childrenInCare: number;
         boroughs: number;
         agenciesCount: number;
     };
     contentSlug?: string;
+    initialContent?: any;
 }
 
 function FadeInSection({ children, className }: { children: React.ReactNode; className?: string }) {
@@ -53,7 +54,7 @@ function FadeInSection({ children, className }: { children: React.ReactNode; cla
     );
 }
 
-export function CountyTemplate({ location, childLocations, agencies, stats, path, contentSlug }: CountyTemplateProps) {
+export function CountyTemplate({ location, childLocations, agencies, stats, path, contentSlug, initialContent }: CountyTemplateProps) {
     const { data: locationContent, isLoading } = useLocationContent(contentSlug || location.slug);
     const locationName = location.name;
     const heroRef = useRef<HTMLDivElement>(null);
@@ -62,7 +63,7 @@ export function CountyTemplate({ location, childLocations, agencies, stats, path
     const regionName = path && path.length > 1 ? path[path.length - 2]?.name : '';
     const countrySlug = path && path.length > 0 ? path[0]?.slug : 'england';
 
-    const c = locationContent?.content;
+    const c = initialContent || locationContent?.content;
 
     if (isLoading) {
         return (
@@ -103,23 +104,23 @@ export function CountyTemplate({ location, childLocations, agencies, stats, path
                                 {c.hero.subheading}
                             </p>
                             <div className="flex flex-wrap items-center gap-3 mb-8">
-                                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: '#d1d5db' }}>
-                                    <Shield className="w-3 h-3 mr-1" style={{ color: '#22c55e' }} />Ofsted-Regulated
-                                </span>
-                                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: '#d1d5db' }}>
-                                    <MapPin className="w-3 h-3 mr-1" style={{ color: '#22c55e' }} />Local Coverage
-                                </span>
-                                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: '#d1d5db' }}>
-                                    <Users className="w-3 h-3 mr-1" style={{ color: '#22c55e' }} />24/7 Support
-                                </span>
+                                {(c.hero.trust_badges || []).map((badge, i) => (
+                                    <span key={i} className="inline-flex items-center px-3 py-1 rounded-full text-xs" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: '#d1d5db' }}>
+                                        {badge}
+                                    </span>
+                                ))}
                             </div>
                             <div className="flex flex-wrap gap-4">
-                                <Button size="lg" style={{ backgroundColor: '#22c55e', color: 'white', borderRadius: '8px', padding: '14px 28px', fontWeight: 600 }} className="hover:translate-y-[-2px] transition-transform duration-200" asChild>
-                                    <Link href="#agencies">Find a Fostering Agency in {locationName}<ArrowRight className="w-4 h-4 ml-2" /></Link>
-                                </Button>
-                                <Button variant="ghost" style={{ backgroundColor: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: '8px', padding: '14px 28px' }} className="hover:translate-y-[-2px] transition-transform duration-200" onClick={() => ctaRef.current?.scrollIntoView({ behavior: 'smooth' })}>
-                                    <Phone className="w-4 h-4 mr-2" />Speak to a Local Fostering Expert
-                                </Button>
+                                {c.hero.cta_primary && (
+                                    <Button size="lg" style={{ backgroundColor: '#22c55e', color: 'white', borderRadius: '8px', padding: '14px 28px', fontWeight: 600 }} className="hover:translate-y-[-2px] transition-transform duration-200" asChild>
+                                        <Link href="#agencies">{c.hero.cta_primary}<ArrowRight className="w-4 h-4 ml-2" /></Link>
+                                    </Button>
+                                )}
+                                {c.hero.cta_secondary && (
+                                    <Button variant="ghost" style={{ backgroundColor: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: '8px', padding: '14px 28px' }} className="hover:translate-y-[-2px] transition-transform duration-200" onClick={() => ctaRef.current?.scrollIntoView({ behavior: 'smooth' })}>
+                                        <Phone className="w-4 h-4 mr-2" />{c.hero.cta_secondary}
+                                    </Button>
+                                )}
                             </div>
                         </FadeInSection>
                     </div>

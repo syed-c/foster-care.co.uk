@@ -1,6 +1,5 @@
 
 import { Metadata } from 'next';
-import UnifiedLocationPage from '@/_pages/UnifiedLocationPage';
 import { ServiceTemplate } from '@/components/locations/ServiceTemplate';
 import CountyPageContent from '@/_pages/CountyPageContent';
 import {
@@ -12,8 +11,29 @@ import {
     Location,
 } from '@/services/dataService';
 import { notFound } from 'next/navigation';
+import { supabase } from '@/integrations/supabase/client';
 
 const SERVICE_SLUGS = ['short-term', 'long-term', 'emergency', 'respite', 'parent-child', 'therapeutic', 'sibling-groups', 'teenagers', 'asylum-seekers', 'disabilities', 'short-term-fostering', 'long-term-fostering', 'emergency-fostering', 'respite-fostering', 'therapeutic-fostering', 'parent-child-fostering', 'sibling-groups-fostering', 'teenagers-fostering', 'asylum-seekers-fostering', 'disabilities-fostering'];
+
+async function getLocationContent(slug: string) {
+    const { data } = await supabase
+        .from("location_content")
+        .select("*")
+        .eq("slug", slug.toLowerCase())
+        .maybeSingle();
+    
+    if (!data?.content) return null;
+    
+    if (typeof data.content === 'string') {
+        try {
+            return JSON.parse(data.content);
+        } catch {
+            return null;
+        }
+    }
+    
+    return data.content;
+}
 
 export async function generateMetadata({ params }: { params: { country: string; region: string; county: string } }): Promise<Metadata> {
     if (SERVICE_SLUGS.includes(params.county)) {
@@ -34,7 +54,6 @@ export async function generateMetadata({ params }: { params: { country: string; 
     }
 
     const locationSlug = params.county;
-
     const location = await getLocationBySlug(locationSlug);
 
     if (!location) {
@@ -81,35 +100,27 @@ export default async function CountyPage({ params }: { params: { country: string
     }
 
     const locationSlug = params.county;
+    const contentSlug = `${params.country}/${params.region}/${params.county}`;
 
-    const locationData = await getLocationBySlug(locationSlug);
+    const [locationData, childLocations, locationPath, locationAgencies, initialContent] = await Promise.all([
+        getLocationBySlug(locationSlug),
+        null,
+        null,
+        null,
+        getLocationContent(contentSlug)
+    ]);
 
-    if (!locationData) {
+    if (!locationData || !initialContent) {
         notFound();
     }
 
     const location = locationData as Location;
 
-    const [
-        childLocations,
-        locationPath,
-        locationFaqs,
-        locationAgencies
-    ] = await Promise.all([
-        getChildLocations(location.id),
-        getLocationPath(location.id),
-        getFaqsByLocation(location.id),
-        getAgenciesByLocation(location.id, 50)
-    ]);
-
     return (
         <CountyPageContent
             initialLocation={location}
-            initialChildLocations={childLocations}
-            initialLocationPath={locationPath}
-            initialLocationFaqs={locationFaqs}
-            initialLocationAgencies={locationAgencies}
-            contentSlug={`${params.country}/${params.region}/${params.county}`}
+            initialContent={initialContent}
+            contentSlug={contentSlug}
         />
     );
 }

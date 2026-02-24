@@ -1,38 +1,37 @@
 "use client";
 import { useParams } from "next/navigation";
-import { useLocationFromPath, useChildLocations, useLocationPath, buildLocationUrl } from "@/hooks/useLocations";
-import { useAgenciesByLocation } from "@/hooks/useAgencies";
-import { useLocationContent } from "@/hooks/useLocationContent";
+import { useLocationFromPath, buildLocationUrl } from "@/hooks/useLocations";
 import { Header } from "@/components/layout/Header";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BackToTop } from "@/components/shared/BackToTop";
 import { SEOHead } from "@/components/seo/SEOHead";
-import { CountyTemplate } from "@/components/locations/CountyTemplate";
+import { RegionTemplate } from "@/components/locations/RegionTemplate";
 import { Location, Agency } from "@/services/dataService";
 
-interface CountyPageContentProps {
+interface RegionPageContentProps {
     initialLocation?: Location | null;
     initialContent?: any;
+    agencies?: Agency[];
     contentSlug?: string;
 }
 
-export default function CountyPageContent({
+export default function RegionPageContent({
     initialLocation,
     initialContent,
+    agencies = [],
     contentSlug,
-}: CountyPageContentProps) {
+}: RegionPageContentProps) {
     const params = useParams();
-    const pathSegments = params?.country && params?.region && params?.county
-        ? [params.country as string, params.region as string, params.county as string]
+    const pathSegments = params?.country && params?.region
+        ? [params.country as string, params.region as string]
         : [];
 
     const { data: location, isLoading: locationLoading } = useLocationFromPath(pathSegments);
-    const { data: locationContent } = useLocationContent(contentSlug || location?.slug);
     
     const effectiveLocation = location || initialLocation;
-    const effectiveContent = locationContent?.content || initialContent;
+    const effectiveContent = initialContent;
 
     const isLoading = locationLoading && !effectiveLocation;
 
@@ -77,7 +76,7 @@ export default function CountyPageContent({
 
     const getSeoTitle = () => {
         if (effectiveLocation.seo_title) return effectiveLocation.seo_title;
-        return `Foster Care in ${effectiveLocation.name} | County Fostering Agencies`;
+        return `Foster Care in ${effectiveLocation.name} | Regional Fostering Agencies`;
     };
 
     const getSeoDescription = () => {
@@ -107,9 +106,9 @@ export default function CountyPageContent({
             <Header />
 
             <main className="flex-1">
-                <CountyTemplate
+                <RegionTemplate
                     location={effectiveLocation}
-                    agencies={[]}
+                    agencies={agencies}
                     stats={{ childrenInCare: 0, boroughs: 0, agenciesCount: 0 }}
                     path={[]}
                     initialContent={effectiveContent}

@@ -14,6 +14,9 @@ export interface LocationContentData {
   hero?: {
     heading: string;
     subheading: string;
+    cta_primary?: string;
+    cta_secondary?: string;
+    trust_badges?: string[];
   };
   intro?: {
     paragraphs: string[];

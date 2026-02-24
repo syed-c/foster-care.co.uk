@@ -1,25 +1,42 @@
 
 import { Metadata } from 'next';
-import UnifiedLocationPage from '@/_pages/UnifiedLocationPage';
 import { ServiceTemplate } from '@/components/locations/ServiceTemplate';
+import RegionPageContent from '@/components/locations/RegionPageContent';
 import {
     getLocationBySlug,
-    getChildLocations,
-    getLocationPath,
-    getFaqsByLocation,
     getAgenciesByLocation,
-    getCmsContentByPage,
     Location,
 } from '@/services/dataService';
 import { notFound } from 'next/navigation';
+import { supabase } from '@/integrations/supabase/client';
 
-const SERVICE_SLUGS = ['short-term', 'long-term', 'emergency', 'respite', 'parent-child', 'therapeutic'];
+const SERVICE_SLUGS = ['short-term', 'long-term', 'emergency', 'respite', 'parent-child', 'therapeutic', 'sibling-groups', 'teenagers', 'asylum-seekers', 'disabilities', 'short-term-fostering', 'long-term-fostering', 'emergency-fostering', 'respite-fostering', 'therapeutic-fostering', 'parent-child-fostering', 'sibling-groups-fostering', 'teenagers-fostering', 'asylum-seekers-fostering', 'disabilities-fostering'];
+
+async function getLocationContent(slug: string) {
+    const { data } = await supabase
+        .from("location_content")
+        .select("*")
+        .eq("slug", slug.toLowerCase())
+        .maybeSingle();
+    
+    if (!data?.content) return null;
+    
+    if (typeof data.content === 'string') {
+        try {
+            return JSON.parse(data.content);
+        } catch {
+            return null;
+        }
+    }
+    
+    return data.content;
+}
 
 export async function generateMetadata({ params }: { params: { country: string; region: string } }): Promise<Metadata> {
     if (SERVICE_SLUGS.includes(params.region)) {
         const countryData = await getLocationBySlug(params.country);
         const countryName = countryData?.name || params.country;
-        const serviceName = params.region.charAt(0).toUpperCase() + params.region.slice(1);
+        const serviceName = params.region.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
         
         return {
             title: `${serviceName} Fostering in ${countryName} | Foster Care UK`,
@@ -53,7 +70,6 @@ export async function generateMetadata({ params }: { params: { country: string; 
 }
 
 export default async function RegionPage({ params }: { params: { country: string; region: string } }) {
-    // Check if it's a service slug
     if (SERVICE_SLUGS.includes(params.region)) {
         const countryData = await getLocationBySlug(params.country);
         const locationName = countryData?.name || params.country;
@@ -67,42 +83,31 @@ export default async function RegionPage({ params }: { params: { country: string
         );
     }
 
-    // Otherwise, render as a region page
     if (params.country === params.region) {
         notFound();
     }
 
     const locationSlug = params.region;
-    const locationData = await getLocationBySlug(locationSlug);
+    const contentSlug = `${params.country}/${params.region}`;
 
-    if (!locationData) {
+    const [locationData, locationAgencies, initialContent] = await Promise.all([
+        getLocationBySlug(locationSlug),
+        null,
+        getLocationContent(contentSlug)
+    ]);
+
+    if (!locationData || !initialContent) {
         notFound();
     }
 
     const location = locationData as Location;
 
-    const [
-        childLocations,
-        locationPath,
-        locationFaqs,
-        locationAgencies,
-        cmsContent
-    ] = await Promise.all([
-        getChildLocations(location.id),
-        getLocationPath(location.id),
-        getFaqsByLocation(location.id),
-        getAgenciesByLocation(location.id, 50),
-        getCmsContentByPage(`location_${locationSlug}`)
-    ]);
-
     return (
-        <UnifiedLocationPage
+        <RegionPageContent
             initialLocation={location}
-            initialChildLocations={childLocations}
-            initialLocationPath={locationPath}
-            initialLocationFaqs={locationFaqs}
-            initialLocationAgencies={locationAgencies}
-            initialCmsContent={cmsContent}
+            initialContent={initialContent}
+            agencies={locationAgencies || []}
+            contentSlug={contentSlug}
         />
     );
 }
