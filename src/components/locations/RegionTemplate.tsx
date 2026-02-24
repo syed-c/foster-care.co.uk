@@ -70,9 +70,10 @@ export function RegionTemplate({ location, childLocations, agencies, stats, path
     const ctaRef = useRef<HTMLDivElement>(null);
     const countrySlug = path && path.length > 0 ? path[0]?.slug : 'england';
 
-    const c = initialContent || locationContent?.content;
+    const content = initialContent || locationContent?.content;
 
-    if (isLoading && !c) {
+    // Show loading only if still loading AND no content available (neither from SSR nor client)
+    if (isLoading && !content) {
         return (
             <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#0f1117' }}>
                 <main className="flex-1 pt-20">
@@ -91,7 +92,7 @@ export function RegionTemplate({ location, childLocations, agencies, stats, path
     return (
         <div className="min-h-screen font-sans" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
             {/* 1. HERO SECTION */}
-            {c?.hero && (
+            {content?.hero && (
                 <section ref={heroRef} className="relative py-14 md:py-24 overflow-hidden" style={{ backgroundColor: '#0f1117', paddingTop: '56px', paddingBottom: '56px' }} id="hero">
                     <div className="relative mx-auto px-4" style={{ maxWidth: '1100px' }}>
                         <FadeInSection>
@@ -101,27 +102,27 @@ export function RegionTemplate({ location, childLocations, agencies, stats, path
                                 <span style={{ color: '#9ca3af' }}>{locationName}</span>
                             </nav>
                             <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-4" style={{ fontSize: '42px', fontWeight: 800, lineHeight: 1.2 }}>
-                                {c.hero.heading}
+                                {content.hero.heading}
                             </h1>
                             <p className="text-lg mb-8" style={{ color: '#9ca3af', maxWidth: '560px', fontSize: '18px', lineHeight: 1.75 }}>
-                                {c.hero.subheading}
+                                {content.hero.subheading}
                             </p>
                             <div className="flex flex-wrap items-center gap-3 mb-8">
-                                {(c.hero.trust_badges || []).map((badge: string, i: number) => (
+                                {(content.hero.trust_badges || []).map((badge: string, i: number) => (
                                     <span key={i} className="inline-flex items-center px-3 py-1 rounded-full text-xs" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: '#d1d5db' }}>
                                         {badge}
                                     </span>
                                 ))}
                             </div>
                             <div className="flex flex-wrap gap-4">
-                                {c.hero.cta_primary && (
+                                {content.hero.cta_primary && (
                                     <Button size="lg" style={{ backgroundColor: '#22c55e', color: 'white', borderRadius: '8px', padding: '14px 28px', fontWeight: 600 }} className="hover:translate-y-[-2px] transition-transform duration-200" asChild>
-                                        <Link href="#agencies">{c.hero.cta_primary}<ArrowRight className="w-4 h-4 ml-2" /></Link>
+                                        <Link href="#agencies">{content.hero.cta_primary}<ArrowRight className="w-4 h-4 ml-2" /></Link>
                                     </Button>
                                 )}
-                                {c.hero.cta_secondary && (
+                                {content.hero.cta_secondary && (
                                     <Button variant="ghost" style={{ backgroundColor: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: '8px', padding: '14px 28px' }} className="hover:translate-y-[-2px] transition-transform duration-200" onClick={() => ctaRef.current?.scrollIntoView({ behavior: 'smooth' })}>
-                                        <Phone className="w-4 h-4 mr-2" />{c.hero.cta_secondary}
+                                        <Phone className="w-4 h-4 mr-2" />{content.hero.cta_secondary}
                                     </Button>
                                 )}
                             </div>
@@ -131,15 +132,15 @@ export function RegionTemplate({ location, childLocations, agencies, stats, path
             )}
 
             {/* 2. ABOUT SECTION */}
-            {c?.about && (
+            {content?.about && (
                 <section className="py-14 md:py-24" style={{ backgroundColor: '#ffffff', paddingTop: '56px', paddingBottom: '56px' }} id="about">
                     <div className="mx-auto px-4" style={{ maxWidth: '1100px' }}>
                         <FadeInSection>
                             <h2 className="text-2xl md:text-3xl font-bold mb-6" style={{ color: '#111827', fontWeight: 700 }}>
-                                {c.about.heading}
+                                {content.about.heading}
                             </h2>
                             <div className="space-y-4">
-                                {c.about.paragraphs.map((paragraph: string, i: number) => (
+                                {content.about.paragraphs.map((paragraph: string, i: number) => (
                                     <p key={i} style={{ color: '#374151', fontSize: '16px', lineHeight: 1.75 }}>{paragraph}</p>
                                 ))}
                             </div>
@@ -177,26 +178,26 @@ export function RegionTemplate({ location, childLocations, agencies, stats, path
             </section>
 
             {/* 4. AGENCY TYPES SECTION */}
-            {c?.agency_types && (
+            {content?.agency_types && (
                 <section className="py-14 md:py-24" style={{ backgroundColor: '#0f1117', paddingTop: '56px', paddingBottom: '56px' }} id="agency-types">
                     <div className="mx-auto px-4" style={{ maxWidth: '1100px' }}>
                         <FadeInSection>
                             <h2 className="text-2xl md:text-3xl font-bold mb-4 text-center" style={{ color: '#ffffff', fontWeight: 700 }}>
-                                {c.agency_types.heading}
+                                {content.agency_types.heading}
                             </h2>
                             <p className="text-center mb-10 max-w-xl mx-auto" style={{ color: '#9ca3af' }}>
-                                {c.agency_types.intro}
+                                {content.agency_types.intro}
                             </p>
                             
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div className="p-8 rounded-xl" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', borderTopWidth: '3px', borderTopColor: '#22c55e' }}>
                                     <h3 className="text-lg font-bold mb-4 flex items-center gap-2" style={{ color: '#ffffff', fontWeight: 700 }}>
                                         <Building2 className="w-5 h-5" style={{ color: '#22c55e' }} />
-                                        {c.agency_types.independent.title}
+                                        {content.agency_types.independent.title}
                                     </h3>
                                     <div className="space-y-4 text-sm" style={{ color: '#d1d5db' }}>
-                                        <p><strong style={{ color: '#f3f4f6' }}>Support:</strong> {c.agency_types.independent.description}</p>
-                                        {c.agency_types.independent.benefits?.map((benefit: string, i: number) => (
+                                        <p><strong style={{ color: '#f3f4f6' }}>Support:</strong> {content.agency_types.independent.description}</p>
+                                        {content.agency_types.independent.benefits?.map((benefit: string, i: number) => (
                                             <p key={i}><span style={{ color: '#22c55e', marginRight: '8px' }}>-</span>{benefit}</p>
                                         ))}
                                     </div>
@@ -204,19 +205,19 @@ export function RegionTemplate({ location, childLocations, agencies, stats, path
                                 <div className="p-8 rounded-xl" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', borderTopWidth: '3px', borderTopColor: '#6b7280' }}>
                                     <h3 className="text-lg font-bold mb-4 flex items-center gap-2" style={{ color: '#ffffff', fontWeight: 700 }}>
                                         <Shield className="w-5 h-5" style={{ color: '#6b7280' }} />
-                                        {c.agency_types.local_authority.title}
+                                        {content.agency_types.local_authority.title}
                                     </h3>
                                     <div className="space-y-4 text-sm" style={{ color: '#d1d5db' }}>
-                                        <p><strong style={{ color: '#f3f4f6' }}>Support:</strong> {c.agency_types.local_authority.description}</p>
-                                        {c.agency_types.local_authority.benefits?.map((benefit: string, i: number) => (
+                                        <p><strong style={{ color: '#f3f4f6' }}>Support:</strong> {content.agency_types.local_authority.description}</p>
+                                        {content.agency_types.local_authority.benefits?.map((benefit: string, i: number) => (
                                             <p key={i}><span style={{ color: '#6b7280', marginRight: '8px' }}>-</span>{benefit}</p>
                                         ))}
                                     </div>
                                 </div>
                             </div>
-                            {c.agency_types.outro && (
+                            {content.agency_types.outro && (
                                 <p className="text-center mt-8 text-sm" style={{ color: '#9ca3af' }}>
-                                    {c.agency_types.outro}
+                                    {content.agency_types.outro}
                                 </p>
                             )}
                         </FadeInSection>
@@ -225,20 +226,20 @@ export function RegionTemplate({ location, childLocations, agencies, stats, path
             )}
 
             {/* 5. FOSTERING SERVICES SECTION */}
-            {c?.fostering_services && (
+            {content?.fostering_services && (
                 <section className="py-14 md:py-24" style={{ backgroundColor: '#ffffff', paddingTop: '56px', paddingBottom: '56px' }} id="services">
                     <div className="mx-auto px-4" style={{ maxWidth: '1100px' }}>
                         <FadeInSection>
                             <h2 className="text-2xl md:text-3xl font-bold mb-4 text-center" style={{ color: '#111827', fontWeight: 700 }}>
-                                {c.fostering_services.heading}
+                                {content.fostering_services.heading}
                             </h2>
                             <p className="text-center mb-10 max-w-xl mx-auto" style={{ color: '#6b7280' }}>
-                                {c.fostering_services.intro}
+                                {content.fostering_services.intro}
                             </p>
                         </FadeInSection>
 
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {c.fostering_services.services.map((service: { name: string; description: string; slug: string }, i: number) => {
+                            {content.fostering_services.services.map((service: { name: string; description: string; slug: string }, i: number) => {
                                 const linkUrl = `/locations/${countrySlug}/${location.slug}/${service.slug}`;
                                 return (
                                     <FadeInSection key={i}>
@@ -256,28 +257,28 @@ export function RegionTemplate({ location, childLocations, agencies, stats, path
                             })}
                         </div>
 
-                        {c.fostering_services.outro && (
-                            <p className="text-center mt-8 max-w-xl mx-auto" style={{ color: '#6b7280' }}>{c.fostering_services.outro}</p>
+                        {content.fostering_services.outro && (
+                            <p className="text-center mt-8 max-w-xl mx-auto" style={{ color: '#6b7280' }}>{content.fostering_services.outro}</p>
                         )}
                     </div>
                 </section>
             )}
 
             {/* 6. SUPPORT FOR FOSTER CARERS SECTION */}
-            {c?.support && (
+            {content?.support && (
                 <section className="py-14 md:py-24" style={{ backgroundColor: '#f8f9fa', paddingTop: '56px', paddingBottom: '56px' }} id="support">
                     <div className="mx-auto px-4" style={{ maxWidth: '1100px' }}>
                         <FadeInSection>
                             <h2 className="text-2xl md:text-3xl font-bold mb-4 text-center" style={{ color: '#111827', fontWeight: 700 }}>
-                                {c.support.heading}
+                                {content.support.heading}
                             </h2>
                             <p className="text-center mb-10 max-w-xl mx-auto" style={{ color: '#6b7280' }}>
-                                {c.support.intro}
+                                {content.support.intro}
                             </p>
                         </FadeInSection>
 
                         <div className="grid md:grid-cols-2 gap-6">
-                            {c.support.categories.map((item: { name: string; description: string }, i: number) => (
+                            {content.support.categories.map((item: { name: string; description: string }, i: number) => (
                                 <FadeInSection key={i}>
                                     <div className="flex gap-4 p-6 rounded-xl" style={{ backgroundColor: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '12px' }}>
                                         <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#dcfce7' }}>
@@ -301,17 +302,17 @@ export function RegionTemplate({ location, childLocations, agencies, stats, path
             )}
 
             {/* 7. GLOSSARY SECTION */}
-            {c?.glossary && (
+            {content?.glossary && (
                 <section className="py-14 md:py-24" style={{ backgroundColor: '#0f1117', paddingTop: '56px', paddingBottom: '56px' }} id="glossary">
                     <div className="mx-auto px-4" style={{ maxWidth: '1100px' }}>
                         <FadeInSection>
                             <div className="flex items-center gap-3 mb-8 justify-center">
                                 <BookOpen className="w-5 h-5" style={{ color: '#22c55e' }} />
-                                <h2 className="text-xl font-semibold" style={{ color: '#ffffff', fontWeight: 700 }}>{c.glossary.heading}</h2>
+                                <h2 className="text-xl font-semibold" style={{ color: '#ffffff', fontWeight: 700 }}>{content.glossary.heading}</h2>
                             </div>
 
                             <Accordion type="single" collapsible className="rounded-xl overflow-hidden" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px' }}>
-                                {c.glossary.terms.map((term: { term: string; definition: string }, i: number) => (
+                                {content.glossary.terms.map((term: { term: string; definition: string }, i: number) => (
                                     <AccordionItem key={i} value={`term-${i}`} style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
                                         <AccordionTrigger className="text-left font-medium px-6 hover:no-underline" style={{ color: '#f3f4f6', fontWeight: 600, padding: '16px 24px' }}>
                                             {term.term}
@@ -328,17 +329,17 @@ export function RegionTemplate({ location, childLocations, agencies, stats, path
             )}
 
             {/* 8. FAQ SECTION */}
-            {c?.faq && (
+            {content?.faq && (
                 <section className="py-14 md:py-24" style={{ backgroundColor: '#0f1117', paddingTop: '56px', paddingBottom: '56px' }} id="faq">
                     <div className="mx-auto px-4" style={{ maxWidth: '1100px' }}>
                         <FadeInSection>
                             <div className="flex items-center gap-3 mb-8 justify-center">
                                 <HelpCircle className="w-5 h-5" style={{ color: '#22c55e' }} />
-                                <h2 className="text-xl font-semibold" style={{ color: '#ffffff', fontWeight: 700 }}>{c.faq.heading}</h2>
+                                <h2 className="text-xl font-semibold" style={{ color: '#ffffff', fontWeight: 700 }}>{content.faq.heading}</h2>
                             </div>
 
                             <Accordion type="single" collapsible className="rounded-xl overflow-hidden" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px' }}>
-                                {c.faq.questions.map((faq: { question: string; answer: string }, i: number) => (
+                                {content.faq.questions.map((faq: { question: string; answer: string }, i: number) => (
                                     <AccordionItem key={i} value={`faq-${i}`} style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
                                         <AccordionTrigger className="text-left font-medium px-6 hover:no-underline" style={{ color: '#f3f4f6', fontWeight: 600, padding: '16px 24px' }}>
                                             {faq.question}
@@ -355,19 +356,19 @@ export function RegionTemplate({ location, childLocations, agencies, stats, path
             )}
 
             {/* 9. CTA SECTION */}
-            {c?.cta && (
+            {content?.cta && (
                 <section ref={ctaRef} className="py-14 md:py-24 text-center" style={{ backgroundColor: '#22c55e', paddingTop: '56px', paddingBottom: '56px' }} id="cta">
                     <div className="mx-auto px-4" style={{ maxWidth: '1100px' }}>
                         <FadeInSection>
                             <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: '#ffffff', fontWeight: 700, fontSize: '30px' }}>
-                                {c.cta.heading}
+                                {content.cta.heading}
                             </h2>
                             <p className="mb-8 max-w-lg mx-auto" style={{ color: 'rgba(255,255,255,0.85)' }}>
-                                {c.cta.paragraph}
+                                {content.cta.paragraph}
                             </p>
                             <Button size="lg" style={{ backgroundColor: '#ffffff', color: '#16a34a', fontWeight: 700, borderRadius: '8px', padding: '14px 32px' }} className="hover:bg-green-50 hover:scale-[1.02] transition-all duration-200" asChild>
                                 <Link href="#agencies">
-                                    {c.cta.button_text}
+                                    {content.cta.button_text}
                                     <ArrowRight className="w-4 h-4 ml-2" />
                                 </Link>
                             </Button>

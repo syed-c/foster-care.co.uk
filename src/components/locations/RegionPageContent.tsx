@@ -1,8 +1,5 @@
 "use client";
-import { useParams } from "next/navigation";
-import { useLocationFromPath, buildLocationUrl } from "@/hooks/useLocations";
 import { Header } from "@/components/layout/Header";
-import { Skeleton } from "@/components/ui/skeleton";
 import { MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BackToTop } from "@/components/shared/BackToTop";
@@ -23,34 +20,8 @@ export default function RegionPageContent({
     agencies = [],
     contentSlug,
 }: RegionPageContentProps) {
-    const params = useParams();
-    const pathSegments = params?.country && params?.region
-        ? [params.country as string, params.region as string]
-        : [];
-
-    const { data: location, isLoading: locationLoading } = useLocationFromPath(pathSegments);
-    
-    const effectiveLocation = location || initialLocation;
+    const effectiveLocation = initialLocation;
     const effectiveContent = initialContent;
-
-    const isLoading = locationLoading && !effectiveLocation;
-
-    if (isLoading) {
-        return (
-            <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#0f1117' }}>
-                <Header />
-                <main className="flex-1 pt-20">
-                    <section className="relative py-20 md:py-28" style={{ backgroundColor: '#0f1117' }}>
-                        <div className="mx-auto px-4" style={{ maxWidth: '1100px' }}>
-                            <Skeleton className="h-6 w-64 mb-6 bg-white/10" />
-                            <Skeleton className="h-16 w-[500px] mb-4 bg-white/10" />
-                            <Skeleton className="h-6 w-full max-w-2xl bg-white/10" />
-                        </div>
-                    </section>
-                </main>
-            </div>
-        );
-    }
 
     if (!effectiveLocation || !effectiveContent) {
         return (

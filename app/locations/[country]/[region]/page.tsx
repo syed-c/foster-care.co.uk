@@ -13,41 +13,49 @@ import { supabase } from '@/integrations/supabase/client';
 const SERVICE_SLUGS = ['short-term', 'long-term', 'emergency', 'respite', 'parent-child', 'therapeutic', 'sibling-groups', 'teenagers', 'asylum-seekers', 'disabilities', 'short-term-fostering', 'long-term-fostering', 'emergency-fostering', 'respite-fostering', 'therapeutic-fostering', 'parent-child-fostering', 'sibling-groups-fostering', 'teenagers-fostering', 'asylum-seekers-fostering', 'disabilities-fostering'];
 
 async function getLocationContent(slug: string) {
-    const { data } = await supabase
-        .from("location_content")
-        .select("*")
-        .eq("slug", slug.toLowerCase())
-        .maybeSingle();
-    
-    if (!data?.content) return null;
-    
-    if (typeof data.content === 'string') {
-        try {
-            return JSON.parse(data.content);
-        } catch {
-            return null;
+    try {
+        const { data } = await supabase
+            .from("location_content")
+            .select("*")
+            .eq("slug", slug.toLowerCase())
+            .maybeSingle();
+        
+        if (!data?.content) return null;
+        
+        if (typeof data.content === 'string') {
+            try {
+                return JSON.parse(data.content);
+            } catch {
+                return null;
+            }
         }
+        
+        return data.content;
+    } catch (error) {
+        console.error('Error fetching location content:', error);
+        return null;
     }
-    
-    return data.content;
 }
 
-export async function generateMetadata({ params }: { params: { country: string; region: string } }): Promise<Metadata> {
-    if (SERVICE_SLUGS.includes(params.region)) {
-        const countryData = await getLocationBySlug(params.country);
-        const countryName = countryData?.name || params.country;
-        const serviceName = params.region.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+export async function generateMetadata({ params }: { params: Promise<{ country: string; region: string }> }): Promise<Metadata> {
+    const resolvedParams = await params;
+    const { country: countryParam, region: regionParam } = resolvedParams;
+    
+    if (SERVICE_SLUGS.includes(regionParam)) {
+        const countryData = await getLocationBySlug(countryParam);
+        const countryName = countryData?.name || countryParam;
+        const serviceName = regionParam.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
         
         return {
             title: `${serviceName} Fostering in ${countryName} | Foster Care UK`,
             description: `Learn about ${serviceName.toLowerCase()} fostering in ${countryName}. Find agencies and support available.`,
             alternates: {
-                canonical: `https://www.foster-care.co.uk/locations/${params.country}/${params.region}`,
+                canonical: `https://www.foster-care.co.uk/locations/${countryParam}/${regionParam}`,
             },
         };
     }
 
-    const locationSlug = params.region;
+    const locationSlug = regionParam;
     const location = await getLocationBySlug(locationSlug);
 
     if (!location) {
@@ -64,40 +72,55 @@ export async function generateMetadata({ params }: { params: { country: string; 
             description: `Become a foster carrier in ${name}. Search verified local agencies and start your journey today.`,
         },
         alternates: {
-            canonical: `https://www.foster-care.co.uk/locations/${params.country}/${params.region}`,
+            canonical: `https://www.foster-care.co.uk/locations/${countryParam}/${regionParam}`,
         },
     };
 }
 
-export default async function RegionPage({ params }: { params: { country: string; region: string } }) {
-    if (SERVICE_SLUGS.includes(params.region)) {
-        const countryData = await getLocationBySlug(params.country);
-        const locationName = countryData?.name || params.country;
+export default async function RegionPage({ params }: { params: Promise<{ country: string; region: string }> }) {
+    const resolvedParams = await params;
+    const { country: countryParam, region: regionParam } = resolvedParams;
+    
+    if (SERVICE_SLUGS.includes(regionParam)) {
+        const countryData = await getLocationBySlug(countryParam);
+        const locationName = countryData?.name || countryParam;
         
         return (
             <ServiceTemplate
-                locationSlug={params.country}
-                serviceSlug={params.region}
+                locationSlug={countryParam}
+                serviceSlug={regionParam}
                 locationName={locationName}
             />
         );
     }
 
-    if (params.country === params.region) {
-        notFound();
+    if (countryParam === regionParam) {
+        return <div>Invalid route</div>;
     }
 
-    const locationSlug = params.region;
-    const contentSlug = `${params.country}/${params.region}`;
+    const locationSlug = regionParam;
+    const contentSlug = `${countryParam}/${regionParam}`;
 
-    const [locationData, locationAgencies, initialContent] = await Promise.all([
-        getLocationBySlug(locationSlug),
-        null,
-        getLocationContent(contentSlug)
-    ]);
+    let initialContent = null;
+    let locationData = null;
+    
+    try {
+        [locationData, initialContent] = await Promise.all([
+            getLocationBySlug(locationSlug),
+            getLocationContent(contentSlug)
+        ]);
+    } catch (error) {
+        console.error('Error fetching region data:', error);
+    }
 
-    if (!locationData || !initialContent) {
-        notFound();
+    // If location exists but no content, show 404
+    if (!locationData) {
+        return <div>Location not found</div>;
+    }
+    
+    // If no content, also show 404 (to avoid duplicate content issues)
+    if (!initialContent) {
+        return <div>Content not found</div>;
     }
 
     const location = locationData as Location;
@@ -106,7 +129,7 @@ export default async function RegionPage({ params }: { params: { country: string
         <RegionPageContent
             initialLocation={location}
             initialContent={initialContent}
-            agencies={locationAgencies || []}
+            agencies={[]}
             contentSlug={contentSlug}
         />
     );
