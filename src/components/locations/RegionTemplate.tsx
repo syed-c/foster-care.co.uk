@@ -70,7 +70,36 @@ export function RegionTemplate({ location, childLocations, agencies, stats, path
     const ctaRef = useRef<HTMLDivElement>(null);
     const countrySlug = path && path.length > 0 ? path[0]?.slug : 'england';
 
-    const content = initialContent || locationContent?.content;
+    const rawContent = initialContent || locationContent?.content;
+    
+    const content = rawContent ? {
+        hero: rawContent.hero || rawContent.intro ? {
+            heading: rawContent.hero?.heading || rawContent.intro?.paragraphs?.[0]?.split('.')[0] || `Fostering in ${locationName}`,
+            subheading: rawContent.hero?.subheading || rawContent.intro?.paragraphs?.join('\n\n') || '',
+            cta_primary: rawContent.hero?.cta_primary || 'Find an Agency',
+            cta_secondary: rawContent.hero?.cta_secondary || 'Talk to Us',
+            trust_badges: rawContent.hero?.trust_badges || ['Ofsted Registered', 'Verified Agencies']
+        } : undefined,
+        about: rawContent.about || rawContent.why_fostering_matters ? {
+            heading: rawContent.about?.heading || rawContent.why_fostering_matters?.heading || `About Fostering in ${locationName}`,
+            paragraphs: rawContent.about?.paragraphs || rawContent.why_fostering_matters?.paragraphs || []
+        } : undefined,
+        agency_types: rawContent.agency_types,
+        fostering_services: rawContent.fostering_services || rawContent.types_of_fostering ? {
+            heading: rawContent.fostering_services?.heading || rawContent.types_of_fostering?.heading || 'Types of Fostering',
+            intro: rawContent.fostering_services?.intro || rawContent.types_of_fostering?.intro || '',
+            outro: rawContent.fostering_services?.outro || rawContent.types_of_fostering?.outro || '',
+            services: rawContent.fostering_services?.services || rawContent.types_of_fostering?.categories?.map((cat: any) => ({
+                name: cat.name,
+                description: cat.description,
+                slug: cat.slug || cat.name.toLowerCase().replace(/\s+/g, '-')
+            })) || []
+        } : undefined,
+        support: rawContent.support,
+        glossary: rawContent.glossary,
+        faq: rawContent.faq,
+        cta: rawContent.cta
+    } : null;
 
     // Show loading only if still loading AND no content available (neither from SSR nor client)
     if (isLoading && !content) {

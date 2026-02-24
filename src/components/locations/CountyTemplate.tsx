@@ -63,9 +63,39 @@ export function CountyTemplate({ location, childLocations, agencies, stats, path
     const regionName = path && path.length > 1 ? path[path.length - 2]?.name : '';
     const countrySlug = path && path.length > 0 ? path[0]?.slug : 'england';
 
-    const c = initialContent || locationContent?.content;
+    const rawContent = initialContent || locationContent?.content;
+    
+    const c = rawContent ? {
+        hero: rawContent.hero || rawContent.intro ? {
+            heading: rawContent.hero?.heading || `Fostering in ${locationName}`,
+            subheading: rawContent.hero?.subheading || rawContent.intro?.paragraphs?.[0] || '',
+            cta_primary: rawContent.hero?.cta_primary || 'Find an Agency',
+            cta_secondary: rawContent.hero?.cta_secondary || 'Talk to Us',
+            trust_badges: rawContent.hero?.trust_badges || ['Ofsted Registered', 'Verified Agencies']
+        } : undefined,
+        about: rawContent.about || rawContent.why_fostering_matters ? {
+            heading: rawContent.about?.heading || rawContent.why_fostering_matters?.heading || `About Fostering in ${locationName}`,
+            paragraphs: rawContent.about?.paragraphs || rawContent.why_fostering_matters?.paragraphs || []
+        } : undefined,
+        agency_types: rawContent.agency_types,
+        fostering_services: rawContent.fostering_services || rawContent.types_of_fostering ? {
+            heading: rawContent.fostering_services?.heading || rawContent.types_of_fostering?.heading || 'Types of Fostering',
+            intro: rawContent.fostering_services?.intro || rawContent.types_of_fostering?.intro || '',
+            outro: rawContent.fostering_services?.outro || rawContent.types_of_fostering?.outro || '',
+            services: rawContent.fostering_services?.services || rawContent.types_of_fostering?.categories?.map((cat: any) => ({
+                name: cat.name,
+                description: cat.description,
+                slug: cat.slug || cat.name.toLowerCase().replace(/\s+/g, '-')
+            })) || []
+        } : undefined,
+        support: rawContent.support,
+        faq: rawContent.faq,
+        cta: rawContent.cta
+    } : null;
 
-    if (isLoading) {
+    const isInitialLoading = isLoading && !c;
+
+    if (isInitialLoading) {
         return (
             <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#0f1117' }}>
                 <main className="flex-1 pt-20">
